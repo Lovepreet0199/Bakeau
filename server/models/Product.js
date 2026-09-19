@@ -39,5 +39,58 @@ const productSchema = new mongoose.Schema({
         trim: true
     },
 
-    //Public 
+    //Public ID used to manage the product image in Cloudinary
+    image_public_id: {
+        type: String,
+        default: null
+    },
+
+    //Indicates whether the product is currently available for customers to order
+    is_available: {
+        type: Boolean,
+        required: true,
+        default: true
+    },
+
+    //Indicates whether the product is visible on the bakery storefront
+    is_visible: {
+        type: Boolean,
+        required: true,
+        default: true
+    },
+
+    //Number of this product currently available in inventory
+    inventory_quantity: {
+        type: Number,
+        required: true,
+        default: 0,
+        min: 0
+    },
+
+    //Inventory level at which the bakery should receive a low inventory warning
+    low_inventory_threshold: {
+        type: Number,
+        required: true,
+        default: 5,
+        min: 0
+    },
+
+    //Indicates whether the product should be highlighted as a featured product
+    is_featured: {
+        type: Boolean,
+        required: true,
+        default: false
+    }
+}, {
+    //Automatically records when the product is created and last updated
+    timestamps: {
+        createdAt: "created_at",
+        updatedAt: "updated_at"
+    }
 });
+
+//Create the Product model using the User Schema
+const Product = mongoose.model("Product", productSchema);
+
+//Export the Product model so it can be used in other files
+export default Product;
