@@ -1,11 +1,15 @@
 //Import Express to create Bakeau server/application
 import express from "express";
-
 //for ES6, this import makes the environment variables available THROUGHOUT the app
 import "dotenv/config";
 
+import connectDB from "./config/db.js";
+
 // Create an Express app and store it in the app variable
 const app = express();
+
+//Connect to MongoDB
+connectDB();
 
 //Port used by the Bakeau backend
 const port = process.env.PORT || 3000;
