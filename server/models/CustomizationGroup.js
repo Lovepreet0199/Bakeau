@@ -25,7 +25,7 @@ const customizationGroupSchema = new mongoose.Schema({
         default: false
     }
 }, {
-    //Automatically records when the customization group  is created and last updated
+    //Automatically records when the customization group is created and last updated
     timestamps: {
         createdAt: "created_at",
         updatedAt: "updated_at"
