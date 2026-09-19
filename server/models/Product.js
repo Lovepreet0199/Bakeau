@@ -25,7 +25,7 @@ const productSchema = new mongoose.Schema({
         trim: true
     },
 
-    //String price of the product before any customization costs
+    //Starting price of the product before any customization costs
     base_price: {
         type: Number,
         required: true,
@@ -89,7 +89,7 @@ const productSchema = new mongoose.Schema({
     }
 });
 
-//Create the Product model using the User Schema
+//Create the Product model using the Product Schema
 const Product = mongoose.model("Product", productSchema);
 
 //Export the Product model so it can be used in other files
