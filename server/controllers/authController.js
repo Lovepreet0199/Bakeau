@@ -4,6 +4,9 @@ import User from "../models/User.js";
 //Import bcrypt to securely hash user passwords
 import bcrypt from "bcryptjs";
 
+//Import jsonwebtoken to create authentication tokens after login
+import jwt from "jsonwebtoken";
+
 //Register a new Customer or Bakery Owner
 const registerUser = async (request, response) => {
     try {
@@ -61,5 +64,69 @@ const registerUser = async (request, response) => {
     }
 };
 
-//Export the registerUser function so it can be used in the authentication routes
-export { registerUser };
+//Login an existing user
+const loginUser = async (request, response) => {
+    try {
+
+        //Get the email and password sent in the login request
+        const { email, password } = request.body;
+
+        //Find the user account with the provided email
+        const user = await User.findOne({ email: email });
+
+        //Check if the user account exists.
+        if (!user) {
+            return response.status(400).json({
+                message: "Invalid email or password"
+            });
+        }
+
+        //Compare the entered password with the hashed password stored in the database
+        const passwordMatches = await bcrypt.compare(password, user.password_hash);
+
+        //Check if the entered password matches the user's password
+        if (!passwordMatches) {
+            return response.status(400).json({
+                message: "Invalid email or password"
+            });
+        }
+
+        //Create a JWT for the successfully authenticated user
+        const token = jwt.sign({
+            userId: user._id,
+            role: user.role
+        },
+            process.env.JWT_SECRET,
+            {
+                expiresIn: "1h"
+            }
+        );
+
+        //Send the JWT and safe user information to the client.
+        response.status(200).json({
+            message: "Login successful",
+            token: token,
+            user: {
+                id: user._id,
+                first_name: user.first_name,
+                last_name: user.last_name,
+                email: user.email,
+                role: user.role
+            }
+        });
+
+    } catch (error) {
+
+        //Log the error in the server terminal for debugging
+        console.error("Login error: ", error.message);
+
+        //Send a server error response to the client
+        return response.status(500).json({
+            message: "Unable to login"
+        });
+    }
+};
+
+
+//Export the authentication controller functions so they can be used in the authentication routes
+export { registerUser, loginUser };
