@@ -19,6 +19,15 @@ const bakerySchema = new mongoose.Schema({
         trim: true
     },
 
+    //Unique URL-friendly name used to identify the bakery storefront
+    slug: {
+        type: String,
+        required: true,
+        unique: true,
+        trim: true,
+        lowercase: true
+    },
+
     //Contact email displayed/used for bakery communication
     contact_email: {
         type: String,

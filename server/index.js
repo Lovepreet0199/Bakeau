@@ -5,11 +5,17 @@ import "dotenv/config";
 
 import connectDB from "./config/db.js";
 
+//Import authentication routes
+import authRoutes from "./routes/authRoutes.js";
+
 // Create an Express app and store it in the app variable
 const app = express();
 
 //Allow Express to read JSON data send in request bodies
 app.use(express.json());
+
+//Use authentication routes for requests starting with /api/auth
+app.use("/api/auth", authRoutes);
 
 //Connect to MongoDB
 connectDB();

@@ -51,11 +51,15 @@ const registerUser = async (request, response) => {
             }
         });
     } catch (error) {
-        //If something unexpected fails
+        //Log error in the server terminal for debugging.
         console.error("Registration error: ", error.message);
 
+        //Send a server error response to the client.
         return response.status(500).json({
             message: "Unable to register user"
         });
     }
-}
+};
+
+//Export the registerUser function so it can be used in the authentication routes
+export { registerUser };
