@@ -8,6 +8,9 @@ import connectDB from "./config/db.js";
 // Create an Express app and store it in the app variable
 const app = express();
 
+//Allow Express to read JSON data send in request bodies
+app.use(express.json());
+
 //Connect to MongoDB
 connectDB();
 
