@@ -53,6 +53,7 @@ const registerUser = async (request, response) => {
                 role: newUser.role
             }
         });
+        
     } catch (error) {
         //Log error in the server terminal for debugging.
         console.error("Registration error: ", error.message);

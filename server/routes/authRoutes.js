@@ -7,6 +7,10 @@ import { registerUser, loginUser } from "../controllers/authController.js";
 //Import body to validate request fields and validationResult to check for validation errors
 import { body, validationResult } from "express-validator";
 
+//Importing the middlewares
+import { authenticateUser } from "../middleware/authMiddleware.js";
+import { authorizeRoles } from "../middleware/roleMiddleware.js";
+
 //Validation rules for user registration
 const registerValidation = [
     body("first_name")
@@ -48,7 +52,7 @@ const loginValidation = [
         .isEmail()
         .withMessage("Please enter a valid email address"),
 
-        body("password")
+    body("password")
         .notEmpty()
         .withMessage("Password is required")
 
@@ -79,6 +83,21 @@ router.post("/register", registerValidation, validateRequest, registerUser);
 
 //Login an existing user
 router.post("/login", loginValidation, validateRequest, loginUser);
+
+
+//Test route for authenticated Bakery Owners
+router.get(
+    "/bakery-owner-test",
+    authenticateUser,
+    authorizeRoles("bakeryOwner"),
+    (request, response) => {
+        //Return a success response with the authenticated user's information
+        response.status(200).json({
+            message: "Bakery Owner access granted",
+            user: request.user
+        });
+    }
+);
 
 //Export the authentication router so it can be used in the main server file
 export default router;

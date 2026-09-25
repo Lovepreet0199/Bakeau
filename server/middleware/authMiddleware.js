@@ -44,4 +44,4 @@ const authenticateUser = (request, response, next) => {
 };
 
 //Export the authentication middleware so it can be used in protected routes
-export { authenticateUser };
+export { authenticateUser }; 
