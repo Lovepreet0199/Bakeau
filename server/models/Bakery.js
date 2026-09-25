@@ -57,6 +57,36 @@ const bakerySchema = new mongoose.Schema({
         trim: true
     },
 
+    //Physical address where customers can pick up their orders
+    address: {
+        street: {
+            type: String,
+            required: true,
+            trim: true
+        },
+        city: {
+            type: String,
+            required: true,
+            trim: true
+        },
+        province: {
+            type: String,
+            required: true,
+            trim: true
+        },
+        postal_code: {
+            type: String,
+            required: true,
+            trim: true
+        },
+        country: {
+            type: String,
+            required: true,
+            trim: true,
+            default: "Canada"
+        }
+    },
+
     //URL of the bakery profile image
     profile_image_url: {
         type: String,
