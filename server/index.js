@@ -8,6 +8,9 @@ import connectDB from "./config/db.js";
 //Import authentication routes
 import authRoutes from "./routes/authRoutes.js";
 
+//Import bakery routes
+import bakeryRoutes from "./routes/bakeryRoutes.js";
+
 // Create an Express app and store it in the app variable
 const app = express();
 
@@ -16,6 +19,9 @@ app.use(express.json());
 
 //Use authentication routes for requests starting with /api/auth
 app.use("/api/auth", authRoutes);
+
+//User bakery routes for requests starting with /api/bakeries
+app.use("/api/bakeries", bakeryRoutes);
 
 //Connect to MongoDB
 connectDB();
