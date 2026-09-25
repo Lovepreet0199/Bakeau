@@ -2,7 +2,7 @@
 import express from "express";
 
 //Import the bakery controller functions
-import { createBakery } from "../controllers/bakeryController.js";
+import { createBakery, getMyBakery } from "../controllers/bakeryController.js";
 
 //Import authentication middleware to protect bakery routes
 import { authenticateUser } from "../middleware/authMiddleware.js";
@@ -19,6 +19,14 @@ router.post(
     authenticateUser,
     authorizeRoles("bakeryOwner"),
     createBakery
+);
+
+//Get the authenticated Bakery Owner's bakery
+router.get(
+    "/mine",
+    authenticateUser,
+    authorizeRoles("bakeryOwner"),
+    getMyBakery
 );
 
 //Export the bakery router so it can be connected to the main Express application

@@ -82,5 +82,39 @@ const createBakery = async (request, response) => {
     }
 };
 
+//Get the authenticated Bakery Owner's bakery
+const getMyBakery = async (request, response) => {
+    try {
+
+        //Get the authenticated Bakery Owner's user ID from the verified JWT
+        const ownerId = request.user.userId;
+
+        //Find the bakery that belongs to the authenticated Bakery Owner
+        const bakery = await Bakery.findOne({
+            owner_id: ownerId
+        });
+
+        //Check if the Bakery Owner has created a bakery
+        if (!bakery) {
+            return response.status(404).json({
+                message: "Bakery not found"
+            });
+        }
+
+        //Return the Bakery Owner's bakery
+        return response.status(200).json({
+            message: "Bakery retrieved successfully",
+            bakery: bakery
+        });
+
+    } catch (error) {
+        console.error("Get bakery error: ", error.message);
+
+        return response.status(500).json({
+            message: "Unable to get bakery"
+        });
+    }
+};
+
 //Export the bakery controller functions so they can be used in bakery routes
-export { createBakery };
+export { createBakery, getMyBakery };
