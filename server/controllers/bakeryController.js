@@ -116,5 +116,62 @@ const getMyBakery = async (request, response) => {
     }
 };
 
+//Update the authenticated Bakery Owner's bakery
+const updateMyBakery = async (request, response) => {
+    try {
+
+        //Get the authenticated Bakery Owner's user ID from the verified JWT
+        const ownerId = request.user.userId;
+
+        //Get the bakery information that the Bakery Owner is allowed to update
+        const {
+            name,
+            contact_email,
+            contact_phone,
+            description,
+            pickup_instructions,
+            address,
+            storefront_theme
+        } = request.body;
+
+        //Find the bakery that belongs to the authenticated Bakery Owner
+        const bakery = await Bakery.findOne({
+            owner_id: ownerId
+        });
+
+        //Check if the Bakery Owner has a bakery to update
+        if (!bakery) {
+            return response.status(404).json({
+                message: "Bakery not found"
+            });
+        }
+
+        //Update the bakery information
+        bakery.name = name;
+        bakery.contact_email = contact_email;
+        bakery.contact_phone = contact_phone;
+        bakery.description = description;
+        bakery.pickup_instructions = pickup_instructions;
+        bakery.address = address;
+        bakery.storefront_theme = storefront_theme;
+
+        //Save the updated bakery information to the database
+        await bakery.save();
+
+        //Return the updated bakery
+        return response.status(200).json({
+            message: "Bakery updated successfully",
+            bakery: bakery
+        });
+
+    } catch (error) {
+        console.error("Bakery update error: ", error.message);
+
+        return response.status(500).json({
+            message: "Unable to update bakery"
+        });
+    }
+};
+
 //Export the bakery controller functions so they can be used in bakery routes
-export { createBakery, getMyBakery };
+export { createBakery, getMyBakery, updateMyBakery };
