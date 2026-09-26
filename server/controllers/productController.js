@@ -65,5 +65,96 @@ const createProduct = async (request, response) => {
     }
 };
 
+//Get all products belonging to the authenticated Bakery Owner's bakery
+const getMyProducts = async (request, response) => {
+    try {
+
+        //Get the authenticated Bakery Owner's user ID from the verified JWT
+        const ownerId = request.user.userId;
+
+        //Find the bakery that belongs to the authenticated Bakery Owner
+        const bakery = await Bakery.findOne({
+            owner_id: ownerId
+        });
+
+        //Check id the Bakery Owner has created a bakery
+        if (!bakery) {
+            return response.status(404).json({
+                message: "Bakery not found"
+            });
+        }
+
+        //Find all products that belong to the authenticated owner's bakery
+        const products = await Product.find({
+            bakery_id: bakery._id
+        });
+
+        //Return all products belonging to the authenticated owner's bakery
+        return response.status(200).json({
+            message: "Products retrieved successfully",
+            products: products
+        });
+
+    } catch (error) {
+
+        console.error("Get products error: ", error.message);
+
+        return response.status(500).json({
+            message: "Unable to get products"
+        });
+    }
+};
+
+//Get one product belonging to the authenticated Bakery Owner's bakery
+const getMyProductById = async (request, response) => {
+    try {
+
+        //Get the authenticated Bakery Owner's user ID from the verified JWT
+        const ownerId = request.user.userId;
+
+        //Get the product ID from the URL
+        const productId = request.params.id;
+
+        //Find the bakery that belongs to the authenticated Bakery Owner
+        const bakery = await Bakery.findOne({
+            owner_id: ownerId
+        });
+
+        //Check if the Bakery Owner has created a bakery
+        if (!bakery) {
+            return response.status(404).json({
+                message: "Bakery not found"
+            });
+        }
+
+        //Find the requested product only if it belongs to the authenticated owner's bakery
+        const product = await Product.findOne({
+            _id: productId,
+            bakery_id: bakery._id
+        });
+
+        //Check if the product exists and belongs to the authenticated owner's bakery
+        if (!product) {
+            return response.status(404).json({
+                message: "Product not found"
+            });
+        }
+
+        //Return the requested product
+        return response.status(200).json({
+            message: "Product retrieved successfully",
+            product: product
+        });
+
+    } catch (error) {
+
+        console.error("Get product error: ", error.message);
+
+        return response.status(500).json({
+            message: "Unable to get product"
+        });
+    }
+};
+
 //Export the product controller functions so they can be used in product routes
-export { createProduct };
+export { createProduct, getMyProducts, getMyProductById };

@@ -2,7 +2,11 @@
 import express from "express";
 
 //Import the product controller functions
-import { createProduct } from "../controllers/productController.js";
+import {
+    createProduct,
+    getMyProducts,
+    getMyProductById
+} from "../controllers/productController.js";
 
 //Import authentication middleware to protect product routes
 import { authenticateUser } from "../middleware/authMiddleware.js";
@@ -68,6 +72,22 @@ const validateRequest = (request, response, next) => {
     //Continue to the controller if validation was successful
     next();
 };
+
+//Get all products belonging to the authenticated Bakery Owner's bakery
+router.get(
+    "/",
+    authenticateUser,
+    authorizeRoles("bakeryOwner"),
+    getMyProducts
+);
+
+//Get one product belonging to the authenticated Bakery Owner's bakery
+router.get(
+    "/:id",
+    authenticateUser,
+    authorizeRoles("bakeryOwner"),
+    getMyProductById
+);
 
 //Create a product for the authenticated Bakery Owner's bakery
 router.post(
