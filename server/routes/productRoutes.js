@@ -6,7 +6,8 @@ import {
     createProduct,
     getMyProducts,
     getMyProductById,
-    updateMyProduct
+    updateMyProduct,
+    deleteMyProduct
 } from "../controllers/productController.js";
 
 //Import authentication middleware to protect product routes
@@ -108,6 +109,14 @@ router.put(
     productValidation,
     validateRequest,
     updateMyProduct
+);
+
+//Delete a product belonging to the authenticated Bakery Owner's bakery
+router.delete(
+    "/:id",
+    authenticateUser,
+    authorizeRoles("bakeryOwner"),
+    deleteMyProduct
 );
 
 //Export the product router so it can be used in the main server file

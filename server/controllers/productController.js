@@ -235,10 +235,63 @@ const updateMyProduct = async (request, response) => {
     }
 };
 
+//Delete a product belonging to the authenticated Bakery Owner's bakery
+const deleteMyProduct = async (request, response) => {
+    try {
+
+        //Get the authenticated Bakery Owner's user ID from the verified JWT
+        const ownerId = request.user.userId;
+
+        //Get the product ID from the URL
+        const productId = request.params.id;
+
+        //Find the bakery that belongs to the authenticated Bakery Owner
+        const bakery = await Bakery.findOne({
+            owner_id: ownerId
+        });
+
+        //Check if the Bakery Owner has created a bakery
+        if (!bakery) {
+            return response.status(404).json({
+                message: "Bakery not found"
+            });
+        }
+
+        //Find the product only if it belongs to the authenticated owner's bakery
+        const product = await Product.findOne({
+            _id: productId,
+            bakery_id: bakery._id
+        });
+
+        //Check if the product exists and belongs to the authenticated owner's bakery
+        if (!product) {
+            return response.status(404).json({
+                message: "Product not found"
+            });
+        }
+
+        //Delete the product from MongoDB
+        await product.deleteOne();
+
+        //Return a success message after deleting the product
+        return response.status(200).json({
+            message: "Product deleted successfully"
+        });
+
+    } catch (error) {
+        console.error("Product deletion error: ", error.message);
+
+        return response.status(500).json({
+            message: "Unable to delete product"
+        });
+    }
+};
+
 //Export the product controller functions so they can be used in product routes
 export {
     createProduct,
     getMyProducts,
     getMyProductById,
-    updateMyProduct
+    updateMyProduct,
+    deleteMyProduct
 };
