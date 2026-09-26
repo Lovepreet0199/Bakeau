@@ -30,6 +30,7 @@ const createProduct = async (request, response) => {
             base_price,
             image_url,
             is_available,
+            is_visible,
             inventory_quantity,
             low_inventory_threshold,
             is_featured

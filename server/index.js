@@ -11,6 +11,9 @@ import authRoutes from "./routes/authRoutes.js";
 //Import bakery routes
 import bakeryRoutes from "./routes/bakeryRoutes.js";
 
+//Import product routes
+import productRoutes from "./routes/productRoutes.js";
+
 // Create an Express app and store it in the app variable
 const app = express();
 
@@ -22,6 +25,9 @@ app.use("/api/auth", authRoutes);
 
 //User bakery routes for requests starting with /api/bakeries
 app.use("/api/bakeries", bakeryRoutes);
+
+//Use product routes for product-related API requests
+app.use("/api/products", productRoutes);
 
 //Connect to MongoDB
 connectDB();
