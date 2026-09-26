@@ -5,7 +5,8 @@ import express from "express";
 import {
     createProduct,
     getMyProducts,
-    getMyProductById
+    getMyProductById,
+    updateMyProduct
 } from "../controllers/productController.js";
 
 //Import authentication middleware to protect product routes
@@ -97,6 +98,16 @@ router.post(
     productValidation,
     validateRequest,
     createProduct
+);
+
+//Update a product belonging to the authenticated Bakery Owner's bakery
+router.put(
+    "/:id",
+    authenticateUser,
+    authorizeRoles("bakeryOwner"),
+    productValidation,
+    validateRequest,
+    updateMyProduct
 );
 
 //Export the product router so it can be used in the main server file

@@ -156,5 +156,89 @@ const getMyProductById = async (request, response) => {
     }
 };
 
+//Update a product belonging to the authenticated Bakery Owner's bakery
+const updateMyProduct = async (request, response) => {
+
+    try {
+
+        //Get the authenticated Bakery Owner's user ID from the verified JWT
+        const ownerId = request.user.userId;
+
+        //Get the product ID from the URL
+        const productId = request.params.id;
+
+        //Find the bakery that belongs to the authenticated Bakery Owner
+        const bakery = await Bakery.findOne({
+            owner_id: ownerId
+        });
+
+        //Check if the Bakery Owner has created a bakery
+        if (!bakery) {
+            return response.status(404).json({
+                message: "Bakery not found"
+            });
+        }
+
+        //Find the product only if it belongs to the authenticated owner's bakery
+        const product = await Product.findOne({
+            _id: productId,
+            bakery_id: bakery._id
+        });
+
+        //Check if the product exists and belongs to the authenticated owner's bakery
+        if (!product) {
+            return response.status(404).json({
+                message: "Product not found"
+            });
+        }
+
+        //Get the updated product information submitted by the Bakery Owner
+        const {
+            name,
+            description,
+            base_price,
+            image_url,
+            is_available,
+            is_visible,
+            inventory_quantity,
+            low_inventory_threshold,
+            is_featured
+        } = request.body;
+
+        //Update the product information
+        product.name = name;
+        product.description = description;
+        product.base_price = base_price;
+        product.image_url = image_url;
+        product.is_available = is_available;
+        product.is_visible = is_visible;
+        product.inventory_quantity = inventory_quantity;
+        product.low_inventory_threshold = low_inventory_threshold;
+        product.is_featured = is_featured;
+
+        //Save the updated product information to MongoDB
+        await product.save();
+
+        //Return the updated product
+        return response.status(200).json({
+            message: "Product updated successfully",
+            product: product
+        });
+
+    } catch (error) {
+
+        console.error("Product update error: ", error.message);
+
+        return response.status(500).json({
+            message: "Unable to update product"
+        });
+    }
+};
+
 //Export the product controller functions so they can be used in product routes
-export { createProduct, getMyProducts, getMyProductById };
+export {
+    createProduct,
+    getMyProducts,
+    getMyProductById,
+    updateMyProduct
+};
