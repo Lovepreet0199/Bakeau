@@ -10,7 +10,8 @@ import {
     getCustomizationGroups,
     updateCustomizationGroup,
     deleteCustomizationGroup,
-    createCustomizationOption
+    createCustomizationOption,
+    getCustomizationOptions
 } from "../controllers/customizationController.js";
 
 //Import authentication middleware to verify the logged-in user
@@ -102,6 +103,14 @@ router.post(
     customizationOptionValidation,
     validateRequest,
     createCustomizationOption
+);
+
+//Get all customization options for a group owned by the authenticated Bakery Owner
+router.get(
+    "/groups/:groupId/options",
+    authenticateUser,
+    authorizeRoles("bakeryOwner"),
+    getCustomizationOptions
 );
 
 //Export the router so it can be used in the main server file

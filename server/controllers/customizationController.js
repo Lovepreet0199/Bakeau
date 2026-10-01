@@ -343,11 +343,77 @@ const createCustomizationOption = async (request, response) => {
     }
 };
 
+//Get all customization options for a group owned by the authenticated Bakery Owner
+const getCustomizationOptions = async (request, response) => {
+    try {
+        //Get the authenticated Bakery Owner's user ID from the verified JWT
+        const ownerId = request.user.userId;
+
+        //Get the customization group ID from the URL
+        const groupId = request.params.groupId;
+
+        //Find the bakery that belongs to the authenticated Bakery Owner
+        const bakery = await Bakery.findOne({
+            owner_id: ownerId
+        });
+
+        //Stop if the Bakery Owner does not have a bakery
+        if (!bakery) {
+            return response.status(404).json({
+                message: "Bakery not found"
+            });
+        }
+
+        //Find the customization group using the group ID from the URL
+        const customizationGroup = await CustomizationGroup.findOne({
+            _id: groupId
+        });
+
+        //Stop if the customization group does not exist
+        if (!customizationGroup) {
+            return response.status(404).json({
+                message: "Customization group not found"
+            });
+        }
+
+        //Find the product connected to the customization group and make sure it belongs to the owner's bakery
+        const product = await Product.findOne({
+            _id: customizationGroup.product_id,
+            bakery_id: bakery._id
+        });
+
+        //Stop if the customization group does not belong to the authenticated owner's bakery
+        if (!product) {
+            return response.status(404).json({
+                message: "Customization group not found"
+            });
+        }
+
+        //Find all customization options that belong to the verified customization group
+        const customizationOptions = await CustomizationOption.find({
+            group_id: customizationGroup._id
+        });
+
+        //Return all customization options that belong to the customization group
+        return response.status(200).json({
+            customizationOptions: customizationOptions
+        });
+
+    } catch (error) {
+        console.error("Get customization options error: ", error.message);
+
+        return response.status(500).json({
+            message: "Unable to get customization options"
+        });
+    }
+};
+
 //Export customization controller functions so they can be used in the routes
 export {
     createCustomizationGroup,
     getCustomizationGroups,
     updateCustomizationGroup,
     deleteCustomizationGroup,
-    createCustomizationOption
+    createCustomizationOption,
+    getCustomizationOptions
 };
