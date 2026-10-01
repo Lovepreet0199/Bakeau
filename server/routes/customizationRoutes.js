@@ -7,7 +7,9 @@ import { body, validationResult } from "express-validator";
 //Import customization controller functions to manage product customization groups
 import {
     createCustomizationGroup,
-    getCustomizationGroups
+    getCustomizationGroups,
+    updateCustomizationGroup,
+    deleteCustomizationGroup
 } from "../controllers/customizationController.js";
 
 //Import authentication middleware to verify the logged-in user
@@ -59,6 +61,24 @@ router.get(
     authenticateUser,
     authorizeRoles("bakeryOwner"),
     getCustomizationGroups
+);
+
+//Update a customization group owned by the authenticated Bakery Owner
+router.put(
+    "/groups/:groupId",
+    authenticateUser,
+    authorizeRoles("bakeryOwner"),
+    customizationGroupValidation,
+    validateRequest,
+    updateCustomizationGroup
+);
+
+//Delete a customization group owned by the authenticated Bakery Owner
+router.delete(
+    "/groups/:groupId",
+    authenticateUser,
+    authorizeRoles("bakeryOwner"),
+    deleteCustomizationGroup
 );
 
 //Export the router so it can be used in the main server file

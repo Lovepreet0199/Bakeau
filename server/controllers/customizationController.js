@@ -124,10 +124,154 @@ const getCustomizationGroups = async (request, response) => {
             message: "Unable to get customization groups"
         });
     }
-
 };
 
+//Update a customization group owned by the authenticated Bakery Owner
+const updateCustomizationGroup = async (request, response) => {
+    try {
+        //Get the authenticated Bakery Owner's user ID from the verified JWT
+        const ownerId = request.user.userId;
+
+        //Get the customization group ID from the URL
+        const groupId = request.params.groupId;
+
+        //Find the bakery that belongs to the authenticated Bakery Owner
+        const bakery = await Bakery.findOne({
+            owner_id: ownerId
+        });
+
+        //Stop if the Bakery Owner does not have a bakery
+        if (!bakery) {
+            return response.status(404).json({
+                message: "Bakery not found"
+            });
+        }
+
+        //Find the customization group using the group ID from the URL
+        const customizationGroup = await CustomizationGroup.findOne({
+            _id: groupId
+        });
+
+        //Stop if the customization group does not exist
+        if (!customizationGroup) {
+            return response.status(404).json({
+                message: "Customization group not found"
+            });
+        }
+
+        //Find the product connected to the customization group and make sure it belongs to the owner's bakery
+        const product = await Product.findOne({
+            _id: customizationGroup.product_id,
+            bakery_id: bakery._id
+        });
+
+        //Stop if the product does not belong to the authenticated owner's bakery
+        if (!product) {
+            return response.status(404).json({
+                message: "Customization group not found"
+            });
+        }
+
+        //Get the updated customization group information submitted by the Bakery Owner
+        const {
+            name,
+            is_required
+        } = request.body;
+
+        //Update the customization group with the submitted information
+        customizationGroup.name = name;
+        customizationGroup.is_required = is_required;
+
+        //Save the updated customization group in the database
+        await customizationGroup.save();
+
+        //Return the updated customization group to the Bakery Owner
+        return response.status(200).json({
+            message: "Customization group updated successfully",
+            customizationGroup: customizationGroup
+        });
+
+    } catch (error) {
+        console.error("Customization group update error: ", error.message);
+
+        return response.status(500).json({
+            message: "Unable to update customization group"
+        });
+    }
+};
+
+//Delete a customization group owned by the authenticated Bakery Owner
+const deleteCustomizationGroup = async (request, response) => {
+    try {
+        //Get the authenticated Bakery Owner's user ID from the verified JWT
+        const ownerId = request.user.userId;
+
+        //Get the customization group ID from the URL
+        const groupId = request.params.groupId;
+
+        //Find the bakery that belongs to the authenticated Bakery Owner
+        const bakery = await Bakery.findOne({
+            owner_id: ownerId
+        });
+
+        //Stop if the Bakery Owner does not have a bakery
+        if (!bakery) {
+            return response.status(404).json({
+                message: "Bakery not found"
+            });
+        }
+
+        //Find the customization group using the group ID from the URL
+        const customizationGroup = await CustomizationGroup.findOne({
+            _id: groupId
+        });
+
+        //Stop if the customization group does not exist
+        if (!customizationGroup) {
+            return response.status(404).json({
+                message: "Customization group not found"
+            });
+        }
+
+        //Find the product connected to the customization group and make sure it belongs to the owner's bakery
+        const product = await Product.findOne({
+            _id: customizationGroup.product_id,
+            bakery_id: bakery._id
+        });
+
+        //Stop if the customization group does not belong to the authenticated owner's bakery
+        if (!product) {
+            return response.status(404).json({
+                message: "Customization group not found"
+            });
+        }
+
+        //Delete all customization options that belong to this customization group
+        await CustomizationOption.deleteMany({
+            group_id: customizationGroup._id
+        });
+
+        //Delete the customization group from the database
+        await customizationGroup.deleteOne();
+
+        //Return a success message after the customization group is deleted
+        return response.status(200).json({
+            message: "Customization group deleted successfully"
+        });
+
+    } catch (error) {
+        console.error("Customization group deletion error: ", error.message);
+
+        return response.status(500).json({
+            message: "Unable to delete customization group"
+        });
+    }
+};
+
+//Export customization controller functions so they can be used in the routes
 export {
     createCustomizationGroup,
-    getCustomizationGroups
+    getCustomizationGroups,
+    updateCustomizationGroup,
+    deleteCustomizationGroup
 };
