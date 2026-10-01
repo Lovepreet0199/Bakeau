@@ -2,7 +2,7 @@
 import Bakery from "../models/Bakery.js";
 
 //Import the Product model to make sure the product belongs to the owner's bakery
-import Product from "../models/Products.js";
+import Product from "../models/Product.js";
 
 //Import the Customization Group model to manage product customization groups
 import CustomizationGroup from "../models/CustomizationGroup.js";
@@ -58,6 +58,12 @@ const createCustomizationGroup = async (request, response) => {
             is_required: is_required
         });
 
+        //Return the newly created customization group
+        return response.status(201).json({
+            message: "Customization group created successfully",
+            customizationGroup: newCustomizationGroup
+        });
+
     } catch (error) {
         console.error("Customization group creation error: ", error.message);
 
@@ -65,4 +71,63 @@ const createCustomizationGroup = async (request, response) => {
             message: "Unable to create customization group"
         });
     }
+};
+
+//Get all customization groups for a product owned by the authenticated Bakery Owner
+const getCustomizationGroups = async (request, response) => {
+    try {
+        //Get the authenticated Bakery Owner's user ID from verified JWT
+        const ownerId = request.user.userId;
+
+        //Get the product ID from the URL
+        const productId = request.params.productId;
+
+        //Find the bakery that belongs to the authenticated Bakery Owner
+        const bakery = await Bakery.findOne({
+            owner_id: ownerId
+        });
+
+        //Stop if the Bakery Owner does not have a bakery 
+        if (!bakery) {
+            return response.status(404).json({
+                message: "Bakery not found"
+            });
+        }
+
+        //Find the product and make sure it belongs to the authenticated owner's bakery
+        const product = await Product.findOne({
+            _id: productId,
+            bakery_id: bakery._id
+        });
+
+        //Stop if the product does not exist or does not belong to this bakery
+        if (!product) {
+            return response.status(404).json({
+                message: "Product not found"
+            });
+        }
+
+        //Find all customization groups that belong to the verified product
+        const customizationGroups = await CustomizationGroup.find({
+            product_id: product._id
+        });
+
+        //Return all customization groups that belong to the product
+        return response.status(200).json({
+            customizationGroups: customizationGroups
+        });
+
+    } catch (error) {
+        console.error("Get customization groups error: ", error.message);
+
+        return response.status(500).json({
+            message: "Unable to get customization groups"
+        });
+    }
+
+};
+
+export {
+    createCustomizationGroup,
+    getCustomizationGroups
 };
