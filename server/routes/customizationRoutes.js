@@ -4,12 +4,13 @@ import express from "express";
 //Import express-validator to validate customization information
 import { body, validationResult } from "express-validator";
 
-//Import customization controller functions to manage product customization groups
+//Import customization controller functions to manage product customization groups and options
 import {
     createCustomizationGroup,
     getCustomizationGroups,
     updateCustomizationGroup,
-    deleteCustomizationGroup
+    deleteCustomizationGroup,
+    createCustomizationOption
 } from "../controllers/customizationController.js";
 
 //Import authentication middleware to verify the logged-in user
@@ -30,6 +31,18 @@ const customizationGroupValidation = [
     body("is_required")
         .isBoolean()
         .withMessage("is_required must be true or false")
+];
+
+//Validate customization option information when creating or updating an option
+const customizationOptionValidation = [
+    body("name")
+        .trim()
+        .notEmpty()
+        .withMessage("Customization option name is required"),
+
+    body("additional_price")
+        .isFloat({ min: 0 })
+        .withMessage("Additional price must be 0 or greater")
 ];
 
 //Check the request for validation errors before continuing
@@ -79,6 +92,16 @@ router.delete(
     authenticateUser,
     authorizeRoles("bakeryOwner"),
     deleteCustomizationGroup
+);
+
+//Create a customization option for a group owned by the authenticated Bakery Owner
+router.post(
+    "/groups/:groupId/options",
+    authenticateUser,
+    authorizeRoles("bakeryOwner"),
+    customizationOptionValidation,
+    validateRequest,
+    createCustomizationOption
 );
 
 //Export the router so it can be used in the main server file

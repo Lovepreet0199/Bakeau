@@ -268,10 +268,86 @@ const deleteCustomizationGroup = async (request, response) => {
     }
 };
 
+//Create a customization option for a group owned by the authenticated Bakery Owner
+const createCustomizationOption = async (request, response) => {
+    try {
+        //Get the authenticated Bakery Owner's user ID from the verified JWT
+        const ownerId = request.user.userId;
+
+        //Get the customization group ID from the URL
+        const groupId = request.params.groupId;
+
+        //Find the bakery that belongs to the authenticated Bakery Owner
+        const bakery = await Bakery.findOne({
+            owner_id: ownerId
+        });
+
+        //Stop if the Bakery Owner does not have a bakery
+        if (!bakery) {
+            return response.status(404).json({
+                message: "Bakery not found"
+            });
+        }
+
+        //Find the customization group using group ID from the URL
+        const customizationGroup = await CustomizationGroup.findOne({
+            _id: groupId
+        });
+
+        //Stop if the customization group does not exist
+        if (!customizationGroup) {
+            return response.status(404).json({
+                message: "Customization group not found"
+            });
+        }
+
+        //Find the product connected to the customization group and make sure it belongs to the owner's bakery
+        const product = await Product.findOne({
+            _id: customizationGroup.product_id,
+            bakery_id: bakery._id
+        });
+
+        //Stop if the customization group does not belong to the authenticated owner's bakery
+        if (!product) {
+            return response.status(404).json({
+                message: "Customization group not found"
+            });
+        }
+
+        //Get the customization option information submitted by the Bakery Owner
+        const {
+            name,
+            additional_price
+        } = request.body;
+
+        //Create the customization option and connect it to the verified customization group
+        const newCustomizationOption = await CustomizationOption.create({
+            group_id: customizationGroup._id,
+            name: name,
+            additional_price: additional_price
+        });
+
+        //Return the newly created customization option
+        return response.status(201).json({
+            message: "Customization option created successfully",
+            customizationOption: newCustomizationOption
+        });
+
+
+    } catch (error) {
+        console.error("Customization option creation error: ", error.message);
+
+        return response.status(500).json({
+            message: "Unable to create customization option"
+        });
+    }
+};
+
 //Export customization controller functions so they can be used in the routes
 export {
     createCustomizationGroup,
     getCustomizationGroups,
     updateCustomizationGroup,
-    deleteCustomizationGroup
+    deleteCustomizationGroup,
+    createCustomizationOption
 };
