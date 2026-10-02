@@ -1,0 +1,64 @@
+/* Main footer area */
+.footer {
+    padding: 60px 0;
+
+    background-color: #2b1e19;
+    color: #ffffff;
+}
+
+/* Main footer row */
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Bakeau brand name */
+.footer-logo {
+    margin-bottom: 16px;
+
+    font-family: "Fraunces", serif;
+    font-size: 26px;
+    font-weight: 600;
+
+    color: #ffffff;
+}
+
+/* Short description underneath the Bakeau name */
+.footer-description {
+    max-width: 340px;
+    margin: 0;
+
+    font-size: 13px;
+    line-height: 1.7;
+
+    color: #b9aaa2;
+}
+
+/* Heading above each group of footer links */
+.footer-column h4 {
+    margin-bottom: 18px;
+
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+
+    color: #ffffff;
+}
+
+/* Footer navigation links */
+.footer-column a {
+    display: block;
+
+    width: fit-content;
+    margin-bottom: 12px;
+
+    font-size: 13px;
+    text-decoration: none;
+
+    color: #b9aaa2;
+}
+
+/* Give links simple feedback when hovered */
+.footer-column a:hover {
+    color: #ffffff;
+}

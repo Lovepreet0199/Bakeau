@@ -9,6 +9,7 @@ import StorefrontSection from "./components/StorefrontSection/StorefrontSection"
 import PricingSection from "./components/PricingSection/PricingSection";
 import FAQSection from "./components/FAQSection/FAQSection";
 import CTASection from "./components/CTASection/CTASection";
+import Footer from "./components/Footer/Footer";
 
 export default function App() {
   return (
@@ -42,6 +43,9 @@ export default function App() {
 
       {/* Final call-to-action section */}
       <CTASection />
+
+      {/* Landing Page Footer */}
+      <Footer />
     </>
   );
 }
