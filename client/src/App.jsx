@@ -1,15 +1,15 @@
 //Import the landing page components
-import Navbar from "./components/Navbar/Navbar";
-import Hero from "./components/Hero/Hero";
-import StatsStrip from "./components/StatsStrip/StatsStrip";
-import ChallengeSection from "./components/ChallengeSection/ChallengeSection";
-import FeaturesSection from "./components/FeaturesSection/FeaturesSection";
-import HowItWorks from "./components/HowItWorks/HowItWorks";
-import StorefrontSection from "./components/StorefrontSection/StorefrontSection";
-import PricingSection from "./components/PricingSection/PricingSection";
-import FAQSection from "./components/FAQSection/FAQSection";
-import CTASection from "./components/CTASection/CTASection";
-import Footer from "./components/Footer/Footer";
+import Navbar from "./components/landing/Navbar/Navbar";
+import Hero from "./components/landing/Hero/Hero";
+import StatsStrip from "./components/landing/StatsStrip/StatsStrip";
+import ChallengeSection from "./components/landing/ChallengeSection/ChallengeSection";
+import FeaturesSection from "./components/landing/FeaturesSection/FeaturesSection";
+import HowItWorks from "./components/landing/HowItWorks/HowItWorks";
+import StorefrontSection from "./components/landing/StorefrontSection/StorefrontSection";
+import PricingSection from "./components/landing/PricingSection/PricingSection";
+import FAQSection from "./components/landing/FAQSection/FAQSection";
+import CTASection from "./components/landing/CTASection/CTASection";
+import Footer from "./components/landing/Footer/Footer";
 
 export default function App() {
   return (
