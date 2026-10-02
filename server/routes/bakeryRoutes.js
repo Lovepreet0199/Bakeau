@@ -10,7 +10,8 @@ import {
     getMyBakery,
     updateMyBakery,
     getPublicBakery,
-    getPublicBakeryProducts
+    getPublicBakeryProducts,
+    getPublicBakeryProduct
 } from "../controllers/bakeryController.js";
 
 //Import authentication middleware to protect bakery routes
@@ -122,7 +123,13 @@ router.get(
 router.get(
     "/public/:slug/products",
     getPublicBakeryProducts
-)
+);
+
+//Get on public product and its customization details for an approved bakery
+router.get(
+    "/public/:slug/products/:productId",
+    getPublicBakeryProduct
+);
 
 //Export the bakery router so it can be connected to the main Express application
 export default router;

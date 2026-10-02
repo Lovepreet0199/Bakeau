@@ -4,6 +4,12 @@ import Bakery from "../models/Bakery.js";
 //Import the Product model to retrieve products for the public bakery storefront
 import Product from "../models/Product.js";
 
+//Import the Customization Group model to retrieve product customization groups
+import CustomizationGroup from "../models/CustomizationGroup.js";
+
+//Import the Customization Option model to retrieve options for each customization group
+import CustomizationOption from "../models/CustomizationOption.js";
+
 //Create a bakery for the authenticated Bakery Owner
 const createBakery = async (request, response) => {
     try {
@@ -249,11 +255,85 @@ const getPublicBakeryProducts = async (request, response) => {
     }
 };
 
+//Get a public product and its customization details for a specific bakery
+const getPublicBakeryProduct = async (request, response) => {
+    try {
+        //Get the bakery slug and product ID from the URL
+        const slug = request.params.slug;
+        const productId = request.params.productId;
+
+        //Find the approved bakery that matches the slug from the URL
+        const bakery = await Bakery.findOne({
+            slug: slug,
+            account_status: "Approved"
+        });
+
+        //Stop if the bakery does not exist or is not approved
+        if (!bakery) {
+            return response.status(404).json({
+                message: "Bakery not found"
+            });
+        }
+
+        //Find the public product and make sure it belongs to this bakery
+        const product = await Product.findOne({
+            _id: productId,
+            bakery_id: bakery._id,
+            is_visible: true,
+            is_available: true
+        }).select("-image_public_id -__v");
+
+        //Stop if the product does not exist or does not belong to this bakery
+        if (!product) {
+            return response.status(404).json({
+                message: "Product not found"
+            });
+        }
+
+        //Find all customization groups that belong to this product
+        const customizationGroups = await CustomizationGroup.find({
+            product_id: product._id
+        }).select("-__v");
+
+        //Create an array to store each customization group together with its options
+        const customizationDetails = [];
+
+        //Loop through each customization group to find its options
+        for (const customizationGroup of customizationGroups) {
+
+            //Find all customization options that belong to the current group
+            const customizationOptions = await CustomizationOption.find({
+                group_id: customizationGroup._id
+            }).select("-__v");
+
+            //Add the customization group and its options to the customization details array
+            customizationDetails.push({
+                group: customizationGroup,
+                options: customizationOptions
+            });
+        }
+
+        //Return the public product together with its customization groups and options
+        return response.status(200).json({
+            product: product,
+            customizationDetails: customizationDetails
+        });
+
+    } catch (error) {
+        console.error("Public product retrieval error: ", error.message);
+
+        return response.status(500).json({
+            message: "Unable to retrieve product"
+        });
+    }
+};
+
 //Export bakery controller functions so they can be used in the routes
 export {
     createBakery,
     getMyBakery,
     updateMyBakery,
     getPublicBakery,
-    getPublicBakeryProducts
+    getPublicBakeryProducts,
+    getPublicBakeryProduct
 };
