@@ -4,6 +4,7 @@ import Hero from "./components/Hero/Hero";
 import StatsStrip from "./components/StatsStrip/StatsStrip";
 import ChallengeSection from "./components/ChallengeSection/ChallengeSection";
 import FeaturesSection from "./components/FeaturesSection/FeaturesSection";
+import HowItWorks from "./components/HowItWorks/HowItWorks";
 
 export default function App() {
   return (
@@ -22,6 +23,9 @@ export default function App() {
 
       {/* Bakeau Features section */}
       <FeaturesSection />
+
+      {/* How it works section */}
+      <HowItWorks />
     </>
   );
 }

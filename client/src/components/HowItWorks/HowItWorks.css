@@ -1,0 +1,225 @@
+/* Main How It Works section */
+.how-it-works-section {
+    width: 100%;
+    padding: 80px 0;
+
+    background-color: #fffdf9;
+}
+
+/* Small label above the main heading */
+.how-it-works-label {
+    margin-bottom: 18px;
+
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+
+    color: #ba5937;
+}
+
+/* Main How It Works heading */
+.how-it-works-title {
+    margin-bottom: 0;
+
+    font-family: "Fraunces", serif;
+    font-size: 40px;
+    font-weight: 600;
+    line-height: 1.15;
+
+    color: #3b2a23;
+}
+
+
+/* Container holding the five Bakeau setup steps */
+.how-it-works-steps {
+    margin-top: 52px;
+}
+
+/* Individual setup step */
+.how-it-works-step {
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+/* Number displayed above each step */
+.how-it-works-number {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-family: "Fraunces", serif;
+    font-size: 20px;
+    font-weight: 600;
+
+    color: #ba5937;
+    background-color: #f7dfd3;
+
+    border-radius: 50%;
+}
+
+/* Title for each setup step */
+.how-it-works-step-title {
+    margin-bottom: 12px;
+
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.3;
+
+    color: #3b2a23;
+}
+
+/* Description underneath each setup step */
+.how-it-works-step-description {
+    max-width: 230px;
+    margin: 0 auto;
+
+    font-size: 13px;
+    line-height: 1.6;
+
+    color: #75665d;
+}
+
+/* Allows the connector line to be positioned relative to each step */
+.how-it-works-step {
+    position: relative;
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+/* Connector line between each numbered step */
+.how-it-works-step:not(:last-child)::after {
+    content: "";
+
+    position: absolute;
+    top: 28px;
+    left: calc(50% + 38px);
+
+    width: calc(100% - 76px);
+    height: 1px;
+
+    background-color: #dfcfc5;
+}
+
+/* Space above the How It Works call-to-action */
+.how-it-works-action {
+    margin-top: 40px;
+}
+
+/* Main call-to-action button */
+.how-it-works-btn {
+    padding: 13px 26px;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    color: #ffffff;
+    background-color: #ba5937;
+
+    border: none;
+    border-radius: 6px;
+
+    transition: background-color 0.2s ease;
+}
+
+/* Slightly darker button when hovered */
+.how-it-works-btn:hover {
+    background-color: #a94f31;
+}
+
+/* Tablet How It Works adjustments */
+@media (max-width: 991px) {
+
+    /* Reduce the overall section spacing */
+    .how-it-works-section {
+        padding: 70px 0;
+    }
+
+    /* Reduce the main heading size */
+    .how-it-works-title {
+        font-size: 36px;
+    }
+
+    /* Add spacing between the stacked steps */
+    .how-it-works-step {
+        margin-bottom: 32px;
+    }
+
+    /* Hide the horizontal connector lines when the steps stack */
+    .how-it-works-step:not(:last-child)::after {
+        display: none;
+    }
+
+    /* Remove unnecessary spacing after the final step */
+    .how-it-works-step:last-child {
+        margin-bottom: 0;
+    }
+}
+
+/* Phone How It Works adjustments */
+@media (max-width: 575px) {
+
+    /* Make the section more compact on small screens */
+    .how-it-works-section {
+        padding: 48px 0;
+    }
+
+    /* Smaller label */
+    .how-it-works-label {
+        margin-bottom: 10px;
+        font-size: 10px;
+    }
+
+    /* Smaller heading so it fits comfortably */
+    .how-it-works-title {
+        font-size: 30px;
+        line-height: 1.15;
+    }
+
+    /* Bring the steps closer to the heading */
+    .how-it-works-steps {
+        margin-top: 36px;
+    }
+
+    /* Reduce the large gap between each step */
+    .how-it-works-step {
+        margin-bottom: 28px;
+    }
+
+    /* Smaller numbered circles */
+    .how-it-works-number {
+        width: 44px;
+        height: 44px;
+        margin-bottom: 12px;
+
+        font-size: 17px;
+    }
+
+    /* Slightly smaller step titles */
+    .how-it-works-step-title {
+        margin-bottom: 7px;
+        font-size: 14px;
+    }
+
+    /* Keep descriptions readable without taking too much space */
+    .how-it-works-step-description {
+        max-width: 280px;
+
+        font-size: 12px;
+        line-height: 1.5;
+    }
+
+    /* Less space before the final button */
+    .how-it-works-action {
+        margin-top: 24px;
+    }
+
+    /* Full-width CTA like our other mobile buttons */
+    .how-it-works-btn {
+        width: 100%;
+        padding: 12px 16px;
+    }
+}
