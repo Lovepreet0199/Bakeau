@@ -1,0 +1,112 @@
+/* Final landing-page call-to-action section */
+.cta-section {
+    padding: 90px 0;
+
+    background-color: #3b2a23;
+}
+
+/* Limits the width of the CTA text and keeps everything centered */
+.cta-content {
+    max-width: 760px;
+}
+
+/* Main CTA heading */
+.cta-title {
+    margin-bottom: 22px;
+
+    font-family: "Fraunces", serif;
+    font-size: 42px;
+    font-weight: 600;
+    line-height: 1.15;
+
+    color: #ffffff;
+}
+
+/* Supporting CTA message */
+.cta-description {
+    margin: 0 auto 28px;
+
+    font-size: 16px;
+    line-height: 1.6;
+
+    color: #dfd3cc;
+}
+
+/* Main Start Your Bakery button */
+.cta-button {
+    padding: 14px 42px;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    color: #ffffff;
+    background-color: #ba5937;
+
+    border: none;
+    border-radius: 10px;
+}
+
+/* Slightly darkens the CTA when the user hovers */
+.cta-button:hover {
+    background-color: #a94f31;
+}
+
+/* Small free-trial information underneath the button */
+.cta-note {
+    margin-top: 20px;
+    margin-bottom: 0;
+
+    font-size: 12px;
+
+    color: #9f8c82;
+}
+
+/* Tablet CTA adjustments */
+@media (max-width: 991px) {
+
+    .cta-section {
+        padding: 70px 0;
+    }
+
+    .cta-title {
+        font-size: 36px;
+    }
+}
+
+
+/* Phone CTA adjustments */
+@media (max-width: 575px) {
+
+    /* Reduce empty space around the CTA on small screens */
+    .cta-section {
+        padding: 58px 0;
+    }
+
+    .cta-title {
+        margin-bottom: 18px;
+
+        font-size: 30px;
+        line-height: 1.15;
+    }
+
+    .cta-description {
+        margin-bottom: 22px;
+
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    /* Give the main action a comfortable mobile width */
+    .cta-button {
+        width: 100%;
+        max-width: 220px;
+
+        padding: 13px 20px;
+    }
+
+    .cta-note {
+        margin-top: 18px;
+
+        font-size: 10px;
+    }
+}
