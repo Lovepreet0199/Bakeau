@@ -5,6 +5,7 @@ import StatsStrip from "./components/StatsStrip/StatsStrip";
 import ChallengeSection from "./components/ChallengeSection/ChallengeSection";
 import FeaturesSection from "./components/FeaturesSection/FeaturesSection";
 import HowItWorks from "./components/HowItWorks/HowItWorks";
+import StorefrontSection from "./components/StorefrontSection/StorefrontSection";
 
 export default function App() {
   return (
@@ -26,6 +27,9 @@ export default function App() {
 
       {/* How it works section */}
       <HowItWorks />
+
+      {/* Shows bakery owners what their public storefront can look like */}
+      <StorefrontSection />
     </>
   );
 }

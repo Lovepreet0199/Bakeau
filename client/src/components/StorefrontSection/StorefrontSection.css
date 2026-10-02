@@ -1,0 +1,200 @@
+/* Main storefront section */
+.storefront-section {
+    width: 100%;
+    padding: 80px 0;
+
+    background-color: #f5efe8;
+}
+
+/* Main two-column content area */
+.storefront-content {
+    margin: 0 auto;
+}
+
+/* Small label above the heading */
+.storefront-label {
+    margin-bottom: 18px;
+
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+
+    color: #ba5937;
+}
+
+/* Main storefront heading */
+.storefront-title {
+    max-width: 550px;
+    margin-bottom: 0;
+
+    font-family: "Fraunces", serif;
+    font-size: 42px;
+    font-weight: 600;
+    line-height: 1.25;
+
+    color: #3b2a23;
+}
+
+/* Description underneath the storefront heading */
+.storefront-description {
+    max-width: 600px;
+    margin-top: 24px;
+    margin-bottom: 26px;
+
+    font-size: 15px;
+    line-height: 1.7;
+
+    color: #75665d;
+}
+
+/* Container for the storefront feature list */
+.storefront-benefits {
+    margin-bottom: 32px;
+}
+
+/* Individual storefront feature */
+.storefront-benefits p {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    margin-bottom: 12px;
+
+    font-size: 15px;
+    color: #5f5149;
+}
+
+/* Green check mark beside each feature */
+.storefront-check {
+    font-size: 17px;
+    font-weight: 600;
+
+    color: #3f7d63;
+}
+
+/* Button used to view an example bakery storefront */
+.storefront-example-btn {
+    padding: 13px 24px;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    color: #3b2a23;
+    background-color: transparent;
+
+    border: 1px solid #3b2a23;
+    border-radius: 8px;
+
+    transition: all 0.2s ease;
+}
+
+/* Give the outlined button feedback when hovered */
+.storefront-example-btn:hover {
+    color: #ffffff;
+    background-color: #3b2a23;
+}
+
+/* Example bakery storefront displayed on the right side */
+.storefront-preview {
+    width: 100%;
+    max-width: 680px;
+    height: auto;
+
+    border-radius: 16px;
+
+    box-shadow: 0 14px 32px rgba(59, 42, 35, 0.12);
+}
+
+/* Tablet storefront adjustments */
+@media (max-width: 991px) {
+
+    .storefront-section {
+        padding: 65px 0;
+    }
+
+    /* Allow the heading to use the full tablet width */
+    .storefront-title {
+        max-width: 100%;
+        font-size: 36px;
+    }
+
+    /* Allow the description to use the full tablet width */
+    .storefront-description {
+        max-width: 100%;
+    }
+
+    /* Storefront preview sits underneath and fills the available space */
+    .storefront-preview {
+        width: 100%;
+        max-width: 100%;
+
+        margin-top: 48px;
+    }
+}
+
+/* Phone storefront adjustments */
+@media (max-width: 575px) {
+
+    /* Reduce the overall section spacing */
+    .storefront-section {
+        padding: 48px 0;
+    }
+
+    /* Smaller section label */
+    .storefront-label {
+        margin-bottom: 12px;
+
+        font-size: 10px;
+    }
+
+    /* Match the smaller mobile heading from the Figma */
+    .storefront-title {
+        font-size: 30px;
+        line-height: 1.25;
+    }
+
+    /* Make the description more compact */
+    .storefront-description {
+        margin-top: 20px;
+        margin-bottom: 22px;
+
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    /* Reduce spacing between the feature points */
+    .storefront-benefits {
+        margin-bottom: 26px;
+    }
+
+    .storefront-benefits p {
+        gap: 8px;
+        margin-bottom: 9px;
+
+        font-size: 12px;
+    }
+
+    /* Slightly smaller checkmarks on phones */
+    .storefront-check {
+        font-size: 14px;
+    }
+
+    /* Keep the button compact like the Figma */
+    .storefront-example-btn {
+        width: auto;
+
+        padding: 12px 18px;
+
+        font-size: 12px;
+    }
+
+    /* Storefront preview appears underneath the content */
+    .storefront-preview {
+        width: 100%;
+        max-width: 100%;
+
+        margin-top: 40px;
+
+        border-radius: 12px;
+    }
+}
