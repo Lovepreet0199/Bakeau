@@ -1,6 +1,9 @@
 //Import the Bakery model to create and manage bakery records
 import Bakery from "../models/Bakery.js";
 
+//Import the Product model to retrieve products for the public bakery storefront
+import Product from "../models/Product.js";
+
 //Create a bakery for the authenticated Bakery Owner
 const createBakery = async (request, response) => {
     try {
@@ -206,10 +209,51 @@ const getPublicBakery = async (request, response) => {
     }
 };
 
+//Get the public products for a bakery using its unique slug
+const getPublicBakeryProducts = async (request, response) => {
+    try {
+        //Get the bakery slug from the URL
+        const slug = request.params.slug;
+
+        //Find the approved bakery that matches the slug from the URL
+        const bakery = await Bakery.findOne({
+            slug: slug,
+            account_status: "Approved"
+        });
+
+        //Stop if the bakery does not exist or is not approved
+        if (!bakery) {
+            return response.status(404).json({
+                message: "Bakery not found"
+            });
+        }
+
+        //Find the public products that belong to this bakery
+        const products = await Product.find({
+            bakery_id: bakery._id,
+            is_visible: true,
+            is_available: true
+        }).select("-image_public_id -__v");
+
+        //Return the bakery's public products
+        return response.status(200).json({
+            products: products
+        });
+
+    } catch (error) {
+        console.error("Public bakery products retrieval error: ", error.message);
+
+        return response.status(500).json({
+            message: "Unable to retrieve bakery products"
+        });
+    }
+};
+
 //Export bakery controller functions so they can be used in the routes
 export {
     createBakery,
     getMyBakery,
     updateMyBakery,
-    getPublicBakery
+    getPublicBakery,
+    getPublicBakeryProducts
 };
