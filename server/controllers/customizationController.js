@@ -408,6 +408,167 @@ const getCustomizationOptions = async (request, response) => {
     }
 };
 
+//Update a customization option owned by the authenticated Bakery Owner
+const updateCustomizationOption = async (request, response) => {
+    try {
+        //Get the authenticated Bakery Owner's user ID from the verified JWT
+        const ownerId = request.user.userId;
+
+        //Get the customization option ID from the URL
+        const optionId = request.params.optionId;
+
+        //Find the bakery that belongs to the authenticated Bakery Owner
+        const bakery = await Bakery.findOne({
+            owner_id: ownerId
+        });
+
+        //Stoop if the Bakery Owner does not have a bakery
+        if (!bakery) {
+            return response.status(404).json({
+                message: "Bakery not found"
+            });
+        }
+
+        //Find the customization option using option ID from the URL
+        const customizationOption = await CustomizationOption.findOne({
+            _id: optionId
+        });
+
+        //Stop if the customization option does not exist
+        if (!customizationOption) {
+            return response.status(404).json({
+                message: "Customization option not found"
+            });
+        }
+
+        //Find the customization group connected to the customization option
+        const customizationGroup = await CustomizationGroup.findOne({
+            _id: customizationOption.group_id
+        });
+
+        //Stop if the customization group does not exist
+        if (!customizationGroup) {
+            return response.status(404).json({
+                message: "Customization option not found"
+            });
+        }
+
+        //Find the product connected to the customization group and make sure it belongs to the owner's bakery
+        const product = await Product.findOne({
+            _id: customizationGroup.product_id,
+            bakery_id: bakery._id
+        });
+
+        //Stop if the customization option does not belong to the authenticated owner's bakery
+        if (!product) {
+            return response.status(404).json({
+                message: "Customization option not found"
+            });
+        }
+
+        //Get the updated customization option information submitted by the Bakery Owner
+        const {
+            name,
+            additional_price
+        } = request.body;
+
+        //Update the customization option with the submitted information
+        customizationOption.name = name;
+        customizationOption.additional_price = additional_price;
+
+        //Save the updated customization option in the database
+        await customizationOption.save();
+
+        //Return the updated customization option to the Bakery Owner
+        return response.status(200).json({
+            message: "Customization option updated successfully",
+            customizationOption: customizationOption
+        });
+
+    } catch (error) {
+        console.error("Customization option update error: ", error.message);
+
+        return response.status(500).json({
+            message: "Unable to update customization option"
+        });
+    }
+};
+
+//Delete a customization option owned by the authenticated Bakery Owner
+const deleteCustomizationOption = async (request, response) => {
+    try {
+        //Get the authenticated Bakery Owner's user ID from the verified JWT
+        const ownerId = request.user.userId;
+
+        //Get the customization option ID from the URL
+        const optionId = request.params.optionId;
+
+        //Find the bakery that belongs to the authenticated Bakery Owner
+        const bakery = await Bakery.findOne({
+            owner_id: ownerId
+        });
+
+        //Stoop if the Bakery Owner does not have a bakery
+        if (!bakery) {
+            return response.status(404).json({
+                message: "Bakery not found"
+            });
+        }
+
+        //Find the customization option using the option ID from the URL
+        const customizationOption = await CustomizationOption.findOne({
+            _id: optionId
+        });
+
+        //Stop if the customization option does not exist
+        if (!customizationOption) {
+            return response.status(404).json({
+                message: "Customization option not found"
+            });
+        }
+
+        //Find the customization group connected to the customization option
+        const customizationGroup = await CustomizationGroup.findOne({
+            _id: customizationOption.group_id
+        });
+
+        //Stop if the customization group does not exist
+        if (!customizationGroup) {
+            return response.status(404).json({
+                message: "Customization option not found"
+            });
+        }
+
+        //Find the product connected to the customization group and make sure it belongs to the owner's bakery
+        const product = await Product.findOne({
+            _id: customizationGroup.product_id,
+            bakery_id: bakery._id
+        });
+
+        //Stop if the customization option does not belong to the authenticated owner's bakery
+        if (!product) {
+            return response.status(404).json({
+                message: "Customization option not found"
+            });
+        }
+
+        //Delete the customization option from the database
+        await customizationOption.deleteOne();
+
+        //Return a success message after the customization option is deleted
+        return response.status(200).json({
+            message: "Customization option deleted successfully"
+        });
+
+    } catch (error) {
+        console.error("Customization option deletion error: ", error.message);
+
+        return response.status(500).json({
+            message: "Unable to delete customization option"
+        });
+    }
+};
+
 //Export customization controller functions so they can be used in the routes
 export {
     createCustomizationGroup,
@@ -415,5 +576,7 @@ export {
     updateCustomizationGroup,
     deleteCustomizationGroup,
     createCustomizationOption,
-    getCustomizationOptions
+    getCustomizationOptions,
+    updateCustomizationOption,
+    deleteCustomizationOption
 };

@@ -11,7 +11,9 @@ import {
     updateCustomizationGroup,
     deleteCustomizationGroup,
     createCustomizationOption,
-    getCustomizationOptions
+    getCustomizationOptions,
+    updateCustomizationOption,
+    deleteCustomizationOption
 } from "../controllers/customizationController.js";
 
 //Import authentication middleware to verify the logged-in user
@@ -112,6 +114,24 @@ router.get(
     authorizeRoles("bakeryOwner"),
     getCustomizationOptions
 );
+
+//Update a customization option owned by the authenticated Bakery Owner
+router.put(
+    "/options/:optionId",
+    authenticateUser,
+    authorizeRoles("bakeryOwner"),
+    customizationOptionValidation,
+    validateRequest,
+    updateCustomizationOption
+);
+
+//Delete a customization option owned by the authenticated Bakery Owner
+router.delete(
+    "/options/:optionId",
+    authenticateUser,
+    authorizeRoles("bakeryOwner"),
+    deleteCustomizationOption
+)
 
 //Export the router so it can be used in the main server file
 export default router;
