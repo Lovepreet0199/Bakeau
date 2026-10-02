@@ -30,16 +30,15 @@ export default function Footer() {
 
                         <a href="#features">Features</a>
                         <a href="#pricing">Pricing</a>
-                        <a href="#how-it-works">How it works</a>
+                        <a href="#">For Bakeries</a>
                     </div>
 
                     {/* Help navigation */}
-                    <div className="col-lg-2 col-md-4 col-6 footer-column">
+                    <div className="col-lg-2 col-6 footer-column">
                         <h4>HELP</h4>
 
-                        <a href="#faq">FAQ</a>
+                        <a href="#">Help Center</a>
                         <a href="#">Contact</a>
-                        <a href="#">Support</a>
                     </div>
 
                     {/* Legal navigation */}
@@ -52,8 +51,24 @@ export default function Footer() {
 
                 </div>
 
+                {/* Bottom area of the footer */}
+                <div className="footer-bottom">
+
+                    {/* Separates the navigation from the copyright information */}
+                    <div className="footer-divider"></div>
+
+                    <p className="footer-copyright">
+                        © 2026 Bakeau. All rights reserved.
+                    </p>
+
+                    <p className="footer-tagline">
+                        Made for independent bakery owners.
+                    </p>
+
+                </div>
+
             </div>
-            
+
         </footer>
     );
 }
