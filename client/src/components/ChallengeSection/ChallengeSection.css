@@ -352,3 +352,86 @@
     /* Very subtle depth like the Figma design */
     box-shadow: 0 2px 4px rgba(59, 42, 35, 0.06);
 }
+
+/* Tablet Challenge section adjustments */
+@media (max-width: 991px) {
+
+    /* Reduce section spacing on smaller screens */
+    .challenge-section {
+        padding: 70px 0;
+    }
+
+    /* Reduce the main Challenge heading size */
+    .challenge-title {
+        font-size: 34px;
+    }
+
+    /* Add space between the Without Bakeau and With Bakeau sections */
+    .challenge-comparison .col-lg-6+.col-lg-6 {
+        margin-top: 36px;
+    }
+}
+
+/* Mobile Challenge section adjustments */
+@media (max-width: 575px) {
+
+    /* Reduce the overall section spacing on phones */
+    .challenge-section {
+        padding: 52px 0;
+    }
+
+    /* Reduce the main heading size for smaller screens */
+    .challenge-title {
+        font-size: 30px;
+        line-height: 1.15;
+    }
+
+    /* Bring the comparison closer to the heading */
+    .challenge-comparison {
+        margin-top: 32px;
+    }
+
+    /* Make the comparison labels slightly smaller */
+    .challenge-side-label {
+        font-size: 10px;
+        margin-bottom: 14px;
+    }
+
+    /* Make the message cards more compact */
+    .challenge-message-card {
+        padding: 12px;
+        margin-bottom: 10px;
+    }
+
+    /* Slightly reduce the message icons */
+    .challenge-message-icon {
+        width: 30px;
+        height: 30px;
+        margin-right: 10px;
+    }
+
+    /* Reduce the platform name */
+    .challenge-message-title {
+        font-size: 12px;
+    }
+
+    /* Reduce the customer message text */
+    .challenge-message-text {
+        font-size: 11px;
+    }
+
+    /* Reduce the message timestamp */
+    .challenge-message-time {
+        font-size: 9px;
+    }
+
+    /* Reduce the order card sections slightly */
+    .bakeau-order-header,
+    .bakeau-order-customer-row,
+    .bakeau-order-pickup-row,
+    .bakeau-order-customizations,
+    .bakeau-order-payment {
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+}

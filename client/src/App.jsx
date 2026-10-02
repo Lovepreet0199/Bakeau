@@ -1,14 +1,9 @@
-//Import the navigation bar for the landing page
+//Import the landing page components
 import Navbar from "./components/Navbar/Navbar";
-
-//Import Hero section component for the landing page
-import Hero from "./components/Hero/Hero"
-
-//Import Stats Strip for the landing page
+import Hero from "./components/Hero/Hero";
 import StatsStrip from "./components/StatsStrip/StatsStrip";
-
-//Import Challenge section for landing page
 import ChallengeSection from "./components/ChallengeSection/ChallengeSection";
+import FeaturesSection from "./components/FeaturesSection/FeaturesSection";
 
 export default function App() {
   return (
@@ -24,6 +19,9 @@ export default function App() {
 
       {/* Challenge section displayed below Statistics */}
       <ChallengeSection />
+
+      {/* Bakeau Features section */}
+      <FeaturesSection />
     </>
   );
 }
