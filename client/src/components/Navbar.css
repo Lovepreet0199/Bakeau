@@ -1,0 +1,186 @@
+/* Main Bakeau header */
+.site-header {
+    position: relative;
+    width: 100%;
+    min-height: 68px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #eee8e3;
+    z-index: 1000;
+}
+
+/* Holds all navbar content in one row */
+.navbar-content {
+    min-height: 68px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Bakeau logo */
+.navbar-logo {
+    font-family: "Fraunces", serif;
+    font-size: 24px;
+    font-weight: 600;
+    color: #3b2a23;
+    text-decoration: none;
+}
+
+.navbar-logo:hover {
+    color: #3b2a23;
+}
+
+/* Main desktop navigation */
+.main-navigation {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+}
+
+/* Navigation links */
+.main-navigation a {
+    font-size: 14px;
+    font-weight: 500;
+    color: #75665d;
+    text-decoration: none;
+}
+
+.main-navigation a:hover {
+    color: #3b2a23;
+}
+
+/* Desktop account actions */
+.navbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+/* Desktop Sign In link */
+.navbar-signin {
+    font-size: 14px;
+    font-weight: 500;
+    color: #75665d;
+    text-decoration: none;
+}
+
+.navbar-signin:hover {
+    color: #3b2a23;
+}
+
+/* Desktop Start Your Bakery button */
+.navbar-start {
+    padding: 9px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #ffffff;
+    background-color: #ba5937;
+    border-radius: 10px;
+    text-decoration: none;
+}
+
+.navbar-start:hover {
+    color: #ffffff;
+    background-color: #a94f31;
+}
+
+/* Mobile account actions are hidden on desktop */
+.mobile-nav-action {
+    display: none;
+}
+
+/* Hamburger button is hidden on desktop */
+.navbar-menu-button {
+    display: none;
+}
+
+
+/* ========================================
+   TABLET AND MOBILE
+   ======================================== */
+
+@media (max-width: 991px) {
+
+    /* Mobile dropdown navigation */
+    .main-navigation {
+        display: none;
+
+        position: absolute;
+        top: 68px;
+        left: 0;
+
+        width: 100%;
+        padding: 10px 24px 14px;
+
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+
+        background-color: #ffffff;
+        border-bottom: 1px solid #eee8e3;
+
+        z-index: 1000;
+    }
+
+    /* React adds this class when the hamburger is clicked */
+    .main-navigation--open {
+        display: flex;
+    }
+
+    /* Mobile navigation links */
+    .main-navigation a {
+        width: 100%;
+        padding: 10px 0;
+        font-size: 14px;
+    }
+
+    /* Hide desktop account actions */
+    .navbar-actions {
+        display: none;
+    }
+
+    /* Show account actions inside mobile menu */
+    .mobile-nav-action {
+        display: block;
+    }
+
+    /* Divider above Sign In */
+    .mobile-nav-signin {
+        margin-top: 4px;
+        padding-top: 18px !important;
+        border-top: 1px solid #eee8e3;
+    }
+
+    /* Mobile Start Your Bakery button */
+    .main-navigation .mobile-nav-start {
+        margin-top: 2px;
+        padding: 11px 14px;
+
+        color: #ffffff;
+        background-color: #ba5937;
+
+        border-radius: 7px;
+        text-align: left;
+    }
+
+    .main-navigation .mobile-nav-start:hover {
+        color: #ffffff;
+        background-color: #a94f31;
+    }
+
+    /* Show hamburger / close button */
+    .navbar-menu-button {
+        display: block;
+
+        padding: 4px;
+
+        background: none;
+        border: none;
+
+        color: #75665d;
+        font-size: 26px;
+        font-weight: 300;
+        line-height: 1;
+
+        cursor: pointer;
+    }
+}
