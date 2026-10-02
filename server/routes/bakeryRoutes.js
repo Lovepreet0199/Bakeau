@@ -8,7 +8,8 @@ import { body, validationResult } from "express-validator";
 import {
     createBakery,
     getMyBakery,
-    updateMyBakery
+    updateMyBakery,
+    getPublicBakery
 } from "../controllers/bakeryController.js";
 
 //Import authentication middleware to protect bakery routes
@@ -108,6 +109,12 @@ router.put(
     bakeryValidation,
     validateRequest,
     updateMyBakery
+);
+
+//Get an approved bakery storefront using its public slug
+router.get(
+    "/public/:slug",
+    getPublicBakery
 );
 
 //Export the bakery router so it can be connected to the main Express application

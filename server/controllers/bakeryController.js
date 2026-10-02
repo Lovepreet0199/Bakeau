@@ -173,5 +173,43 @@ const updateMyBakery = async (request, response) => {
     }
 };
 
-//Export the bakery controller functions so they can be used in bakery routes
-export { createBakery, getMyBakery, updateMyBakery };
+//Get a public bakery storefront using its unique slug
+const getPublicBakery = async (request, response) => {
+    try {
+        //Get the bakery slug from the URL
+        const slug = request.params.slug;
+
+        //Find an approved bakery that matches the slug from the URL
+        const bakery = await Bakery.findOne({
+            slug: slug,
+            account_status: "Approved"
+        }).select("-owner_id -__v");
+
+        //Stop if the bakery does not exist or is not approved
+        if (!bakery) {
+            return response.status(404).json({
+                message: "Bakery not found"
+            });
+        }
+
+        //Return the approved bakery information for the public storefront
+        return response.status(200).json({
+            bakery: bakery
+        });
+
+    } catch (error) {
+        console.error("Public bakery retrieval error: ", error.message);
+
+        return response.status(500).json({
+            message: "Unable to retrieve bakery"
+        });
+    }
+};
+
+//Export bakery controller functions so they can be used in the routes
+export {
+    createBakery,
+    getMyBakery,
+    updateMyBakery,
+    getPublicBakery
+};
