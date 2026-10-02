@@ -7,6 +7,7 @@ import FeaturesSection from "./components/FeaturesSection/FeaturesSection";
 import HowItWorks from "./components/HowItWorks/HowItWorks";
 import StorefrontSection from "./components/StorefrontSection/StorefrontSection";
 import PricingSection from "./components/PricingSection/PricingSection";
+import FAQSection from "./components/FAQSection/FAQSection";
 
 export default function App() {
   return (
@@ -34,6 +35,9 @@ export default function App() {
 
       {/* Displays Bakeau subscription plans and pricing */}
       <PricingSection />
+
+      {/* Display FAQ section */}
+      <FAQSection />
     </>
   );
 }

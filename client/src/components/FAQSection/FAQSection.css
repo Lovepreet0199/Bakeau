@@ -1,0 +1,166 @@
+/* Main FAQ section */
+.faq-section {
+    padding: 90px 0;
+
+    background-color: #f5efe8;
+}
+
+/* Centers the heading above the questions */
+.faq-heading {
+    margin-bottom: 48px;
+}
+
+/* Small terracotta section label */
+.faq-label {
+    margin-bottom: 14px;
+
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+
+    color: #ba5937;
+}
+
+/* Main FAQ heading */
+.faq-title {
+    margin: 0;
+
+    font-family: "Fraunces", serif;
+    font-size: 42px;
+    font-weight: 600;
+    line-height: 1.15;
+
+    color: #3b2a23;
+}
+
+/* Limits the FAQ list width to match the Figma layout */
+.faq-list {
+    max-width: 840px;
+}
+
+/* Individual FAQ card */
+.faq-item {
+    margin-bottom: 14px;
+
+    background-color: #ffffff;
+
+    border: 1px solid #ded5cd;
+    border-radius: 12px;
+
+    overflow: hidden;
+}
+
+/* Clickable question row */
+.faq-question {
+    width: 100%;
+    padding: 22px 28px;
+
+    font-size: 16px;
+    font-weight: 600;
+    text-align: left;
+
+    color: #3b2a23;
+    background-color: #ffffff;
+
+    border: none;
+}
+
+/* Plus / minus icon on the right side */
+.faq-icon {
+    margin-left: 20px;
+
+    font-size: 18px;
+    font-weight: 400;
+
+    color: #75665d;
+}
+
+/* Answer area shown when a question is opened */
+.faq-answer {
+    padding: 0 28px 22px;
+}
+
+/* FAQ answer text */
+.faq-answer p {
+    margin: 0;
+
+    font-size: 14px;
+    line-height: 1.7;
+
+    color: #75665d;
+}
+
+/* Tablet FAQ adjustments */
+@media (max-width: 991px) {
+
+    /* Reduce vertical spacing on tablets */
+    .faq-section {
+        padding: 70px 0;
+    }
+
+    .faq-heading {
+        margin-bottom: 38px;
+    }
+
+    /* Slightly reduce the main heading */
+    .faq-title {
+        font-size: 36px;
+    }
+
+    /* Keep the FAQ list from touching the screen edges */
+    .faq-list {
+        max-width: 720px;
+    }
+}
+
+/* Phone FAQ adjustments */
+@media (max-width: 575px) {
+
+    /* More compact section spacing for phones */
+    .faq-section {
+        padding: 52px 0;
+    }
+
+    .faq-heading {
+        margin-bottom: 30px;
+    }
+
+    .faq-label {
+        margin-bottom: 10px;
+        font-size: 10px;
+    }
+
+    .faq-title {
+        font-size: 30px;
+        line-height: 1.15;
+    }
+
+    /* Make each question comfortable to tap on a phone */
+    .faq-question {
+        padding: 18px 16px;
+
+        font-size: 14px;
+        line-height: 1.4;
+    }
+
+    .faq-icon {
+        margin-left: 14px;
+        font-size: 18px;
+    }
+
+    /* Align opened answers with their question text */
+    .faq-answer {
+        padding: 0 16px 18px;
+    }
+
+    .faq-answer p {
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    /* Slightly reduce space between FAQ cards */
+    .faq-item {
+        margin-bottom: 10px;
+        border-radius: 10px;
+    }
+}
