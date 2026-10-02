@@ -2,7 +2,7 @@
 import "./StorefrontSection.css";
 
 // Import the bakery storefront preview image
-import storefrontPreview from "../../assets/img/storefront-summary.png";
+import storefrontPreview from "../../../assets/img/storefront-summary.png";
 
 // Shows bakery owners what their public Bakeau storefront can look like
 export default function StorefrontSection() {

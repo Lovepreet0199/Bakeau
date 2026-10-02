@@ -2,7 +2,7 @@
 import "./FeaturesSection.css";
 
 //Import the bakery storefront preview
-import storefrontPreview from "../../assets/img/storefront-preview.png";
+import storefrontPreview from "../../../assets/img/storefront-preview.png";
 
 //Main Features section for the Bakeau landing page
 export default function FeaturesSection() {

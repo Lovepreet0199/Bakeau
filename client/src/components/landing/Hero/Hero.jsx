@@ -2,7 +2,7 @@
 import "./Hero.css";
 
 //Import the dashboard preview image used in the Hero section
-import dashboardPreview from "../../assets/img/bakeau-dashboard-preview.png";
+import dashboardPreview from "../../../assets/img/bakeau-dashboard-preview.png";
 
 //Main Hero section for the Bakeau landing page
 export default function Hero() {

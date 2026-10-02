@@ -8,7 +8,7 @@
     background-image:
         linear-gradient(rgba(35, 24, 18, 0.28),
             rgba(35, 24, 18, 0.28)),
-        url("../../assets/img/hero-background.png");
+        url("../../../assets/img/hero-background.png");
 
     background-size: cover;
     background-position: center;
