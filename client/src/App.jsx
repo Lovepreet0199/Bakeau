@@ -6,6 +6,7 @@ import ChallengeSection from "./components/ChallengeSection/ChallengeSection";
 import FeaturesSection from "./components/FeaturesSection/FeaturesSection";
 import HowItWorks from "./components/HowItWorks/HowItWorks";
 import StorefrontSection from "./components/StorefrontSection/StorefrontSection";
+import PricingSection from "./components/PricingSection/PricingSection";
 
 export default function App() {
   return (
@@ -30,6 +31,9 @@ export default function App() {
 
       {/* Shows bakery owners what their public storefront can look like */}
       <StorefrontSection />
+
+      {/* Displays Bakeau subscription plans and pricing */}
+      <PricingSection />
     </>
   );
 }
