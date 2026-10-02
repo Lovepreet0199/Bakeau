@@ -1,0 +1,77 @@
+/* Statistics strip displayed below the Hero */
+.stats-strip {
+    padding: 28px 0;
+    background-color: #fffdf9;
+    border-bottom: 1px solid #eee7e1;
+}
+
+/* Main statistic number */
+.stats-number {
+    margin-bottom: 4px;
+
+    font-family: "Fraunces", serif;
+    font-size: 26px;
+    font-weight: 600;
+
+    color: #3b2a23;
+}
+
+/* Description displayed below each statistic */
+.stats-label {
+    margin-bottom: 0;
+
+    font-size: 12px;
+    font-weight: 500;
+
+    color: #75665d;
+}
+
+/* Tablet Stats Strip adjustments */
+@media (max-width: 991px) {
+
+    /* Reduce the overall height of the statistics strip */
+    .stats-strip {
+        padding: 18px 0;
+    }
+
+    /* Add spacing when the statistics wrap into two rows */
+    .stats-strip .col-6 {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    /* Reduce the statistic number size on tablets */
+    .stats-number {
+        font-size: 22px;
+    }
+
+    /* Reduce the statistic description on tablets */
+    .stats-label {
+        font-size: 11px;
+    }
+}
+
+/* Mobile Stats Strip adjustments */
+@media (max-width: 575px) {
+
+    /* Make the statistics strip more compact on phones */
+    .stats-strip {
+        padding: 12px 0;
+    }
+
+    /* Reduce spacing around each statistic */
+    .stats-strip .col-12 {
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+
+    /* Smaller statistic numbers for phone screens */
+    .stats-number {
+        font-size: 19px;
+    }
+
+    /* Smaller labels for phone screens */
+    .stats-label {
+        font-size: 10px;
+    }
+}

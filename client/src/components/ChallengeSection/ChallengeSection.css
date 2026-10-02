@@ -1,0 +1,354 @@
+/* Main Challenge section */
+.challenge-section {
+    padding: 45px 0;
+    background-color: #fffdf9;
+}
+
+/* Small label above the Challenge heading */
+.challenge-label {
+    margin-bottom: 12px;
+
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+
+    color: #ba5937;
+}
+
+/* Main Challenge section heading */
+.challenge-title {
+    margin-bottom: 16px;
+
+    font-family: "Fraunces", serif;
+    font-size: 40px;
+    font-weight: 600;
+    line-height: 1.15;
+
+    color: #3b2a23;
+}
+
+/* Space between the section heading and comparison content */
+.challenge-comparison {
+    margin-top: 40px;
+}
+
+/* Labels above both sides of the comparison */
+.challenge-side-label {
+    margin-bottom: 18px;
+
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+/* Label above the scattered order examples */
+.challenge-side-label--without {
+    color: #8a6f60;
+}
+
+/* Label above the organized Bakeau order */
+.challenge-side-label--with {
+    color: #287a58;
+}
+
+/* Individual message card shown on the Without Bakeau side */
+.challenge-message-card {
+    width: 100%;
+    padding: 16px;
+
+    background-color: #ffffff;
+    border: 1px solid #e8ddd5;
+    border-radius: 12px;
+}
+
+/* Circular icon displayed beside each message */
+.challenge-message-icon {
+    width: 34px;
+    height: 34px;
+    margin-right: 14px;
+
+    /* Centers the letter inside the circle */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    font-size: 12px;
+    font-weight: 600;
+    color: #ffffff;
+
+    border-radius: 50%;
+}
+
+/* Instagram message icon */
+.challenge-message-icon--instagram {
+    background-color: #e1306c;
+}
+
+/* Main content area of the message */
+.challenge-message-content {
+    min-width: 0;
+}
+
+/* Individual message card shown on the Without Bakeau side */
+.challenge-message-card {
+    width: 100%;
+    padding: 16px;
+    margin-bottom: 12px;
+
+    background-color: #ffffff;
+    border: 1px solid #e8ddd5;
+    border-radius: 12px;
+}
+
+/* WhatsApp message icon */
+.challenge-message-icon--whatsapp {
+    background-color: #25d366;
+}
+
+/* Name of the platform the message came from */
+.challenge-message-title {
+    margin-bottom: 4px;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    color: #3b2a23;
+}
+
+/* Time displayed on the right side of the message */
+.challenge-message-time {
+    margin-left: 12px;
+
+    font-size: 10px;
+    font-weight: 400;
+
+    color: #a3948b;
+}
+
+/* Customer message text */
+.challenge-message-text {
+    margin-bottom: 0;
+
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.5;
+
+    color: #75665d;
+}
+
+/* Email message icon */
+.challenge-message-icon--email {
+    background-color: #4f7cac;
+}
+
+/* Spreadsheet message icon */
+.challenge-message-icon--spreadsheet {
+    background-color: #34a853;
+}
+
+/* Phone call icon */
+.challenge-message-icon--phone {
+    background-color: #8a6f60;
+}
+
+/* Header section of the Bakeau order card */
+.bakeau-order-header {
+    padding: 18px 20px;
+}
+
+/* Small order number displayed above the product name */
+.bakeau-order-number {
+    margin-bottom: 4px;
+
+    font-size: 10px;
+    font-weight: 500;
+
+    color: #8a7b72;
+}
+
+/* Main product name displayed in the order header */
+.bakeau-order-product-title {
+    margin-bottom: 0;
+
+    font-size: 16px;
+    font-weight: 600;
+
+    color: #3b2a23;
+}
+
+/* Current order status */
+.bakeau-order-status {
+    padding: 5px 12px;
+
+    font-size: 10px;
+    font-weight: 600;
+
+    color: #287a58;
+    background-color: #e8f5ee;
+
+    border-radius: 20px;
+}
+
+/* Customer information row */
+.bakeau-order-customer-row {
+    padding: 16px 20px;
+    border-top: 1px solid #eee7e1;
+}
+
+/* Customer name */
+.bakeau-order-customer-name {
+    margin-bottom: 2px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #3b2a23;
+}
+
+/* Customer email and phone number */
+.bakeau-order-contact {
+    margin-bottom: 0;
+    font-size: 10px;
+    color: #8a7b72;
+}
+
+/* Pickup information row */
+.bakeau-order-pickup-row {
+    padding: 16px 20px;
+    border-top: 1px solid #eee7e1;
+}
+
+/* Calendar icon displayed beside the pickup information */
+.bakeau-order-pickup-icon {
+    width: 36px;
+    height: 36px;
+    margin-right: 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    font-size: 17px;
+    color: #ba5937;
+    background-color: #fff3eb;
+    border-radius: 8px;
+}
+
+/* Pickup date and time */
+.bakeau-order-pickup-date {
+    margin-bottom: 2px;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    color: #3b2a23;
+}
+
+/* Bakery pickup location */
+.bakeau-order-pickup-location {
+    margin-bottom: 0;
+
+    font-size: 10px;
+
+    color: #8a7b72;
+}
+
+/* Customization section inside the Bakeau order */
+.bakeau-order-customizations {
+    padding: 18px 20px;
+    border-top: 1px solid #eee7e1;
+}
+
+/* Heading used for sections inside the order card */
+.bakeau-order-section-title {
+    margin-bottom: 14px;
+
+    font-size: 10px;
+    font-weight: 600;
+
+    color: #3b2a23;
+}
+
+/* Small label describing each customization */
+.bakeau-customization-label {
+    margin-bottom: 2px;
+
+    font-size: 9px;
+    font-weight: 500;
+
+    color: #a3948b;
+}
+
+/* Selected customization value */
+.bakeau-customization-value {
+    margin-bottom: 10px;
+
+    font-size: 11px;
+    font-weight: 600;
+
+    color: #3b2a23;
+}
+
+/* Payment section inside the Bakeau order */
+.bakeau-order-payment {
+    padding: 18px 20px;
+    border-top: 1px solid #eee7e1;
+}
+
+/* Standard rows in the payment breakdown */
+.bakeau-payment-row {
+    margin-bottom: 7px;
+
+    font-size: 11px;
+    color: #75665d;
+}
+
+/* Final order total */
+.bakeau-payment-total {
+    padding-top: 10px;
+    margin-top: 10px;
+
+    font-size: 12px;
+    color: #3b2a23;
+
+    border-top: 1px solid #eee7e1;
+}
+
+/* Deposit already paid by the customer */
+.bakeau-payment-paid {
+    margin-top: 12px;
+
+    font-size: 11px;
+    color: #287a58;
+}
+
+/* Remaining payment due at pickup */
+.bakeau-payment-due {
+    padding-top: 10px;
+    margin-top: 10px;
+
+    font-size: 12px;
+    color: #ba5937;
+
+    border-top: 1px solid #eee7e1;
+}
+
+/* Organized order card shown on the With Bakeau side */
+.bakeau-order-card {
+    width: 100%;
+    padding: 0;
+
+    background-color: #ffffff;
+
+    /* Outer border keeps the entire order inside one card */
+    border: 1px solid #e4d8cf;
+    border-radius: 12px;
+
+    /* Keeps the inner sections inside the rounded corners */
+    overflow: hidden;
+
+    /* Very subtle depth like the Figma design */
+    box-shadow: 0 2px 4px rgba(59, 42, 35, 0.06);
+}
