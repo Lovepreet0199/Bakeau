@@ -1,0 +1,4 @@
+/* Smoothly scroll to landing page sections when navbar links are clicked */
+html {
+    scroll-behavior: smooth;
+}

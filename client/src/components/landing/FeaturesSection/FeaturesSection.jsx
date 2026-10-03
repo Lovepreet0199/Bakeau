@@ -7,7 +7,7 @@ import storefrontPreview from "../../../assets/img/storefront-preview.png";
 //Main Features section for the Bakeau landing page
 export default function FeaturesSection() {
     return (
-        <section className="features-section" id="features">
+        <section id="features" className="features-section" >
 
             {/* Responsive horizontal spacing for the Features section */}
             <div className="container-fluid px-3 px-md-4">
@@ -89,7 +89,7 @@ export default function FeaturesSection() {
                             {/* Main benefits of the Bakeau storefront */}
                             <div className="features-benefits">
 
-                                <p>✓ Branded bakery page (your logo, colours, photos)</p>
+                                <p>✓ Branded bakery page (your logo, colors, photos)</p>
 
                                 <p>✓ Custom product options (size, flavour, filling, etc.)</p>
 
