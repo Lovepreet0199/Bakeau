@@ -15,6 +15,9 @@ export default function Register() {
     // Stores a registration error that can be shown to the user
     const [formError, setFormError] = useState("");
 
+    // Tracks whether the registration request is currently being submitted
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
     // Stores the values entered in the registration form
     const [formData, setFormData] = useState({
         firstName: "",
@@ -66,8 +69,50 @@ export default function Register() {
             password: formData.password,
         };
 
-        console.log(registrationData);
-        console.log("Registration form is valid");
+        // Prevents the form from being submitted again while the request is running
+        setIsSubmitting(true);
+
+        try {
+            // Sends the bakery owner registration data to the backend
+            const response = await fetch(
+                "http://localhost:3000/api/auth/register/bakery-owner",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(registrationData)
+                }
+            );
+
+            //Converts the backend JSON response into a JavaScript object
+            const data = await response.json();
+
+            //Stop registration if the backend returns an error
+            if (!response.ok) {
+
+                // Express-validator returns validation errors inside an errors array
+                if (data.errors && data.errors.length > 0) {
+                    setFormError(data.errors[0].msg);
+                } else {
+                    setFormError(data.message || "Registration failed. Please try again.");
+                }
+
+                return;
+            }
+
+            //Registration was successful
+            setFormError("");
+            console.log("Registration successful:", data);
+
+        } catch (error) {
+            // Handles connection errors such as the backend server being unavailable
+            setFormError("Unable to connect to Bakeau. Please try again.");
+            console.error("Registration error:", error);
+        } finally {
+            // Allows the form to be submitted again after the request finishes
+            setIsSubmitting(false);
+        }
     }
 
     return (
@@ -298,8 +343,12 @@ export default function Register() {
                             </div>
 
                             {/* Submits the bakery owner registration form */}
-                            <button type="submit" className="btn register-submit-btn w-100">
-                                Create account
+                            <button
+                                type="submit"
+                                className="btn register-submit-btn w-100"
+                                disabled={isSubmitting}
+                            >
+                                {isSubmitting ? "Creating account..." : "Create account"}
                             </button>
 
                             {/* Link for users who already have a Bakeau account */}

@@ -1,5 +1,9 @@
+// Allows the React frontend to communicate with the Express backend
+import cors from "cors";
+
 //Import Express to create Bakeau server/application
 import express from "express";
+
 //for ES6, this import makes the environment variables available THROUGHOUT the app
 import "dotenv/config";
 
@@ -19,6 +23,13 @@ import customizationRoutes from "./routes/customizationRoutes.js";
 
 // Create an Express app and store it in the app variable
 const app = express();
+
+// Allows requests from the Bakeau React frontend during development
+app.use(
+    cors({
+        origin: "http://localhost:5173"
+    })
+);
 
 //Allow Express to read JSON data send in request bodies
 app.use(express.json());
