@@ -36,7 +36,7 @@ export default function Register() {
     }
 
     // Handles the registration form submission
-    function handleSubmit(event) {
+    async function handleSubmit(event) {
         event.preventDefault();
 
         //Make sure both password fields contain the same password
@@ -45,9 +45,28 @@ export default function Register() {
             return;
         }
 
+        // Checks that the password meets Bakeau's password requirements
+        const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}$/;
+
+        if (!passwordPattern.test(formData.password)) {
+            setFormError(
+                "Password must be at least 8 characters and include uppercase, lowercase, and a number."
+            );
+            return;
+        }
+
         //Clears an old error when the form is valid
         setFormError("");
 
+        // Prepares the registration data in the format expected by the backend
+        const registrationData = {
+            first_name: formData.firstName,
+            last_name: formData.lastName,
+            email: formData.email,
+            password: formData.password,
+        };
+
+        console.log(registrationData);
         console.log("Registration form is valid");
     }
 

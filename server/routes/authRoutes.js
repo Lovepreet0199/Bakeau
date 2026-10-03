@@ -40,13 +40,7 @@ const registerValidation = [
         .matches(/[a-z]/)
         .withMessage("Password must contain a lowercase letter")
         .matches(/[0-9]/)
-        .withMessage("Password must contain a number"),
-
-    body("role")
-        .notEmpty()
-        .withMessage("Account type is required")
-        .isIn(["customer", "bakeryOwner"])
-        .withMessage("Account type must be Customer or Bakery Owner")
+        .withMessage("Password must contain a number")
 ];
 
 //Validation rules for user login
@@ -84,9 +78,31 @@ const validateRequest = (request, response, next) => {
 //Create a router for authentication routes
 const router = express.Router();
 
-//Register a new Customer or a Bakery Owner.
-router.post("/register", registerValidation, validateRequest, registerUser);
+// Register a new Bakery Owner
+router.post(
+    "/register/bakery-owner",
+    registerValidation,
+    validateRequest,
+    (request, response) => {
+        // The backend decides the account role, not the frontend
+        request.body.role = "bakeryOwner";
 
+        return registerUser(request, response);
+    }
+);
+
+// Register a new Customer
+router.post(
+    "/register/customer",
+    registerValidation,
+    validateRequest,
+    (request, response) => {
+        // The backend decides the account role, not the frontend
+        request.body.role = "customer";
+
+        return registerUser(request, response);
+    }
+);
 //Login an existing user
 router.post("/login", loginValidation, validateRequest, loginUser);
 
