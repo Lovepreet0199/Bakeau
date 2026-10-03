@@ -40,7 +40,7 @@ const registerValidation = [
         .matches(/[a-z]/)
         .withMessage("Password must contain a lowercase letter")
         .matches(/[0-9]/)
-        .withMessage("Password must contain a number"), ,
+        .withMessage("Password must contain a number"),
 
     body("role")
         .notEmpty()
