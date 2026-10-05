@@ -11,6 +11,9 @@ import CheckEmail from "./pages/CheckEmail/CheckEmail";
 //Import the email verification page
 import VerifyEmail from "./pages/VerifyEmail/VerifyEmail";
 
+//Import the Bakeau login page
+import Login from "./pages/Login/Login";
+
 export default function App() {
   return (
     <>
@@ -33,6 +36,12 @@ export default function App() {
           path="/verify-email"
           element={<VerifyEmail />}
         />
+
+        <Route
+          path="/login"
+          element={<Login />} />
+
+
       </Routes>
     </>
   );

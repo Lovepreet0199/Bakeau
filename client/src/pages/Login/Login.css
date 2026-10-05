@@ -1,0 +1,278 @@
+/* Main login page */
+.login-page {
+    background-color: #fffdf9;
+    color: #3b2a23;
+}
+
+/* Left side of the desktop login layout */
+.login-image-panel {
+    position: relative;
+    min-height: 100vh;
+    overflow: hidden;
+
+    /* Display the bakery image across the full panel */
+    background-image: url("../../assets/img/login-cake.png");
+    background-size: cover;
+    background-position: center;
+}
+
+/* Adds contrast between the background image and the text */
+.login-image-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(35, 22, 17, 0.48);
+}
+
+/* Keeps the Bakeau text above the dark image overlay */
+.login-image-content {
+    position: relative;
+    z-index: 1;
+    padding: 48px;
+    color: #ffffff;
+}
+
+/* Bakeau brand displayed over the image */
+.login-brand {
+    width: fit-content;
+    color: #ffffff;
+    font-family: "Fraunces", serif;
+    font-size: 24px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+/* Small brand icon beside the Bakeau name */
+.login-brand-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 18px;
+}
+
+/* Main message displayed over the cake image */
+.login-image-title {
+    max-width: 520px;
+    font-family: "Fraunces", serif;
+    font-size: clamp(37px, 4vw, 64px);
+    line-height: 1.08;
+}
+
+/* Supporting message below the image heading */
+.login-image-description {
+    max-width: 500px;
+    color: rgba(255, 255, 255, 0.88);
+    font-size: 16px;
+    line-height: 1.7;
+}
+
+/* Right side of the desktop login layout */
+.login-form-panel {
+    min-height: 100vh;
+    background-color: #fffdf9;
+}
+
+/* Controls the maximum width of the sign in form */
+.login-form-content {
+    max-width: 520px;
+}
+
+/* Main sign in heading */
+.login-title {
+    font-family: "Fraunces", serif;
+    font-size: clamp(35px, 3vw, 51px);
+    line-height: 1.15;
+    color: #3b2a23;
+}
+
+/* Supporting text below the sign in heading */
+.login-subtitle {
+    color: #75645c;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+/* Labels displayed above the login form fields */
+.login-form-label {
+    color: #3b2a23;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* Email and password inputs */
+.login-input {
+    min-height: 52px;
+    padding: 12px 16px;
+    border: 1px solid #d8cec8;
+    border-radius: 8px;
+    background-color: #ffffff;
+    color: #3b2a23;
+}
+
+/* Makes the active form field clear for keyboard and mouse users */
+.login-input:focus {
+    border-color: #ba5937;
+    box-shadow: 0 0 0 3px rgba(186, 89, 55, 0.15);
+}
+
+/* Forgot password link displayed beside the password label */
+.login-forgot-link {
+    color: #ba5937;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.login-forgot-link:hover {
+    color: #a94f31;
+    text-decoration: underline;
+}
+
+/* Makes the forgot password link visible when using keyboard navigation */
+.login-forgot-link:focus-visible {
+    outline: 2px solid #ba5937;
+    outline-offset: 3px;
+    border-radius: 3px;
+}
+
+/* Remember device checkbox label */
+.login-checkbox-label {
+    color: #5f514b;
+    font-size: 14px;
+}
+
+/* Uses the Bakeau accent color when the checkbox is selected */
+.login-checkbox:checked {
+    background-color: #ba5937;
+    border-color: #ba5937;
+}
+
+/* Makes the checkbox clearly visible during keyboard navigation */
+.login-checkbox:focus {
+    border-color: #ba5937;
+    box-shadow: 0 0 0 3px rgba(186, 89, 55, 0.15);
+}
+
+/* Displays login errors without relying only on color */
+.login-error {
+    padding: 14px 16px;
+    border: 1px solid #e3b8aa;
+    border-radius: 8px;
+    background-color: #fff4f0;
+    color: #7c3425;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* Main sign in button */
+.login-submit-btn {
+    min-height: 52px;
+    border: none;
+    border-radius: 8px;
+    background-color: #ba5937;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+}
+
+/* Sign in button hover state */
+.login-submit-btn:hover:not(:disabled) {
+    background-color: #a94f31;
+}
+
+/* Makes the button visible during keyboard navigation */
+.login-submit-btn:focus-visible {
+    outline: 3px solid rgba(186, 89, 55, 0.35);
+    outline-offset: 3px;
+}
+
+/* Shows that the form is currently being submitted */
+.login-submit-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+}
+
+/* Horizontal lines displayed beside the OR text */
+.login-divider-line {
+    height: 1px;
+    background-color: #ddd3cd;
+}
+
+/* OR text displayed between the divider lines */
+.login-divider-text {
+    color: #8a7a72;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* Text displayed below the sign in button */
+.login-register-text {
+    color: #75645c;
+    font-size: 14px;
+}
+
+/* Link to the bakery registration page */
+.login-register-link {
+    color: #ba5937;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.login-register-link:hover {
+    color: #a94f31;
+    text-decoration: underline;
+}
+
+/* Makes the registration link visible during keyboard navigation */
+.login-register-link:focus-visible {
+    outline: 2px solid #ba5937;
+    outline-offset: 3px;
+    border-radius: 3px;
+}
+
+/* Bakeau branding displayed above the form on smaller screens */
+.login-mobile-brand {
+    color: #3b2a23;
+    font-family: "Fraunces", serif;
+    font-size: 22px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.login-mobile-brand:hover {
+    color: #ba5937;
+}
+
+/* Small Bakeau icon beside the mobile brand name */
+.login-mobile-brand-icon {
+    width: 30px;
+    height: 30px;
+    font-size: 17px;
+}
+
+/* Makes the mobile Bakeau link visible during keyboard navigation */
+.login-mobile-brand:focus-visible {
+    outline: 2px solid #ba5937;
+    outline-offset: 4px;
+    border-radius: 4px;
+}
+
+/* Back button displayed above the login form */
+.login-back-button {
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: #75645c;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.login-back-button:hover {
+    color: #ba5937;
+}
+
+/* Makes the back button visible during keyboard navigation */
+.login-back-button:focus-visible {
+    outline: 2px solid #ba5937;
+    outline-offset: 4px;
+    border-radius: 4px;
+}
