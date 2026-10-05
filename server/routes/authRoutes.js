@@ -5,7 +5,8 @@ import express from "express";
 import {
     registerUser,
     loginUser,
-    verifyEmail
+    verifyEmail,
+    resendVerificationEmail
 } from "../controllers/authController.js";
 
 //Import body to validate request fields and validationResult to check for validation errors
@@ -112,6 +113,12 @@ router.post(
 router.post(
     "/verify-email",
     verifyEmail
+);
+
+//Send a new verification email to an unverified user
+router.post(
+    "/resend-verification",
+    resendVerificationEmail
 );
 
 //Login an existing user

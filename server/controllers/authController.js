@@ -163,6 +163,88 @@ const verifyEmail = async (request, response) => {
     }
 };
 
+//Send a new email verification link to an unverified user
+const resendVerificationEmail = async (request, response) => {
+    try {
+
+        //Get the email address sent by the frontend
+        const { email } = request.body;
+
+        //Stop if no email address was provided
+        if (!email) {
+            return response.status(400).json({
+                message: "Email is required"
+            });
+        }
+
+        //Find the user account with the provided email
+        const user = await User.findOne({
+            email: email
+        });
+
+        //Stop if no account exists with the provided email
+        if (!user) {
+            return response.status(404).json({
+                message: "User account not found"
+            });
+        }
+
+        //Stop if the user's email address is already verified
+        if (user.email_verified) {
+            return response.status(400).json({
+                message: "Email is already verified"
+            });
+        }
+
+        //Create a new secure random token for email verification
+        const emailVerificationToken = crypto.randomBytes(32).toString("hex");
+
+        //Hash the new verification token before storing it in the database
+        const emailVerificationTokenHash = crypto
+            .createHash("sha256")
+            .update(emailVerificationToken)
+            .digest("hex");
+
+        //Set the new verification token to expire after 24 hours
+        const emailVerificationExpiresAt = new Date(
+            Date.now() + 24 * 60 * 60 * 1000
+        );
+
+        //Replace the old verification token with the new token
+        user.email_verification_token_hash = emailVerificationTokenHash;
+        user.email_verification_expires_at = emailVerificationExpiresAt;
+
+        //Save the new verification token and expiry time to MongoDB
+        await user.save();
+
+        //Create a new verification link using the new verification token
+        const verificationUrl =
+            `http://localhost:5173/verify-email?token=${emailVerificationToken}`;
+
+        //Send the new verification email to the user
+        await sendVerificationEmail(
+            user.email,
+            verificationUrl
+        );
+
+        //Tell the frontend that a new verification email was sent successfully
+        return response.status(200).json({
+            message: "Verification email sent successfully"
+        });
+
+    } catch (error) {
+
+        //Log the error for debugging on the server
+        console.error("Resend verification email error:", error.message);
+
+        //Return a generic error message to the frontend
+        return response.status(500).json({
+            message: "Unable to resend verification email"
+        });
+
+    }
+};
+
 //Login an existing user
 const loginUser = async (request, response) => {
     try {
@@ -187,6 +269,14 @@ const loginUser = async (request, response) => {
         if (!passwordMatches) {
             return response.status(400).json({
                 message: "Invalid email or password"
+            });
+        }
+
+        //Stop normal login if the user's email address has not been verified
+        if (!user.email_verified) {
+            return response.status(403).json({
+                message: "Please verify your email before continuing",
+                emailVerified: false
             });
         }
 
@@ -228,4 +318,9 @@ const loginUser = async (request, response) => {
 
 
 //Export the authentication controller functions so they can be used in the authentication routes
-export { registerUser, loginUser, verifyEmail };
+export {
+    registerUser,
+    loginUser,
+    verifyEmail,
+    resendVerificationEmail
+};
