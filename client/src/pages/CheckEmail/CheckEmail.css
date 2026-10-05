@@ -1,0 +1,227 @@
+/* Main email verification page */
+.check-email-page {
+    background-color: #fffdf9;
+    color: #3b2a23;
+    font-family: "Inter", sans-serif;
+}
+
+/* Bakeau wordmark */
+.check-email-logo {
+    color: #3b2a23;
+    font-family: "Fraunces", serif;
+    font-size: 1.7rem;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+/* Sign-in link in the top-right corner */
+.check-email-signin {
+    color: #3b2a23;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.check-email-signin:hover {
+    color: #ba5937;
+}
+
+/* Main verification card */
+.check-email-card {
+    background-color: #ffffff;
+    border: 1px solid #eee5de;
+    border-radius: 18px;
+    box-shadow: 0 14px 40px rgba(59, 42, 35, 0.08);
+}
+
+/* Decorative email icon */
+.check-email-icon {
+    width: 76px;
+    height: 76px;
+    background-color: #f7e8e1;
+    border-radius: 50%;
+    color: #ba5937;
+    font-size: 2rem;
+}
+
+/* Main page heading */
+.check-email-card h1 {
+    font-family: "Fraunces", serif;
+    font-size: 2.2rem;
+    font-weight: 600;
+    color: #3b2a23;
+}
+
+/* Text underneath the main heading */
+.check-email-subtitle {
+    color: #766963;
+    font-size: 0.95rem;
+}
+
+/* Highlights the email address where the link was sent */
+.check-email-address {
+    max-width: 390px;
+    padding: 13px 18px;
+    background-color: #faf7f4;
+    border: 1px solid #e9dfd8;
+    border-radius: 8px;
+    color: #3b2a23;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+/* Instructions explaining what the user should do next */
+.check-email-instructions {
+    max-width: 440px;
+    color: #766963;
+    font-size: 0.9rem;
+    line-height: 1.7;
+}
+
+/* Help box for users who cannot find the verification email */
+.check-email-help {
+    max-width: 440px;
+    padding: 18px;
+    background-color: #fff8f3;
+    border: 1px solid #f0ddd2;
+    border-radius: 10px;
+}
+
+/* Information icon inside the help box */
+.check-email-help-icon {
+    width: 22px;
+    height: 22px;
+    border: 1px solid #ba5937;
+    border-radius: 50%;
+    color: #ba5937;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+/* Help box heading */
+.check-email-help strong {
+    color: #3b2a23;
+    font-size: 0.88rem;
+}
+
+/* Help box description */
+.check-email-help p {
+    color: #766963;
+    font-size: 0.82rem;
+    line-height: 1.55;
+}
+
+/* Main resend verification button */
+.check-email-resend-btn {
+    max-width: 440px;
+    padding: 13px 20px;
+    background-color: #ba5937;
+    border: none;
+    border-radius: 8px;
+    color: #ffffff;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.check-email-resend-btn:hover {
+    background-color: #a94f31;
+}
+
+/* Support message underneath the resend button */
+.check-email-support {
+    color: #8a7d76;
+    font-size: 0.8rem;
+}
+
+.check-email-support a {
+    color: #3b2a23;
+    font-weight: 600;
+}
+
+/* Divider above the back link */
+.check-email-divider {
+    max-width: 440px;
+    border-color: #eee5de;
+    opacity: 1;
+}
+
+/* Link back to sign in */
+.check-email-back {
+    color: #3b2a23;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.check-email-back:hover {
+    color: #ba5937;
+}
+
+/* Keeps keyboard navigation clearly visible */
+.check-email-logo:focus-visible,
+.check-email-signin:focus-visible,
+.check-email-resend-btn:focus-visible,
+.check-email-support a:focus-visible,
+.check-email-back:focus-visible {
+    outline: 3px solid #ba5937;
+    outline-offset: 3px;
+}
+
+/* Message shown after the user tries to resend the verification email */
+.check-email-message {
+    color: #3b2a23;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+/* Bakeau-specific visual adjustments for tablets */
+@media (max-width: 991.98px) {
+    .check-email-card h1 {
+        font-size: 2rem;
+    }
+
+    .check-email-icon {
+        width: 70px;
+        height: 70px;
+        font-size: 1.8rem;
+    }
+}
+
+/* Bakeau-specific visual adjustments for mobile devices */
+@media (max-width: 575.98px) {
+    .check-email-logo {
+        font-size: 1.5rem;
+    }
+
+    .check-email-signin {
+        font-size: 0.85rem;
+    }
+
+    .check-email-card {
+        border-radius: 14px;
+    }
+
+    .check-email-card h1 {
+        font-size: 1.8rem;
+    }
+
+    .check-email-icon {
+        width: 64px;
+        height: 64px;
+        font-size: 1.6rem;
+    }
+
+    .check-email-address {
+        font-size: 0.82rem;
+        overflow-wrap: anywhere;
+    }
+
+    .check-email-instructions {
+        font-size: 0.85rem;
+    }
+
+    .check-email-help {
+        padding: 15px;
+    }
+}

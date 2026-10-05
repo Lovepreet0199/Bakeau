@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // Registration page styles
 import "./Register.css";
@@ -103,7 +103,19 @@ export default function Register() {
 
             //Registration was successful
             setFormError("");
-            console.log("Registration successful:", data);
+
+            //Temporarily save the email so the verification page still works after a refresh
+            sessionStorage.setItem(
+                "pendingVerificationEmail",
+                formData.email
+            );
+
+            //Send the user to the email verification screen after registration
+            navigate("/check-email", {
+                state: {
+                    email: formData.email
+                }
+            });
 
         } catch (error) {
             // Handles connection errors such as the backend server being unavailable
@@ -114,6 +126,9 @@ export default function Register() {
             setIsSubmitting(false);
         }
     }
+
+    //Used to move the user to the email verification screen
+    const navigate = useNavigate();
 
     return (
         <main className="register-page container-fluid p-0">

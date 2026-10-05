@@ -5,6 +5,9 @@ import { Routes, Route } from "react-router-dom";
 import LandingPage from "./pages/LandingPage/LandingPage";
 import Register from "./pages/Register/Register";
 
+//Import the email verification instruction page
+import CheckEmail from "./pages/CheckEmail/CheckEmail";
+
 export default function App() {
   return (
     <>
@@ -15,6 +18,12 @@ export default function App() {
 
         {/* Bakery owner registration page */}
         <Route path="/register" element={<Register />} />
+
+        {/* Shows instructions after account registration */}
+        <Route
+          path="/check-email"
+          element={<CheckEmail />}
+        />
       </Routes>
     </>
   );
