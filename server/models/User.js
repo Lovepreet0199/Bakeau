@@ -40,6 +40,24 @@ const userSchema = new mongoose.Schema({
         enum: ["customer", "bakeryOwner", "platformAdmin"]
     },
 
+    //Tracks whether the user has verified their email address
+    email_verified: {
+        type: Boolean,
+        default: false
+    },
+
+    //Stores the hashed email verification token
+    email_verification_token_hash: {
+        type: String,
+        default: null
+    },
+
+    //Stores when the email verification token expires
+    email_verification_expires_at: {
+        type: Date,
+        default: null
+    },
+
     //Stores the hashed password reset token when a password reset is required
     password_reset_token_hash: {
         type: String,

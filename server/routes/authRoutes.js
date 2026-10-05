@@ -2,7 +2,11 @@
 import express from "express";
 
 //Import the authentication controller functions
-import { registerUser, loginUser } from "../controllers/authController.js";
+import {
+    registerUser,
+    loginUser,
+    verifyEmail
+} from "../controllers/authController.js";
 
 //Import body to validate request fields and validationResult to check for validation errors
 import { body, validationResult } from "express-validator";
@@ -103,8 +107,20 @@ router.post(
         return registerUser(request, response);
     }
 );
+
+//Verify a user's email address
+router.post(
+    "/verify-email",
+    verifyEmail
+);
+
 //Login an existing user
-router.post("/login", loginValidation, validateRequest, loginUser);
+router.post(
+    "/login",
+    loginValidation,
+    validateRequest,
+    loginUser
+);
 
 
 //Test route for authenticated Bakery Owners
