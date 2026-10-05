@@ -8,6 +8,9 @@ import Register from "./pages/Register/Register";
 //Import the email verification instruction page
 import CheckEmail from "./pages/CheckEmail/CheckEmail";
 
+//Import the email verification page
+import VerifyEmail from "./pages/VerifyEmail/VerifyEmail";
+
 export default function App() {
   return (
     <>
@@ -23,6 +26,12 @@ export default function App() {
         <Route
           path="/check-email"
           element={<CheckEmail />}
+        />
+
+        {/* Verifies the email token sent to the user's inbox */}
+        <Route
+          path="/verify-email"
+          element={<VerifyEmail />}
         />
       </Routes>
     </>

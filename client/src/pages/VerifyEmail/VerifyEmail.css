@@ -1,0 +1,261 @@
+/* Main background for the email verification page */
+.verify-email-page {
+    background-color: #fffdf9;
+    color: #3b2a23;
+    font-family: "Inter", sans-serif;
+}
+
+/* Keeps the simple page header clean and separated from the content */
+.verify-email-header {
+    border-bottom: 1px solid #eee7e1;
+}
+
+/* Bakeau logo shown in the verification page header */
+.verify-email-logo {
+    color: #3b2a23;
+    font-family: "Fraunces", serif;
+    font-size: 1.7rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+}
+
+/* Keep the logo color consistent when hovered */
+.verify-email-logo:hover {
+    color: #3b2a23;
+}
+
+/* Sign in link shown on the right side of the header */
+.verify-email-signin {
+    color: #5f514b;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+/* Adds feedback when the user points at the sign in link */
+.verify-email-signin:hover {
+    color: #ba5937;
+}
+
+/* Main section containing the verification information */
+.verify-email-section {
+    padding-top: 7rem;
+    padding-bottom: 5rem;
+}
+
+/* Main verification content area */
+.verify-email-content {
+    max-width: 560px;
+    margin: 0 auto;
+}
+
+/* Small label shown above the verification heading */
+.verify-email-label {
+    color: #ba5937;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+/* Main heading for each verification state */
+.verify-email-status h1 {
+    max-width: 500px;
+    margin-bottom: 1rem;
+    color: #3b2a23;
+    font-family: "Fraunces", serif;
+    font-size: 2.6rem;
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.025em;
+}
+
+/* Main supporting text underneath the heading */
+.verify-email-description {
+    max-width: 500px;
+    margin-bottom: 1.75rem;
+    color: #6f625c;
+    font-size: 1rem;
+    line-height: 1.7;
+}
+
+/* Smaller secondary explanation used on the error screen */
+.verify-email-secondary-text {
+    max-width: 500px;
+    margin-top: -0.75rem;
+    margin-bottom: 1.75rem;
+    color: #857872;
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+/* Small verification result shown above the main heading */
+.verify-email-result {
+    width: fit-content;
+    color: #39704b;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+/* Small icon used beside the verification result */
+.verify-email-result-icon {
+    display: inline-flex;
+    width: 24px;
+    height: 24px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: #eaf4ed;
+    font-size: 0.75rem;
+}
+
+/* Error variation of the verification result */
+.verify-email-result-error {
+    color: #9a4633;
+}
+
+/* Error icon background */
+.verify-email-result-error .verify-email-result-icon {
+    background-color: #f8eae6;
+}
+
+/* Confirmation message returned by the backend */
+.verify-email-server-message {
+    margin-top: -0.75rem;
+    margin-bottom: 1.75rem;
+    color: #857872;
+    font-size: 0.85rem;
+}
+
+/* Main action used after verification succeeds or fails */
+.verify-email-button {
+    min-height: 48px;
+    padding: 0.75rem 1.4rem;
+    border: 1px solid #ba5937;
+    border-radius: 8px;
+    background-color: #ba5937;
+    color: #ffffff;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+/* Button hover feedback */
+.verify-email-button:hover {
+    border-color: #a94f31;
+    background-color: #a94f31;
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+
+/* Small loading indicator shown while verification is running */
+.verify-email-loader {
+    width: 28px;
+    height: 28px;
+    border: 2px solid #e5dcd6;
+    border-top-color: #ba5937;
+    border-radius: 50%;
+    animation: verify-email-spin 0.8s linear infinite;
+}
+
+/* Rotates the loading indicator */
+@keyframes verify-email-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Help area underneath the verification content */
+.verify-email-footer {
+    max-width: 500px;
+    border-top: 1px solid #e9e1db;
+}
+
+/* Help text */
+.verify-email-footer p {
+    color: #857872;
+    font-size: 0.85rem;
+}
+
+/* Support link */
+.verify-email-footer a {
+    color: #3b2a23;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+/* Support link hover state */
+.verify-email-footer a:hover {
+    color: #ba5937;
+}
+
+/* Visible keyboard focus for interactive elements */
+.verify-email-logo:focus-visible,
+.verify-email-signin:focus-visible,
+.verify-email-button:focus-visible,
+.verify-email-footer a:focus-visible {
+    outline: 3px solid rgba(186, 89, 55, 0.3);
+    outline-offset: 4px;
+}
+
+/* Tablet visual adjustments */
+@media (max-width: 991.98px) {
+    .verify-email-section {
+        padding-top: 5rem;
+    }
+
+    .verify-email-status h1 {
+        font-size: 2.3rem;
+    }
+}
+
+/* Mobile visual adjustments */
+@media (max-width: 575.98px) {
+    .verify-email-header {
+        border-bottom: none;
+    }
+
+    .verify-email-logo {
+        font-size: 1.5rem;
+    }
+
+    .verify-email-signin {
+        font-size: 0.85rem;
+    }
+
+    .verify-email-section {
+        padding-top: 3.5rem;
+        padding-bottom: 3rem;
+    }
+
+    .verify-email-status h1 {
+        font-size: 2rem;
+    }
+
+    .verify-email-description {
+        font-size: 0.95rem;
+    }
+
+    .verify-email-button {
+        width: 100%;
+    }
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .verify-email-loader {
+        animation: none;
+    }
+
+    .verify-email-button {
+        transition: none;
+    }
+
+    .verify-email-button:hover {
+        transform: none;
+    }
+}
