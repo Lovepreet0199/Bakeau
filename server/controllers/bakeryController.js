@@ -40,7 +40,11 @@ const createBakery = async (request, response) => {
             storefront_theme,
             primary_color,
             secondary_color,
-            dark_color
+            dark_color,
+            logo_image_url,
+            logo_image_public_id,
+            bakery_image_url,
+            bakery_image_public_id
         } = request.body;
 
         //Create a URL-friendly slug from the bakery name
@@ -79,7 +83,11 @@ const createBakery = async (request, response) => {
             storefront_theme: storefront_theme,
             primary_color: primary_color,
             secondary_color: secondary_color,
-            dark_color: dark_color
+            dark_color: dark_color,
+            logo_image_url: logo_image_url,
+            logo_image_public_id: logo_image_public_id,
+            bakery_image_url: bakery_image_url,
+            bakery_image_public_id: bakery_image_public_id
         });
 
         //Return the newly created bakery
@@ -149,7 +157,11 @@ const updateMyBakery = async (request, response) => {
             storefront_theme,
             primary_color,
             secondary_color,
-            dark_color
+            dark_color,
+            logo_image_url,
+            logo_image_public_id,
+            bakery_image_url,
+            bakery_image_public_id
         } = request.body;
 
         //Find the bakery that belongs to the authenticated Bakery Owner
@@ -175,6 +187,10 @@ const updateMyBakery = async (request, response) => {
         bakery.primary_color = primary_color;
         bakery.secondary_color = secondary_color;
         bakery.dark_color = dark_color;
+        bakery.logo_image_url = logo_image_url;
+        bakery.logo_image_public_id = logo_image_public_id;
+        bakery.bakery_image_url = bakery_image_url;
+        bakery.bakery_image_public_id = bakery_image_public_id;
 
         //Save the updated bakery information to the database
         await bakery.save();

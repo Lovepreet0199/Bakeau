@@ -87,6 +87,32 @@ const bakerySchema = new mongoose.Schema({
         }
     },
 
+    //URL of the bakery logo displayed on the storefront
+    logo_image_url: {
+        type: String,
+        trim: true,
+        default: null
+    },
+
+    //Public ID used to manage the bakery logo in Cloudinary
+    logo_image_public_id: {
+        type: String,
+        default: null
+    },
+
+    //URL of the bakery image displayed on the About section
+    bakery_image_url: {
+        type: String,
+        trim: true,
+        default: null
+    },
+
+    //Public ID used to manage the bakery image in Cloudinary
+    bakery_image_public_id: {
+        type: String,
+        default: null
+    },
+
     //URL of the bakery profile image
     profile_image_url: {
         type: String,
