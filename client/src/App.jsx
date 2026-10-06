@@ -14,6 +14,9 @@ import VerifyEmail from "./pages/VerifyEmail/VerifyEmail";
 //Import the Bakeau login page
 import Login from "./pages/Login/Login";
 
+//Import the bakery setup page
+import BakerySetup from "./pages/BakerySetup/BakerySetup";
+
 export default function App() {
   return (
     <>
@@ -41,6 +44,11 @@ export default function App() {
           path="/login"
           element={<Login />} />
 
+        {/* Bakery setup page for new Bakery Owners */}
+        <Route
+          path="/bakery-setup"
+          element={<BakerySetup />}
+        />
 
       </Routes>
     </>

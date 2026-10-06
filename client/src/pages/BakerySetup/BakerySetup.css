@@ -1,0 +1,152 @@
+/* Main bakery setup page */
+.bakery-setup-page {
+    background-color: #fffdf9;
+    color: #3b2a23;
+}
+
+/* Left branding and bakery image section */
+.bakery-setup-sidebar {
+    position: relative;
+    min-height: 100vh;
+    background-image: url("../../assets/img/bakery-setup.png");
+    background-size: cover;
+    background-position: center;
+    color: #ffffff;
+    overflow: hidden;
+}
+
+/* Dark overlay keeps the sidebar content readable over the image */
+.bakery-setup-sidebar::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: rgba(42, 27, 21, 0.68);
+}
+
+/* Keeps the sidebar content above the background image */
+.bakery-setup-sidebar-content {
+    position: relative;
+    z-index: 2;
+    min-height: 100vh;
+    padding: 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Bakeau logo */
+.bakery-setup-logo {
+    color: #ffffff;
+    font-family: "Fraunces", serif;
+    font-size: 30px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+/* Sidebar heading */
+.bakery-setup-sidebar-text h2 {
+    margin-bottom: 16px;
+    font-family: "Fraunces", serif;
+    font-size: 42px;
+    line-height: 1.15;
+}
+
+/* Sidebar description */
+.bakery-setup-sidebar-text p {
+    max-width: 360px;
+    margin-bottom: 0;
+    font-size: 16px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.82);
+}
+
+/* Right side of the setup page */
+.bakery-setup-content {
+    background-color: #fffdf9;
+}
+
+/* Controls the width and spacing of the setup form */
+.bakery-setup-form-container {
+    width: 100%;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 60px 48px;
+}
+
+/* Main setup heading */
+.bakery-setup-form-container h1 {
+    margin-bottom: 8px;
+    font-family: "Fraunces", serif;
+    font-size: 38px;
+    color: #3b2a23;
+}
+
+/* Text below the main heading */
+.bakery-setup-form-container>p {
+    margin-bottom: 0;
+    font-size: 16px;
+    color: #6f625c;
+}
+
+/* Progress section above the current setup step */
+.bakery-setup-progress {
+    margin-bottom: 42px;
+}
+
+/* Displays the current step number */
+.bakery-setup-step-number {
+    margin-bottom: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #7c6d66;
+}
+
+/* Places all setup steps beside each other */
+.bakery-setup-progress-bars {
+    display: flex;
+    gap: 13px;
+}
+
+/* Individual setup step button */
+.bakery-setup-progress-step {
+    flex: 1;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    text-align: center;
+}
+
+/* Progress line above each step name */
+.bakery-setup-progress-bar {
+    display: block;
+    width: 100%;
+    height: 4px;
+    margin-bottom: 8px;
+    border-radius: 4px;
+    background-color: #e7ddd7;
+}
+
+/* Step name */
+.bakery-setup-progress-label {
+    display: block;
+    font-size: 12px;
+    color: #8a7b74;
+    white-space: nowrap;
+}
+
+/* Current step */
+.bakery-setup-progress-step.active .bakery-setup-progress-bar {
+    background-color: #ba5937;
+}
+
+.bakery-setup-progress-step.active .bakery-setup-progress-label {
+    font-weight: 600;
+    color: #3b2a23;
+}
+
+/* Future steps cannot be clicked */
+.bakery-setup-progress-step:disabled {
+    cursor: default;
+}
