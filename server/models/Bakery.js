@@ -53,8 +53,8 @@ const bakerySchema = new mongoose.Schema({
     //Instructions explaining how customers should pick up their order
     pickup_instructions: {
         type: String,
-        required: true,
-        trim: true
+        trim: true,
+        default: ""
     },
 
     //Physical address where customers can pick up their orders
@@ -158,6 +158,77 @@ const bakerySchema = new mongoose.Schema({
         type: String,
         trim: true,
         default: "#432C23"
+    },
+    //Minimum number of hours customers must order in advance
+    minimum_order_notice: {
+        type: Number,
+        min: 1,
+        default: 72
+    },
+
+    //Timezone used for pickup times and order deadlines
+    timezone: {
+        type: String,
+        trim: true,
+        default: "America/Toronto"
+    },
+
+    //Maximum number of orders the bakery can accept each day
+    maximum_orders_per_day: {
+        type: Number,
+        min: 1,
+        default: 10
+    },
+
+    //Controls whether customers can currently place new orders
+    accepting_orders: {
+        type: Boolean,
+        default: true
+    },
+
+    //Payment rule used for customer orders
+    payment_rule: {
+        type: String,
+        enum: ["full", "deposit"],
+        default: "full"
+    },
+
+    //Percentage customers must pay when deposit payments are enabled
+    deposit_percentage: {
+        type: Number,
+        min: 1,
+        max: 100,
+        default: 25
+    },
+
+    //Allows the bakery to accept payments outside Bakeau, such as at pickup
+    allow_manual_payment: {
+        type: Boolean,
+        default: false
+    },
+    //Stripe connected account used to receive online payments
+    stripe_account_id: {
+        type: String,
+        trim: true,
+        default: null
+    },
+
+    //Tracks whether the bakery owner has submitted the required Stripe onboarding details
+    stripe_details_submitted: {
+        type: Boolean,
+        default: false
+    },
+
+    //Tracks whether Stripe currently allows this bakery to accept payments
+    stripe_charges_enabled: {
+        type: Boolean,
+        default: false
+    },
+
+    //Tracks whether Stripe currently allows payouts to the bakery
+    stripe_payouts_enabled: {
+        type: Boolean,
+        default: false
     }
 }, {
     //Automatically records when the bakery is created and last updated

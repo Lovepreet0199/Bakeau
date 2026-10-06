@@ -7,6 +7,11 @@ import { body, validationResult } from "express-validator";
 //Import upload middleware to receive bakery image files
 import upload from "../middleware/upload.js";
 
+//Import the Stripe controller function used to connect a Bakery Owner's Stripe account
+import {
+    connectStripeAccount
+} from "../controllers/stripeController.js";
+
 //Import the bakery controller functions
 import {
     createBakery,
@@ -47,11 +52,6 @@ const bakeryValidation = [
         .notEmpty()
         .withMessage("Bakery description is required"),
 
-    body("pickup_instructions")
-        .trim()
-        .notEmpty()
-        .withMessage("Pickup instructions are required"),
-
     body("address.street")
         .trim()
         .notEmpty()
@@ -70,7 +70,43 @@ const bakeryValidation = [
     body("address.postal_code")
         .trim()
         .notEmpty()
-        .withMessage("Postal code is required")
+        .withMessage("Postal code is required"),
+
+    body("minimum_order_notice")
+        .isInt({ min: 1 })
+        .withMessage("Minimum order notice must be at least 1 hour"),
+
+    body("timezone")
+        .isIn([
+            "America/Toronto",
+            "America/Winnipeg",
+            "America/Edmonton",
+            "America/Vancouver",
+            "America/Halifax",
+            "America/St_Johns"
+        ])
+        .withMessage("Please select a valid timezone"),
+
+    body("maximum_orders_per_day")
+        .isInt({ min: 1 })
+        .withMessage("Maximum orders per day must be at least 1"),
+
+    body("accepting_orders")
+        .isBoolean()
+        .withMessage("Accepting orders must be true or false"),
+
+    body("payment_rule")
+        .isIn(["full", "deposit"])
+        .withMessage("Payment rule must be full or deposit"),
+
+    body("deposit_percentage")
+        .if(body("payment_rule").equals("deposit"))
+        .isFloat({ min: 1, max: 100 })
+        .withMessage("Deposit percentage must be between 1 and 100"),
+
+    body("allow_manual_payment")
+        .isBoolean()
+        .withMessage("Manual payment setting must be true or false")
 ];
 
 //Check the bakery validation results
@@ -134,6 +170,14 @@ router.post(
     authorizeRoles("bakeryOwner"),
     upload.single("bakery_image"),
     uploadBakeryImage
+);
+
+//Create or continue Stripe onboarding for the authenticated Bakery Owner
+router.post(
+    "/stripe/connect",
+    authenticateUser,
+    authorizeRoles("bakeryOwner"),
+    connectStripeAccount
 );
 
 //Get an approved bakery storefront using its public slug

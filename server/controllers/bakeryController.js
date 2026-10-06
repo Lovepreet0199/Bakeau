@@ -47,7 +47,14 @@ const createBakery = async (request, response) => {
             logo_image_url,
             logo_image_public_id,
             bakery_image_url,
-            bakery_image_public_id
+            bakery_image_public_id,
+            minimum_order_notice,
+            timezone,
+            maximum_orders_per_day,
+            accepting_orders,
+            payment_rule,
+            deposit_percentage,
+            allow_manual_payment
         } = request.body;
 
         //Create a URL-friendly slug from the bakery name
@@ -90,7 +97,14 @@ const createBakery = async (request, response) => {
             logo_image_url: logo_image_url,
             logo_image_public_id: logo_image_public_id,
             bakery_image_url: bakery_image_url,
-            bakery_image_public_id: bakery_image_public_id
+            bakery_image_public_id: bakery_image_public_id,
+            minimum_order_notice: minimum_order_notice,
+            timezone: timezone,
+            maximum_orders_per_day: maximum_orders_per_day,
+            accepting_orders: accepting_orders,
+            payment_rule: payment_rule,
+            deposit_percentage: deposit_percentage,
+            allow_manual_payment: allow_manual_payment
         });
 
         //Return the newly created bakery
@@ -164,7 +178,14 @@ const updateMyBakery = async (request, response) => {
             logo_image_url,
             logo_image_public_id,
             bakery_image_url,
-            bakery_image_public_id
+            bakery_image_public_id,
+            minimum_order_notice,
+            timezone,
+            maximum_orders_per_day,
+            accepting_orders,
+            payment_rule,
+            deposit_percentage,
+            allow_manual_payment
         } = request.body;
 
         //Find the bakery that belongs to the authenticated Bakery Owner
@@ -194,6 +215,13 @@ const updateMyBakery = async (request, response) => {
         bakery.logo_image_public_id = logo_image_public_id;
         bakery.bakery_image_url = bakery_image_url;
         bakery.bakery_image_public_id = bakery_image_public_id;
+        bakery.minimum_order_notice = minimum_order_notice;
+        bakery.timezone = timezone;
+        bakery.maximum_orders_per_day = maximum_orders_per_day;
+        bakery.accepting_orders = accepting_orders;
+        bakery.payment_rule = payment_rule;
+        bakery.deposit_percentage = deposit_percentage;
+        bakery.allow_manual_payment = allow_manual_payment;
 
         //Save the updated bakery information to the database
         await bakery.save();
