@@ -7,6 +7,9 @@ import BakeryBasicsStep from "./components/BakeryBasicsStep";
 //Import the Location and Contact step
 import LocationStep from "./components/LocationStep";
 
+//Import the Branding step
+import BrandingStep from "./components/BrandingStep";
+
 //Import the bakery setup page styles
 import "./BakerySetup.css";
 
@@ -43,7 +46,12 @@ export default function BakerySetup() {
         province: "",
         postal_code: "",
         contact_email: "",
-        contact_phone: ""
+        contact_phone: "",
+
+        //Branding information
+        primary_color: "#C65F3A",
+        secondary_color: "#F4E8DF",
+        dark_color: "#432C23"
     });
 
 
@@ -214,6 +222,16 @@ export default function BakerySetup() {
                             {/* Step 2 - Location and contact */}
                             {currentStep === 2 && (
                                 <LocationStep
+                                    formData={formData}
+                                    handleChange={handleChange}
+                                    handleContinue={handleContinue}
+                                    handleBack={handleBack}
+                                />
+                            )}
+
+                            {/* Step 3 - Branding */}
+                            {currentStep === 3 && (
+                                <BrandingStep
                                     formData={formData}
                                     handleChange={handleChange}
                                     handleContinue={handleContinue}

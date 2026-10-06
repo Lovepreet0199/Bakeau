@@ -1,4 +1,4 @@
-//Display the Location and Content step of the bakery setup process
+//Displays the Location and Contact step of the bakery setup process
 export default function LocationStep({
     formData,
     handleChange,
@@ -68,6 +68,7 @@ export default function LocationStep({
                         />
                     </div>
 
+
                     <div className="col-md-6 mb-4">
                         <label
                             htmlFor="province"
@@ -88,77 +89,77 @@ export default function LocationStep({
                             required
                         />
                     </div>
+                </div>
+                {/* Postal code */}
+                <div className="mb-4">
+                    <label
+                        htmlFor="postalCode"
+                        className="form-label"
+                    >
+                        Postal code
+                    </label>
 
-                    {/* Postal code */}
-                    <div className="mb-4">
+                    <input
+                        type="text"
+                        id="postalCode"
+                        name="postal_code"
+                        className="form-control"
+                        value={formData.postal_code}
+                        onChange={handleChange}
+                        placeholder="e.g. L5A 1B2"
+                        autoComplete="postal-code"
+                        required
+                    />
+                </div>
+
+                {/* Contact information */}
+                <div className="row">
+
+                    <div className="col-md-6 mb-4">
                         <label
-                            htmlFor="postalCode"
+                            htmlFor="contactEmail"
                             className="form-label"
                         >
-                            Postal code
+                            Contact email
                         </label>
 
                         <input
-                            type="text"
-                            id="postalCode"
-                            name="postal_code"
+                            type="email"
+                            id="contactEmail"
+                            name="contact_email"
                             className="form-control"
-                            value={formData.postal_code}
+                            value={formData.contact_email}
                             onChange={handleChange}
-                            placeholder="e.g. L5A 1B2"
-                            autoComplete="postal-code"
+                            placeholder="e.g. hello@sweetcrumbs.ca"
+                            autoComplete="email"
                             required
                         />
                     </div>
 
-                    {/* Contact information */}
-                    <div className="row">
+                    <div className="col-md-6 mb-4">
+                        <label
+                            htmlFor="contactPhone"
+                            className="form-label"
+                        >
+                            Contact phone
+                        </label>
 
-                        <div className="col-md-6 mb-4">
-                            <label
-                                htmlFor="contactEmail"
-                                className="form-label"
-                            >
-                                Contact email
-                            </label>
-
-                            <input
-                                type="email"
-                                id="contactEmail"
-                                name="contact_email"
-                                className="form-control"
-                                value={formData.contact_email}
-                                onChange={handleChange}
-                                placeholder="e.g. hello@sweetcrumbs.ca"
-                                autoComplete="email"
-                                required
-                            />
-                        </div>
-
-                        <div className="col-md-6 mb-4">
-                            <label
-                                htmlFor="contactPhone"
-                                className="form-label"
-                            >
-                                Contact phone
-                            </label>
-
-                            <input
-                                type="tel"
-                                id="contactPhone"
-                                name="contact_phone"
-                                className="form-control"
-                                value={formData.contact_phone}
-                                onChange={handleChange}
-                                placeholder="e.g. 647-555-0123"
-                                autoComplete="tel"
-                                required
-                            />
-                        </div>
-
+                        <input
+                            type="tel"
+                            id="contactPhone"
+                            name="contact_phone"
+                            className="form-control"
+                            value={formData.contact_phone}
+                            onChange={handleChange}
+                            placeholder="e.g. 647-555-0123"
+                            autoComplete="tel"
+                            required
+                        />
                     </div>
 
                 </div>
+
+
                 {/* Navigation buttons */}
                 <div className="d-flex justify-content-between mt-4">
 
@@ -178,7 +179,7 @@ export default function LocationStep({
                     </button>
 
                 </div>
-            </form>
-        </div>
+            </form >
+        </div >
     );
 }
