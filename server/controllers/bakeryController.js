@@ -10,6 +10,9 @@ import CustomizationGroup from "../models/CustomizationGroup.js";
 //Import the Customization Option model to retrieve options for each customization group
 import CustomizationOption from "../models/CustomizationOption.js";
 
+//Import Cloudinary to upload and manage bakery images
+import cloudinary from "../config/cloudinary.js";
+
 //Create a bakery for the authenticated Bakery Owner
 const createBakery = async (request, response) => {
     try {
@@ -210,6 +213,104 @@ const updateMyBakery = async (request, response) => {
     }
 };
 
+//Upload a logo for the authenticated Bakery Owner's bakery
+const uploadBakeryLogo = async (request, response) => {
+
+    try {
+
+        //Check if the Bakery Owner selected an image
+        if (!request.file) {
+            return response.status(400).json({
+                message: "Please select a logo image"
+            });
+        }
+
+        //Upload the bakery logo to Cloudinary
+        const uploadResult = await new Promise((resolve, reject) => {
+
+            const uploadStream = cloudinary.uploader.upload_stream(
+                {
+                    folder: "bakeau/bakery-logos"
+                },
+                (error, result) => {
+
+                    if (error) {
+                        reject(error);
+                    } else {
+                        resolve(result);
+                    }
+                }
+            );
+
+            uploadStream.end(request.file.buffer);
+        });
+
+        //Return the uploaded logo information so it can be saved during bakery setup
+        return response.status(200).json({
+            message: "Bakery logo uploaded successfully",
+            logo_image_url: uploadResult.secure_url,
+            logo_image_public_id: uploadResult.public_id
+        });
+
+    } catch (error) {
+
+        console.error("Bakery logo upload error: ", error.message);
+
+        return response.status(500).json({
+            message: "Unable to upload bakery logo"
+        });
+    }
+};
+
+//Upload a bakery image for the About section during bakery setup
+const uploadBakeryImage = async (request, response) => {
+
+    try {
+
+        //Check if the Bakery Owner selected an image
+        if (!request.file) {
+            return response.status(400).json({
+                message: "Please select a bakery image"
+            });
+        }
+
+        //Upload the bakery image to Cloudinary
+        const uploadResult = await new Promise((resolve, reject) => {
+
+            const uploadStream = cloudinary.uploader.upload_stream(
+                {
+                    folder: "bakeau/bakery-images"
+                },
+                (error, result) => {
+
+                    if (error) {
+                        reject(error);
+                    } else {
+                        resolve(result);
+                    }
+                }
+            );
+
+            uploadStream.end(request.file.buffer);
+        });
+
+        //Return the uploaded bakery image information so it can be saved during bakery setup
+        return response.status(200).json({
+            message: "Bakery image uploaded successfully",
+            bakery_image_url: uploadResult.secure_url,
+            bakery_image_public_id: uploadResult.public_id
+        });
+
+    } catch (error) {
+
+        console.error("Bakery image upload error: ", error.message);
+
+        return response.status(500).json({
+            message: "Unable to upload bakery image"
+        });
+    }
+};
+
 //Get a public bakery storefront using its unique slug
 const getPublicBakery = async (request, response) => {
     try {
@@ -361,6 +462,8 @@ export {
     createBakery,
     getMyBakery,
     updateMyBakery,
+    uploadBakeryLogo,
+    uploadBakeryImage,
     getPublicBakery,
     getPublicBakeryProducts,
     getPublicBakeryProduct

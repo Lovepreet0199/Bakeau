@@ -4,11 +4,16 @@ import express from "express";
 //Import express-validator to validate bakery information
 import { body, validationResult } from "express-validator";
 
+//Import upload middleware to receive bakery image files
+import upload from "../middleware/upload.js";
+
 //Import the bakery controller functions
 import {
     createBakery,
     getMyBakery,
     updateMyBakery,
+    uploadBakeryLogo,
+    uploadBakeryImage,
     getPublicBakery,
     getPublicBakeryProducts,
     getPublicBakeryProduct
@@ -111,6 +116,24 @@ router.put(
     bakeryValidation,
     validateRequest,
     updateMyBakery
+);
+
+//Upload the authenticated Bakery Owner's storefront logo
+router.post(
+    "/uploads/logo",
+    authenticateUser,
+    authorizeRoles("bakeryOwner"),
+    upload.single("logo"),
+    uploadBakeryLogo
+);
+
+//Upload the Bakery Owner's image for the About section
+router.post(
+    "/uploads/bakery-image",
+    authenticateUser,
+    authorizeRoles("bakeryOwner"),
+    upload.single("bakery_image"),
+    uploadBakeryImage
 );
 
 //Get an approved bakery storefront using its public slug
