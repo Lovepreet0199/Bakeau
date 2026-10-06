@@ -33,7 +33,7 @@ export default function BakeryBasicsStep({
                         htmlFor="bakeryName"
                         className="form-label"
                     >
-                        Bakery name
+                        Bakery name <span className="required-field">*</span>
                     </label>
 
                     <input
@@ -55,7 +55,7 @@ export default function BakeryBasicsStep({
                         htmlFor="bakeryDescription"
                         className="form-label"
                     >
-                        Bakery description
+                        Bakery description <span className="required-field">*</span>
                     </label>
 
                     <textarea
@@ -76,7 +76,7 @@ export default function BakeryBasicsStep({
                         htmlFor="bakeryType"
                         className="form-label"
                     >
-                        Bakery type
+                        Bakery type <span className="required-field">*</span>
                     </label>
 
                     <select
@@ -119,7 +119,7 @@ export default function BakeryBasicsStep({
                                 htmlFor="otherBakeryType"
                                 className="form-label"
                             >
-                                Please specify your bakery type
+                                Please specify your bakery type <span className="required-field">*</span>
                             </label>
 
                             <input

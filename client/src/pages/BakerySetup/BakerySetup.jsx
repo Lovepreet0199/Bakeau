@@ -51,7 +51,13 @@ export default function BakerySetup() {
         //Branding information
         primary_color: "#C65F3A",
         secondary_color: "#F4E8DF",
-        dark_color: "#432C23"
+        dark_color: "#432C23",
+
+        //Branding images
+        logo_image_url: "",
+        logo_image_public_id: "",
+        bakery_image_url: "",
+        bakery_image_public_id: "",
     });
 
 
@@ -60,10 +66,10 @@ export default function BakerySetup() {
 
         const { name, value } = event.target;
 
-        setFormData({
-            ...formData,
+        setFormData((previousFormData) => ({
+            ...previousFormData,
             [name]: value
-        });
+        }));
     }
 
 
@@ -115,8 +121,12 @@ export default function BakerySetup() {
         }
     }
 
+
+    //Moves the Bakery Owner to the previous setup step
     function handleBack() {
+
         const previousStep = currentStep - 1;
+
         setCurrentStep(previousStep);
     }
 
@@ -125,12 +135,24 @@ export default function BakerySetup() {
         <main className="bakery-setup-page min-vh-100">
 
             <div className="container-fluid p-0">
+
                 <div className="row g-0 min-vh-100">
 
                     {/* Left side displays Bakeau branding and bakery imagery */}
-                    <aside className="col-lg-3 bakery-setup-sidebar">
+                    <aside className="col-12 col-lg-3 bakery-setup-sidebar">
 
-                        <div className="bakery-setup-sidebar-content">
+                        <div
+                            className="
+                                bakery-setup-sidebar-content
+                                d-flex
+                                flex-column
+                                justify-content-between
+                                px-4
+                                px-md-5
+                                py-4
+                                py-lg-5
+                            "
+                        >
 
                             <a
                                 href="/"
@@ -139,12 +161,12 @@ export default function BakerySetup() {
                                 Bakeau
                             </a>
 
-                            <div className="bakery-setup-sidebar-text">
+                            <div className="bakery-setup-sidebar-text mt-5 mt-lg-0">
 
                                 <h2>
                                     Build your bakery,
-                                    <br />
-                                    your way.
+                                    <br className="d-none d-sm-block" />
+                                    {" "}your way.
                                 </h2>
 
                                 <p>
@@ -160,9 +182,19 @@ export default function BakerySetup() {
 
 
                     {/* Right side contains the bakery setup process */}
-                    <section className="col-lg-9 bakery-setup-content">
+                    <section className="col-12 col-lg-9 bakery-setup-content">
 
-                        <div className="bakery-setup-form-container">
+                        <div
+                            className="
+                                bakery-setup-form-container
+                                mx-auto
+                                px-3
+                                px-sm-4
+                                px-md-5
+                                py-4
+                                py-lg-5
+                            "
+                        >
 
                             {/* Shows the owner's progress through the bakery setup process */}
                             <div className="bakery-setup-progress">
@@ -171,7 +203,16 @@ export default function BakerySetup() {
                                     Step {currentStep} of {setupSteps.length}
                                 </p>
 
-                                <div className="bakery-setup-progress-bars">
+                                <div
+                                    className="
+                                        bakery-setup-progress-bars
+                                        d-flex
+                                        gap-2
+                                        gap-md-3
+                                        overflow-auto
+                                        pb-2
+                                    "
+                                >
 
                                     {setupSteps.map((step, index) => {
 
@@ -188,8 +229,8 @@ export default function BakerySetup() {
                                                 type="button"
                                                 className={
                                                     stepNumber === currentStep
-                                                        ? "bakery-setup-progress-step active"
-                                                        : "bakery-setup-progress-step"
+                                                        ? "bakery-setup-progress-step active flex-grow-1"
+                                                        : "bakery-setup-progress-step flex-grow-1"
                                                 }
                                                 disabled={!canVisitStep}
                                                 onClick={() =>
@@ -201,6 +242,7 @@ export default function BakerySetup() {
                                                 <span className="bakery-setup-progress-label">
                                                     {step}
                                                 </span>
+
                                             </button>
                                         );
                                     })}
@@ -219,6 +261,7 @@ export default function BakerySetup() {
                                 />
                             )}
 
+
                             {/* Step 2 - Location and contact */}
                             {currentStep === 2 && (
                                 <LocationStep
@@ -228,6 +271,7 @@ export default function BakerySetup() {
                                     handleBack={handleBack}
                                 />
                             )}
+
 
                             {/* Step 3 - Branding */}
                             {currentStep === 3 && (
@@ -244,6 +288,7 @@ export default function BakerySetup() {
                     </section>
 
                 </div>
+
             </div>
 
         </main>

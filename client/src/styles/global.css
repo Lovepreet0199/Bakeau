@@ -2,3 +2,15 @@
 html {
     scroll-behavior: smooth;
 }
+
+/* Marks fields that must be completed */
+.required-field {
+    color: #BA5937;
+}
+
+/* Identifies fields that are optional */
+.optional-field {
+    font-size: 13px;
+    font-weight: 400;
+    color: #8A7B74;
+}

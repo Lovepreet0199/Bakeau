@@ -11,7 +11,9 @@ export default function LocationStep({
             <div className="bakery-setup-step-heading">
                 <h1>Location & Contact</h1>
 
-                <p>Add your bakery's pickup location and contact information.</p>
+                <p>
+                    Add your bakery's pickup location and contact information.
+                </p>
             </div>
 
             <form
@@ -24,11 +26,13 @@ export default function LocationStep({
 
                 {/* Street address */}
                 <div className="mb-4">
+
                     <label
                         htmlFor="streetAddress"
                         className="form-label"
                     >
                         Street address
+                        <span className="required-field"> *</span>
                     </label>
 
                     <input
@@ -42,17 +46,21 @@ export default function LocationStep({
                         autoComplete="street-address"
                         required
                     />
+
                 </div>
 
-                {/* City and province */}
-                <div className="row">
 
-                    <div className="col-md-6 mb-4">
+                {/* City and province */}
+                <div className="row g-3 mb-1">
+
+                    <div className="col-12 col-md-6">
+
                         <label
                             htmlFor="city"
                             className="form-label"
                         >
                             City
+                            <span className="required-field"> *</span>
                         </label>
 
                         <input
@@ -66,15 +74,18 @@ export default function LocationStep({
                             autoComplete="address-level2"
                             required
                         />
+
                     </div>
 
 
-                    <div className="col-md-6 mb-4">
+                    <div className="col-12 col-md-6">
+
                         <label
                             htmlFor="province"
                             className="form-label"
                         >
                             Province
+                            <span className="required-field"> *</span>
                         </label>
 
                         <input
@@ -88,15 +99,21 @@ export default function LocationStep({
                             autoComplete="address-level1"
                             required
                         />
+
                     </div>
+
                 </div>
+
+
                 {/* Postal code */}
                 <div className="mb-4">
+
                     <label
                         htmlFor="postalCode"
                         className="form-label"
                     >
                         Postal code
+                        <span className="required-field"> *</span>
                     </label>
 
                     <input
@@ -110,17 +127,21 @@ export default function LocationStep({
                         autoComplete="postal-code"
                         required
                     />
+
                 </div>
 
-                {/* Contact information */}
-                <div className="row">
 
-                    <div className="col-md-6 mb-4">
+                {/* Contact information */}
+                <div className="row g-3 mb-1">
+
+                    <div className="col-12 col-md-6">
+
                         <label
                             htmlFor="contactEmail"
                             className="form-label"
                         >
                             Contact email
+                            <span className="required-field"> *</span>
                         </label>
 
                         <input
@@ -134,14 +155,18 @@ export default function LocationStep({
                             autoComplete="email"
                             required
                         />
+
                     </div>
 
-                    <div className="col-md-6 mb-4">
+
+                    <div className="col-12 col-md-6">
+
                         <label
                             htmlFor="contactPhone"
                             className="form-label"
                         >
                             Contact phone
+                            <span className="required-field"> *</span>
                         </label>
 
                         <input
@@ -155,17 +180,27 @@ export default function LocationStep({
                             autoComplete="tel"
                             required
                         />
+
                     </div>
 
                 </div>
 
 
                 {/* Navigation buttons */}
-                <div className="d-flex justify-content-between mt-4">
+                <div
+                    className="
+                        d-flex
+                        flex-column
+                        flex-sm-row
+                        justify-content-between
+                        gap-3
+                        mt-4
+                    "
+                >
 
                     <button
                         type="button"
-                        className="btn bakery-setup-back-button"
+                        className="btn bakery-setup-back-button order-2 order-sm-1"
                         onClick={handleBack}
                     >
                         Back
@@ -173,13 +208,15 @@ export default function LocationStep({
 
                     <button
                         type="submit"
-                        className="btn bakery-setup-continue-button"
+                        className="btn bakery-setup-continue-button order-1 order-sm-2"
                     >
                         Continue
                     </button>
 
                 </div>
-            </form >
-        </div >
+
+            </form>
+
+        </div>
     );
 }

@@ -180,7 +180,7 @@ export default function Register() {
                                 {/* First name */}
                                 <div className="col-6 mb-3">
                                     <label htmlFor="firstName" className="form-label">
-                                        First name
+                                        First name <span className="required-field">*</span>
                                     </label>
 
                                     <input
@@ -198,7 +198,7 @@ export default function Register() {
                                 {/* Last name */}
                                 <div className="col-6 mb-3">
                                     <label htmlFor="lastName" className="form-label">
-                                        Last name
+                                        Last name <span className="required-field">*</span>
                                     </label>
 
                                     <input
@@ -217,7 +217,7 @@ export default function Register() {
                             {/* Email address */}
                             <div className="mb-3">
                                 <label htmlFor="email" className="form-label">
-                                    Email
+                                    Email <span className="required-field">*</span>
                                 </label>
 
                                 <input
@@ -235,7 +235,7 @@ export default function Register() {
                             {/* Password */}
                             <div className="mb-3">
                                 <label htmlFor="password" className="form-label">
-                                    Password
+                                    Password <span className="required-field">*</span>
                                 </label>
 
                                 <div className="password-input-wrapper">
@@ -285,7 +285,7 @@ export default function Register() {
                             {/* Confirm password */}
                             <div className="mb-3">
                                 <label htmlFor="confirmPassword" className="form-label">
-                                    Confirm password
+                                    Confirm password <span className="required-field">*</span>
                                 </label>
 
                                 <div className="password-input-wrapper">
@@ -354,6 +354,7 @@ export default function Register() {
                                     <Link to="/terms">Terms of Service</Link>
                                     {" "}and{" "}
                                     <Link to="/privacy">Privacy Policy</Link>.
+                                    <span className="required-field">*</span>
                                 </label>
                             </div>
 
