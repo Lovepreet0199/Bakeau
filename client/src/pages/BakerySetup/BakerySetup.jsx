@@ -10,6 +10,9 @@ import LocationStep from "./components/LocationStep";
 //Import the Branding step
 import BrandingStep from "./components/BrandingStep";
 
+//Import the Business Settings step
+import BusinessSettingsStep from "./components/BusinessSettingsStep";
+
 //Import the bakery setup page styles
 import "./BakerySetup.css";
 
@@ -58,17 +61,25 @@ export default function BakerySetup() {
         logo_image_public_id: "",
         bakery_image_url: "",
         bakery_image_public_id: "",
+
+        //Business settings
+        minimum_order_notice: 72,
+        timezone: "America/Toronto",
+        maximum_orders_per_day: 10,
+        accepting_orders: true,
     });
 
 
     //Updates the matching form field whenever the Bakery Owner enters information
     function handleChange(event) {
 
-        const { name, value } = event.target;
+        //Get the field information from the form element
+        const { name, value, type, checked } = event.target;
 
+        //Update the matching field and use checked for checkbox inputs
         setFormData((previousFormData) => ({
             ...previousFormData,
-            [name]: value
+            [name]: type === "checkbox" ? checked : value
         }));
     }
 
@@ -111,6 +122,21 @@ export default function BakerySetup() {
             }
         }
 
+        //Step 3 does not require validation because branding images are optional
+        //and theme colors already have default values
+
+        //Checks the required fields for Step 4
+        if (currentStep === 4) {
+
+            if (
+                Number(formData.minimum_order_notice) < 1 ||
+                !formData.timezone ||
+                Number(formData.maximum_orders_per_day) < 1
+            ) {
+                return;
+            }
+        }
+
         const nextStep = currentStep + 1;
 
         setCurrentStep(nextStep);
@@ -141,18 +167,7 @@ export default function BakerySetup() {
                     {/* Left side displays Bakeau branding and bakery imagery */}
                     <aside className="col-12 col-lg-3 bakery-setup-sidebar">
 
-                        <div
-                            className="
-                                bakery-setup-sidebar-content
-                                d-flex
-                                flex-column
-                                justify-content-between
-                                px-4
-                                px-md-5
-                                py-4
-                                py-lg-5
-                            "
-                        >
+                        <div className="bakery-setup-sidebar-content d-flex flex-column justify-content-between px-4 px-md-5 py-4 py-lg-5">
 
                             <a
                                 href="/"
@@ -184,17 +199,7 @@ export default function BakerySetup() {
                     {/* Right side contains the bakery setup process */}
                     <section className="col-12 col-lg-9 bakery-setup-content">
 
-                        <div
-                            className="
-                                bakery-setup-form-container
-                                mx-auto
-                                px-3
-                                px-sm-4
-                                px-md-5
-                                py-4
-                                py-lg-5
-                            "
-                        >
+                        <div className="bakery-setup-form-container mx-auto px-3 px-sm-4 px-md-5 py-4 py-lg-5">
 
                             {/* Shows the owner's progress through the bakery setup process */}
                             <div className="bakery-setup-progress">
@@ -203,16 +208,7 @@ export default function BakerySetup() {
                                     Step {currentStep} of {setupSteps.length}
                                 </p>
 
-                                <div
-                                    className="
-                                        bakery-setup-progress-bars
-                                        d-flex
-                                        gap-2
-                                        gap-md-3
-                                        overflow-auto
-                                        pb-2
-                                    "
-                                >
+                                <div className="bakery-setup-progress-bars d-flex gap-2 gap-md-3 overflow-auto pb-2">
 
                                     {setupSteps.map((step, index) => {
 
@@ -233,16 +229,13 @@ export default function BakerySetup() {
                                                         : "bakery-setup-progress-step flex-grow-1"
                                                 }
                                                 disabled={!canVisitStep}
-                                                onClick={() =>
-                                                    setCurrentStep(stepNumber)
-                                                }
+                                                onClick={() => setCurrentStep(stepNumber)}
                                             >
                                                 <span className="bakery-setup-progress-bar"></span>
 
                                                 <span className="bakery-setup-progress-label">
                                                     {step}
                                                 </span>
-
                                             </button>
                                         );
                                     })}
@@ -276,6 +269,17 @@ export default function BakerySetup() {
                             {/* Step 3 - Branding */}
                             {currentStep === 3 && (
                                 <BrandingStep
+                                    formData={formData}
+                                    handleChange={handleChange}
+                                    handleContinue={handleContinue}
+                                    handleBack={handleBack}
+                                />
+                            )}
+
+
+                            {/* Step 4 - Business settings */}
+                            {currentStep === 4 && (
+                                <BusinessSettingsStep
                                     formData={formData}
                                     handleChange={handleChange}
                                     handleContinue={handleContinue}

@@ -161,6 +161,7 @@ export default function BrandingStep({
         }
     }
 
+
     //Creates bakery initials for the storefront preview when no logo is uploaded
     function getBakeryInitials() {
 
@@ -184,15 +185,18 @@ export default function BrandingStep({
         ).toUpperCase();
     }
 
+
     return (
         <div className="bakery-setup-step">
 
             <div className="bakery-setup-step-heading">
+
                 <h1>Branding</h1>
 
                 <p>
                     Customize how your bakery will appear to customers.
                 </p>
+
             </div>
 
 
@@ -226,20 +230,14 @@ export default function BrandingStep({
                     {/* Custom bakery logo upload area */}
                     <label
                         htmlFor="bakeryLogo"
-                        className={
-                            isLogoUploading
-                                ? "bakery-image-upload disabled"
-                                : "bakery-image-upload"
-                        }
+                        className={isLogoUploading ? "bakery-image-upload disabled" : "bakery-image-upload"}
                     >
                         <span className="bakery-image-upload-icon">
                             🖼️
                         </span>
 
                         <span className="bakery-image-upload-title">
-                            {isLogoUploading
-                                ? "Uploading logo..."
-                                : "Upload bakery logo"}
+                            {isLogoUploading ? "Uploading logo..." : "Upload bakery logo"}
                         </span>
 
                         <span className="bakery-image-upload-description">
@@ -257,7 +255,6 @@ export default function BrandingStep({
 
                     {/* Shows the uploaded bakery logo */}
                     {formData.logo_image_url && (
-
                         <div className="mt-3">
 
                             <img
@@ -267,7 +264,6 @@ export default function BrandingStep({
                             />
 
                         </div>
-
                     )}
 
                 </div>
@@ -291,20 +287,14 @@ export default function BrandingStep({
                     {/* Custom bakery image upload area */}
                     <label
                         htmlFor="bakeryImage"
-                        className={
-                            isBakeryImageUploading
-                                ? "bakery-image-upload disabled"
-                                : "bakery-image-upload"
-                        }
+                        className={isBakeryImageUploading ? "bakery-image-upload disabled" : "bakery-image-upload"}
                     >
                         <span className="bakery-image-upload-icon">
                             🖼️
                         </span>
 
                         <span className="bakery-image-upload-title">
-                            {isBakeryImageUploading
-                                ? "Uploading bakery image..."
-                                : "Upload bakery image"}
+                            {isBakeryImageUploading ? "Uploading bakery image..." : "Upload bakery image"}
                         </span>
 
                         <span className="bakery-image-upload-description">
@@ -322,7 +312,6 @@ export default function BrandingStep({
 
                     {/* Shows the uploaded bakery image */}
                     {formData.bakery_image_url && (
-
                         <div className="mt-3">
 
                             <img
@@ -332,7 +321,6 @@ export default function BrandingStep({
                             />
 
                         </div>
-
                     )}
 
                 </div>
@@ -356,23 +344,17 @@ export default function BrandingStep({
                             <button
                                 key={color}
                                 type="button"
-                                className={
-                                    formData.primary_color === color
-                                        ? "bakery-brand-color-option selected"
-                                        : "bakery-brand-color-option"
-                                }
+                                className={formData.primary_color === color ? "bakery-brand-color-option selected" : "bakery-brand-color-option"}
                                 style={{
                                     backgroundColor: color
                                 }}
                                 onClick={() => {
-
                                     handleChange({
                                         target: {
                                             name: "primary_color",
                                             value: color
                                         }
                                     });
-
                                 }}
                                 aria-label={`Select ${color} as primary color`}
                             >
@@ -421,23 +403,17 @@ export default function BrandingStep({
                             <button
                                 key={color}
                                 type="button"
-                                className={
-                                    formData.secondary_color === color
-                                        ? "bakery-brand-color-option selected"
-                                        : "bakery-brand-color-option"
-                                }
+                                className={formData.secondary_color === color ? "bakery-brand-color-option selected" : "bakery-brand-color-option"}
                                 style={{
                                     backgroundColor: color
                                 }}
                                 onClick={() => {
-
                                     handleChange({
                                         target: {
                                             name: "secondary_color",
                                             value: color
                                         }
                                     });
-
                                 }}
                                 aria-label={`Select ${color} as secondary color`}
                             >
@@ -486,23 +462,17 @@ export default function BrandingStep({
                             <button
                                 key={color}
                                 type="button"
-                                className={
-                                    formData.dark_color === color
-                                        ? "bakery-brand-color-option selected"
-                                        : "bakery-brand-color-option"
-                                }
+                                className={formData.dark_color === color ? "bakery-brand-color-option selected" : "bakery-brand-color-option"}
                                 style={{
                                     backgroundColor: color
                                 }}
                                 onClick={() => {
-
                                     handleChange({
                                         target: {
                                             name: "dark_color",
                                             value: color
                                         }
                                     });
-
                                 }}
                                 aria-label={`Select ${color} as dark color`}
                             >
@@ -544,18 +514,7 @@ export default function BrandingStep({
 
                         {/* Preview navigation */}
                         <div
-                            className="
-                                d-flex
-                                flex-column
-                                flex-sm-row
-                                align-items-start
-                                align-items-sm-center
-                                justify-content-between
-                                gap-2
-                                px-3
-                                py-2
-                                bakery-brand-preview-navbar
-                            "
+                            className="d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between gap-2 px-3 py-2 bakery-brand-preview-navbar"
                             style={{
                                 backgroundColor: formData.dark_color
                             }}
@@ -563,7 +522,7 @@ export default function BrandingStep({
 
                             <div className="d-flex align-items-center gap-2 bakery-brand-preview-brand">
 
-                                {/* Displays uploaded logo or a fallback letter */}
+                                {/* Displays uploaded logo or bakery initials */}
                                 {formData.logo_image_url ? (
 
                                     <img
@@ -575,12 +534,7 @@ export default function BrandingStep({
                                 ) : (
 
                                     <div
-                                        className="
-                                            d-flex
-                                            align-items-center
-                                            justify-content-center
-                                            bakery-brand-preview-logo-fallback
-                                        "
+                                        className="d-flex align-items-center justify-content-center bakery-brand-preview-logo-fallback"
                                         style={{
                                             backgroundColor: formData.primary_color
                                         }}
@@ -596,7 +550,6 @@ export default function BrandingStep({
 
                             </div>
 
-
                             <div className="d-flex align-items-center gap-3 bakery-brand-preview-nav-links">
 
                                 <span>Menu</span>
@@ -610,17 +563,7 @@ export default function BrandingStep({
 
                         {/* Preview product area */}
                         <div
-                            className="
-                                d-flex
-                                flex-column
-                                flex-sm-row
-                                align-items-start
-                                align-items-sm-center
-                                gap-3
-                                m-3
-                                p-3
-                                bakery-brand-preview-product
-                            "
+                            className="d-flex flex-column flex-sm-row align-items-start align-items-sm-center gap-3 m-3 p-3 bakery-brand-preview-product"
                             style={{
                                 backgroundColor: formData.secondary_color
                             }}
@@ -628,7 +571,6 @@ export default function BrandingStep({
 
                             <div className="bakery-brand-preview-product-image">
                             </div>
-
 
                             <div className="flex-grow-1">
 
@@ -665,25 +607,11 @@ export default function BrandingStep({
 
 
                 {/* Navigation buttons */}
-                <div
-                    className="
-                        d-flex
-                        flex-column
-                        flex-sm-row
-                        justify-content-between
-                        gap-3
-                        mt-4
-                    "
-                >
+                <div className="d-flex flex-column flex-sm-row justify-content-between gap-3 mt-4">
 
                     <button
                         type="button"
-                        className="
-                            btn
-                            bakery-setup-back-button
-                            order-2
-                            order-sm-1
-                        "
+                        className="btn bakery-setup-back-button order-2 order-sm-1"
                         onClick={handleBack}
                     >
                         Back
@@ -691,12 +619,7 @@ export default function BrandingStep({
 
                     <button
                         type="submit"
-                        className="
-                            btn
-                            bakery-setup-continue-button
-                            order-1
-                            order-sm-2
-                        "
+                        className="btn bakery-setup-continue-button order-1 order-sm-2"
                     >
                         Continue
                     </button>

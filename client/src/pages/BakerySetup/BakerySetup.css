@@ -445,6 +445,110 @@
     color: #FFFFFF;
 }
 
+/* Information box used for business settings */
+.bakery-settings-info-box {
+    padding: 18px;
+    border: 1px solid #E2D8D2;
+    border-radius: 12px;
+    background-color: #FFF8F3;
+}
+
+/* Heading inside the settings information box */
+.bakery-settings-info-box h3 {
+    font-family: "Fraunces", serif;
+    font-size: 18px;
+    color: #3B2A23;
+}
+
+/* Description shown under bakery setup field labels */
+.bakery-setup-field-description {
+    margin-bottom: 10px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #7C6D66;
+}
+
+
+/* Gives setup inputs and selects consistent Bakeau styling */
+.bakery-setup-form .form-control,
+.bakery-setup-form .form-select {
+    min-height: 48px;
+    border: 1px solid #D8CCC5;
+    border-radius: 10px;
+    background-color: #FFFFFF;
+    color: #3B2A23;
+}
+
+
+/* Highlights setup fields when selected */
+.bakery-setup-form .form-control:focus,
+.bakery-setup-form .form-select:focus {
+    border-color: #BA5937;
+    box-shadow: 0 0 0 3px rgba(186, 89, 55, 0.12);
+}
+
+
+/* Keeps placeholder text softer */
+.bakery-setup-form .form-control::placeholder {
+    color: #A89991;
+}
+
+
+/* Business setting row used for switches */
+.bakery-settings-switch-row {
+    padding: 16px 18px;
+    border: 1px solid #E2D8D2;
+    border-radius: 12px;
+    background-color: #FFFFFF;
+}
+
+
+/* Makes the settings switch easier to click */
+.bakery-settings-switch-row .form-check-input {
+    width: 44px;
+    height: 24px;
+    cursor: pointer;
+}
+
+
+/* Bakeau color for enabled switches */
+.bakery-settings-switch-row .form-check-input:checked {
+    background-color: #BA5937;
+    border-color: #BA5937;
+}
+
+
+/* Removes the default focus glow from the switch */
+.bakery-settings-switch-row .form-check-input:focus {
+    border-color: #BA5937;
+    box-shadow: 0 0 0 3px rgba(186, 89, 55, 0.12);
+}
+
+
+/* Information box used for business settings */
+.bakery-settings-info-box {
+    padding: 18px;
+    border: 1px solid #E2D8D2;
+    border-radius: 12px;
+    background-color: #FFF8F3;
+}
+
+
+/* Heading inside the settings information box */
+.bakery-settings-info-box h3 {
+    font-family: "Fraunces", serif;
+    font-size: 18px;
+    color: #3B2A23;
+}
+
+
+/* Description inside the settings information box */
+.bakery-settings-info-box p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #7C6D66;
+}
+
 
 /* Desktop sidebar fills the height of the screen */
 @media (min-width: 992px) {

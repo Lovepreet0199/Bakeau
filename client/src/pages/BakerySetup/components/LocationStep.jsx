@@ -9,11 +9,13 @@ export default function LocationStep({
         <div className="bakery-setup-step">
 
             <div className="bakery-setup-step-heading">
+
                 <h1>Location & Contact</h1>
 
                 <p>
                     Add your bakery's pickup location and contact information.
                 </p>
+
             </div>
 
             <form
@@ -187,16 +189,7 @@ export default function LocationStep({
 
 
                 {/* Navigation buttons */}
-                <div
-                    className="
-                        d-flex
-                        flex-column
-                        flex-sm-row
-                        justify-content-between
-                        gap-3
-                        mt-4
-                    "
-                >
+                <div className="d-flex flex-column flex-sm-row justify-content-between gap-3 mt-4">
 
                     <button
                         type="button"
