@@ -4,6 +4,9 @@ import { useState } from "react";
 //Import the Bakery Basics step
 import BakeryBasicsStep from "./components/BakeryBasicsStep";
 
+//Import the Location and Contact step
+import LocationStep from "./components/LocationStep";
+
 //Import the bakery setup page styles
 import "./BakerySetup.css";
 
@@ -38,6 +41,7 @@ export default function BakerySetup() {
         street_address: "",
         city: "",
         province: "",
+        postal_code: "",
         contact_email: "",
         contact_phone: ""
     });
@@ -78,6 +82,21 @@ export default function BakerySetup() {
             }
         }
 
+        //Checks the required fields for Step 2
+        if (currentStep === 2) {
+
+            if (
+                !formData.street_address.trim() ||
+                !formData.city.trim() ||
+                !formData.province.trim() ||
+                !formData.postal_code.trim() ||
+                !formData.contact_email.trim() ||
+                !formData.contact_phone.trim()
+            ) {
+                return;
+            }
+        }
+
         const nextStep = currentStep + 1;
 
         setCurrentStep(nextStep);
@@ -86,6 +105,11 @@ export default function BakerySetup() {
         if (nextStep > highestStepReached) {
             setHighestStepReached(nextStep);
         }
+    }
+
+    function handleBack() {
+        const previousStep = currentStep - 1;
+        setCurrentStep(previousStep);
     }
 
 
@@ -184,6 +208,16 @@ export default function BakerySetup() {
                                     formData={formData}
                                     handleChange={handleChange}
                                     handleContinue={handleContinue}
+                                />
+                            )}
+
+                            {/* Step 2 - Location and contact */}
+                            {currentStep === 2 && (
+                                <LocationStep
+                                    formData={formData}
+                                    handleChange={handleChange}
+                                    handleContinue={handleContinue}
+                                    handleBack={handleBack}
                                 />
                             )}
 
