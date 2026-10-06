@@ -37,7 +37,10 @@ const createBakery = async (request, response) => {
             description,
             pickup_instructions,
             address,
-            storefront_theme
+            storefront_theme,
+            primary_color,
+            secondary_color,
+            dark_color
         } = request.body;
 
         //Create a URL-friendly slug from the bakery name
@@ -73,7 +76,10 @@ const createBakery = async (request, response) => {
             description: description,
             pickup_instructions: pickup_instructions,
             address: address,
-            storefront_theme: storefront_theme
+            storefront_theme: storefront_theme,
+            primary_color: primary_color,
+            secondary_color: secondary_color,
+            dark_color: dark_color
         });
 
         //Return the newly created bakery
@@ -140,7 +146,10 @@ const updateMyBakery = async (request, response) => {
             description,
             pickup_instructions,
             address,
-            storefront_theme
+            storefront_theme,
+            primary_color,
+            secondary_color,
+            dark_color
         } = request.body;
 
         //Find the bakery that belongs to the authenticated Bakery Owner
@@ -163,6 +172,9 @@ const updateMyBakery = async (request, response) => {
         bakery.pickup_instructions = pickup_instructions;
         bakery.address = address;
         bakery.storefront_theme = storefront_theme;
+        bakery.primary_color = primary_color;
+        bakery.secondary_color = secondary_color;
+        bakery.dark_color = dark_color;
 
         //Save the updated bakery information to the database
         await bakery.save();

@@ -112,6 +112,26 @@ const bakerySchema = new mongoose.Schema({
     storefront_theme: {
         type: String,
         default: null
+    },
+    //Primary color used for buttons, links, and important storefront accents
+    primary_color: {
+        type: String,
+        trim: true,
+        default: "#C65F3A"
+    },
+
+    //Secondary color used for softer storefront backgrounds and accents
+    secondary_color: {
+        type: String,
+        trim: true,
+        default: "#F4E8DF"
+    },
+
+    //Dark color used for areas such as the footer and announcement bar
+    dark_color: {
+        type: String,
+        trim: true,
+        default: "#432C23"
     }
 }, {
     //Automatically records when the bakery is created and last updated
