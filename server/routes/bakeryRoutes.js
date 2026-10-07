@@ -7,9 +7,10 @@ import { body, validationResult } from "express-validator";
 //Import upload middleware to receive bakery image files
 import upload from "../middleware/upload.js";
 
-//Import the Stripe controller function used to connect a Bakery Owner's Stripe account
+//Import the Stripe controller functions used for bakery payment setup
 import {
-    connectStripeAccount
+    connectStripeAccount,
+    getStripeStatus
 } from "../controllers/stripeController.js";
 
 //Import the bakery controller functions
@@ -178,6 +179,14 @@ router.post(
     authenticateUser,
     authorizeRoles("bakeryOwner"),
     connectStripeAccount
+);
+
+//Get the Stripe connection status for the authenticated Bakery Owner
+router.get(
+    "/stripe/status",
+    authenticateUser,
+    authorizeRoles("bakeryOwner"),
+    getStripeStatus
 );
 
 //Get an approved bakery storefront using its public slug
