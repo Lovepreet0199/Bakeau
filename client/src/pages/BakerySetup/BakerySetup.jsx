@@ -70,6 +70,11 @@ export default function BakerySetup() {
         timezone: "America/Toronto",
         maximum_orders_per_day: 10,
         accepting_orders: true,
+
+        //Payment settings
+        payment_rule: "full",
+        deposit_percentage: 25,
+        allow_manual_payment: false,
     });
 
 
@@ -86,9 +91,86 @@ export default function BakerySetup() {
         }));
     }
 
+    //Makes sure the Bakery Owner has a bakery before Step 5 actions continue
+    async function ensureBakeryExists() {
+
+        //Get the Bakery Owner's saved authentication token
+        const token = localStorage.getItem("token");
+
+        //Check whether this Bakery Owner already has a bakery
+        const existingBakeryResponse = await fetch(
+            "http://localhost:3000/api/bakeries/mine",
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+        //The bakery already exists, so nothing else needs to be created
+        if (existingBakeryResponse.ok) {
+            return true;
+        }
+
+        //Stop if the request failed for a reason other than the bakery not existing
+        if (existingBakeryResponse.status !== 404) {
+            return false;
+        }
+
+        //Create the bakery using the information collected during setup
+        const createBakeryResponse = await fetch(
+            "http://localhost:3000/api/bakeries",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    name: formData.name,
+                    description: formData.description,
+                    contact_email: formData.contact_email,
+                    contact_phone: formData.contact_phone,
+
+                    address: {
+                        street: formData.street_address,
+                        city: formData.city,
+                        province: formData.province,
+                        postal_code: formData.postal_code,
+                        country: "Canada"
+                    },
+
+                    primary_color: formData.primary_color,
+                    secondary_color: formData.secondary_color,
+                    dark_color: formData.dark_color,
+
+                    logo_image_url: formData.logo_image_url,
+                    logo_image_public_id: formData.logo_image_public_id,
+                    bakery_image_url: formData.bakery_image_url,
+                    bakery_image_public_id: formData.bakery_image_public_id,
+
+                    minimum_order_notice: Number(formData.minimum_order_notice),
+                    timezone: formData.timezone,
+                    maximum_orders_per_day: Number(formData.maximum_orders_per_day),
+                    accepting_orders: formData.accepting_orders,
+
+                    payment_rule: formData.payment_rule,
+                    deposit_percentage: Number(formData.deposit_percentage),
+                    allow_manual_payment: formData.allow_manual_payment
+                })
+            }
+        );
+
+        //Stop if the bakery could not be created
+        if (!createBakeryResponse.ok) {
+            return false;
+        }
+
+        return true;
+    }
 
     //Moves the Bakery Owner to the next setup step after validation
-    function handleContinue() {
+    async function handleContinue() {
 
         //Checks the required fields for Step 1
         if (currentStep === 1) {
@@ -138,6 +220,59 @@ export default function BakerySetup() {
             ) {
                 return;
             }
+        }
+
+        //Checks the required fields for Step 5
+        if (currentStep === 5) {
+
+            //Stop if no payment rule is selected
+            if (!formData.payment_rule) {
+                return;
+            }
+
+            //Validate the deposit percentage when deposit payments are selected
+            if (
+                formData.payment_rule === "deposit" &&
+                (
+                    Number(formData.deposit_percentage) < 1 ||
+                    Number(formData.deposit_percentage) > 100
+                )
+            ) {
+                return;
+            }
+            //Make sure the bakery exists before moving to the Plan step
+            const bakeryExists = await ensureBakeryExists();
+
+            //Stop if the bakery could not be created or loaded
+            if (!bakeryExists) {
+                return;
+            }
+
+            //Get the Bakery Owner's saved authentication token
+            const token = localStorage.getItem("token");
+
+            //Save the latest payment settings
+            const response = await fetch(
+                "http://localhost:3000/api/bakeries/mine/payment-settings",
+                {
+                    method: "PATCH",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        payment_rule: formData.payment_rule,
+                        deposit_percentage: Number(formData.deposit_percentage),
+                        allow_manual_payment: formData.allow_manual_payment
+                    })
+                }
+            );
+
+            //Stop if the payment settings could not be saved
+            if (!response.ok) {
+                return;
+            }
+
         }
 
         const nextStep = currentStep + 1;
@@ -297,6 +432,7 @@ export default function BakerySetup() {
                                     handleChange={handleChange}
                                     handleContinue={handleContinue}
                                     handleBack={handleBack}
+                                    ensureBakeryExists={ensureBakeryExists}
                                 />
                             )}
 

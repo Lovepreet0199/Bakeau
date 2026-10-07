@@ -6,7 +6,8 @@ export default function PaymentStep({
     formData,
     handleChange,
     handleContinue,
-    handleBack
+    handleBack,
+    ensureBakeryExists
 }) {
 
     //Tracks whether Bakeau is currently creating the Stripe onboarding link
@@ -43,6 +44,16 @@ export default function PaymentStep({
 
                 //Convert the backend response to JavaScript
                 const data = await response.json();
+
+                //A new Bakery Owner may not have a bakery record yet
+                if (response.status === 404) {
+                    setStripeStatus({
+                        connected: false,
+                        onboarding_complete: false
+                    });
+
+                    return;
+                }
 
                 //Stop if the Stripe status could not be loaded
                 if (!response.ok) {
@@ -87,7 +98,24 @@ export default function PaymentStep({
         //Open a new tab immediately so the browser does not block it
         const stripeWindow = window.open("", "_blank");
 
+        //Stop if the browser blocked the new tab
+        if (!stripeWindow) {
+            setStripeError("Please allow pop-ups to continue with Stripe setup.");
+            setIsStripeLoading(false);
+            return;
+        }
+
         try {
+
+            //Make sure the bakery exists before starting Stripe onboarding
+            const bakeryExists = await ensureBakeryExists();
+
+            //Stop if the bakery could not be created or loaded
+            if (!bakeryExists) {
+                stripeWindow.close();
+                setStripeError("Unable to prepare your bakery for Stripe setup.");
+                return;
+            }
 
             //Get the Bakery Owner's saved authentication token
             const token = localStorage.getItem("token");
