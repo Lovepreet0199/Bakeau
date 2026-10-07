@@ -13,6 +13,9 @@ import BrandingStep from "./components/BrandingStep";
 //Import the Business Settings step
 import BusinessSettingsStep from "./components/BusinessSettingsStep";
 
+//Import the Payments step
+import PaymentStep from "./components/PaymentStep";
+
 //Import the bakery setup page styles
 import "./BakerySetup.css";
 
@@ -280,6 +283,16 @@ export default function BakerySetup() {
                             {/* Step 4 - Business settings */}
                             {currentStep === 4 && (
                                 <BusinessSettingsStep
+                                    formData={formData}
+                                    handleChange={handleChange}
+                                    handleContinue={handleContinue}
+                                    handleBack={handleBack}
+                                />
+                            )}
+
+                            {/* Step 5 - Payments */}
+                            {currentStep === 5 && (
+                                <PaymentStep
                                     formData={formData}
                                     handleChange={handleChange}
                                     handleContinue={handleContinue}

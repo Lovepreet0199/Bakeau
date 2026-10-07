@@ -549,6 +549,148 @@
     color: #7C6D66;
 }
 
+/* Card used for the Stripe connection section */
+.bakery-payment-card {
+    padding: 18px;
+    border: 1px solid #E2D8D2;
+    border-radius: 12px;
+    background-color: #FFFFFF;
+}
+
+/* Heading inside the Stripe connection card */
+.bakery-payment-card h3 {
+    font-family: "Fraunces", serif;
+    font-size: 18px;
+    color: #3B2A23;
+}
+
+/* Selectable card used for payment rule options */
+.bakery-payment-option {
+    padding: 16px 18px 16px 42px;
+    border: 1px solid #E2D8D2;
+    border-radius: 12px;
+    background-color: #FFFFFF;
+}
+
+/* Highlights the payment option when its radio button is selected */
+.bakery-payment-option:has(.form-check-input:checked) {
+    border-color: #BA5937;
+    background-color: #FFF8F3;
+}
+
+/* Uses the Bakeau accent color for selected payment radios */
+.bakery-payment-option .form-check-input:checked {
+    background-color: #BA5937;
+    border-color: #BA5937;
+}
+
+/* Makes the payment option label slightly stronger */
+.bakery-payment-option .form-check-label {
+    font-weight: 600;
+    color: #3B2A23;
+}
+
+/* Extra settings shown when deposit payments are selected */
+.bakery-deposit-settings {
+    padding: 16px 18px;
+    border: 1px solid #E2D8D2;
+    border-radius: 12px;
+    background-color: #FFF8F3;
+}
+
+/* Keeps the deposit input from becoming unnecessarily wide */
+.bakery-deposit-settings .form-control {
+    max-width: 180px;
+}
+
+/* Card used for the optional manual payment setting */
+.bakery-payment-manual {
+    padding: 16px 18px;
+    border: 1px solid #E2D8D2;
+    border-radius: 12px;
+    background-color: #FFFFFF;
+}
+
+/* Makes the manual payment switch easier to click */
+.bakery-payment-manual .form-check-input {
+    width: 44px;
+    height: 24px;
+    cursor: pointer;
+}
+
+/* Uses the Bakeau accent color when manual payments are enabled */
+.bakery-payment-manual .form-check-input:checked {
+    background-color: #BA5937;
+    border-color: #BA5937;
+}
+
+/* Adds a subtle Bakeau focus ring to the switch */
+.bakery-payment-manual .form-check-input:focus {
+    border-color: #BA5937;
+    box-shadow: 0 0 0 3px rgba(186, 89, 55, 0.12);
+}
+
+/* Gives the payment rule section a clear heading */
+.bakery-payment-option .form-check-label {
+    font-size: 15px;
+    font-weight: 600;
+    color: #3B2A23;
+}
+
+/* Main button used to start Stripe onboarding */
+.bakery-stripe-button {
+    min-height: 52px;
+    border: 0;
+    border-radius: 10px;
+    background-color: #635BFF;
+    font-size: 16px;
+    font-weight: 600;
+    color: #FFFFFF;
+}
+
+/* Keeps Stripe button text white when hovered */
+.bakery-stripe-button:hover {
+    background-color: #5149E8;
+    color: #FFFFFF;
+}
+
+/* Loading state while Bakeau prepares the Stripe onboarding link */
+.bakery-stripe-button:disabled {
+    background-color: #EEECFF;
+    color: #635BFF;
+    opacity: 1;
+    cursor: not-allowed;
+}
+
+/* Card used for the Stripe connection section */
+.bakery-payment-card {
+    padding: 20px 26px;
+    border: 1px solid #E2D8D2;
+    border-radius: 12px;
+    background-color: #FFFFFF;
+}
+
+/* Status message shown while Stripe onboarding is incomplete */
+.bakery-stripe-status {
+    padding: 10px 12px;
+    margin-top: 8px;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+/* Styling for an incomplete Stripe connection */
+.bakery-stripe-status-incomplete {
+    background-color: #FFF9ED;
+    border: 1px solid #E8D8AE;
+    color: #6E5420;
+}
+
+/* Styling for a completed Stripe connection */
+.bakery-stripe-status-connected {
+    background-color: #EEF8F1;
+    border: 1px solid #B7DCC1;
+    color: #2F6B3C;
+}
 
 /* Desktop sidebar fills the height of the screen */
 @media (min-width: 992px) {
