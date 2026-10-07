@@ -1,6 +1,9 @@
 //Allows the Payments step to track Stripe state and load connection status
 import { useEffect, useState } from "react";
 
+//Import helper used to get the saved authentication token
+import { getAuthToken } from "../../../utils/authStorage";
+
 //Displays the Payments step of the bakery setup process
 export default function PaymentStep({
     formData,
@@ -30,7 +33,7 @@ export default function PaymentStep({
             try {
 
                 //Get the Bakery Owner's saved authentication token
-                const token = localStorage.getItem("token");
+                const token = getAuthToken();
 
                 //Ask the backend for the current Stripe connection status
                 const response = await fetch(

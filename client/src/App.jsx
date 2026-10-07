@@ -17,6 +17,9 @@ import Login from "./pages/Login/Login";
 //Import the bakery setup page
 import BakerySetup from "./pages/BakerySetup/BakerySetup";
 
+//Import the Bakery Owner dashboard
+import BakeryDashboard from "./pages/Dashboard/BakeryDashboard";
+
 export default function App() {
   return (
     <>
@@ -48,6 +51,12 @@ export default function App() {
         <Route
           path="/bakery-setup"
           element={<BakerySetup />}
+        />
+
+        {/* Bakery dashboard page for Bakery Owners */}
+        <Route
+          path="/bakery/dashboard"
+          element={<BakeryDashboard />}
         />
 
       </Routes>

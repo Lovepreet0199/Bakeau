@@ -16,6 +16,12 @@ import BusinessSettingsStep from "./components/BusinessSettingsStep";
 //Import the Payments step
 import PaymentStep from "./components/PaymentStep";
 
+//Import the Plan step
+import PlanStep from "./components/PlanStep";
+
+//Import helper used to get the saved authentication token
+import { getAuthToken } from "../../utils/authStorage";
+
 //Import the bakery setup page styles
 import "./BakerySetup.css";
 
@@ -95,7 +101,7 @@ export default function BakerySetup() {
     async function ensureBakeryExists() {
 
         //Get the Bakery Owner's saved authentication token
-        const token = localStorage.getItem("token");
+        const token = getAuthToken();
 
         //Check whether this Bakery Owner already has a bakery
         const existingBakeryResponse = await fetch(
@@ -240,6 +246,7 @@ export default function BakerySetup() {
             ) {
                 return;
             }
+
             //Make sure the bakery exists before moving to the Plan step
             const bakeryExists = await ensureBakeryExists();
 
@@ -249,7 +256,7 @@ export default function BakerySetup() {
             }
 
             //Get the Bakery Owner's saved authentication token
-            const token = localStorage.getItem("token");
+            const token = getAuthToken();
 
             //Save the latest payment settings
             const response = await fetch(
@@ -292,6 +299,42 @@ export default function BakerySetup() {
         const previousStep = currentStep - 1;
 
         setCurrentStep(previousStep);
+    }
+
+    //Completes the bakery setup process and sends the Bakery Owner to the dashboard
+    async function handleFinishSetup() {
+
+        try {
+
+            //Get the Bakery Owner's saved authentication token
+            const token = getAuthToken();
+
+            //Mark the bakery setup process as completed
+            const response = await fetch(
+                "http://localhost:3000/api/bakeries/mine/complete-setup",
+                {
+                    method: "PATCH",
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+
+            //Convert the backend response to JavaScript
+            const data = await response.json();
+
+            //Stop if the setup process could not be completed
+            if (!response.ok) {
+                throw new Error(data.message || "Unable to complete bakery setup");
+            }
+
+            //Send the Bakery Owner to the dashboard
+            window.location.href = "/bakery/dashboard";
+
+        } catch (error) {
+
+            console.error("Bakery setup completion error:", error.message);
+        }
     }
 
 
@@ -433,6 +476,14 @@ export default function BakerySetup() {
                                     handleContinue={handleContinue}
                                     handleBack={handleBack}
                                     ensureBakeryExists={ensureBakeryExists}
+                                />
+                            )}
+
+                            {/* Step 6 - Plan */}
+                            {currentStep === 6 && (
+                                <PlanStep
+                                    handleBack={handleBack}
+                                    handleFinishSetup={handleFinishSetup}
                                 />
                             )}
 

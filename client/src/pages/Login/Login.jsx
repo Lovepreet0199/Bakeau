@@ -141,6 +141,9 @@ export default function Login() {
             //Convert the bakery API response into a JavaScript object
             const bakeryData = await bakeryResponse.json();
 
+            //Get the bakery from the API response
+            const bakery = bakeryData.bakery || bakeryData;
+
             //Send a new Bakery Owner to the bakery setup flow
             if (bakeryResponse.status === 404) {
                 navigate("/bakery-setup");
@@ -154,9 +157,14 @@ export default function Login() {
                 );
                 return;
             }
+            //Send an incomplete Bakery Owner back to the setup process
+            if (!bakery.setup_completed) {
+                navigate("/bakery-setup");
+                return;
+            }
 
-            //Send an existing Bakery Owner to their dashboard
-            navigate("/dashboard");
+            //Send a Bakery Owner with completed setup to their dashboard
+            navigate("/bakery/dashboard");
 
         } catch (error) {
 

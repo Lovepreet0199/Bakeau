@@ -1,0 +1,242 @@
+/* Main Bakery Owner dashboard page */
+.bakery-dashboard-page {
+    min-height: 100vh;
+    background-color: #FAF8F5;
+    color: #2F241F;
+}
+
+/* Dark navigation area used on the left side of the dashboard */
+.bakery-dashboard-sidebar {
+    width: 285px;
+    min-height: 100vh;
+    background-color: #35231C;
+    color: #FFFFFF;
+}
+
+/* Keeps the sidebar content arranged vertically */
+.bakery-dashboard-sidebar-content {
+    min-height: 100vh;
+    padding: 24px 16px;
+}
+
+/* Bakeau branding */
+.bakery-dashboard-brand {
+    padding: 0 8px 22px;
+}
+
+.bakery-dashboard-brand h2 {
+    margin-bottom: 2px;
+    font-family: "Fraunces", serif;
+    font-size: 27px;
+    color: #FFFFFF;
+}
+
+.bakery-dashboard-brand p {
+    margin-bottom: 0;
+    font-size: 12px;
+    color: #CBBDB5;
+}
+
+/* Current bakery selector */
+.bakery-dashboard-bakery-select {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 13px 14px;
+    border: 1px solid #674A3F;
+    border-radius: 10px;
+    background-color: #402B23;
+    color: #FFFFFF;
+    text-align: left;
+}
+
+.bakery-dashboard-bakery-select strong,
+.bakery-dashboard-bakery-select span {
+    display: block;
+}
+
+.bakery-dashboard-bakery-select div span {
+    margin-top: 3px;
+    font-size: 12px;
+    color: #D2BDB3;
+}
+
+/* Main sidebar navigation */
+.bakery-dashboard-nav {
+    margin-top: 28px;
+}
+
+/* Individual dashboard navigation button */
+.bakery-dashboard-nav-item {
+    width: 100%;
+    padding: 12px 14px;
+    border: 0;
+    border-radius: 8px;
+    background-color: transparent;
+    font-size: 15px;
+    color: #D7C9C1;
+    text-align: left;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.bakery-dashboard-nav-item:hover {
+    background-color: #493128;
+    color: #FFFFFF;
+}
+
+/* Currently selected dashboard page */
+.bakery-dashboard-nav-item.active {
+    background-color: #68402E;
+    color: #FFFFFF;
+    font-weight: 600;
+}
+
+/* Lower navigation and owner information */
+.bakery-dashboard-sidebar-bottom {
+    padding-top: 20px;
+    border-top: 1px solid #584138;
+}
+
+/* Bakery Owner information */
+.bakery-dashboard-user {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    margin-top: 18px;
+    padding: 14px 8px 0;
+}
+
+/* Circular Bakery Owner initials */
+.bakery-dashboard-user-avatar {
+    width: 38px;
+    height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background-color: #C65F3A;
+    font-size: 13px;
+    font-weight: 700;
+    color: #FFFFFF;
+}
+
+/* User name */
+.bakery-dashboard-user strong {
+    display: block;
+    font-size: 14px;
+}
+
+/* User role */
+.bakery-dashboard-user div span {
+    display: block;
+    margin-top: 2px;
+    font-size: 12px;
+    color: #BDAEA6;
+}
+
+/* Main dashboard section */
+.bakery-dashboard-main {
+    min-width: 0;
+}
+
+/* Top dashboard navigation bar */
+.bakery-dashboard-topbar {
+    min-height: 72px;
+    padding: 12px 28px;
+    border-bottom: 1px solid #E8E0DA;
+    background-color: #FFFFFF;
+}
+
+/* Dashboard search field */
+.bakery-dashboard-search {
+    width: 100%;
+    max-width: 520px;
+}
+
+.bakery-dashboard-search .form-control {
+    min-height: 46px;
+    border: 0;
+    border-radius: 10px;
+    background-color: #F3EFEB;
+}
+
+/* Notification button */
+.bakery-dashboard-icon-button {
+    width: 42px;
+    height: 42px;
+    border: 0;
+    border-radius: 50%;
+    background-color: transparent;
+}
+
+/* Owner information shown in the top navigation */
+.bakery-dashboard-topbar-user {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+/* Main dashboard content */
+.bakery-dashboard-content {
+    padding: 28px;
+}
+
+/* Main dashboard welcome heading */
+.bakery-dashboard-content h1 {
+    margin-bottom: 5px;
+    font-family: "Fraunces", serif;
+    font-size: 30px;
+    color: #2F241F;
+}
+
+/* Supporting dashboard text */
+.bakery-dashboard-content p {
+    color: #76665E;
+}
+
+/* Main terracotta dashboard action */
+.bakery-dashboard-primary-button {
+    min-height: 44px;
+    padding: 10px 18px;
+    border: 0;
+    border-radius: 9px;
+    background-color: #C65F3A;
+    font-weight: 600;
+    color: #FFFFFF;
+}
+
+.bakery-dashboard-primary-button:hover {
+    background-color: #AB4F30;
+    color: #FFFFFF;
+}
+
+/* Adjust dashboard layout for tablets and smaller screens */
+@media (max-width: 991px) {
+
+    .bakery-dashboard-sidebar {
+        width: 100%;
+        min-height: auto;
+    }
+
+    .bakery-dashboard-sidebar-content {
+        min-height: auto;
+    }
+
+    .bakery-dashboard-nav {
+        display: none;
+    }
+
+    .bakery-dashboard-sidebar-bottom {
+        display: none;
+    }
+
+    .bakery-dashboard-topbar {
+        padding: 12px 18px;
+    }
+
+    .bakery-dashboard-content {
+        padding: 22px 18px;
+    }
+}
