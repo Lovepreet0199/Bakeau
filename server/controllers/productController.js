@@ -4,6 +4,9 @@ import Product from "../models/Product.js";
 //Import the Bakery model to identify the authenticated owner's bakery
 import Bakery from "../models/Bakery.js";
 
+//Import Cloudinary to upload and manage product images
+import cloudinary from "../config/cloudinary.js";
+
 //Create a product for the authenticated Bakery Owner's bakery
 const createProduct = async (request, response) => {
     try {
@@ -29,6 +32,7 @@ const createProduct = async (request, response) => {
             description,
             base_price,
             image_url,
+            image_public_id,
             is_available,
             is_visible,
             inventory_quantity,
@@ -43,6 +47,7 @@ const createProduct = async (request, response) => {
             description: description,
             base_price: base_price,
             image_url: image_url,
+            image_public_id: image_public_id,
             is_available: is_available,
             is_visible: is_visible,
             inventory_quantity: inventory_quantity,
@@ -63,6 +68,58 @@ const createProduct = async (request, response) => {
             message: "Unable to create product"
         });
     }
+};
+
+//Upload a product image for the authenticated Bakery Owner
+const uploadProductImage = async (request, response) => {
+
+    try {
+
+        //Check if the Bakery Owner selected an image
+        if (!request.file) {
+            return response.status(400).json({
+                message: "Please select a product image"
+            });
+        }
+
+        //Upload the product image to Cloudinary
+        const uploadResult = await new Promise((resolve, reject) => {
+
+            const uploadStream = cloudinary.uploader.upload_stream(
+                {
+                    folder: "bakeau/product-images"
+                },
+                (error, result) => {
+
+                    if (error) {
+                        reject(error);
+                    } else {
+                        resolve(result);
+                    }
+
+                }
+            );
+
+            uploadStream.end(request.file.buffer);
+        });
+
+        //Return the uploaded product image information
+        return response.status(200).json({
+            message: "Product image uploaded successfully",
+            image_url: uploadResult.secure_url,
+            image_public_id: uploadResult.public_id
+        });
+
+    } catch (error) {
+
+        console.error("Product image upload error:", error.message);
+
+        return response.status(500).json({
+            message: "Unable to upload product image"
+        });
+
+    }
+
 };
 
 //Get all products belonging to the authenticated Bakery Owner's bakery
@@ -198,6 +255,7 @@ const updateMyProduct = async (request, response) => {
             description,
             base_price,
             image_url,
+            image_public_id,
             is_available,
             is_visible,
             inventory_quantity,
@@ -210,6 +268,7 @@ const updateMyProduct = async (request, response) => {
         product.description = description;
         product.base_price = base_price;
         product.image_url = image_url;
+        product.image_public_id = image_public_id;
         product.is_available = is_available;
         product.is_visible = is_visible;
         product.inventory_quantity = inventory_quantity;
@@ -290,6 +349,7 @@ const deleteMyProduct = async (request, response) => {
 //Export the product controller functions so they can be used in product routes
 export {
     createProduct,
+    uploadProductImage,
     getMyProducts,
     getMyProductById,
     updateMyProduct,

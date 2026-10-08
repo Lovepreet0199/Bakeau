@@ -1,9 +1,13 @@
 //Import Express to create products routes
 import express from "express";
 
+//Import upload middleware to receive product image files
+import upload from "../middleware/upload.js";
+
 //Import the product controller functions
 import {
     createProduct,
+    uploadProductImage,
     getMyProducts,
     getMyProductById,
     updateMyProduct,
@@ -81,6 +85,15 @@ router.get(
     authenticateUser,
     authorizeRoles("bakeryOwner"),
     getMyProducts
+);
+
+//Upload a product image for the authenticated Bakery Owner
+router.post(
+    "/uploads/image",
+    authenticateUser,
+    authorizeRoles("bakeryOwner"),
+    upload.single("product_image"),
+    uploadProductImage
 );
 
 //Get one product belonging to the authenticated Bakery Owner's bakery
