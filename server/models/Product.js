@@ -82,7 +82,6 @@ const productSchema = new mongoose.Schema({
         required: true
     },
 
-
     //Number of this product currently available in inventory
     inventory_quantity: {
         type: Number,
@@ -133,6 +132,29 @@ const productSchema = new mongoose.Schema({
         type: Boolean,
         required: true,
         default: false
+    },
+
+    //Controls whether the customer pays the full amount or a deposit
+    payment_rule: {
+        type: String,
+        enum: ["full_payment", "deposit"],
+        default: "full_payment",
+        required: true
+    },
+
+    //Percentage of the product price required when a deposit is used
+    deposit_percentage: {
+        type: Number,
+        default: null,
+        min: 1,
+        max: 100
+    },
+
+    //Number of hours before pickup when cancellation is no longer allowed
+    cancellation_cutoff_hours: {
+        type: Number,
+        default: 24,
+        min: 0
     }
 }, {
     //Automatically records when the product is created and last updated

@@ -42,7 +42,10 @@ const createProduct = async (request, response) => {
             minimum_preparation_notice,
             maximum_orders_per_day,
             available_pickup_days,
-            is_featured
+            is_featured,
+            payment_rule,
+            deposit_percentage,
+            cancellation_cutoff_hours,
         } = request.body;
 
         //Set product visibility based on its publishing status
@@ -78,7 +81,15 @@ const createProduct = async (request, response) => {
             minimum_preparation_notice: minimum_preparation_notice,
             maximum_orders_per_day: maximum_orders_per_day,
             available_pickup_days: available_pickup_days,
-            is_featured: is_featured
+            is_featured: is_featured,
+            payment_rule: payment_rule,
+
+            deposit_percentage:
+                payment_rule === "deposit"
+                    ? deposit_percentage
+                    : null,
+
+            cancellation_cutoff_hours: cancellation_cutoff_hours,
         });
 
         //Return the newly created product
@@ -291,7 +302,10 @@ const updateMyProduct = async (request, response) => {
             minimum_preparation_notice,
             maximum_orders_per_day,
             available_pickup_days,
-            is_featured
+            is_featured,
+            payment_rule,
+            deposit_percentage,
+            cancellation_cutoff_hours,
         } = request.body;
 
         //Set product visibility based on its publishing status
@@ -331,6 +345,14 @@ const updateMyProduct = async (request, response) => {
         product.maximum_orders_per_day = maximum_orders_per_day;
         product.available_pickup_days = available_pickup_days;
         product.is_featured = is_featured;
+        product.payment_rule = payment_rule;
+
+        product.deposit_percentage =
+            payment_rule === "deposit"
+                ? deposit_percentage
+                : null;
+
+        product.cancellation_cutoff_hours = cancellation_cutoff_hours;
 
         //Save the updated product information to MongoDB
         await product.save();

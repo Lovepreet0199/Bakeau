@@ -116,6 +116,23 @@ const productValidation = [
             "sunday"
         ])
         .withMessage("Please select valid pickup days"),
+
+    body("payment_rule")
+        .notEmpty()
+        .withMessage("Payment rule is required")
+        .isIn(["full_payment", "deposit"])
+        .withMessage("Payment rule must be full payment or deposit"),
+
+    body("deposit_percentage")
+        .if(body("payment_rule").equals("deposit"))
+        .notEmpty()
+        .withMessage("Deposit percentage is required")
+        .isFloat({ min: 1, max: 100 })
+        .withMessage("Deposit percentage must be between 1 and 100"),
+
+    body("cancellation_cutoff_hours")
+        .isInt({ min: 0 })
+        .withMessage("Cancellation cutoff must be 0 or greater"),
 ];
 
 //Validate a product publishing status update
