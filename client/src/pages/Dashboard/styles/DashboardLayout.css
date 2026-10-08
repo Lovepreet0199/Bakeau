@@ -109,12 +109,14 @@
     color: #FFFFFF;
 }
 
+/* Bakery name */
 .bakery-dashboard-bakery-select strong {
     display: block;
     font-size: 13px;
     font-weight: 600;
 }
 
+/* Storefront text */
 .bakery-dashboard-bakery-select div span {
     margin-top: 3px;
     font-size: 11px;
@@ -148,6 +150,7 @@
     color: #8F8580;
 }
 
+/* Navigation hover */
 .bakery-dashboard-nav-item:hover {
     background-color: #302B28;
     color: #FFFFFF;
@@ -157,6 +160,7 @@
     color: #D8D1CD;
 }
 
+/* Active dashboard navigation item */
 .bakery-dashboard-nav-item.active {
     background-color: #342D29;
     color: #FFFFFF;
@@ -199,12 +203,14 @@
     color: #FFFFFF;
 }
 
+/* Bakery Owner name */
 .bakery-dashboard-user strong {
     display: block;
     font-size: 13px;
     font-weight: 600;
 }
 
+/* Bakery Owner role */
 .bakery-dashboard-user div span {
     display: block;
     margin-top: 2px;
@@ -253,6 +259,7 @@
     width: 100%;
 }
 
+/* Dashboard search icon */
 .bakery-dashboard-search-icon {
     position: absolute;
     top: 50%;
@@ -263,6 +270,7 @@
     pointer-events: none;
 }
 
+/* Dashboard search input */
 .bakery-dashboard-search .form-control {
     min-height: 42px;
     padding-left: 40px;
@@ -304,7 +312,7 @@
     background-color: #F7F6F5;
 }
 
-/* Owner information shown in top bar */
+/* Bakery Owner information shown in topbar */
 .bakery-dashboard-topbar-user {
     display: flex;
     align-items: center;
@@ -324,213 +332,15 @@
     color: #918985;
 }
 
-/* Dashboard content */
-.bakery-dashboard-content {
-    width: 100%;
-    padding: 20px 14px;
-}
-
-/* Dashboard heading */
-.bakery-dashboard-content h1 {
-    margin-bottom: 6px;
-    font-family: "Inter", sans-serif;
-    font-size: 24px;
-    font-weight: 700;
-    letter-spacing: -0.3px;
-    color: #25201E;
-}
-
-.bakery-dashboard-content p {
-    font-size: 14px;
-    color: #746D68;
-}
-
-/* Main dashboard action */
-.bakery-dashboard-primary-button {
-    min-height: 42px;
-    padding: 9px 16px;
-    border: 1px solid #B95434;
-    border-radius: 7px;
-    background-color: #C65F3A;
-    font-size: 13px;
-    font-weight: 600;
-    color: #FFFFFF;
-}
-
-.bakery-dashboard-primary-button:hover {
-    border-color: #A84C2F;
-    background-color: #B65435;
-    color: #FFFFFF;
-}
-
-/* Dashboard statistic card */
-.bakery-dashboard-stat-card {
-    border: 1px solid #E4E1DE;
-    border-radius: 8px;
-    background-color: #FFFFFF;
-    box-shadow: none;
-}
-
-/* Statistic card spacing */
-.bakery-dashboard-stat-card .card-body {
-    padding: 18px;
-}
-
-/* Statistic label */
-.bakery-dashboard-stat-label {
-    font-size: 13px;
-    font-weight: 500;
-    color: #746D68;
-}
-
-/* Statistic value */
-.bakery-dashboard-stat-value {
-    font-family: "Inter", sans-serif;
-    font-size: 25px;
-    font-weight: 700;
-    letter-spacing: -0.4px;
-    color: #25201E;
-}
-
-/* Statistic icon */
-.bakery-dashboard-stat-icon {
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    border-radius: 7px;
-    background-color: #F5F1EE;
-    color: #A34F32;
-}
-
-/* Statistic supporting text */
-.bakery-dashboard-stat-note {
-    font-size: 12px;
-    color: #99918C;
-}
-
-/* Reusable card used for larger dashboard sections */
-.bakery-dashboard-section-card {
-    border: 1px solid #E4E1DE;
-    border-radius: 8px;
-    background-color: #FFFFFF;
-    box-shadow: none;
-}
-
-/* Dashboard section heading area */
-.bakery-dashboard-section-card .card-header {
-    padding: 18px;
-    border-bottom: 1px solid #E9E6E3;
-    background-color: #FFFFFF;
-}
-
-/* Dashboard section heading */
-.bakery-dashboard-section-title {
-    font-size: 16px;
-    font-weight: 700;
-    color: #25201E;
-}
-
-/* Supporting text under a dashboard section heading */
-.bakery-dashboard-section-description {
-    font-size: 12px;
-    color: #8A827D;
-}
-
-/* Small text-style dashboard action */
-.bakery-dashboard-text-button {
-    padding: 6px 8px;
-    border: 0;
-    background-color: transparent;
-    font-size: 13px;
-    font-weight: 600;
-    color: #B65435;
-}
-
-/* Recent orders table */
-.bakery-dashboard-table {
-    min-width: 720px;
-}
-
-/* Order table heading */
-.bakery-dashboard-table thead th {
-    padding: 12px 18px;
-    border-bottom: 1px solid #E9E6E3;
-    background-color: #FAF9F8;
-    font-size: 11px;
-    font-weight: 600;
-    color: #7A726D;
-    text-transform: uppercase;
-}
-
-/* Order table cells */
-.bakery-dashboard-table tbody td {
-    padding: 14px 18px;
-    border-color: #EFECE9;
-    font-size: 13px;
-    color: #4D4541;
-}
-
-/* Order number */
-.bakery-dashboard-table tbody strong {
-    color: #25201E;
-}
-
-/* Base order status */
-.bakery-order-status {
-    padding: 5px 9px;
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: 600;
-}
-
-/* Preparing order */
-.bakery-order-status-preparing {
-    background-color: #EEF3FB;
-    color: #45658D;
-}
-
-/* Ready order */
-.bakery-order-status-ready {
-    background-color: #EDF7F0;
-    color: #3F7650;
-}
-
-/* Completed order */
-.bakery-order-status-completed {
-    background-color: #F1EFED;
-    color: #665E59;
-}
-
-/* Small table action */
-.bakery-dashboard-table-action {
-    padding: 5px 8px;
-    border: 0;
-    background-color: transparent;
-    font-size: 12px;
-    font-weight: 600;
-    color: #B65435;
-}
-
-/* Tablet layout */
+/* Tablet dashboard layout */
 @media (min-width: 768px) {
 
     .bakery-dashboard-topbar {
         padding: 10px 20px;
     }
-
-    .bakery-dashboard-content {
-        padding: 26px 24px;
-    }
-
-    .bakery-dashboard-content h1 {
-        font-size: 26px;
-    }
 }
 
-/* Desktop layout */
+/* Desktop dashboard layout */
 @media (min-width: 992px) {
 
     /* Sidebar becomes permanently visible */
@@ -559,13 +369,5 @@
     .bakery-dashboard-topbar {
         min-height: 68px;
         padding: 10px 28px;
-    }
-
-    .bakery-dashboard-content {
-        padding: 30px 32px;
-    }
-
-    .bakery-dashboard-content h1 {
-        font-size: 27px;
     }
 }

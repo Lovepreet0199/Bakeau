@@ -1,591 +1,245 @@
-//Allows the dashboard to track the mobile sidebar
-import { useState } from "react";
+//Import dashboard overview styles
+import "./styles/DashboardOverview.css";
 
-//Import dashboard icons
+//Used for dashboard navigation
+import { useNavigate } from "react-router-dom";
+
+//Import dashboard statistic icons
 import {
-    Bell,
-    LayoutDashboard,
-    ShoppingBag,
-    Package,
-    CalendarDays,
-    Users,
-    CreditCard,
-    Settings,
-    CircleHelp,
-    ExternalLink,
-    Plus,
-    Search,
-    ChevronDown,
-    Boxes,
-    Star,
-    Megaphone,
-    ChartNoAxesCombined,
     DollarSign,
     ShoppingCart,
     ReceiptText,
     UserPlus,
-    Menu,
-    X
+    Plus
 } from "lucide-react";
 
-//Import the bakery dashboard page styles
-import "./BakeryDashboard.css";
+//Import reusable dashboard components
+import DashboardStatCard from "./components/DashboardStatCard";
 
-//Displays the main dashboard for the Bakery Owner
+//Displays the Bakery Owner dashboard overview
 export default function BakeryDashboard() {
 
-    //Tracks whether the sidebar is open on smaller screens
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    //Used to navigate to other Bakery Owner pages
+    const navigate = useNavigate();
 
     return (
-        <main className="bakery-dashboard-page">
+        <div className="bakery-dashboard-content">
 
-            {/* Dark overlay shown behind the mobile sidebar */}
-            {isSidebarOpen && (
+            {/* Dashboard heading and main action */}
+            <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+
+                {/* Dashboard heading */}
+                <div>
+
+                    <h1>Overview</h1>
+
+                    <p className="mb-0">
+                        Here's what's happening at Sandhu Bakery today.
+                    </p>
+
+                </div>
+
+                {/* Opens the Add Product page */}
                 <button
                     type="button"
-                    className="bakery-dashboard-sidebar-overlay d-lg-none"
-                    aria-label="Close navigation"
-                    onClick={() => setIsSidebarOpen(false)}
-                ></button>
-            )}
+                    className="btn bakery-dashboard-primary-button d-flex align-items-center justify-content-center gap-2"
+                    onClick={() => navigate("/bakery/products/new")}
+                >
+                    <Plus size={18} strokeWidth={2} />
+                    <span>Add product</span>
+                </button>
 
-            <div className="container-fluid p-0">
+            </div>
 
-                {/* Dashboard layout */}
-                <div className="d-lg-flex min-vh-100">
+            {/* Dashboard summary cards */}
+            <div className="row row-cols-1 row-cols-sm-2 row-cols-xl-4 g-3 mb-4">
 
-                    {/* Bakery dashboard sidebar */}
-                    <aside
-                        id="bakeryDashboardSidebar"
-                        className={`bakery-dashboard-sidebar ${isSidebarOpen ? "mobile-open" : ""}`}
+                {/* Revenue summary */}
+                <DashboardStatCard
+                    label="Revenue"
+                    value="$0.00"
+                    note="This week"
+                    icon={<DollarSign size={19} strokeWidth={1.8} />}
+                />
+
+                {/* Orders summary */}
+                <DashboardStatCard
+                    label="Orders"
+                    value="0"
+                    note="This week"
+                    icon={<ShoppingCart size={19} strokeWidth={1.8} />}
+                />
+
+                {/* Average order value summary */}
+                <DashboardStatCard
+                    label="Average order"
+                    value="$0.00"
+                    note="This week"
+                    icon={<ReceiptText size={19} strokeWidth={1.8} />}
+                />
+
+                {/* New customers summary */}
+                <DashboardStatCard
+                    label="New customers"
+                    value="0"
+                    note="This week"
+                    icon={<UserPlus size={19} strokeWidth={1.8} />}
+                />
+
+            </div>
+
+            {/* Recent orders section */}
+            <div className="card bakery-dashboard-section-card mb-4">
+
+                {/* Recent orders heading */}
+                <div className="card-header d-flex align-items-center justify-content-between gap-3">
+
+                    <div>
+
+                        <h2 className="bakery-dashboard-section-title mb-1">
+                            Recent orders
+                        </h2>
+
+                        <p className="bakery-dashboard-section-description mb-0">
+                            Latest customer orders for your bakery.
+                        </p>
+
+                    </div>
+
+                    {/* Opens the full orders page */}
+                    <button
+                        type="button"
+                        className="btn bakery-dashboard-text-button"
                     >
+                        View all
+                    </button>
 
-                        <div className="bakery-dashboard-sidebar-content d-flex flex-column">
+                </div>
 
-                            {/* Bakeau branding */}
-                            <div className="bakery-dashboard-brand d-flex align-items-center justify-content-between">
+                {/* Allows the order table to scroll on smaller screens */}
+                <div className="table-responsive">
 
-                                <h2>Bakeau</h2>
+                    <table className="table bakery-dashboard-table align-middle mb-0">
 
-                                {/* Close button shown only on smaller screens */}
-                                <button
-                                    type="button"
-                                    className="bakery-dashboard-sidebar-close d-lg-none"
-                                    aria-label="Close navigation"
-                                    onClick={() => setIsSidebarOpen(false)}
-                                >
-                                    <X size={20} strokeWidth={1.8} />
-                                </button>
+                        {/* Order table headings */}
+                        <thead>
+                            <tr>
+                                <th scope="col">Order</th>
+                                <th scope="col">Customer</th>
+                                <th scope="col">Items</th>
+                                <th scope="col">Total</th>
+                                <th scope="col">Status</th>
+                                <th scope="col" className="text-end">Action</th>
+                            </tr>
+                        </thead>
 
-                            </div>
+                        {/* Recent order records */}
+                        <tbody>
 
-                            {/* Current bakery */}
-                            <button
-                                type="button"
-                                className="bakery-dashboard-bakery-select"
-                            >
+                            {/* Preparing order */}
+                            <tr>
 
-                                <div className="d-flex align-items-center gap-3">
+                                <td>
+                                    <strong>#1001</strong>
+                                </td>
 
-                                    <div className="bakery-dashboard-bakery-avatar">
-                                        SB
-                                    </div>
+                                <td>Olivia Chen</td>
 
-                                    <div>
-                                        <strong>Sandhu Bakery</strong>
+                                <td>Custom Cake</td>
 
-                                        <span className="d-flex align-items-center gap-1">
-                                            View storefront
-                                            <ExternalLink size={12} strokeWidth={1.8} />
-                                        </span>
-                                    </div>
+                                <td>$58.00</td>
 
-                                </div>
-
-                                <ChevronDown size={17} strokeWidth={1.8} />
-
-                            </button>
-
-                            {/* Main navigation */}
-                            <nav className="bakery-dashboard-nav flex-grow-1">
-
-                                <button type="button" className="bakery-dashboard-nav-item active">
-                                    <LayoutDashboard size={18} strokeWidth={1.8} />
-                                    <span>Overview</span>
-                                </button>
-
-                                <button type="button" className="bakery-dashboard-nav-item">
-                                    <ShoppingBag size={18} strokeWidth={1.8} />
-                                    <span>Orders</span>
-                                </button>
-
-                                <button type="button" className="bakery-dashboard-nav-item">
-                                    <Package size={18} strokeWidth={1.8} />
-                                    <span>Products</span>
-                                </button>
-
-                                <button type="button" className="bakery-dashboard-nav-item">
-                                    <Boxes size={18} strokeWidth={1.8} />
-                                    <span>Inventory</span>
-                                </button>
-
-                                <button type="button" className="bakery-dashboard-nav-item">
-                                    <CalendarDays size={18} strokeWidth={1.8} />
-                                    <span>Pickup Schedule</span>
-                                </button>
-
-                                <button type="button" className="bakery-dashboard-nav-item">
-                                    <Users size={18} strokeWidth={1.8} />
-                                    <span>Customers</span>
-                                </button>
-
-                                <button type="button" className="bakery-dashboard-nav-item">
-                                    <CreditCard size={18} strokeWidth={1.8} />
-                                    <span>Payments</span>
-                                </button>
-
-                                <button type="button" className="bakery-dashboard-nav-item">
-                                    <Star size={18} strokeWidth={1.8} />
-                                    <span>Reviews</span>
-                                </button>
-
-                                <button type="button" className="bakery-dashboard-nav-item">
-                                    <Megaphone size={18} strokeWidth={1.8} />
-                                    <span>Marketing</span>
-                                </button>
-
-                                <button type="button" className="bakery-dashboard-nav-item">
-                                    <ChartNoAxesCombined size={18} strokeWidth={1.8} />
-                                    <span>Analytics</span>
-                                </button>
-
-                            </nav>
-
-                            {/* Bottom navigation */}
-                            <div className="bakery-dashboard-sidebar-bottom">
-
-                                <button type="button" className="bakery-dashboard-nav-item">
-                                    <Settings size={18} strokeWidth={1.8} />
-                                    <span>Settings</span>
-                                </button>
-
-                                <button type="button" className="bakery-dashboard-nav-item">
-                                    <CircleHelp size={18} strokeWidth={1.8} />
-                                    <span>Help & Support</span>
-                                </button>
-
-                                {/* Bakery Owner information */}
-                                <div className="bakery-dashboard-user">
-
-                                    <div className="bakery-dashboard-user-avatar">
-                                        LS
-                                    </div>
-
-                                    <div>
-                                        <strong>Lovepreet S.</strong>
-                                        <span>Bakery Owner</span>
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </aside>
-
-                    {/* Main dashboard area */}
-                    <section className="bakery-dashboard-main flex-grow-1">
-
-                        {/* Dashboard top bar */}
-                        <header className="bakery-dashboard-topbar d-flex align-items-center justify-content-between gap-2 gap-md-3">
-
-                            {/* Left side of top bar */}
-                            <div className="d-flex align-items-center flex-grow-1 gap-2 gap-md-3">
-
-                                {/* Opens sidebar on mobile and tablet */}
-                                <button
-                                    type="button"
-                                    className="bakery-dashboard-menu-button d-lg-none"
-                                    aria-label="Open navigation"
-                                    aria-controls="bakeryDashboardSidebar"
-                                    aria-expanded={isSidebarOpen}
-                                    onClick={() => setIsSidebarOpen(true)}
-                                >
-                                    <Menu size={21} strokeWidth={1.8} />
-                                </button>
-
-                                {/* Dashboard search */}
-                                <div className="bakery-dashboard-search d-none d-sm-block flex-grow-1">
-
-                                    <Search
-                                        size={18}
-                                        strokeWidth={1.8}
-                                        className="bakery-dashboard-search-icon"
-                                    />
-
-                                    <input
-                                        type="search"
-                                        className="form-control"
-                                        placeholder="Search orders, customers, products..."
-                                    />
-
-                                </div>
-
-                            </div>
-
-                            {/* Topbar actions */}
-                            <div className="d-flex align-items-center gap-2 gap-md-3">
-
-                                <button
-                                    type="button"
-                                    className="bakery-dashboard-icon-button"
-                                    aria-label="Notifications"
-                                >
-                                    <Bell size={20} strokeWidth={1.8} />
-                                </button>
-
-                                <div className="bakery-dashboard-topbar-user">
-
-                                    <span className="bakery-dashboard-user-avatar">
-                                        LS
+                                <td>
+                                    <span className="badge bakery-order-status bakery-order-status-preparing">
+                                        Preparing
                                     </span>
+                                </td>
 
-                                    <div className="d-none d-md-block">
-                                        <strong>Lovepreet S.</strong>
-                                        <span>Owner</span>
-                                    </div>
-
-                                    <ChevronDown size={16} strokeWidth={1.8} className="d-none d-md-block" />
-
-                                </div>
-
-                            </div>
-
-                        </header>
-
-                        {/* Dashboard content */}
-                        <div className="bakery-dashboard-content">
-
-                            {/* Dashboard heading */}
-                            <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
-
-                                <div>
-                                    <h1>Overview</h1>
-
-                                    <p className="mb-0">
-                                        Here's what's happening at Sandhu Bakery today.
-                                    </p>
-                                </div>
-
-                                <button
-                                    type="button"
-                                    className="btn bakery-dashboard-primary-button d-flex align-items-center justify-content-center gap-2"
-                                >
-                                    <Plus size={18} strokeWidth={2} />
-                                    <span>Add product</span>
-                                </button>
-
-                            </div>
-
-                            {/* Dashboard summary cards */}
-                            <div className="row row-cols-1 row-cols-sm-2 row-cols-xl-4 g-3 mb-4">
-
-                                {/* Revenue */}
-                                <div className="col">
-                                    <div className="card h-100 bakery-dashboard-stat-card">
-
-                                        <div className="card-body">
-
-                                            <div className="d-flex align-items-start justify-content-between gap-3">
-
-                                                <div>
-                                                    <p className="bakery-dashboard-stat-label mb-2">
-                                                        Revenue
-                                                    </p>
-
-                                                    <h2 className="bakery-dashboard-stat-value mb-0">
-                                                        $0.00
-                                                    </h2>
-                                                </div>
-
-                                                <div className="bakery-dashboard-stat-icon">
-                                                    <DollarSign size={19} strokeWidth={1.8} />
-                                                </div>
-
-                                            </div>
-
-                                            <p className="bakery-dashboard-stat-note mb-0 mt-3">
-                                                This week
-                                            </p>
-
-                                        </div>
-
-                                    </div>
-                                </div>
-
-                                {/* Orders */}
-                                <div className="col">
-                                    <div className="card h-100 bakery-dashboard-stat-card">
-
-                                        <div className="card-body">
-
-                                            <div className="d-flex align-items-start justify-content-between gap-3">
-
-                                                <div>
-                                                    <p className="bakery-dashboard-stat-label mb-2">
-                                                        Orders
-                                                    </p>
-
-                                                    <h2 className="bakery-dashboard-stat-value mb-0">
-                                                        0
-                                                    </h2>
-                                                </div>
-
-                                                <div className="bakery-dashboard-stat-icon">
-                                                    <ShoppingCart size={19} strokeWidth={1.8} />
-                                                </div>
-
-                                            </div>
-
-                                            <p className="bakery-dashboard-stat-note mb-0 mt-3">
-                                                This week
-                                            </p>
-
-                                        </div>
-
-                                    </div>
-                                </div>
-
-                                {/* Average order */}
-                                <div className="col">
-                                    <div className="card h-100 bakery-dashboard-stat-card">
-
-                                        <div className="card-body">
-
-                                            <div className="d-flex align-items-start justify-content-between gap-3">
-
-                                                <div>
-                                                    <p className="bakery-dashboard-stat-label mb-2">
-                                                        Average order
-                                                    </p>
-
-                                                    <h2 className="bakery-dashboard-stat-value mb-0">
-                                                        $0.00
-                                                    </h2>
-                                                </div>
-
-                                                <div className="bakery-dashboard-stat-icon">
-                                                    <ReceiptText size={19} strokeWidth={1.8} />
-                                                </div>
-
-                                            </div>
-
-                                            <p className="bakery-dashboard-stat-note mb-0 mt-3">
-                                                This week
-                                            </p>
-
-                                        </div>
-
-                                    </div>
-                                </div>
-
-                                {/* New customers */}
-                                <div className="col">
-                                    <div className="card h-100 bakery-dashboard-stat-card">
-
-                                        <div className="card-body">
-
-                                            <div className="d-flex align-items-start justify-content-between gap-3">
-
-                                                <div>
-                                                    <p className="bakery-dashboard-stat-label mb-2">
-                                                        New customers
-                                                    </p>
-
-                                                    <h2 className="bakery-dashboard-stat-value mb-0">
-                                                        0
-                                                    </h2>
-                                                </div>
-
-                                                <div className="bakery-dashboard-stat-icon">
-                                                    <UserPlus size={19} strokeWidth={1.8} />
-                                                </div>
-
-                                            </div>
-
-                                            <p className="bakery-dashboard-stat-note mb-0 mt-3">
-                                                This week
-                                            </p>
-
-                                        </div>
-
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            {/* Recent orders */}
-                            <div className="card bakery-dashboard-section-card mb-4">
-
-                                {/* Recent orders heading */}
-                                <div className="card-header d-flex align-items-center justify-content-between gap-3">
-
-                                    <div>
-                                        <h2 className="bakery-dashboard-section-title mb-1">
-                                            Recent orders
-                                        </h2>
-
-                                        <p className="bakery-dashboard-section-description mb-0">
-                                            Latest customer orders for your bakery.
-                                        </p>
-                                    </div>
+                                <td className="text-end">
 
                                     <button
                                         type="button"
-                                        className="btn bakery-dashboard-text-button"
+                                        className="btn bakery-dashboard-table-action"
                                     >
-                                        View all
+                                        View
                                     </button>
 
-                                </div>
+                                </td>
 
-                                {/* Makes the order table scroll horizontally on smaller screens */}
-                                <div className="table-responsive">
+                            </tr>
 
-                                    <table className="table bakery-dashboard-table align-middle mb-0">
+                            {/* Ready order */}
+                            <tr>
 
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">Order</th>
-                                                <th scope="col">Customer</th>
-                                                <th scope="col">Items</th>
-                                                <th scope="col">Total</th>
-                                                <th scope="col">Status</th>
-                                                <th scope="col" className="text-end">Action</th>
-                                            </tr>
-                                        </thead>
+                                <td>
+                                    <strong>#1002</strong>
+                                </td>
 
-                                        <tbody>
+                                <td>Priya Nair</td>
 
-                                            <tr>
-                                                <td>
-                                                    <strong>#1001</strong>
-                                                </td>
+                                <td>Cupcakes</td>
 
-                                                <td>
-                                                    Olivia Chen
-                                                </td>
+                                <td>$36.00</td>
 
-                                                <td>
-                                                    Custom Cake
-                                                </td>
+                                <td>
+                                    <span className="badge bakery-order-status bakery-order-status-ready">
+                                        Ready
+                                    </span>
+                                </td>
 
-                                                <td>
-                                                    $58.00
-                                                </td>
+                                <td className="text-end">
 
-                                                <td>
-                                                    <span className="badge bakery-order-status bakery-order-status-preparing">
-                                                        Preparing
-                                                    </span>
-                                                </td>
+                                    <button
+                                        type="button"
+                                        className="btn bakery-dashboard-table-action"
+                                    >
+                                        View
+                                    </button>
 
-                                                <td className="text-end">
-                                                    <button
-                                                        type="button"
-                                                        className="btn bakery-dashboard-table-action"
-                                                    >
-                                                        View
-                                                    </button>
-                                                </td>
-                                            </tr>
+                                </td>
 
-                                            <tr>
-                                                <td>
-                                                    <strong>#1002</strong>
-                                                </td>
+                            </tr>
 
-                                                <td>
-                                                    Priya Nair
-                                                </td>
+                            {/* Completed order */}
+                            <tr>
 
-                                                <td>
-                                                    Cupcakes
-                                                </td>
+                                <td>
+                                    <strong>#1003</strong>
+                                </td>
 
-                                                <td>
-                                                    $36.00
-                                                </td>
+                                <td>Daniel Ortiz</td>
 
-                                                <td>
-                                                    <span className="badge bakery-order-status bakery-order-status-ready">
-                                                        Ready
-                                                    </span>
-                                                </td>
+                                <td>Cookie Box</td>
 
-                                                <td className="text-end">
-                                                    <button
-                                                        type="button"
-                                                        className="btn bakery-dashboard-table-action"
-                                                    >
-                                                        View
-                                                    </button>
-                                                </td>
-                                            </tr>
+                                <td>$24.00</td>
 
-                                            <tr>
-                                                <td>
-                                                    <strong>#1003</strong>
-                                                </td>
+                                <td>
+                                    <span className="badge bakery-order-status bakery-order-status-completed">
+                                        Completed
+                                    </span>
+                                </td>
 
-                                                <td>
-                                                    Daniel Ortiz
-                                                </td>
+                                <td className="text-end">
 
-                                                <td>
-                                                    Cookie Box
-                                                </td>
+                                    <button
+                                        type="button"
+                                        className="btn bakery-dashboard-table-action"
+                                    >
+                                        View
+                                    </button>
 
-                                                <td>
-                                                    $24.00
-                                                </td>
+                                </td>
 
-                                                <td>
-                                                    <span className="badge bakery-order-status bakery-order-status-completed">
-                                                        Completed
-                                                    </span>
-                                                </td>
+                            </tr>
 
-                                                <td className="text-end">
-                                                    <button
-                                                        type="button"
-                                                        className="btn bakery-dashboard-table-action"
-                                                    >
-                                                        View
-                                                    </button>
-                                                </td>
-                                            </tr>
+                        </tbody>
 
-                                        </tbody>
-
-                                    </table>
-
-                                </div>
-
-                            </div>
-
-                            
-
-                        </div>
-
-                    </section>
+                    </table>
 
                 </div>
 
             </div>
 
-        </main>
+        </div>
     );
 }

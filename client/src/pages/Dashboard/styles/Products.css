@@ -1,0 +1,215 @@
+/* Product card */
+.bakery-product-card {
+    border: 1px solid #e4e1de;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #ffffff;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Product card hover */
+.bakery-product-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* Product image */
+.bakery-product-image {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+    background-color: #f3f1ef;
+}
+
+/* Product card body */
+.bakery-product-card .card-body {
+    padding: 18px;
+}
+
+/* Product name */
+.bakery-product-name {
+    color: #25201e;
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+/* Product price */
+.bakery-product-price {
+    color: #25201e;
+    font-size: 15px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+/* Product description */
+.bakery-product-description {
+    color: #746d68;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* Featured badge shown on product image */
+.bakery-product-featured-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 5px 8px;
+    border: 1px solid #efd8ae;
+    border-radius: 6px;
+    background-color: #fffaf0;
+    color: #c17a13;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* Product availability badge */
+.bakery-product-status {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    padding: 5px 9px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* Active product */
+.bakery-product-active {
+    background-color: #d7f7e7;
+    color: #067647;
+}
+
+/* Inactive product */
+.bakery-product-inactive {
+    background-color: #eeeeec;
+    color: #746d68;
+}
+
+/* Product inventory text */
+.bakery-product-inventory {
+    color: #746d68;
+    font-size: 13px;
+}
+
+/* Product visibility text */
+.bakery-product-visibility {
+    color: #746d68;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* Edit and feature buttons */
+.bakery-product-action-button {
+    min-height: 40px;
+    border: 1px solid #e4e1de;
+    border-radius: 9px;
+    background-color: #ffffff;
+    color: #25201e;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* Edit and feature button hover */
+.bakery-product-action-button:hover {
+    border-color: #cfc7c2;
+    background-color: #faf8f7;
+    color: #25201e;
+}
+
+/* Feature button layout */
+.bakery-product-feature-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+/* Featured product button */
+.bakery-product-feature-button.is-featured {
+    border-color: #efd8ae;
+    background-color: #fffaf0;
+    color: #c17a13;
+}
+
+/* Featured button hover */
+.bakery-product-feature-button.is-featured:hover {
+    border-color: #e3c58d;
+    background-color: #fff7e8;
+    color: #a9650d;
+}
+
+/* Delete product button */
+.bakery-product-delete-button {
+    width: 42px;
+    min-width: 42px;
+    min-height: 40px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #e4e1de;
+    border-radius: 9px;
+    background-color: #ffffff;
+    color: #c54536;
+}
+
+/* Delete product button hover */
+.bakery-product-delete-button:hover {
+    border-color: #e3b8b2;
+    background-color: #fff5f4;
+    color: #a93429;
+}
+
+/* Product search container */
+.bakery-product-search {
+    min-height: 44px;
+    padding: 0 14px;
+    border: 1px solid #e4e1de;
+    border-radius: 10px;
+    background-color: #ffffff;
+    color: #8a817c;
+}
+
+/* Product search input */
+.bakery-product-search .form-control {
+    border: none;
+    box-shadow: none;
+    background-color: transparent;
+    color: #25201e;
+    font-size: 14px;
+}
+
+/* Product search placeholder */
+.bakery-product-search .form-control::placeholder {
+    color: #9b938e;
+}
+
+/* Product filter button */
+.bakery-product-filter-button {
+    min-height: 44px;
+    padding: 0 16px;
+    border: 1px solid #e4e1de;
+    border-radius: 10px;
+    background-color: #ffffff;
+    color: #5f5651;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* Product filter button hover */
+.bakery-product-filter-button:hover {
+    border-color: #cfc7c2;
+    background-color: #faf8f7;
+    color: #25201e;
+}
+
+/* Selected product filter */
+.bakery-product-filter-button.active {
+    border-color: #342d29;
+    background-color: #342d29;
+    color: #ffffff;
+}
