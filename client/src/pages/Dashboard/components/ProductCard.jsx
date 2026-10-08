@@ -7,7 +7,11 @@ export default function ProductCard({
     onEdit,
     onDelete,
     onToggleFeatured,
-    isFeatureUpdating
+    isFeatureUpdating,
+    onToggleAvailability,
+    isAvailabilityUpdating,
+    onToggleStatus,
+    isStatusUpdating
 }) {
 
     return (
@@ -31,14 +35,20 @@ export default function ProductCard({
                     </span>
                 )}
 
-                {/* Product availability status */}
+                {/* Product publishing status */}
                 <span
-                    className={`bakery-product-status ${product.is_available
-                        ? "bakery-product-active"
-                        : "bakery-product-inactive"
+                    className={`bakery-product-status ${product.status === "active"
+                        ? "bakery-product-published"
+                        : product.status === "draft"
+                            ? "bakery-product-draft"
+                            : "bakery-product-hidden"
                         }`}
                 >
-                    {product.is_available ? "Active" : "Inactive"}
+                    {product.status === "active"
+                        ? "Published"
+                        : product.status === "draft"
+                            ? "Draft"
+                            : "Hidden"}
                 </span>
 
             </div>
@@ -69,19 +79,61 @@ export default function ProductCard({
                 {/* Product inventory */}
                 <div className="d-flex align-items-center justify-content-between gap-2 mb-3">
 
+                    {/* Product inventory information */}
                     <span className="bakery-product-inventory">
-                        Inventory: {product.inventory_quantity}
+                        {product.stock_type === "made_to_order"
+                            ? "Made to order"
+                            : `Inventory: ${product.inventory_quantity}`
+                        }
                     </span>
 
-                    {/* Storefront visibility */}
-                    <span className="bakery-product-visibility">
-                        {product.is_visible ? "Visible" : "Hidden"}
+                    {/* Product ordering availability */}
+                    <span
+                        className={`bakery-product-availability ${product.is_available ? "is-available" : "is-unavailable"
+                            }`}
+                    >
+                        {product.is_available ? "Available" : "Unavailable"}
                     </span>
 
                 </div>
 
+                {/* Product quick controls */}
+                {product.status !== "draft" && (
+                    <div className="d-flex flex-column flex-sm-row gap-2 mb-3">
+
+                        {/* Product ordering availability */}
+                        <button
+                            type="button"
+                            className="btn bakery-product-quick-action flex-grow-1"
+                            onClick={onToggleAvailability}
+                            disabled={isAvailabilityUpdating}
+                        >
+                            {isAvailabilityUpdating
+                                ? "Updating..."
+                                : product.is_available
+                                    ? "Make unavailable"
+                                    : "Make available"}
+                        </button>
+
+                        {/* Product storefront visibility */}
+                        <button
+                            type="button"
+                            className="btn bakery-product-quick-action flex-grow-1"
+                            onClick={onToggleStatus}
+                            disabled={isStatusUpdating}
+                        >
+                            {isStatusUpdating
+                                ? "Updating..."
+                                : product.status === "active"
+                                    ? "Hide product"
+                                    : "Show product"}
+                        </button>
+
+                    </div>
+                )}
+
                 {/* Product actions */}
-                <div className="d-flex gap-2 mt-auto">
+                <div className="d-flex flex-wrap gap-2 mt-auto">
 
                     {/* Edit product */}
                     <button

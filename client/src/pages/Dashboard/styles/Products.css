@@ -77,16 +77,38 @@
     font-weight: 600;
 }
 
-/* Active product */
-.bakery-product-active {
+/* Published Product status */
+.bakery-product-published {
     background-color: #d7f7e7;
     color: #067647;
 }
 
-/* Inactive product */
-.bakery-product-inactive {
+/* Draft Product status */
+.bakery-product-draft {
     background-color: #eeeeec;
     color: #746d68;
+}
+
+/* Hidden Product status */
+.bakery-product-hidden {
+    background-color: #fff1ee;
+    color: #a84c2e;
+}
+
+/* Product ordering availability */
+.bakery-product-availability {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* Product available for ordering */
+.bakery-product-availability.is-available {
+    color: #067647;
+}
+
+/* Product unavailable for ordering */
+.bakery-product-availability.is-unavailable {
+    color: #9a918b;
 }
 
 /* Product inventory text */
@@ -274,4 +296,52 @@
     border-color: #912018;
     background-color: #912018;
     color: #ffffff;
+}
+
+/* Product quick action button */
+.bakery-product-quick-action {
+    min-height: 38px;
+    padding: 7px 10px;
+    border: 1px solid #e4e1de;
+    border-radius: 8px;
+    background-color: #faf9f8;
+    color: #5f5651;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* Product quick action button hover */
+.bakery-product-quick-action:hover {
+    border-color: #cfc7c2;
+    background-color: #f4f1ef;
+    color: #25201e;
+}
+
+/* Products empty and loading state */
+.bakery-products-empty-state {
+    padding: 48px 24px;
+    border: 1px dashed #d8d2ce;
+    border-radius: 12px;
+    background-color: #ffffff;
+    text-align: center;
+}
+
+/* Empty state heading */
+.bakery-products-empty-state h2 {
+    margin-bottom: 8px;
+    color: #25201e;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+/* Empty state description */
+.bakery-products-empty-state p {
+    margin-bottom: 20px;
+    color: #746d68;
+    font-size: 14px;
+}
+
+/* Products error */
+.bakery-products-error {
+    color: #b42318 !important;
 }

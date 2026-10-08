@@ -40,30 +40,63 @@ export default function BakeryProducts() {
     //Stores the Product currently updating its featured state
     const [featuredProductId, setFeaturedProductId] = useState(null);
 
+    //Stores the Product currently updating its publishing status
+    const [statusProductId, setStatusProductId] = useState(null);
+
+    //Stores the Product currently updating its availability
+    const [availabilityProductId, setAvailabilityProductId] = useState(null);
+
+    //Tracks whether Products are being loaded
+    const [isProductsLoading, setIsProductsLoading] = useState(true);
+
+    //Stores any Product loading error
+    const [productsError, setProductsError] = useState("");
+
     //Loads the bakery products when the Products page opens
     useEffect(() => {
 
         //Gets the Bakery Owner products from the backend
         async function fetchProducts() {
 
-            //Get the logged-in user's JWT token
-            const token = getAuthToken();
+            setIsProductsLoading(true);
+            setProductsError("");
 
-            //Request the Bakery Owner's products
-            const response = await fetch(
-                "http://localhost:3000/api/products",
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`
+            try {
+
+                //Get the logged-in user's JWT token
+                const token = getAuthToken();
+
+                //Request the Bakery Owner's products
+                const response = await fetch(
+                    "http://localhost:3000/api/products",
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
                     }
-                });
+                );
 
-            //Convert the response into JavaScript data
-            const data = await response.json();
+                //Convert the response into JavaScript data
+                const data = await response.json();
 
-            //Store the products returned by the backend
-            setProducts(data.products);
+                //Stop if Products could not be loaded
+                if (!response.ok) {
+                    throw new Error(
+                        data.message || "Unable to load products"
+                    );
+                }
 
+                //Store the Products returned by the backend
+                setProducts(data.products || []);
+
+            } catch (error) {
+
+                setProductsError(error.message);
+
+            } finally {
+
+                setIsProductsLoading(false);
+            }
         }
 
         //Run the function when the Products page loads
@@ -81,17 +114,22 @@ export default function BakeryProducts() {
         //Starts by allowing all products
         let matchesFilter = true;
 
-        //Shows only available products
+        //Shows only published Products
         if (activeFilter === "active") {
-            matchesFilter = product.is_available;
+            matchesFilter = product.status === "active";
         }
 
-        //Shows only unavailable products
-        if (activeFilter === "inactive") {
-            matchesFilter = !product.is_available;
+        //Shows only draft Products
+        if (activeFilter === "draft") {
+            matchesFilter = product.status === "draft";
         }
 
-        //Shows only featured products
+        //Shows only hidden Products
+        if (activeFilter === "hidden") {
+            matchesFilter = product.status === "hidden";
+        }
+
+        //Shows only featured Products
         if (activeFilter === "featured") {
             matchesFilter = product.is_featured;
         }
@@ -228,6 +266,124 @@ export default function BakeryProducts() {
         }
     }
 
+    //Updates whether a Product can currently be ordered
+    async function handleToggleAvailability(product) {
+
+        const newAvailability = !product.is_available;
+
+        setAvailabilityProductId(product._id);
+
+        try {
+
+            const token = getAuthToken();
+
+            const response = await fetch(
+                `http://localhost:3000/api/products/${product._id}/availability`,
+                {
+                    method: "PATCH",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        is_available: newAvailability
+                    })
+                }
+            );
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(
+                    data.message ||
+                    data.errors?.[0]?.msg ||
+                    "Unable to update product availability"
+                );
+            }
+
+            //Replace the Product with the updated Product
+            setProducts((currentProducts) =>
+                currentProducts.map((currentProduct) =>
+                    currentProduct._id === product._id
+                        ? data.product
+                        : currentProduct
+                )
+            );
+
+        } catch (error) {
+
+            console.error(
+                "Product availability update error:",
+                error.message
+            );
+
+        } finally {
+
+            setAvailabilityProductId(null);
+        }
+    }
+
+    //Changes a Product between Published and Hidden
+    async function handleToggleProductStatus(product) {
+
+        //Published Products become hidden and hidden Products become published
+        const newStatus =
+            product.status === "active"
+                ? "hidden"
+                : "active";
+
+        setStatusProductId(product._id);
+
+        try {
+
+            const token = getAuthToken();
+
+            const response = await fetch(
+                `http://localhost:3000/api/products/${product._id}/status`,
+                {
+                    method: "PATCH",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        status: newStatus
+                    })
+                }
+            );
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(
+                    data.message ||
+                    data.errors?.[0]?.msg ||
+                    "Unable to update product status"
+                );
+            }
+
+            //Replace the Product with the updated Product
+            setProducts((currentProducts) =>
+                currentProducts.map((currentProduct) =>
+                    currentProduct._id === product._id
+                        ? data.product
+                        : currentProduct
+                )
+            );
+
+        } catch (error) {
+
+            console.error(
+                "Product status update error:",
+                error.message
+            );
+
+        } finally {
+
+            setStatusProductId(null);
+        }
+    }
+
     return (
         <div className="bakery-dashboard-content">
 
@@ -285,15 +441,23 @@ export default function BakeryProducts() {
                         className={`btn bakery-product-filter-button ${activeFilter === "active" ? "active" : ""}`}
                         onClick={() => setActiveFilter("active")}
                     >
-                        Active
+                        Published
                     </button>
 
                     <button
                         type="button"
-                        className={`btn bakery-product-filter-button ${activeFilter === "inactive" ? "active" : ""}`}
-                        onClick={() => setActiveFilter("inactive")}
+                        className={`btn bakery-product-filter-button ${activeFilter === "draft" ? "active" : ""}`}
+                        onClick={() => setActiveFilter("draft")}
                     >
-                        Inactive
+                        Draft
+                    </button>
+
+                    <button
+                        type="button"
+                        className={`btn bakery-product-filter-button ${activeFilter === "hidden" ? "active" : ""}`}
+                        onClick={() => setActiveFilter("hidden")}
+                    >
+                        Hidden
                     </button>
 
                     <button
@@ -308,28 +472,100 @@ export default function BakeryProducts() {
                 </div>
             </div>
 
-            {/* Products grid */}
-            <div className="row g-3">
+            {/* Products loading state */}
+            {isProductsLoading ? (
 
-                {filteredProducts.map((product) => {
+                <div className="bakery-products-empty-state">
+                    <p className="mb-0">Loading products...</p>
+                </div>
 
-                    return (
-                        /* Product column */
-                        <div key={product._id} className="col-12 col-md-6 col-xl-4">
+            ) : productsError ? (
+
+                /* Products loading error */
+                <div className="bakery-products-empty-state">
+                    <p className="bakery-products-error mb-0">
+                        {productsError}
+                    </p>
+                </div>
+
+            ) : products.length === 0 ? (
+
+                /* No Products created yet */
+                <div className="bakery-products-empty-state">
+
+                    <h2>No products yet</h2>
+
+                    <p>
+                        Add your first product to start building your bakery storefront.
+                    </p>
+
+                    <button
+                        type="button"
+                        className="btn bakery-dashboard-primary-button"
+                        onClick={() => navigate("/bakery/products/new")}
+                    >
+                        Add product
+                    </button>
+
+                </div>
+
+            ) : filteredProducts.length === 0 ? (
+
+                /* No Products match the selected search or filter */
+                <div className="bakery-products-empty-state">
+
+                    <h2>No products found</h2>
+
+                    <p className="mb-0">
+                        Try changing your search or selected filter.
+                    </p>
+
+                </div>
+
+            ) : (
+
+                /* Products grid */
+                <div className="row g-3">
+
+                    {filteredProducts.map((product) => (
+                        <div
+                            key={product._id}
+                            className="col-12 col-md-6 col-xl-4"
+                        >
 
                             <ProductCard
                                 product={product}
-                                onEdit={() => navigate(`/bakery/products/${product._id}/edit`)}
-                                onDelete={() => setProductToDelete(product)}
-                                onToggleFeatured={() => handleToggleFeatured(product)}
-                                isFeatureUpdating={featuredProductId === product._id}
+                                onEdit={() =>
+                                    navigate(`/bakery/products/${product._id}/edit`)
+                                }
+                                onDelete={() =>
+                                    setProductToDelete(product)
+                                }
+                                onToggleFeatured={() =>
+                                    handleToggleFeatured(product)
+                                }
+                                isFeatureUpdating={
+                                    featuredProductId === product._id
+                                }
+                                onToggleAvailability={() =>
+                                    handleToggleAvailability(product)
+                                }
+                                isAvailabilityUpdating={
+                                    availabilityProductId === product._id
+                                }
+                                onToggleStatus={() =>
+                                    handleToggleProductStatus(product)
+                                }
+                                isStatusUpdating={
+                                    statusProductId === product._id
+                                }
                             />
 
                         </div>
-                    );
-                })}
+                    ))}
 
-            </div>
+                </div>
+            )}
 
             {/* Product delete confirmation */}
             {productToDelete && (
