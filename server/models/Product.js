@@ -64,15 +64,24 @@ const productSchema = new mongoose.Schema({
     is_available: {
         type: Boolean,
         required: true,
-        default: true
+        default: false
     },
 
     //Indicates whether the product is visible on the bakery storefront
     is_visible: {
         type: Boolean,
         required: true,
-        default: true
+        default: false
     },
+
+    //Controls whether the product uses inventory tracking
+    stock_type: {
+        type: String,
+        enum: ["made_to_order", "track_inventory"],
+        default: "made_to_order",
+        required: true
+    },
+
 
     //Number of this product currently available in inventory
     inventory_quantity: {
@@ -88,6 +97,35 @@ const productSchema = new mongoose.Schema({
         required: true,
         default: 5,
         min: 0
+    },
+
+    //Minimum number of hours needed before the product can be prepared
+    minimum_preparation_notice: {
+        type: Number,
+        default: 24,
+        min: 0
+    },
+
+    //Maximum number of this product that can be ordered per day
+    maximum_orders_per_day: {
+        type: Number,
+        default: null,
+        min: 1
+    },
+
+    //Days when this product can be picked up
+    available_pickup_days: {
+        type: [String],
+        enum: [
+            "monday",
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday",
+            "sunday"
+        ],
+        default: []
     },
 
     //Indicates whether the product should be highlighted as a featured product

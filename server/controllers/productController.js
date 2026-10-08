@@ -36,8 +36,12 @@ const createProduct = async (request, response) => {
             image_url,
             image_public_id,
             is_available = true,
+            stock_type,
             inventory_quantity,
             low_inventory_threshold,
+            minimum_preparation_notice,
+            maximum_orders_per_day,
+            available_pickup_days,
             is_featured
         } = request.body;
 
@@ -60,10 +64,23 @@ const createProduct = async (request, response) => {
             image_public_id: image_public_id,
             is_available: status === "draft" ? false : is_available,
             is_visible: isVisible,
-            inventory_quantity: inventory_quantity,
-            low_inventory_threshold: low_inventory_threshold,
+            stock_type: stock_type,
+            //Use inventory values only when inventory tracking is enabled
+            inventory_quantity:
+                stock_type === "track_inventory"
+                    ? inventory_quantity
+                    : 0,
+
+            low_inventory_threshold:
+                stock_type === "track_inventory"
+                    ? low_inventory_threshold
+                    : 5,
+            minimum_preparation_notice: minimum_preparation_notice,
+            maximum_orders_per_day: maximum_orders_per_day,
+            available_pickup_days: available_pickup_days,
             is_featured: is_featured
         });
+
         //Return the newly created product
         return response.status(201).json({
             message: "Product created successfully",
@@ -268,8 +285,12 @@ const updateMyProduct = async (request, response) => {
             image_url,
             image_public_id,
             is_available,
+            stock_type,
             inventory_quantity,
             low_inventory_threshold,
+            minimum_preparation_notice,
+            maximum_orders_per_day,
+            available_pickup_days,
             is_featured
         } = request.body;
 
@@ -295,8 +316,20 @@ const updateMyProduct = async (request, response) => {
         product.image_public_id = image_public_id;
         product.is_available = isAvailable;
         product.is_visible = isVisible;
-        product.inventory_quantity = inventory_quantity;
-        product.low_inventory_threshold = low_inventory_threshold;
+        product.stock_type = stock_type;
+        //Update inventory values based on the selected stock type
+        product.inventory_quantity =
+            stock_type === "track_inventory"
+                ? inventory_quantity
+                : 0;
+
+        product.low_inventory_threshold =
+            stock_type === "track_inventory"
+                ? low_inventory_threshold
+                : 5;
+        product.minimum_preparation_notice = minimum_preparation_notice;
+        product.maximum_orders_per_day = maximum_orders_per_day;
+        product.available_pickup_days = available_pickup_days;
         product.is_featured = is_featured;
 
         //Save the updated product information to MongoDB

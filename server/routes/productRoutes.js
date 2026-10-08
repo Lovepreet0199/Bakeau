@@ -64,10 +64,12 @@ const productValidation = [
         .withMessage("Product image is required"),
 
     body("inventory_quantity")
+        .if(body("stock_type").equals("track_inventory"))
         .notEmpty()
         .withMessage("Inventory quantity is required")
         .isInt({ min: 0 })
         .withMessage("Inventory quantity must be 0 or greater"),
+
 
     body("is_available")
         .isBoolean()
@@ -78,10 +80,42 @@ const productValidation = [
         .withMessage("Featured value must be true or false"),
 
     body("low_inventory_threshold")
+        .if(body("stock_type").equals("track_inventory"))
         .notEmpty()
         .withMessage("Low inventory threshold is required")
         .isInt({ min: 0 })
-        .withMessage("Low inventory threshold must be 0 or greater")
+        .withMessage("Low inventory threshold must be 0 or greater"),
+
+    body("stock_type")
+        .notEmpty()
+        .withMessage("Stock type is required")
+        .isIn(["made_to_order", "track_inventory"])
+        .withMessage("Stock type must be made to order or track inventory"),
+
+    body("minimum_preparation_notice")
+        .isInt({ min: 0 })
+        .withMessage("Minimum preparation notice must be 0 or greater"),
+
+    body("maximum_orders_per_day")
+        .optional({ nullable: true })
+        .isInt({ min: 1 })
+        .withMessage("Maximum orders per day must be at least 1"),
+
+    body("available_pickup_days")
+        .isArray()
+        .withMessage("Available pickup days must be an array"),
+
+    body("available_pickup_days.*")
+        .isIn([
+            "monday",
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday",
+            "sunday"
+        ])
+        .withMessage("Please select valid pickup days"),
 ];
 
 //Validate a product publishing status update
