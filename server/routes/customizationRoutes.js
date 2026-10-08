@@ -131,7 +131,7 @@ router.delete(
     authenticateUser,
     authorizeRoles("bakeryOwner"),
     deleteCustomizationOption
-)
+);
 
 //Export the router so it can be used in the main server file
 export default router;

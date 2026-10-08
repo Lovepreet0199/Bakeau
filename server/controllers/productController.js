@@ -4,6 +4,10 @@ import Product from "../models/Product.js";
 //Import the Bakery model to identify the authenticated owner's bakery
 import Bakery from "../models/Bakery.js";
 
+//Import customization models used when deleting a Product
+import CustomizationGroup from "../models/CustomizationGroup.js";
+import CustomizationOption from "../models/CustomizationOption.js";
+
 //Import Cloudinary to upload and manage product images
 import cloudinary from "../config/cloudinary.js";
 
@@ -606,9 +610,31 @@ const deleteMyProduct = async (request, response) => {
             });
         }
 
-        //Delete the product from MongoDB
-        await product.deleteOne();
+        //Find all customization groups that belong to the Product
+        const customizationGroups = await CustomizationGroup.find({
+            product_id: product._id
+        }).select("_id");
 
+        //Store the customization group IDs
+        const customizationGroupIds = customizationGroups.map(
+            (group) => group._id
+        );
+
+        //Delete all customization options that belong to those groups
+        await CustomizationOption.deleteMany({
+            group_id: {
+                $in: customizationGroupIds
+            }
+        });
+
+        //Delete all customization groups that belong to the Product
+        await CustomizationGroup.deleteMany({
+            product_id: product._id
+        });
+
+        //Delete the Product
+        await product.deleteOne();
+        
         //Return a success message after deleting the product
         return response.status(200).json({
             message: "Product deleted successfully"
