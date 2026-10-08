@@ -213,3 +213,65 @@
     background-color: #342d29;
     color: #ffffff;
 }
+
+/*  PRODUCT DELETE CONFIRMATION */
+
+/* Product delete confirmation background */
+.bakery-product-delete-modal-backdrop {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1050;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-color: rgba(37, 32, 30, 0.45);
+}
+
+/* Product delete confirmation modal */
+.bakery-product-delete-modal {
+    width: 100%;
+    max-width: 440px;
+    padding: 24px;
+    border: 1px solid #e4e1de;
+    border-radius: 12px;
+    background-color: #ffffff;
+    box-shadow: 0 18px 50px rgba(37, 32, 30, 0.18);
+}
+
+/* Product delete confirmation heading */
+.bakery-product-delete-modal-title {
+    margin-bottom: 8px;
+    color: #25201e;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+/* Product delete confirmation description */
+.bakery-product-delete-modal-description {
+    margin-bottom: 0;
+    color: #746d68;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* Product delete confirmation button */
+.bakery-product-delete-confirm-button {
+    padding: 8px 16px;
+    border: 1px solid #b42318;
+    border-radius: 8px;
+    background-color: #b42318;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* Product delete confirmation button hover */
+.bakery-product-delete-confirm-button:hover {
+    border-color: #912018;
+    background-color: #912018;
+    color: #ffffff;
+}

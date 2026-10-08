@@ -2,7 +2,12 @@
 import { Star, X } from "lucide-react";
 
 //Displays one bakery product card
-export default function ProductCard({ product }) {
+export default function ProductCard({
+    product,
+    onDelete,
+    onToggleFeatured,
+    isFeatureUpdating
+}) {
 
     return (
         <div className="card h-100 bakery-product-card">
@@ -28,8 +33,8 @@ export default function ProductCard({ product }) {
                 {/* Product availability status */}
                 <span
                     className={`bakery-product-status ${product.is_available
-                            ? "bakery-product-active"
-                            : "bakery-product-inactive"
+                        ? "bakery-product-active"
+                        : "bakery-product-inactive"
                         }`}
                 >
                     {product.is_available ? "Active" : "Inactive"}
@@ -85,24 +90,32 @@ export default function ProductCard({ product }) {
                         Edit
                     </button>
 
-                    {/* Feature product */}
+                    {/* Feature Product */}
                     <button
                         type="button"
                         className={`btn bakery-product-action-button bakery-product-feature-button flex-grow-1 ${product.is_featured ? "is-featured" : ""
                             }`}
+                        onClick={onToggleFeatured}
+                        disabled={isFeatureUpdating}
                     >
                         <Star
                             size={14}
                             fill={product.is_featured ? "currentColor" : "none"}
                         />
 
-                        {product.is_featured ? "Featured" : "Feature"}
+                        {isFeatureUpdating
+                            ? "Updating..."
+                            : product.is_featured
+                                ? "Featured"
+                                : "Feature"}
                     </button>
 
                     {/* Delete product */}
                     <button
                         type="button"
                         className="btn bakery-product-delete-button"
+                        onClick={onDelete}
+                        aria-label={`Delete ${product.name}`}
                     >
                         <X size={18} />
                     </button>

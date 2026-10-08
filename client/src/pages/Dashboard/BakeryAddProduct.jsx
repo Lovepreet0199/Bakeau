@@ -452,9 +452,16 @@ export default function BakeryAddProduct() {
                 );
             }
 
+            //Sort customization groups from oldest to newest
+            const sortedGroups = [...data.customizationGroups].sort(
+                (firstGroup, secondGroup) =>
+                    new Date(firstGroup.created_at) - new Date(secondGroup.created_at)
+            );
+
+
             //Load the options that belong to each customization group
             const groupsWithOptions = await Promise.all(
-                data.customizationGroups.map(async (group) => {
+                sortedGroups.map(async (group) => {
 
                     const optionResponse = await fetch(
                         `http://localhost:3000/api/customizations/groups/${group._id}/options`,

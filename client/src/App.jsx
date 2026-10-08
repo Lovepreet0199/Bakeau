@@ -97,6 +97,10 @@ export default function App() {
           element={<BakeryAddProduct />}
         />
 
+        <Route
+          path="products/:id/edit"
+          element={<BakeryAddProduct />} />
+          
       </Route>
 
     </Routes>

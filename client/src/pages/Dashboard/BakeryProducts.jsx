@@ -31,6 +31,15 @@ export default function BakeryProducts() {
     //Tracks the currently selected product filter
     const [activeFilter, setActiveFilter] = useState("all");
 
+    //Stores the Product waiting to be deleted
+    const [productToDelete, setProductToDelete] = useState(null);
+
+    //Tracks whether the Product is currently being deleted
+    const [isProductDeleting, setIsProductDeleting] = useState(false);
+
+    //Stores the Product currently updating its featured state
+    const [featuredProductId, setFeaturedProductId] = useState(null);
+
     //Loads the bakery products when the Products page opens
     useEffect(() => {
 
@@ -90,6 +99,134 @@ export default function BakeryProducts() {
         return matchesSearch && matchesFilter;
 
     });
+
+    //Deletes the selected Product
+    async function handleDeleteProduct() {
+
+        //Stop if no Product is selected
+        if (!productToDelete) {
+            return;
+        }
+
+        //Show the Product deletion loading state
+        setIsProductDeleting(true);
+
+        try {
+
+            //Get the logged-in user's JWT token
+            const token = getAuthToken();
+
+            //Delete the selected Product
+            const response = await fetch(
+                `http://localhost:3000/api/products/${productToDelete._id}`,
+                {
+                    method: "DELETE",
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+
+            //Convert the response into JavaScript data
+            const data = await response.json();
+
+            //Stop if the Product could not be deleted
+            if (!response.ok) {
+                throw new Error(
+                    data.message || "Unable to delete product"
+                );
+            }
+
+            //Remove the deleted Product from the Products page
+            setProducts((currentProducts) =>
+                currentProducts.filter(
+                    (product) => product._id !== productToDelete._id
+                )
+            );
+
+            //Close the delete confirmation modal
+            setProductToDelete(null);
+
+        } catch (error) {
+
+            console.error("Product deletion error:", error.message);
+
+        } finally {
+
+            //Remove the Product deletion loading state
+            setIsProductDeleting(false);
+        }
+    }
+
+    //Updates whether a Product is featured
+    async function handleToggleFeatured(product) {
+
+        //Checks that the featured button is calling this function
+        console.log("Feature clicked:", product);
+
+        //Store the new featured value
+        const newFeaturedValue = !product.is_featured;
+
+        //Show the loading state for this Product
+        setFeaturedProductId(product._id);
+
+        try {
+
+            //Get the logged-in user's JWT token
+            const token = getAuthToken();
+
+            //Update only the Product's featured state
+            const response = await fetch(
+                `http://localhost:3000/api/products/${product._id}/featured`,
+                {
+                    method: "PATCH",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        is_featured: newFeaturedValue
+                    })
+                }
+            );
+
+            //Convert the response into JavaScript data
+            const data = await response.json();
+
+            //Checks the response returned by the backend
+            console.log("Featured response:", response.status, data);
+
+            //Stop if the featured state could not be updated
+            if (!response.ok) {
+                throw new Error(
+                    data.message ||
+                    data.errors?.[0]?.msg ||
+                    "Unable to update featured product"
+                );
+            }
+
+            //Replace the Product with the updated Product returned by the backend
+            setProducts((currentProducts) =>
+                currentProducts.map((currentProduct) =>
+                    currentProduct._id === product._id
+                        ? data.product
+                        : currentProduct
+                )
+            );
+
+        } catch (error) {
+
+            console.error(
+                "Product featured update error:",
+                error.message
+            );
+
+        } finally {
+
+            //Remove the Product featured loading state
+            setFeaturedProductId(null);
+        }
+    }
 
     return (
         <div className="bakery-dashboard-content">
@@ -180,13 +317,68 @@ export default function BakeryProducts() {
                         /* Product column */
                         <div key={product._id} className="col-12 col-md-6 col-xl-4">
 
-                            <ProductCard product={product} />
+                            <ProductCard
+                                product={product}
+                                onDelete={() => setProductToDelete(product)}
+                                onToggleFeatured={() => handleToggleFeatured(product)}
+                                isFeatureUpdating={featuredProductId === product._id}
+                            />
 
                         </div>
                     );
                 })}
 
             </div>
+
+            {/* Product delete confirmation */}
+            {productToDelete && (
+                <div className="bakery-product-delete-modal-backdrop">
+
+                    <div className="bakery-product-delete-modal">
+
+                        {/* Delete confirmation heading */}
+                        <h2 className="bakery-product-delete-modal-title">
+                            Delete product?
+                        </h2>
+
+                        {/* Delete confirmation message */}
+                        <p className="bakery-product-delete-modal-description">
+                            Delete <strong>"{productToDelete.name}"</strong>?
+                            This action cannot be undone.
+                        </p>
+
+                        {/* Delete confirmation actions */}
+                        <div className="d-flex justify-content-end align-items-center gap-2 mt-4">
+
+                            {/* Cancel Product deletion */}
+                            <button
+                                type="button"
+                                className="btn bakery-dashboard-secondary-button"
+                                onClick={() => setProductToDelete(null)}
+                                disabled={isProductDeleting}
+                            >
+                                Cancel
+                            </button>
+
+                            {/* Confirm Product deletion */}
+                            <button
+                                type="button"
+                                className="btn bakery-product-delete-confirm-button"
+                                onClick={handleDeleteProduct}
+                                disabled={isProductDeleting}
+                            >
+                                {isProductDeleting
+                                    ? "Deleting..."
+                                    : "Delete product"}
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            )}
+
         </div>
     );
 }
