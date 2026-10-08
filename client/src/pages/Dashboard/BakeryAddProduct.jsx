@@ -1,5 +1,5 @@
 //Import React hooks used for the Add Product form
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 //Import the authentication token helper
 import { getAuthToken } from "../../utils/authStorage";
@@ -25,26 +25,40 @@ export default function BakeryAddProduct() {
     //Stores any Basic Information validation error
     const [formError, setFormError] = useState("");
 
-    //Stores temporary customization groups before the product is saved
+    //Stores the MongoDB Product ID after the product is first saved
+    const [productId, setProductId] = useState(null);
+
+    //Tracks whether the product is currently being saved
+    const [isProductSaving, setIsProductSaving] = useState(false);
+
+    //Stores customization groups for the current Product
     const [customizationGroups, setCustomizationGroups] = useState([]);
+
+    //Stores the new customization group name
+    const [newGroupName, setNewGroupName] = useState("");
+
+    //Stores whether the new customization group is required
+    const [newGroupRequired, setNewGroupRequired] = useState(false);
 
     ///Stores the Add Product form values
     const [formData, setFormData] = useState({
         name: "",
         category: "",
         description: "",
-        status: "draft",
         base_price: "",
         image_url: "",
         image_public_id: "",
-        is_available: true,
+        is_available: false,
         stock_type: "made_to_order",
         inventory_quantity: "",
         low_inventory_threshold: "5",
         minimum_preparation_notice: "24",
         maximum_orders_per_day: "",
         available_pickup_days: [],
-        is_featured: false
+        is_featured: false,
+        payment_rule: "full_payment",
+        deposit_percentage: "",
+        cancellation_cutoff_hours: "24"
     });
 
     //Category options shown in the dropdown
@@ -217,7 +231,7 @@ export default function BakeryAddProduct() {
     }
 
     //Validates Payment settings before moving to the next step
-    function handlePaymentContinue() {
+    async function handlePaymentContinue() {
 
         //Check deposit percentage only when deposit payment is selected
         if (
@@ -243,10 +257,196 @@ export default function BakeryAddProduct() {
 
         //Clear any previous validation error
         setFormError("");
+        setIsProductSaving(true);
 
-        //Move to the Options step
-        setCurrentStep(4);
+        try {
+
+            //Get the logged-in user's JWT token
+            const token = getAuthToken();
+
+            //Prepare the Product information for the backend
+            const productData = {
+                ...formData,
+
+                //Keep the Product private until the Option step is final
+                status: "draft",
+                is_available: false,
+
+                //Send null when no daily order limit is selected
+                maximum_orders_per_day:
+                    formData.maximum_orders_per_day === ""
+                        ? null
+                        : formData.maximum_orders_per_day,
+
+                //Deposit percentage is only used for deposit payments
+                deposit_percentage:
+                    formData.payment_rule === "deposit"
+                        ? formData.deposit_percentage
+                        : null
+            };
+
+            let response;
+
+            //Create the Product only if it does not exist yet
+            if (!productId) {
+                response = await fetch(
+                    "http://localhost:3000/api/products",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-type": "application/json",
+                            Authorization: `Bearer ${token}`
+                        },
+                        body: JSON.stringify(productData)
+                    }
+                );
+
+            } else {
+
+                //Update the existing draft id the Product was already created
+                response = await fetch(
+                    `http://localhost:3000/api/products/${productId}`,
+                    {
+                        method: "PUT",
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${token}`
+                        },
+                        body: JSON.stringify(productData)
+                    }
+                );
+            }
+            //Convert the response into JavaScript data
+            const data = await response.json();
+
+            //Stop if the Product could not be saved
+            if (!response.ok) {
+                throw new Error(
+                    data.message ||
+                    data.errors?.[0]?.msg ||
+                    "Unable to save product"
+                );
+            }
+
+            //Store the real MongoDB Product ID after the first save
+            if (!productId) {
+                setProductId(data.product._id);
+            }
+
+            //Only open Options after the Product exists in MongoDB
+            setCurrentStep(4);
+
+        } catch (error) {
+
+            //Stay on Payment if saving the Product failed
+            setFormError(error.message);
+
+        } finally {
+
+            //Remove the loading state
+            setIsProductSaving(false);
+        }
     }
+
+    //Creates a customization group for the current Product
+    async function handleAddCustomizationGroup() {
+
+        //Do not create an empty group
+        if (!newGroupName.trim()) {
+            setFormError("Please enter an option group name.");
+            return;
+        }
+
+        try {
+
+            //Get the logged-in user's JWT token
+            const token = getAuthToken();
+
+            //Create the customization group using the saved Product ID
+            const response = await fetch(
+                `http://localhost:3000/api/customizations/products/${productId}/groups`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        name: newGroupName,
+                        is_required: newGroupRequired
+                    })
+                }
+            );
+
+            //Convert the response into JavaScript data
+            const data = await response.json();
+
+            //Stop if the group could not be created
+            if (!response.ok) {
+                throw new Error(
+                    data.message || "Unable to create customization group"
+                );
+            }
+
+            //Clear the input after the group is created
+            setNewGroupName("");
+            setNewGroupRequired(false);
+            setFormError("");
+
+
+            //Reload the Product's customization groups
+            await fetchCustomizationGroups();
+
+        } catch (error) {
+            setFormError(error.message);
+        }
+    }
+
+    //Loads customization groups for the current Product
+    const fetchCustomizationGroups = useCallback(async () => {
+
+        try {
+
+            //Get the logged-in user's JWT token
+            const token = getAuthToken();
+
+            //Request all customization groups for this Product
+            const response = await fetch(
+                `http://localhost:3000/api/customizations/products/${productId}/groups`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+
+            //Convert the response into JavaScript data
+            const data = await response.json();
+
+            //Stop if the groups could not be loaded
+            if (!response.ok) {
+                throw new Error(
+                    data.message || "Unable to load customization groups"
+                );
+            }
+
+            //Store the real database groups
+            setCustomizationGroups(data.customizationGroups);
+
+        } catch (error) {
+            setFormError(error.message);
+        }
+
+    }, [productId]);
+
+    //Loads customization groups when the Options step opens
+    useEffect(() => {
+
+        if (currentStep === 4 && productId) {
+            fetchCustomizationGroups();
+        }
+
+    }, [currentStep, productId, fetchCustomizationGroups]);
 
     return (
         <div className="bakery-dashboard-content">
@@ -531,44 +731,6 @@ export default function BakeryAddProduct() {
 
                         </div>
 
-                        {/* Product publishing status */}
-                        <div className="mb-3">
-                            <label
-                                htmlFor="productStatus"
-                                className="form-label bakery-add-product-label"
-                            >
-                                Status
-                                <span className="bakery-required-field"> *</span>
-                            </label>
-
-                            <p className="bakery-add-product-field-description mb-2">
-                                Control how this product appears on your storefront.
-                            </p>
-
-                            <select
-                                id="productStatus"
-                                className="form-select bakery-add-product-input"
-                                value={formData.status}
-                                onChange={(event) =>
-                                    setFormData({
-                                        ...formData,
-                                        status: event.target.value
-                                    })
-                                }
-                            >
-                                <option value="draft">
-                                    Draft — not visible on storefront
-                                </option>
-
-                                <option value="active">
-                                    Active — visible on storefront
-                                </option>
-
-                                <option value="hidden">
-                                    Hidden — accessible by direct link only
-                                </option>
-                            </select>
-                        </div>
 
                         {/* Basic Information validation error */}
                         {formError && (
@@ -816,13 +978,14 @@ export default function BakeryAddProduct() {
 
                         {/* Product availability */}
                         <div className="d-flex align-items-center justify-content-between gap-3 mb-4 bakery-availability-setting">
+
                             <div>
                                 <p className="bakery-add-product-label mb-1">
                                     Available for ordering
                                 </p>
 
                                 <p className="bakery-add-product-field-description mb-0">
-                                    Allow customers to place orders for this product.
+                                    Allow customers to place orders for this product when it is published.
                                 </p>
                             </div>
 
@@ -833,7 +996,6 @@ export default function BakeryAddProduct() {
                                     role="switch"
                                     id="productAvailability"
                                     checked={formData.is_available}
-                                    disabled={formData.status === "draft"}
                                     onChange={(event) =>
                                         setFormData({
                                             ...formData,
@@ -842,6 +1004,7 @@ export default function BakeryAddProduct() {
                                     }
                                 />
                             </div>
+
                         </div>
 
                         {/* Featured product */}
@@ -852,9 +1015,7 @@ export default function BakeryAddProduct() {
                                 </p>
 
                                 <p className="bakery-add-product-field-description mb-0">
-                                    {formData.status === "draft"
-                                        ? "Draft products cannot be ordered."
-                                        : "Allow customers to place orders for this product."}
+                                    Highlight this product in featured sections of your storefront.
                                 </p>
                             </div>
 
@@ -1050,8 +1211,9 @@ export default function BakeryAddProduct() {
                                 type="button"
                                 className="btn bakery-dashboard-primary-button"
                                 onClick={handlePaymentContinue}
+                                disabled={isProductSaving}
                             >
-                                Continue
+                                {isProductSaving ? "Saving..." : "Continue"}
                             </button>
 
                         </div>
@@ -1060,7 +1222,7 @@ export default function BakeryAddProduct() {
                 </div>
             )}
 
-            {currentStep === 4 && (
+            {currentStep === 4 && productId && (
                 <div className="card bakery-add-product-card">
                     <div className="card-body">
 
@@ -1075,17 +1237,115 @@ export default function BakeryAddProduct() {
                             </p>
                         </div>
 
-                        {/* Return to Payment */}
-                        <button
-                            type="button"
-                            className="btn bakery-dashboard-secondary-button"
-                            onClick={() => {
-                                setFormError("");
-                                setCurrentStep(3);
-                            }}
-                        >
-                            Back
-                        </button>
+                        {/* Existing customization groups */}
+                        {customizationGroups.map((group) => (
+                            <div
+                                key={group._id}
+                                className="card bakery-add-product-card mb-3"
+                            >
+                                <div className="card-body">
+
+                                    <div className="d-flex justify-content-between align-items-center gap-3">
+
+                                        <div>
+                                            <p className="bakery-add-product-label mb-1">
+                                                {group.name}
+                                            </p>
+
+                                            <p className="bakery-add-product-field-description mb-0">
+                                                {group.is_required
+                                                    ? "Required"
+                                                    : "Optional"}
+                                            </p>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        ))}
+
+                        {/* New customization group */}
+                        <div className="mb-4">
+
+                            <label
+                                htmlFor="customizationGroupName"
+                                className="form-label bakery-add-product-label"
+                            >
+                                Option group name
+                            </label>
+
+                            <input
+                                type="text"
+                                id="customizationGroupName"
+                                className="form-control bakery-add-product-input"
+                                placeholder="e.g. Cake size"
+                                value={newGroupName}
+                                onChange={(event) => setNewGroupName(event.target.value)}
+                            />
+
+                        </div>
+
+                        {/* Required customization group */}
+                        <div className="d-flex align-items-center justify-content-between gap-3 mb-4 bakery-availability-setting">
+
+                            <div>
+                                <p className="bakery-add-product-label mb-1">
+                                    Required
+                                </p>
+
+                                <p className="bakery-add-product-field-description mb-0">
+                                    Customers must select an option from this group before ordering.
+                                </p>
+                            </div>
+
+                            <div className="form-check form-switch mb-0">
+                                <input
+                                    className="form-check-input bakery-product-switch"
+                                    type="checkbox"
+                                    role="switch"
+                                    id="customizationGroupRequired"
+                                    checked={newGroupRequired}
+                                    onChange={(event) =>
+                                        setNewGroupRequired(event.target.checked)
+                                    }
+                                />
+                            </div>
+
+                        </div>
+
+                        {/* Customization group validation error */}
+                        {formError && (
+                            <p className="bakery-add-product-error mb-3">
+                                {formError}
+                            </p>
+                        )}
+
+                        {/* Options actions */}
+                        <div className="d-flex justify-content-between align-items-center gap-3 mt-4">
+
+                            {/* Return to Payment */}
+                            <button
+                                type="button"
+                                className="btn bakery-dashboard-secondary-button"
+                                onClick={() => {
+                                    setFormError("");
+                                    setCurrentStep(3);
+                                }}
+                            >
+                                Back
+                            </button>
+
+                            {/* Create customization group */}
+                            <button
+                                type="button"
+                                className="btn bakery-dashboard-primary-button"
+                                onClick={handleAddCustomizationGroup}
+                            >
+                                Add option group
+                            </button>
+
+                        </div>
 
                     </div>
                 </div>
