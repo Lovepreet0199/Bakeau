@@ -10,6 +10,9 @@ import {
     uploadProductImage,
     getMyProducts,
     getMyProductById,
+    updateProductStatus,
+    updateProductAvailability,
+    updateProductFeatured,
     updateMyProduct,
     deleteMyProduct
 } from "../controllers/productController.js";
@@ -38,6 +41,17 @@ const productValidation = [
         .notEmpty()
         .withMessage("Product description is required"),
 
+    body("category")
+        .trim()
+        .notEmpty()
+        .withMessage("Product category is required"),
+
+    body("status")
+        .notEmpty()
+        .withMessage("Product status is required")
+        .isIn(["draft", "active", "hidden"])
+        .withMessage("Product status must be draft, active, or hidden"),
+
     body("base_price")
         .notEmpty()
         .withMessage("Base price is required")
@@ -55,11 +69,42 @@ const productValidation = [
         .isInt({ min: 0 })
         .withMessage("Inventory quantity must be 0 or greater"),
 
+    body("is_available")
+        .isBoolean()
+        .withMessage("Product availability must be true or false"),
+
+    body("is_featured")
+        .isBoolean()
+        .withMessage("Featured value must be true or false"),
+
     body("low_inventory_threshold")
         .notEmpty()
         .withMessage("Low inventory threshold is required")
         .isInt({ min: 0 })
         .withMessage("Low inventory threshold must be 0 or greater")
+];
+
+//Validate a product publishing status update
+const productStatusValidation = [
+    body("status")
+        .notEmpty()
+        .withMessage("Product status is required")
+        .isIn(["draft", "active", "hidden"])
+        .withMessage("Product status must be draft, active, or hidden")
+];
+
+//Validate a product availability update
+const productAvailabilityValidation = [
+    body("is_available")
+        .isBoolean()
+        .withMessage("Product availability must be true or false")
+];
+
+//Validate a product featured update
+const productFeaturedValidation = [
+    body("is_featured")
+        .isBoolean()
+        .withMessage("Featured value must be true or false")
 ];
 
 //Check the product validation results
@@ -112,6 +157,36 @@ router.post(
     productValidation,
     validateRequest,
     createProduct
+);
+
+//Update only a product's publishing status
+router.patch(
+    "/:id/status",
+    authenticateUser,
+    authorizeRoles("bakeryOwner"),
+    productStatusValidation,
+    validateRequest,
+    updateProductStatus
+);
+
+//Update only a product's availability
+router.patch(
+    "/:id/availability",
+    authenticateUser,
+    authorizeRoles("bakeryOwner"),
+    productAvailabilityValidation,
+    validateRequest,
+    updateProductAvailability
+);
+
+//Update only a product's featured state
+router.patch(
+    "/:id/featured",
+    authenticateUser,
+    authorizeRoles("bakeryOwner"),
+    productFeaturedValidation,
+    validateRequest,
+    updateProductFeatured
 );
 
 //Update a product belonging to the authenticated Bakery Owner's bakery

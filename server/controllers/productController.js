@@ -19,7 +19,7 @@ const createProduct = async (request, response) => {
             owner_id: ownerId
         });
 
-        //Check ig the Bakery Owner has created a bakery
+        //Check if the Bakery Owner has created a bakery
         if (!bakery) {
             return response.status(400).json({
                 message: "Bakery not found"
@@ -30,31 +30,40 @@ const createProduct = async (request, response) => {
         const {
             name,
             description,
+            category,
+            status = "draft",
             base_price,
             image_url,
             image_public_id,
-            is_available,
-            is_visible,
+            is_available = true,
             inventory_quantity,
             low_inventory_threshold,
             is_featured
         } = request.body;
+
+        //Set product visibility based on its publishing status
+        let isVisible = false;
+
+        if (status === "active") {
+            isVisible = true;
+        }
 
         //Create the product and connect it to the authenticated Owner's bakery
         const newProduct = await Product.create({
             bakery_id: bakery._id,
             name: name,
             description: description,
+            category: category,
+            status: status,
             base_price: base_price,
             image_url: image_url,
             image_public_id: image_public_id,
-            is_available: is_available,
-            is_visible: is_visible,
+            is_available: status === "draft" ? false : is_available,
+            is_visible: isVisible,
             inventory_quantity: inventory_quantity,
             low_inventory_threshold: low_inventory_threshold,
             is_featured: is_featured
         });
-
         //Return the newly created product
         return response.status(201).json({
             message: "Product created successfully",
@@ -253,24 +262,39 @@ const updateMyProduct = async (request, response) => {
         const {
             name,
             description,
+            category,
+            status,
             base_price,
             image_url,
             image_public_id,
             is_available,
-            is_visible,
             inventory_quantity,
             low_inventory_threshold,
             is_featured
         } = request.body;
 
+        //Set product visibility based on its publishing status
+        let isVisible = false;
+
+        if (status === "active") {
+            isVisible = true;
+        }
+
+        //Draft products cannot be ordered
+        const isAvailable = status === "draft"
+            ? false
+            : is_available;
+
         //Update the product information
         product.name = name;
         product.description = description;
+        product.category = category;
+        product.status = status;
         product.base_price = base_price;
         product.image_url = image_url;
         product.image_public_id = image_public_id;
-        product.is_available = is_available;
-        product.is_visible = is_visible;
+        product.is_available = isAvailable;
+        product.is_visible = isVisible;
         product.inventory_quantity = inventory_quantity;
         product.low_inventory_threshold = low_inventory_threshold;
         product.is_featured = is_featured;
@@ -290,6 +314,204 @@ const updateMyProduct = async (request, response) => {
 
         return response.status(500).json({
             message: "Unable to update product"
+        });
+    }
+};
+
+//Update only the publishing status of a Bakery Owner's product
+const updateProductStatus = async (request, response) => {
+
+    try {
+
+        //Get the authenticated Bakery Owner's user ID
+        const ownerId = request.user.userId;
+
+        //Get the product ID from the URL
+        const productId = request.params.id;
+
+        //Get the new product status from the request
+        const { status } = request.body;
+
+        //Find the bakery belonging to the authenticated Bakery Owner
+        const bakery = await Bakery.findOne({
+            owner_id: ownerId
+        });
+
+        //Stop if the Bakery Owner does not have a bakery
+        if (!bakery) {
+            return response.status(404).json({
+                message: "Bakery not found"
+            });
+        }
+
+        //Find the product only if it belongs to this bakery
+        const product = await Product.findOne({
+            _id: productId,
+            bakery_id: bakery._id
+        });
+
+        //Stop if the product does not exist
+        if (!product) {
+            return response.status(404).json({
+                message: "Product not found"
+            });
+        }
+
+        //Update the product publishing status
+        product.status = status;
+
+        //Only active products appear in storefront listings
+        product.is_visible = status === "active";
+
+        //Draft products cannot be ordered
+        if (status === "draft") {
+            product.is_available = false;
+        }
+
+        //Save the updated product
+        await product.save();
+
+        //Return the updated product
+        return response.status(200).json({
+            message: "Product status updated successfully",
+            product: product
+        });
+
+    } catch (error) {
+
+        console.error("Product status update error:", error.message);
+
+        return response.status(500).json({
+            message: "Unable to update product status"
+        });
+    }
+};
+
+//Update only the availability of a Bakery Owner's product
+const updateProductAvailability = async (request, response) => {
+
+    try {
+
+        //Get the authenticated Bakery Owner's user ID
+        const ownerId = request.user.userId;
+
+        //Get the product ID from the URL
+        const productId = request.params.id;
+
+        //Get the new availability value
+        const { is_available } = request.body;
+
+        //Find the bakery belonging to the authenticated Bakery Owner
+        const bakery = await Bakery.findOne({
+            owner_id: ownerId
+        });
+
+        //Stop if the Bakery Owner does not have a bakery
+        if (!bakery) {
+            return response.status(404).json({
+                message: "Bakery not found"
+            });
+        }
+
+        //Find the product only if it belongs to this bakery
+        const product = await Product.findOne({
+            _id: productId,
+            bakery_id: bakery._id
+        });
+
+        //Stop if the product does not exist
+        if (!product) {
+            return response.status(404).json({
+                message: "Product not found"
+            });
+        }
+
+        //Draft products cannot be made available
+        if (product.status === "draft" && is_available === true) {
+            return response.status(400).json({
+                message: "A draft product cannot be made available"
+            });
+        }
+
+        //Update the product availability
+        product.is_available = is_available;
+
+        //Save the updated product
+        await product.save();
+
+        //Return the updated product
+        return response.status(200).json({
+            message: "Product availability updated successfully",
+            product: product
+        });
+
+    } catch (error) {
+
+        console.error("Product availability update error:", error.message);
+
+        return response.status(500).json({
+            message: "Unable to update product availability"
+        });
+    }
+};
+
+//Update only the featured state of a Bakery Owner's product
+const updateProductFeatured = async (request, response) => {
+
+    try {
+
+        //Get the authenticated Bakery Owner's user ID
+        const ownerId = request.user.userId;
+
+        //Get the product ID from the URL
+        const productId = request.params.id;
+
+        //Get the new featured value
+        const { is_featured } = request.body;
+
+        //Find the bakery belonging to the authenticated Bakery Owner
+        const bakery = await Bakery.findOne({
+            owner_id: ownerId
+        });
+
+        //Stop if the Bakery Owner does not have a bakery
+        if (!bakery) {
+            return response.status(404).json({
+                message: "Bakery not found"
+            });
+        }
+
+        //Find the product only if it belongs to this bakery
+        const product = await Product.findOne({
+            _id: productId,
+            bakery_id: bakery._id
+        });
+
+        //Stop if the product does not exist
+        if (!product) {
+            return response.status(404).json({
+                message: "Product not found"
+            });
+        }
+
+        //Update the product featured state
+        product.is_featured = is_featured;
+
+        //Save the updated product
+        await product.save();
+
+        //Return the updated product
+        return response.status(200).json({
+            message: "Product featured status updated successfully",
+            product: product
+        });
+
+    } catch (error) {
+
+        console.error("Product featured update error:", error.message);
+
+        return response.status(500).json({
+            message: "Unable to update product featured status"
         });
     }
 };
@@ -353,5 +575,8 @@ export {
     getMyProducts,
     getMyProductById,
     updateMyProduct,
+    updateProductStatus,
+    updateProductAvailability,
+    updateProductFeatured,
     deleteMyProduct
 };

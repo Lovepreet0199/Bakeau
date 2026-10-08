@@ -25,6 +25,21 @@ const productSchema = new mongoose.Schema({
         trim: true
     },
 
+    //Category used to organize products on the bakery storefront
+    category: {
+        type: String,
+        required: true,
+        trim: true
+    },
+
+    //Controls how the product is published on the storefront
+    status: {
+        type: String,
+        enum: ["draft", "active", "hidden"],
+        default: "draft",
+        required: true
+    },
+
     //Starting price of the product before any customization costs
     base_price: {
         type: Number,
