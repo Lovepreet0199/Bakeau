@@ -4,6 +4,7 @@ import { Star, X } from "lucide-react";
 //Displays one bakery product card
 export default function ProductCard({
     product,
+    onEdit,
     onDelete,
     onToggleFeatured,
     isFeatureUpdating
@@ -86,6 +87,7 @@ export default function ProductCard({
                     <button
                         type="button"
                         className="btn bakery-product-action-button flex-grow-1"
+                        onClick={onEdit}
                     >
                         Edit
                     </button>

@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 //Import React hooks used for the Add Product form
 import { useState, useEffect, useCallback } from "react";
@@ -17,6 +17,12 @@ export default function BakeryAddProduct() {
 
     //Used to navigate back to the Products page
     const navigate = useNavigate();
+
+    //Gets the Product ID from the URL when editing a Product
+    const { id: editProductId } = useParams();
+
+    //Checks whether the Product form is being used for editing
+    const isEditMode = Boolean(editProductId);
 
     //Tracks the current Add Product form step
     const [currentStep, setCurrentStep] = useState(1);
@@ -59,6 +65,9 @@ export default function BakeryAddProduct() {
 
     //Stores the customization group waiting to be deleted
     const [groupToDelete, setGroupToDelete] = useState(null);
+
+    //Stores the Product's existing publishing status when editing
+    const [existingProductStatus, setExistingProductStatus] = useState("draft");
 
     ///Stores the Add Product form values
     const [formData, setFormData] = useState({
@@ -277,6 +286,13 @@ export default function BakeryAddProduct() {
 
         //Clear any previous validation error
         setFormError("");
+
+        //Existing Products already have an ID, so wait until Save changes
+        if (isEditMode) {
+            setCurrentStep(4);
+            return;
+        }
+
         setIsProductSaving(true);
 
         try {
@@ -288,9 +304,12 @@ export default function BakeryAddProduct() {
             const productData = {
                 ...formData,
 
-                //Keep the Product private until the Option step is final
+                //New Products are saved as drafts before Options
                 status: "draft",
+
+                //Draft Products cannot be ordered
                 is_available: false,
+
 
                 //Send null when no daily order limit is selected
                 maximum_orders_per_day:
@@ -696,9 +715,9 @@ export default function BakeryAddProduct() {
 
                 //Draft Products cannot be ordered
                 is_available:
-                    status === "active"
-                        ? formData.is_available
-                        : false,
+                    status === "draft"
+                        ? false
+                        : formData.is_available,
 
                 //Send null when no daily order limit is selected
                 maximum_orders_per_day:
@@ -753,22 +772,118 @@ export default function BakeryAddProduct() {
         }
     }
 
+
+    // --------------------------------------------EDIT PRODUCT------------------------------------------
+    //Loads the existing Product when the form is in Edit mode
+    useEffect(() => {
+
+        //Do not load a Product when creating a new Product
+        if (!isEditMode) {
+            return;
+        }
+
+        //Gets the Product information from the backend
+        async function fetchProductForEdit() {
+
+            try {
+
+                //Get the logged-in user's JWT token
+                const token = getAuthToken();
+
+                //Request the Product being edited
+                const response = await fetch(
+                    `http://localhost:3000/api/products/${editProductId}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+                );
+
+                //Convert the response into JavaScript data
+                const data = await response.json();
+
+                //Stop if the Product could not be loaded
+                if (!response.ok) {
+                    throw new Error(
+                        data.message || "Unable to load product"
+                    );
+                }
+
+                //Store the Product ID so the existing Product can be updated later
+                setProductId(data.product._id);
+
+                //Stores the Product's current publishing status
+                setExistingProductStatus(data.product.status || "draft");
+
+                //Fill the Product form with the existing Product information
+                setFormData((currentFormData) => ({
+                    ...currentFormData,
+                    name: data.product.name || "",
+                    description: data.product.description || "",
+                    category: data.product.category || "",
+                    base_price: data.product.base_price ?? "",
+                    image_url: data.product.image_url || "",
+                    image_public_id: data.product.image_public_id || null,
+                    is_available: data.product.is_available ?? false,
+                    is_featured: data.product.is_featured ?? false,
+                    stock_type: data.product.stock_type || "made_to_order",
+                    inventory_quantity: data.product.inventory_quantity ?? 0,
+                    low_inventory_threshold:
+                        data.product.low_inventory_threshold ?? 5,
+                    minimum_preparation_notice:
+                        data.product.minimum_preparation_notice ?? 24,
+                    maximum_orders_per_day:
+                        data.product.maximum_orders_per_day ?? "",
+                    available_pickup_days:
+                        data.product.available_pickup_days || [],
+                    payment_rule:
+                        data.product.payment_rule || "full_payment",
+                    deposit_percentage:
+                        data.product.deposit_percentage ?? "",
+                    cancellation_cutoff_hours:
+                        data.product.cancellation_cutoff_hours ?? 24
+                }));
+
+                //Clear any previous form error
+                setFormError("");
+
+            } catch (error) {
+
+                setFormError(error.message);
+            }
+        }
+
+        //Load the existing Product
+        fetchProductForEdit();
+
+    }, [editProductId, isEditMode]);
+
+
+
     return (
         <div className="bakery-dashboard-content">
 
-            {/* Add Product breadcrumb */}
+            {/* Product breadcrumb */}
             <div className="d-flex align-items-center gap-2 mb-3 bakery-add-product-breadcrumb">
                 <span>Products</span>
                 <span>/</span>
-                <span className="fw-semibold">Add product</span>
+                <span className="fw-semibold">
+                    {isEditMode ? "Edit product" : "Add product"}
+                </span>
             </div>
 
-            {/* Add Product page heading */}
+            {/* Product page heading */}
             <div className="mb-4">
-                <h1 className="mb-1">Add product</h1>
+                <h1 className="mb-1">
+                    {isEditMode ? "Edit product" : "Add product"}
+                </h1>
 
                 <p className="mb-0 bakery-add-product-description">
-                    Create a new product for your bakery storefront.
+                    {isEditMode
+                        ? "Update your product information, availability, payment settings, and options."
+                        : "Create a new product for your bakery storefront."
+                    }
                 </p>
             </div>
 
@@ -1045,7 +1160,18 @@ export default function BakeryAddProduct() {
                         )}
 
                         {/* Basic Information navigation */}
-                        <div className="d-flex justify-content-end mt-4">
+                        <div className="d-flex justify-content-between align-items-center gap-3 mt-4">
+
+                            {/* Returns to the Products page */}
+                            <button
+                                type="button"
+                                className="btn bakery-dashboard-secondary-button bakery-add-product-back-button"
+                                onClick={() => navigate("/bakery/products")}
+                            >
+                                Back to products
+                            </button>
+
+                            {/* Continue to Availability */}
                             <button
                                 type="button"
                                 className="btn bakery-dashboard-primary-button"
@@ -1053,6 +1179,7 @@ export default function BakeryAddProduct() {
                             >
                                 Continue
                             </button>
+
                         </div>
 
                     </div>
@@ -1891,25 +2018,47 @@ export default function BakeryAddProduct() {
                             {/* Final Product actions */}
                             <div className="d-flex align-items-center gap-2">
 
-                                {/* Save Product without publishing */}
-                                <button
-                                    type="button"
-                                    className="btn bakery-dashboard-secondary-button"
-                                    onClick={() => handleFinalProductSave("draft")}
-                                    disabled={isProductSaving}
-                                >
-                                    {isProductSaving ? "Saving..." : "Save draft"}
-                                </button>
+                                {/* Existing active or hidden Products keep their current status */}
+                                {isEditMode && existingProductStatus !== "draft" ? (
 
-                                {/* Publish Product to the storefront */}
-                                <button
-                                    type="button"
-                                    className="btn bakery-dashboard-primary-button"
-                                    onClick={() => handleFinalProductSave("active")}
-                                    disabled={isProductSaving}
-                                >
-                                    {isProductSaving ? "Saving..." : "Publish product"}
-                                </button>
+                                    <button
+                                        type="button"
+                                        className="btn bakery-dashboard-primary-button"
+                                        onClick={() =>
+                                            handleFinalProductSave(existingProductStatus)
+                                        }
+                                        disabled={isProductSaving}
+                                    >
+                                        {isProductSaving
+                                            ? "Saving..."
+                                            : "Save changes"}
+                                    </button>
+
+                                ) : (
+                                    <>
+                                        {/* Save the Product as a draft */}
+                                        <button
+                                            type="button"
+                                            className="btn bakery-dashboard-secondary-button"
+                                            onClick={() => handleFinalProductSave("draft")}
+                                            disabled={isProductSaving}
+                                        >
+                                            Save draft
+                                        </button>
+
+                                        {/* Publish the Product */}
+                                        <button
+                                            type="button"
+                                            className="btn bakery-dashboard-primary-button"
+                                            onClick={() => handleFinalProductSave("active")}
+                                            disabled={isProductSaving}
+                                        >
+                                            {isProductSaving
+                                                ? "Publishing..."
+                                                : "Publish product"}
+                                        </button>
+                                    </>
+                                )}
 
                             </div>
 

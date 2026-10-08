@@ -319,6 +319,7 @@ export default function BakeryProducts() {
 
                             <ProductCard
                                 product={product}
+                                onEdit={() => navigate(`/bakery/products/${product._id}/edit`)}
                                 onDelete={() => setProductToDelete(product)}
                                 onToggleFeatured={() => handleToggleFeatured(product)}
                                 isFeatureUpdating={featuredProductId === product._id}
