@@ -50,6 +50,7 @@ const createBakery = async (request, response) => {
             bakery_image_public_id,
             minimum_order_notice,
             timezone,
+            currency,
             maximum_orders_per_day,
             accepting_orders,
             payment_rule,
@@ -100,6 +101,7 @@ const createBakery = async (request, response) => {
             bakery_image_public_id: bakery_image_public_id,
             minimum_order_notice: minimum_order_notice,
             timezone: timezone,
+            currency: currency,
             maximum_orders_per_day: maximum_orders_per_day,
             accepting_orders: accepting_orders,
             payment_rule: payment_rule,
@@ -118,6 +120,47 @@ const createBakery = async (request, response) => {
 
         return response.status(500).json({
             message: "Unable to create bakery"
+        });
+    }
+};
+
+//Marks the Bakery Owner setup process as completed
+const completeBakerySetup = async (request, response) => {
+
+    try {
+
+        //Get the authenticated Bakery Owner ID
+        const ownerId = request.user.userId;
+
+        //Find the bakery owned by this Bakery Owner
+        const bakery = await Bakery.findOne({
+            owner_id: ownerId
+        });
+
+        //Stop if the Bakery Owner does not have a bakery
+        if (!bakery) {
+            return response.status(404).json({
+                message: "Bakery not found"
+            });
+        }
+
+        //Mark the bakery setup process as completed
+        bakery.setup_completed = true;
+
+        //Save the updated bakery
+        await bakery.save();
+
+        return response.status(200).json({
+            message: "Bakery setup completed successfully",
+            bakery: bakery
+        });
+
+    } catch (error) {
+
+        console.error("Bakery setup completion error:", error.message);
+
+        return response.status(500).json({
+            message: "Unable to complete bakery setup"
         });
     }
 };
@@ -181,6 +224,7 @@ const updateMyBakery = async (request, response) => {
             bakery_image_public_id,
             minimum_order_notice,
             timezone,
+            currency,
             maximum_orders_per_day,
             accepting_orders,
             payment_rule,
@@ -217,6 +261,10 @@ const updateMyBakery = async (request, response) => {
         bakery.bakery_image_public_id = bakery_image_public_id;
         bakery.minimum_order_notice = minimum_order_notice;
         bakery.timezone = timezone;
+        //Update the bakery currency only if it was included in the request
+        if (currency !== undefined) {
+            bakery.currency = currency;
+        }
         bakery.maximum_orders_per_day = maximum_orders_per_day;
         bakery.accepting_orders = accepting_orders;
         bakery.payment_rule = payment_rule;
@@ -286,6 +334,56 @@ const uploadBakeryLogo = async (request, response) => {
 
         return response.status(500).json({
             message: "Unable to upload bakery logo"
+        });
+    }
+};
+
+//Update payment settings for the authenticated Bakery Owner
+const updateBakeryPaymentSettings = async (request, response) => {
+    try {
+
+        //Get the authenticated Bakery Owner's user ID
+        const ownerId = request.user.userId;
+
+        //Get the payment settings submitted by the Bakery Owner
+        const {
+            payment_rule,
+            deposit_percentage,
+            allow_manual_payment
+        } = request.body;
+
+        //Find the bakery that belongs to the authenticated Bakery Owner
+        const bakery = await Bakery.findOne({
+            owner_id: ownerId
+        });
+
+        //Stop if the Bakery Owner does not have a bakery
+        if (!bakery) {
+            return response.status(404).json({
+                message: "Bakery not found"
+            });
+        }
+
+        //Update the bakery payment settings
+        bakery.payment_rule = payment_rule;
+        bakery.deposit_percentage = deposit_percentage;
+        bakery.allow_manual_payment = allow_manual_payment;
+
+        //Save the updated payment settings
+        await bakery.save();
+
+        //Return the updated payment settings
+        return response.status(200).json({
+            message: "Payment settings updated successfully",
+            bakery: bakery
+        });
+
+    } catch (error) {
+
+        console.error("Payment settings update error:", error.message);
+
+        return response.status(500).json({
+            message: "Unable to update payment settings"
         });
     }
 };
@@ -488,8 +586,10 @@ const getPublicBakeryProduct = async (request, response) => {
 //Export bakery controller functions so they can be used in the routes
 export {
     createBakery,
+    completeBakerySetup,
     getMyBakery,
     updateMyBakery,
+    updateBakeryPaymentSettings,
     uploadBakeryLogo,
     uploadBakeryImage,
     getPublicBakery,

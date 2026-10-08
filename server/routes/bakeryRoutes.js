@@ -16,8 +16,10 @@ import {
 //Import the bakery controller functions
 import {
     createBakery,
+    completeBakerySetup,
     getMyBakery,
     updateMyBakery,
+    updateBakeryPaymentSettings,
     uploadBakeryLogo,
     uploadBakeryImage,
     getPublicBakery,
@@ -88,6 +90,11 @@ const bakeryValidation = [
         ])
         .withMessage("Please select a valid timezone"),
 
+    body("currency")
+        .optional()
+        .isIn(["CAD", "USD", "INR", "GBP", "EUR"])
+        .withMessage("Please select a valid currency"),
+
     body("maximum_orders_per_day")
         .isInt({ min: 1 })
         .withMessage("Maximum orders per day must be at least 1"),
@@ -95,6 +102,23 @@ const bakeryValidation = [
     body("accepting_orders")
         .isBoolean()
         .withMessage("Accepting orders must be true or false"),
+
+    body("payment_rule")
+        .isIn(["full", "deposit"])
+        .withMessage("Payment rule must be full or deposit"),
+
+    body("deposit_percentage")
+        .if(body("payment_rule").equals("deposit"))
+        .isFloat({ min: 1, max: 100 })
+        .withMessage("Deposit percentage must be between 1 and 100"),
+
+    body("allow_manual_payment")
+        .isBoolean()
+        .withMessage("Manual payment setting must be true or false")
+];
+
+//Validate bakery payment settings
+const paymentSettingsValidation = [
 
     body("payment_rule")
         .isIn(["full", "deposit"])
@@ -179,6 +203,24 @@ router.post(
     authenticateUser,
     authorizeRoles("bakeryOwner"),
     connectStripeAccount
+);
+
+//Update payment settings for the authenticated Bakery Owner
+router.patch(
+    "/mine/payment-settings",
+    authenticateUser,
+    authorizeRoles("bakeryOwner"),
+    paymentSettingsValidation,
+    validateRequest,
+    updateBakeryPaymentSettings
+);
+
+//Marks the Bakery Owner setup process as completed
+router.patch(
+    "/mine/complete-setup",
+    authenticateUser,
+    authorizeRoles("bakeryOwner"),
+    completeBakerySetup
 );
 
 //Get the Stripe connection status for the authenticated Bakery Owner

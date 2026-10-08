@@ -173,6 +173,15 @@ const bakerySchema = new mongoose.Schema({
         default: "America/Toronto"
     },
 
+    //Currency used for product prices and customer payments
+    currency: {
+        type: String,
+        enum: ["CAD", "USD", "INR", "GBP", "EUR"],
+        default: "CAD",
+        trim: true,
+        uppercase: true
+    },
+
     //Maximum number of orders the bakery can accept each day
     maximum_orders_per_day: {
         type: Number,
@@ -229,7 +238,13 @@ const bakerySchema = new mongoose.Schema({
     stripe_payouts_enabled: {
         type: Boolean,
         default: false
-    }
+    },
+
+    //Tracks whether the Bakery Owner completed the setup process
+    setup_completed: {
+        type: Boolean,
+        default: false
+    },
 }, {
     //Automatically records when the bakery is created and last updated
     timestamps: {
