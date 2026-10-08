@@ -1,0 +1,270 @@
+/* Add Product breadcrumb */
+.bakery-add-product-breadcrumb {
+    color: #746d68;
+    font-size: 14px;
+}
+
+/* Add Product page description */
+.bakery-add-product-description {
+    color: #746d68;
+    font-size: 14px;
+}
+
+/* Add Product steps */
+.bakery-add-product-steps {
+    max-width: 650px;
+}
+
+/* Step number */
+.bakery-add-product-step-number {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: 1px solid #cfc7c2;
+    border-radius: 50%;
+    background-color: #ffffff;
+    color: #746d68;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* Active step number */
+.bakery-add-product-step-number.active {
+    border-color: #c65f3a;
+    background-color: #c65f3a;
+    color: #ffffff;
+}
+
+/* Step label */
+.bakery-add-product-step-label {
+    color: #25201e;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* Line connecting form steps */
+.bakery-add-product-step-line {
+    height: 1px;
+    flex-grow: 1;
+    margin: 0 18px;
+    background-color: #e4e1de;
+}
+
+/* Add Product form card */
+.bakery-add-product-card {
+    border: 1px solid #e4e1de;
+    border-radius: 12px;
+    background-color: #ffffff;
+}
+
+/* Add Product card body */
+.bakery-add-product-card .card-body {
+    padding: 20px;
+}
+
+/* Add Product field label */
+.bakery-add-product-label {
+    color: #25201e;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* Required field indicator */
+.bakery-required-field {
+    color: #c65f3a;
+}
+
+/* Add Product text input */
+.bakery-add-product-input {
+    min-height: 44px;
+    border: 1px solid #e4e1de;
+    border-radius: 8px;
+    color: #25201e;
+    font-size: 14px;
+}
+
+/* Add Product input focus */
+.bakery-add-product-input:focus {
+    border-color: #c65f3a;
+    box-shadow: 0 0 0 3px rgba(198, 95, 58, 0.12);
+}
+
+/* Add Product description field */
+.bakery-add-product-textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+/* Bakery currency selector */
+.bakery-add-product-currency {
+    max-width: 110px;
+    min-height: 44px;
+    border-color: #e4e1de;
+    background-color: #f8f6f4;
+    color: #25201e;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* Bakery currency selector focus */
+.bakery-add-product-currency:focus {
+    border-color: #c65f3a;
+    box-shadow: 0 0 0 3px rgba(198, 95, 58, 0.12);
+}
+
+/* Product image button while the image is uploading */
+.bakery-add-product-image-button.uploading {
+    pointer-events: none;
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+/* Product image upload area */
+.bakery-add-product-image-upload {
+    padding: 32px 20px;
+    border: 1px dashed #cfc7c2;
+    border-radius: 10px;
+    background-color: #faf9f8;
+    color: #746d68;
+}
+
+/* Product image upload icon */
+.bakery-add-product-image-upload svg {
+    color: #8b837e;
+}
+
+/* Product image upload title */
+.bakery-add-product-image-title {
+    margin-top: 10px;
+    color: #25201e;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* Product image upload description */
+.bakery-add-product-image-description {
+    color: #8b837e;
+    font-size: 13px;
+}
+
+/* Product image choose button */
+.bakery-add-product-image-button {
+    min-height: 40px;
+    padding: 8px 16px;
+    border: 1px solid #e4e1de;
+    border-radius: 8px;
+    background-color: #ffffff;
+    color: #25201e;
+    font-size: 14px;
+    font-weight: 600;
+    transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Product image choose button hover */
+.bakery-add-product-image-button:hover {
+    border-color: #c65f3a;
+    background-color: #fff8f5;
+    color: #c65f3a;
+}
+
+/* Uploaded product image preview */
+.bakery-add-product-image-preview {
+    width: 100%;
+    max-width: 320px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 12px;
+}
+
+/* Successful product image upload message */
+.bakery-add-product-image-success {
+    color: #067647;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* Add Product validation error */
+.bakery-add-product-error {
+    color: #c54536;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+/* Category dropdown uses the same shared input styling */
+.bakery-add-product-input {
+    min-height: 44px;
+    border: 1px solid #ddd6d1;
+    border-radius: 8px;
+    box-shadow: none;
+}
+
+/* Add Product section heading */
+.bakery-add-product-section-title {
+    color: #25201e;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+/* Pickup day selection buttons */
+.bakery-pickup-day-button {
+    padding: 8px 14px;
+    border: 1px solid #e4e1de;
+    border-radius: 8px;
+    background-color: #f8f6f4;
+    color: #746d68;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.bakery-pickup-day-button:hover {
+    border-color: #c65f3a;
+    background-color: #fff8f5;
+    color: #c65f3a;
+}
+
+.bakery-pickup-day-button.selected {
+    border-color: #c65f3a;
+    background-color: #c65f3a;
+    color: #ffffff;
+}
+
+/* Product setting switches */
+.bakery-product-switch {
+    width: 42px;
+    height: 22px;
+    cursor: pointer;
+}
+
+.bakery-product-switch:checked {
+    background-color: #c65f3a;
+    border-color: #c65f3a;
+}
+
+.bakery-product-switch:focus {
+    border-color: #c65f3a;
+    box-shadow: 0 0 0 3px rgba(198, 95, 58, 0.12);
+}
+
+/* Add Product validation error */
+.bakery-add-product-error {
+    padding: 10px 12px;
+    border: 1px solid #efc8c3;
+    border-radius: 8px;
+    background-color: #fff4f2;
+    color: #b42318;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* Deposit settings shown when deposit payment is selected */
+.bakery-payment-deposit-section {
+    padding: 16px;
+    border: 1px solid #eaded8;
+    border-radius: 8px;
+    background-color: #fffaf7;
+}

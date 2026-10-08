@@ -763,6 +763,36 @@
     box-shadow: 0 8px 24px rgba(67, 44, 35, 0.08);
 }
 
+/* Store currency section */
+.bakery-currency-section {
+    padding: 18px;
+    border: 1px solid #e4e1de;
+    border-radius: 12px;
+    background-color: #ffffff;
+}
+
+/* Store currency dropdown */
+.bakery-currency-select {
+    min-height: 46px;
+    border: 1px solid #d9d3cf;
+    border-radius: 8px;
+    background-color: #ffffff;
+    color: #25201e;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* Store currency dropdown focus */
+.bakery-currency-select:focus {
+    border-color: #c65f3a;
+    box-shadow: 0 0 0 3px rgba(198, 95, 58, 0.12);
+}
+
+/* Store currency dropdown hover */
+.bakery-currency-select:hover {
+    border-color: #bfb7b2;
+}
+
 /* Adjust spacing on smaller screens */
 @media (max-width: 576px) {
     .bakery-plan-card {

@@ -184,6 +184,39 @@ export default function PaymentStep({
                     handleContinue();
                 }}
             >
+
+                {/* Store currency */}
+                <div className="mb-4 bakery-currency-section">
+
+                    <label
+                        htmlFor="currency"
+                        className="form-label"
+                    >
+                        Store currency
+                        <span className="required-field"> *</span>
+                    </label>
+
+                    <p className="bakery-setup-field-description">
+                        Choose the currency used for all product prices and customer payments.
+                    </p>
+
+                    <select
+                        id="currency"
+                        name="currency"
+                        className="form-select bakery-currency-select"
+                        value={formData.currency}
+                        onChange={handleChange}
+                        required
+                    >
+                        <option value="CAD">CAD - Canadian Dollar</option>
+                        <option value="USD">USD - US Dollar</option>
+                        <option value="INR">INR - Indian Rupee</option>
+                        <option value="GBP">GBP - British Pound</option>
+                        <option value="EUR">EUR - Euro</option>
+                    </select>
+
+                </div>
+
                 {/* Stripe connection */}
                 <div className="bakery-payment-card mb-4">
 
