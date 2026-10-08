@@ -540,26 +540,31 @@ const updateProductFeatured = async (request, response) => {
             });
         }
 
-        //Find the product only if it belongs to this bakery
-        const product = await Product.findOne({
-            _id: productId,
-            bakery_id: bakery._id
-        });
+        //Update only the featured value if the Product belongs to this bakery
+        const product = await Product.findOneAndUpdate(
+            {
+                _id: productId,
+                bakery_id: bakery._id
+            },
+            {
+                $set: {
+                    is_featured: is_featured
+                }
+            },
+            {
+                returnDocument: "after",
+                runValidators: true
+            }
+        );
 
-        //Stop if the product does not exist
+        //Stop if the Product does not exist
         if (!product) {
             return response.status(404).json({
                 message: "Product not found"
             });
         }
 
-        //Update the product featured state
-        product.is_featured = is_featured;
-
-        //Save the updated product
-        await product.save();
-
-        //Return the updated product
+        //Return the updated Product
         return response.status(200).json({
             message: "Product featured status updated successfully",
             product: product
@@ -567,7 +572,10 @@ const updateProductFeatured = async (request, response) => {
 
     } catch (error) {
 
-        console.error("Product featured update error:", error.message);
+        console.error(
+            "Product featured update error:",
+            error.message
+        );
 
         return response.status(500).json({
             message: "Unable to update product featured status"
@@ -634,7 +642,7 @@ const deleteMyProduct = async (request, response) => {
 
         //Delete the Product
         await product.deleteOne();
-        
+
         //Return a success message after deleting the product
         return response.status(200).json({
             message: "Product deleted successfully"
