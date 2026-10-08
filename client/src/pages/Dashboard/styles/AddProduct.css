@@ -66,6 +66,13 @@
     padding: 20px;
 }
 
+/* Add Product section heading */
+.bakery-add-product-section-title {
+    color: #25201e;
+    font-size: 18px;
+    font-weight: 700;
+}
+
 /* Add Product field label */
 .bakery-add-product-label {
     color: #25201e;
@@ -78,11 +85,12 @@
     color: #c65f3a;
 }
 
-/* Add Product text input */
+/* Add Product inputs */
 .bakery-add-product-input {
     min-height: 44px;
-    border: 1px solid #e4e1de;
+    border: 1px solid #ddd6d1;
     border-radius: 8px;
+    box-shadow: none;
     color: #25201e;
     font-size: 14px;
 }
@@ -97,6 +105,15 @@
 .bakery-add-product-textarea {
     min-height: 120px;
     resize: vertical;
+}
+
+/* Currency shown beside price inputs */
+.bakery-add-product-price-symbol {
+    border-color: #ddd6d1;
+    background-color: #f8f6f4;
+    color: #746d68;
+    font-size: 14px;
+    font-weight: 500;
 }
 
 /* Bakery currency selector */
@@ -114,13 +131,6 @@
 .bakery-add-product-currency:focus {
     border-color: #c65f3a;
     box-shadow: 0 0 0 3px rgba(198, 95, 58, 0.12);
-}
-
-/* Product image button while the image is uploading */
-.bakery-add-product-image-button.uploading {
-    pointer-events: none;
-    opacity: 0.65;
-    cursor: not-allowed;
 }
 
 /* Product image upload area */
@@ -161,7 +171,10 @@
     color: #25201e;
     font-size: 14px;
     font-weight: 600;
-    transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+    transition:
+        border-color 0.2s ease,
+        background-color 0.2s ease,
+        color 0.2s ease;
 }
 
 /* Product image choose button hover */
@@ -171,14 +184,21 @@
     color: #c65f3a;
 }
 
+/* Product image button while uploading */
+.bakery-add-product-image-button.uploading {
+    pointer-events: none;
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
 /* Uploaded product image preview */
 .bakery-add-product-image-preview {
     width: 100%;
     max-width: 320px;
     height: 200px;
+    margin-bottom: 12px;
     object-fit: cover;
     border-radius: 10px;
-    margin-bottom: 12px;
 }
 
 /* Successful product image upload message */
@@ -186,68 +206,6 @@
     color: #067647;
     font-size: 13px;
     font-weight: 600;
-}
-
-/* Add Product validation error */
-.bakery-add-product-error {
-    color: #c54536;
-    font-size: 13px;
-    font-weight: 500;
-}
-
-/* Category dropdown uses the same shared input styling */
-.bakery-add-product-input {
-    min-height: 44px;
-    border: 1px solid #ddd6d1;
-    border-radius: 8px;
-    box-shadow: none;
-}
-
-/* Add Product section heading */
-.bakery-add-product-section-title {
-    color: #25201e;
-    font-size: 18px;
-    font-weight: 700;
-}
-
-/* Pickup day selection buttons */
-.bakery-pickup-day-button {
-    padding: 8px 14px;
-    border: 1px solid #e4e1de;
-    border-radius: 8px;
-    background-color: #f8f6f4;
-    color: #746d68;
-    font-size: 13px;
-    font-weight: 600;
-}
-
-.bakery-pickup-day-button:hover {
-    border-color: #c65f3a;
-    background-color: #fff8f5;
-    color: #c65f3a;
-}
-
-.bakery-pickup-day-button.selected {
-    border-color: #c65f3a;
-    background-color: #c65f3a;
-    color: #ffffff;
-}
-
-/* Product setting switches */
-.bakery-product-switch {
-    width: 42px;
-    height: 22px;
-    cursor: pointer;
-}
-
-.bakery-product-switch:checked {
-    background-color: #c65f3a;
-    border-color: #c65f3a;
-}
-
-.bakery-product-switch:focus {
-    border-color: #c65f3a;
-    box-shadow: 0 0 0 3px rgba(198, 95, 58, 0.12);
 }
 
 /* Add Product validation error */
@@ -261,10 +219,314 @@
     font-weight: 600;
 }
 
-/* Deposit settings shown when deposit payment is selected */
+/* Pickup day selection buttons */
+.bakery-pickup-day-button {
+    padding: 8px 14px;
+    border: 1px solid #e4e1de;
+    border-radius: 8px;
+    background-color: #f8f6f4;
+    color: #746d68;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* Pickup day hover */
+.bakery-pickup-day-button:hover {
+    border-color: #c65f3a;
+    background-color: #fff8f5;
+    color: #c65f3a;
+}
+
+/* Selected pickup day */
+.bakery-pickup-day-button.selected {
+    border-color: #c65f3a;
+    background-color: #c65f3a;
+    color: #ffffff;
+}
+
+/* Product setting switches */
+.bakery-product-switch {
+    width: 42px;
+    height: 22px;
+    cursor: pointer;
+}
+
+/* Checked Product switch */
+.bakery-product-switch:checked {
+    border-color: #c65f3a;
+    background-color: #c65f3a;
+}
+
+/* Product switch focus */
+.bakery-product-switch:focus {
+    border-color: #c65f3a;
+    box-shadow: 0 0 0 3px rgba(198, 95, 58, 0.12);
+}
+
+/* Deposit settings */
 .bakery-payment-deposit-section {
     padding: 16px;
     border: 1px solid #eaded8;
     border-radius: 8px;
     background-color: #fffaf7;
+}
+
+
+/* =========================================
+   PRODUCT CUSTOMIZATION
+   ========================================= */
+
+
+/* Customization group card */
+.bakery-customization-group-card {
+    border: 1px solid #e4e1de;
+    border-radius: 12px;
+    background-color: #fffdfa;
+}
+
+/* Customization group card body */
+.bakery-customization-group-card .card-body {
+    padding: 18px;
+}
+
+/* Customization group name */
+.bakery-customization-group-name {
+    color: #25201e;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+/* Required checkbox label */
+.bakery-customization-required-label {
+    color: #746d68;
+    font-size: 13px;
+    cursor: default;
+}
+
+/* Required checkbox */
+.bakery-customization-group-card .form-check-input {
+    cursor: default;
+}
+
+/* Checked Required checkbox */
+.bakery-customization-group-card .form-check-input:checked {
+    border-color: #c65f3a;
+    background-color: #c65f3a;
+}
+
+/* Required checkbox focus */
+.bakery-customization-group-card .form-check-input:focus {
+    border-color: #c65f3a;
+    box-shadow: 0 0 0 3px rgba(198, 95, 58, 0.12);
+}
+
+/* Remove entire customization group */
+.bakery-customization-remove-group {
+    padding: 2px 0;
+    border: 0;
+    background-color: transparent;
+    color: #746d68;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+/* Remove group hover */
+.bakery-customization-remove-group:hover {
+    background-color: transparent;
+    color: #c65f3a;
+}
+
+
+/* =========================================
+   SAVED CUSTOMIZATION OPTIONS
+   ========================================= */
+
+
+/* Wrapper around a saved option */
+.bakery-customization-option-wrapper {
+    margin-bottom: 8px;
+}
+
+/* Small dot before saved option */
+.bakery-customization-option-dot {
+    width: 8px;
+    flex-shrink: 0;
+    color: #a79e98;
+    font-size: 12px;
+    text-align: center;
+}
+
+/* Saved option display */
+.bakery-customization-option-display {
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    border: 1px solid #e4e1de;
+    border-radius: 8px;
+    background-color: #ffffff;
+    color: #25201e;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* Delete one customization option */
+.bakery-customization-delete-option {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 6px;
+    background-color: transparent;
+    color: #9a918b;
+}
+
+/* Delete option hover */
+.bakery-customization-delete-option:hover {
+    background-color: #fff1ee;
+    color: #c65f3a;
+}
+
+
+/* =========================================
+   ADD CHOICE
+   ========================================= */
+
+
+/* Add choice text button */
+.bakery-customization-add-choice {
+    padding: 4px 0;
+    border: 0;
+    background-color: transparent;
+    color: #c65f3a;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* Add choice hover */
+.bakery-customization-add-choice:hover {
+    background-color: transparent;
+    color: #a84c2e;
+}
+
+/* New customization choice form */
+.bakery-customization-choice-form {
+    padding: 16px;
+    margin-top: 12px;
+    border: 1px solid #e4e1de;
+    border-radius: 10px;
+    background-color: #faf9f8;
+}
+
+/* Labels inside Add choice form */
+.bakery-customization-choice-form .bakery-add-product-label {
+    margin-bottom: 6px;
+    font-size: 13px;
+}
+
+/* Cancel choice button */
+.bakery-customization-cancel-button {
+    padding: 8px 14px;
+    border: 0;
+    border-radius: 6px;
+    background-color: transparent;
+    color: #746d68;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* Cancel choice hover */
+.bakery-customization-cancel-button:hover {
+    background-color: #f0ece9;
+    color: #25201e;
+}
+
+/* Add option group button */
+.bakery-customization-add-group {
+    min-height: 52px;
+    padding: 12px 16px;
+    border: 1px dashed #cfc7c2;
+    border-radius: 10px;
+    background-color: #ffffff;
+    color: #25201e;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: left;
+}
+
+/* Add option group button hover */
+.bakery-customization-add-group:hover {
+    border-color: #c65f3a;
+    background-color: #fff8f5;
+    color: #c65f3a;
+}
+
+/* Add option group button focus */
+.bakery-customization-add-group:focus {
+    border-color: #c65f3a;
+    box-shadow: 0 0 0 3px rgba(198, 95, 58, 0.12);
+}
+
+/* Delete confirmation background */
+.bakery-delete-modal-backdrop {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1050;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-color: rgba(37, 32, 30, 0.45);
+}
+
+/* Delete confirmation modal */
+.bakery-delete-modal {
+    width: 100%;
+    max-width: 440px;
+    padding: 24px;
+    border: 1px solid #e4e1de;
+    border-radius: 12px;
+    background-color: #ffffff;
+    box-shadow: 0 18px 50px rgba(37, 32, 30, 0.18);
+}
+
+/* Delete confirmation heading */
+.bakery-delete-modal-title {
+    margin-bottom: 8px;
+    color: #25201e;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+/* Delete confirmation description */
+.bakery-delete-modal-description {
+    margin-bottom: 0;
+    color: #746d68;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* Delete confirmation button */
+.bakery-delete-modal-button {
+    padding: 8px 16px;
+    border: 1px solid #b42318;
+    border-radius: 8px;
+    background-color: #b42318;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* Delete confirmation button hover */
+.bakery-delete-modal-button:hover {
+    border-color: #912018;
+    background-color: #912018;
+    color: #ffffff;
 }

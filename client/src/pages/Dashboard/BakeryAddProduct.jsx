@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 //Import React hooks used for the Add Product form
 import { useState, useEffect, useCallback } from "react";
 
@@ -5,13 +7,16 @@ import { useState, useEffect, useCallback } from "react";
 import { getAuthToken } from "../../utils/authStorage";
 
 //Import Add Product icons
-import { ImagePlus } from "lucide-react";
+import { ImagePlus, X } from "lucide-react";
 
 //Import styles
 import "./styles/AddProduct.css";
 
 //Displays the Add Product page for Bakery Owners
 export default function BakeryAddProduct() {
+
+    //Used to navigate back to the Products page
+    const navigate = useNavigate();
 
     //Tracks the current Add Product form step
     const [currentStep, setCurrentStep] = useState(1);
@@ -39,6 +44,21 @@ export default function BakeryAddProduct() {
 
     //Stores whether the new customization group is required
     const [newGroupRequired, setNewGroupRequired] = useState(false);
+
+    //Stores whether the new customization group form is open
+    const [isAddingGroup, setIsAddingGroup] = useState(false);
+
+    //Stores the group currently adding a choice
+    const [activeGroupId, setActiveGroupId] = useState(null);
+
+    //Stores the new customization option name
+    const [newOptionName, setNewOptionName] = useState("");
+
+    //Stores the additional price for the new option
+    const [newOptionPrice, setNewOptionPrice] = useState("0");
+
+    //Stores the customization group waiting to be deleted
+    const [groupToDelete, setGroupToDelete] = useState(null);
 
     ///Stores the Add Product form values
     const [formData, setFormData] = useState({
@@ -351,7 +371,7 @@ export default function BakeryAddProduct() {
     //Creates a customization group for the current Product
     async function handleAddCustomizationGroup() {
 
-        //Do not create an empty group
+        //Do not create an empty customization group
         if (!newGroupName.trim()) {
             setFormError("Please enter an option group name.");
             return;
@@ -372,7 +392,7 @@ export default function BakeryAddProduct() {
                         Authorization: `Bearer ${token}`
                     },
                     body: JSON.stringify({
-                        name: newGroupName,
+                        name: newGroupName.trim(),
                         is_required: newGroupRequired
                     })
                 }
@@ -388,21 +408,23 @@ export default function BakeryAddProduct() {
                 );
             }
 
-            //Clear the input after the group is created
+            //Clear and close the new group form
             setNewGroupName("");
             setNewGroupRequired(false);
+            setIsAddingGroup(false);
             setFormError("");
-
 
             //Reload the Product's customization groups
             await fetchCustomizationGroups();
 
         } catch (error) {
+
+            //Display the group creation error
             setFormError(error.message);
         }
     }
 
-    //Loads customization groups for the current Product
+    //Loads customization groups and their options for the current Product
     const fetchCustomizationGroups = useCallback(async () => {
 
         try {
@@ -430,8 +452,37 @@ export default function BakeryAddProduct() {
                 );
             }
 
-            //Store the real database groups
-            setCustomizationGroups(data.customizationGroups);
+            //Load the options that belong to each customization group
+            const groupsWithOptions = await Promise.all(
+                data.customizationGroups.map(async (group) => {
+
+                    const optionResponse = await fetch(
+                        `http://localhost:3000/api/customizations/groups/${group._id}/options`,
+                        {
+                            headers: {
+                                Authorization: `Bearer ${token}`
+                            }
+                        }
+                    );
+
+                    const optionData = await optionResponse.json();
+
+                    if (!optionResponse.ok) {
+                        throw new Error(
+                            optionData.message ||
+                            "Unable to load customization options"
+                        );
+                    }
+
+                    return {
+                        ...group,
+                        options: optionData.customizationOptions
+                    };
+                })
+            );
+
+            //Store the groups together with their saved options
+            setCustomizationGroups(groupsWithOptions);
 
         } catch (error) {
             setFormError(error.message);
@@ -447,6 +498,253 @@ export default function BakeryAddProduct() {
         }
 
     }, [currentStep, productId, fetchCustomizationGroups]);
+
+    //Create a customization option inside a Product group
+    async function handleAddCustomizationOption(groupId) {
+
+        //Do not create an option without a name
+        if (!newOptionName.trim()) {
+            setFormError("Please enter a choice name.");
+            return;
+        }
+
+        //Do not allow a negative additional price
+        if (
+            newOptionPrice === "" ||
+            Number(newOptionPrice) < 0
+        ) {
+            setFormError("Please enter a valid additional price.");
+            return;
+        }
+
+        try {
+
+            //Get the logged-in user's JWT token
+            const token = getAuthToken();
+
+            //Create the option using the real customization group ID
+            const response = await fetch(
+                `http://localhost:3000/api/customizations/groups/${groupId}/options`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        name: newOptionName.trim(),
+                        additional_price: Number(newOptionPrice)
+                    })
+                }
+            );
+
+            //Convert the response into JavaScript data
+            const data = await response.json();
+
+            //Stop if the option could not be created
+            if (!response.ok) {
+                throw new Error(
+                    data.message || "Unable to create customization option"
+                );
+            }
+
+            //Clear the choice form after it is created
+            setNewOptionName("");
+            setNewOptionPrice("0");
+            setActiveGroupId(null);
+            setFormError("");
+
+            //Reload the groups so the new choice appears immediately
+            await fetchCustomizationGroups();
+
+        } catch (error) {
+            setFormError(error.message);
+
+        }
+    }
+
+    //Deletes one customization option
+    async function handleDeleteCustomizationOption(optionId) {
+
+        try {
+
+            //Get the logged-in user's JWT token
+            const token = getAuthToken();
+
+            //Delete the selected customization option
+            const response = await fetch(
+                `http://localhost:3000/api/customizations/options/${optionId}`,
+                {
+                    method: "DELETE",
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+
+            //Convert the response into JavaScript data
+            const data = await response.json();
+
+            //Stop if the customization option could not be deleted
+            if (!response.ok) {
+                throw new Error(
+                    data.message || "Unable to delete customization option"
+                );
+            }
+
+            //Reload groups and options after deleting
+            await fetchCustomizationGroups();
+
+            //Clear any previous error
+            setFormError("");
+
+        } catch (error) {
+
+            //Display the deletion error
+            setFormError(error.message);
+        }
+    }
+
+    //Opens the confirmation modal for a customization group
+    function handleDeleteCustomizationGroup(group) {
+        setGroupToDelete(group);
+        setFormError("");
+    }
+
+    //Deletes the selected customization group and all of its options
+    async function confirmDeleteCustomizationGroup() {
+
+        //Stop if no customization group is selected
+        if (!groupToDelete) {
+            return;
+        }
+
+        try {
+
+            //Get the logged-in user's JWT token
+            const token = getAuthToken();
+
+            //Delete the selected customization group
+            const response = await fetch(
+                `http://localhost:3000/api/customizations/groups/${groupToDelete._id}`,
+                {
+                    method: "DELETE",
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+
+            //Convert the response into JavaScript data
+            const data = await response.json();
+
+            //Stop if the customization group could not be deleted
+            if (!response.ok) {
+                throw new Error(
+                    data.message || "Unable to delete customization group"
+                );
+            }
+
+            //Close the Add choice form if the deleted group was open
+            if (activeGroupId === groupToDelete._id) {
+                setActiveGroupId(null);
+                setNewOptionName("");
+                setNewOptionPrice("0");
+            }
+
+            //Close the confirmation modal
+            setGroupToDelete(null);
+
+            //Reload the remaining customization groups
+            await fetchCustomizationGroups();
+
+            //Clear any previous error
+            setFormError("");
+
+        } catch (error) {
+
+            //Display the deletion error
+            setFormError(error.message);
+        }
+    }
+
+    //Saves the final Product as a draft or publishes it
+    async function handleFinalProductSave(status) {
+
+        //Show the Product saving state
+        setIsProductSaving(true);
+        setFormError("");
+
+        try {
+
+            //Get the logged-in user's JWT token
+            const token = getAuthToken();
+
+            //Prepare the final Product information
+            const productData = {
+                ...formData,
+
+                //Set the Product status based on the selected action
+                status: status,
+
+                //Draft Products cannot be ordered
+                is_available:
+                    status === "active"
+                        ? formData.is_available
+                        : false,
+
+                //Send null when no daily order limit is selected
+                maximum_orders_per_day:
+                    formData.maximum_orders_per_day === ""
+                        ? null
+                        : formData.maximum_orders_per_day,
+
+                //Deposit percentage is only used for deposit payments
+                deposit_percentage:
+                    formData.payment_rule === "deposit"
+                        ? formData.deposit_percentage
+                        : null
+            };
+
+            //Update the saved Product
+            const response = await fetch(
+                `http://localhost:3000/api/products/${productId}`,
+                {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
+                    },
+                    body: JSON.stringify(productData)
+                }
+            );
+
+            //Convert the response into JavaScript data
+            const data = await response.json();
+
+            //Stop if the Product could not be saved
+            if (!response.ok) {
+                throw new Error(
+                    data.message ||
+                    data.errors?.[0]?.msg ||
+                    "Unable to save product"
+                );
+            }
+
+            //Return to the Products page after saving
+            navigate("/bakery/products");
+
+        } catch (error) {
+
+            //Display the Product saving error
+            setFormError(error.message);
+
+        } finally {
+
+            //Remove the Product saving state
+            setIsProductSaving(false);
+        }
+    }
 
     return (
         <div className="bakery-dashboard-content">
@@ -801,8 +1099,12 @@ export default function BakeryAddProduct() {
                                 </option>
                             </select>
 
+                            {/* Explains the selected stock type */}
                             <p className="bakery-add-product-field-description mt-2 mb-0">
-                                Choose whether this product is prepared after an order or uses tracked inventory.
+                                {formData.stock_type === "made_to_order"
+                                    ? "Choose this for products you prepare after an order is placed. Bakeau will not track a stock quantity."
+                                    : "Choose this for products with a limited quantity available. Bakeau will reduce inventory as items are ordered and show a low-stock warning when needed."
+                                }
                             </p>
                         </div>
 
@@ -834,6 +1136,11 @@ export default function BakeryAddProduct() {
                                             })
                                         }
                                     />
+
+                                    {/* Explains the inventory quantity */}
+                                    <p className="bakery-add-product-field-description mt-2 mb-0">
+                                        Number of individual items currently available for customers to order.
+                                    </p>
                                 </div>
 
                                 {/* Low inventory threshold */}
@@ -860,6 +1167,11 @@ export default function BakeryAddProduct() {
                                             })
                                         }
                                     />
+
+                                    {/* Explains the low inventory threshold */}
+                                    <p className="bakery-add-product-field-description mt-2 mb-0">
+                                        Bakeau will warn you when inventory reaches this quantity or lower.
+                                    </p>
                                 </div>
 
 
@@ -1233,7 +1545,8 @@ export default function BakeryAddProduct() {
                             </h2>
 
                             <p className="bakery-add-product-field-description mb-0">
-                                Add customization choices customers can select when ordering.
+                                Build reusable customization option groups for this product.
+                                Customers will see these when ordering.
                             </p>
                         </div>
 
@@ -1241,87 +1554,318 @@ export default function BakeryAddProduct() {
                         {customizationGroups.map((group) => (
                             <div
                                 key={group._id}
-                                className="card bakery-add-product-card mb-3"
+                                className="card bakery-customization-group-card mb-3"
                             >
                                 <div className="card-body">
 
-                                    <div className="d-flex justify-content-between align-items-center gap-3">
+                                    {/* Customization group header */}
+                                    <div className="d-flex justify-content-between align-items-center gap-3 mb-3">
 
-                                        <div>
-                                            <p className="bakery-add-product-label mb-1">
-                                                {group.name}
-                                            </p>
+                                        {/* Customization group name */}
+                                        <p className="bakery-customization-group-name mb-0">
+                                            {group.name}
+                                        </p>
 
-                                            <p className="bakery-add-product-field-description mb-0">
+                                        {/* Customization group information and actions */}
+                                        <div className="d-flex align-items-center gap-3">
+
+                                            {/* Displays whether the group is required */}
+                                            <span className="bakery-customization-group-type">
                                                 {group.is_required
                                                     ? "Required"
                                                     : "Optional"}
-                                            </p>
+                                            </span>
+
+                                            {/* Delete customization group */}
+                                            <button
+                                                type="button"
+                                                className="btn bakery-customization-remove-group"
+                                                onClick={() =>
+                                                    handleDeleteCustomizationGroup(group)
+                                                }
+                                            >
+                                                Remove
+                                            </button>
+
                                         </div>
 
                                     </div>
+
+                                    {/* Saved customization options */}
+                                    {group.options.map((option) => (
+                                        <div
+                                            key={option._id}
+                                            className="d-flex align-items-center gap-2 bakery-customization-option-wrapper"
+                                        >
+
+                                            {/* Saved option information */}
+                                            <div className="d-flex justify-content-between align-items-center gap-3 flex-grow-1 bakery-customization-option-display">
+
+                                                {/* Customization option name */}
+                                                <span className="bakery-customization-option-name">
+                                                    {option.name}
+                                                </span>
+
+                                                {/* Additional option price */}
+                                                <span className="bakery-customization-option-price">
+                                                    +{bakeryCurrency} {Number(option.additional_price).toFixed(2)}
+                                                </span>
+
+                                            </div>
+
+                                            {/* Delete customization option */}
+                                            <button
+                                                type="button"
+                                                className="btn bakery-customization-delete-option"
+                                                onClick={() =>
+                                                    handleDeleteCustomizationOption(option._id)
+                                                }
+                                                aria-label={`Delete ${option.name}`}
+                                            >
+                                                <X size={18} />
+                                            </button>
+
+                                        </div>
+                                    ))}
+
+                                    {/* Open Add choice form */}
+                                    {activeGroupId !== group._id && (
+                                        <button
+                                            type="button"
+                                            className="btn bakery-customization-add-choice mt-2"
+                                            onClick={() => {
+
+                                                //Close the new group form
+                                                setIsAddingGroup(false);
+
+                                                //Open the Add choice form for this group
+                                                setActiveGroupId(group._id);
+
+                                                //Reset the choice inputs
+                                                setNewOptionName("");
+                                                setNewOptionPrice("0");
+                                                setFormError("");
+                                            }}
+                                        >
+                                            + Add choice
+                                        </button>
+                                    )}
+
+                                    {/* New customization option form */}
+                                    {activeGroupId === group._id && (
+                                        <div className="bakery-customization-choice-form mt-3">
+
+                                            <div className="row g-3">
+
+                                                {/* Choice name */}
+                                                <div className="col-12 col-md-8">
+                                                    <label
+                                                        htmlFor={`optionName-${group._id}`}
+                                                        className="form-label bakery-add-product-label"
+                                                    >
+                                                        Choice name
+                                                    </label>
+
+                                                    <input
+                                                        type="text"
+                                                        id={`optionName-${group._id}`}
+                                                        className="form-control bakery-add-product-input"
+                                                        placeholder="e.g. 8 inch"
+                                                        value={newOptionName}
+                                                        onChange={(event) =>
+                                                            setNewOptionName(event.target.value)
+                                                        }
+                                                    />
+                                                </div>
+
+                                                {/* Additional price */}
+                                                <div className="col-12 col-md-4">
+                                                    <label
+                                                        htmlFor={`optionPrice-${group._id}`}
+                                                        className="form-label bakery-add-product-label"
+                                                    >
+                                                        Additional price
+                                                    </label>
+
+                                                    <div className="input-group">
+
+                                                        {/* Bakery currency */}
+                                                        <span className="input-group-text bakery-add-product-price-symbol">
+                                                            {bakeryCurrency}
+                                                        </span>
+
+                                                        {/* Additional option price */}
+                                                        <input
+                                                            type="number"
+                                                            id={`optionPrice-${group._id}`}
+                                                            className="form-control bakery-add-product-input"
+                                                            min="0"
+                                                            step="0.01"
+                                                            value={newOptionPrice}
+                                                            onChange={(event) =>
+                                                                setNewOptionPrice(event.target.value)
+                                                            }
+                                                        />
+
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                            {/* Add choice actions */}
+                                            <div className="d-flex justify-content-end align-items-center gap-2 mt-3">
+
+                                                {/* Cancel adding choice */}
+                                                <button
+                                                    type="button"
+                                                    className="btn bakery-customization-cancel-button"
+                                                    onClick={() => {
+                                                        setActiveGroupId(null);
+                                                        setNewOptionName("");
+                                                        setNewOptionPrice("0");
+                                                        setFormError("");
+                                                    }}
+                                                >
+                                                    Cancel
+                                                </button>
+
+                                                {/* Save customization option */}
+                                                <button
+                                                    type="button"
+                                                    className="btn bakery-dashboard-primary-button"
+                                                    onClick={() =>
+                                                        handleAddCustomizationOption(group._id)
+                                                    }
+                                                >
+                                                    Save choice
+                                                </button>
+
+                                            </div>
+
+                                        </div>
+                                    )}
 
                                 </div>
                             </div>
                         ))}
 
-                        {/* New customization group */}
-                        <div className="mb-4">
+                        {/* Open Add option group form */}
+                        {!isAddingGroup && (
+                            <button
+                                type="button"
+                                className="btn bakery-customization-add-group w-100"
+                                onClick={() => {
 
-                            <label
-                                htmlFor="customizationGroupName"
-                                className="form-label bakery-add-product-label"
+                                    //Close any open Add choice form
+                                    setActiveGroupId(null);
+                                    setNewOptionName("");
+                                    setNewOptionPrice("0");
+
+                                    //Open the new customization group form
+                                    setIsAddingGroup(true);
+                                    setNewGroupName("");
+                                    setNewGroupRequired(false);
+                                    setFormError("");
+                                }}
                             >
-                                Option group name
-                            </label>
+                                + Add option group
+                            </button>
+                        )}
 
-                            <input
-                                type="text"
-                                id="customizationGroupName"
-                                className="form-control bakery-add-product-input"
-                                placeholder="e.g. Cake size"
-                                value={newGroupName}
-                                onChange={(event) => setNewGroupName(event.target.value)}
-                            />
 
-                        </div>
+                        {/* New customization group form */}
+                        {isAddingGroup && (
+                            <div className="bakery-customization-new-group mt-3">
 
-                        {/* Required customization group */}
-                        <div className="d-flex align-items-center justify-content-between gap-3 mb-4 bakery-availability-setting">
+                                {/* New customization group name */}
+                                <div className="mb-4">
+                                    <label
+                                        htmlFor="customizationGroupName"
+                                        className="form-label bakery-add-product-label"
+                                    >
+                                        Option group name
+                                    </label>
 
-                            <div>
-                                <p className="bakery-add-product-label mb-1">
-                                    Required
-                                </p>
+                                    <input
+                                        type="text"
+                                        id="customizationGroupName"
+                                        className="form-control bakery-add-product-input"
+                                        placeholder="e.g. Cake size"
+                                        value={newGroupName}
+                                        onChange={(event) =>
+                                            setNewGroupName(event.target.value)
+                                        }
+                                    />
+                                </div>
 
-                                <p className="bakery-add-product-field-description mb-0">
-                                    Customers must select an option from this group before ordering.
-                                </p>
+                                {/* Required customization group */}
+                                <div className="d-flex align-items-center justify-content-between gap-3 mb-4">
+
+                                    <div>
+                                        <p className="bakery-add-product-label mb-1">
+                                            Required
+                                        </p>
+
+                                        <p className="bakery-add-product-field-description mb-0">
+                                            Customers must select an option from this group before ordering.
+                                        </p>
+                                    </div>
+
+                                    {/* Required group setting */}
+                                    <div className="form-check form-switch mb-0">
+                                        <input
+                                            className="form-check-input bakery-product-switch"
+                                            type="checkbox"
+                                            role="switch"
+                                            id="customizationGroupRequired"
+                                            checked={newGroupRequired}
+                                            onChange={(event) =>
+                                                setNewGroupRequired(event.target.checked)
+                                            }
+                                        />
+                                    </div>
+
+                                </div>
+
+                                {/* New customization group actions */}
+                                <div className="d-flex justify-content-end align-items-center gap-2">
+
+                                    {/* Cancel creating customization group */}
+                                    <button
+                                        type="button"
+                                        className="btn bakery-customization-cancel-button"
+                                        onClick={() => {
+                                            setIsAddingGroup(false);
+                                            setNewGroupName("");
+                                            setNewGroupRequired(false);
+                                            setFormError("");
+                                        }}
+                                    >
+                                        Cancel
+                                    </button>
+
+                                    {/* Create customization group */}
+                                    <button
+                                        type="button"
+                                        className="btn bakery-dashboard-primary-button"
+                                        onClick={handleAddCustomizationGroup}
+                                    >
+                                        Add option group
+                                    </button>
+
+                                </div>
+
                             </div>
+                        )}
 
-                            <div className="form-check form-switch mb-0">
-                                <input
-                                    className="form-check-input bakery-product-switch"
-                                    type="checkbox"
-                                    role="switch"
-                                    id="customizationGroupRequired"
-                                    checked={newGroupRequired}
-                                    onChange={(event) =>
-                                        setNewGroupRequired(event.target.checked)
-                                    }
-                                />
-                            </div>
-
-                        </div>
-
-                        {/* Customization group validation error */}
+                        {/* Options validation error */}
                         {formError && (
-                            <p className="bakery-add-product-error mb-3">
+                            <p className="bakery-add-product-error mt-3 mb-0">
                                 {formError}
                             </p>
                         )}
 
-                        {/* Options actions */}
+                        {/* Options navigation */}
                         <div className="d-flex justify-content-between align-items-center gap-3 mt-4">
 
                             {/* Return to Payment */}
@@ -1332,22 +1876,84 @@ export default function BakeryAddProduct() {
                                     setFormError("");
                                     setCurrentStep(3);
                                 }}
+                                disabled={isProductSaving}
                             >
                                 Back
                             </button>
 
-                            {/* Create customization group */}
+                            {/* Final Product actions */}
+                            <div className="d-flex align-items-center gap-2">
+
+                                {/* Save Product without publishing */}
+                                <button
+                                    type="button"
+                                    className="btn bakery-dashboard-secondary-button"
+                                    onClick={() => handleFinalProductSave("draft")}
+                                    disabled={isProductSaving}
+                                >
+                                    {isProductSaving ? "Saving..." : "Save draft"}
+                                </button>
+
+                                {/* Publish Product to the storefront */}
+                                <button
+                                    type="button"
+                                    className="btn bakery-dashboard-primary-button"
+                                    onClick={() => handleFinalProductSave("active")}
+                                    disabled={isProductSaving}
+                                >
+                                    {isProductSaving ? "Saving..." : "Publish product"}
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            )}
+
+            {/* Customization group delete confirmation */}
+            {groupToDelete && (
+                <div className="bakery-delete-modal-backdrop">
+
+                    <div className="bakery-delete-modal">
+
+                        {/* Delete confirmation heading */}
+                        <h2 className="bakery-delete-modal-title">
+                            Remove option group?
+                        </h2>
+
+                        {/* Delete confirmation message */}
+                        <p className="bakery-delete-modal-description">
+                            Delete <strong>"{groupToDelete.name}"</strong>?
+                            All choices inside this group will also be deleted.
+                        </p>
+
+                        {/* Delete confirmation actions */}
+                        <div className="d-flex justify-content-end align-items-center gap-2 mt-4">
+
+                            {/* Cancel group deletion */}
                             <button
                                 type="button"
-                                className="btn bakery-dashboard-primary-button"
-                                onClick={handleAddCustomizationGroup}
+                                className="btn bakery-dashboard-secondary-button"
+                                onClick={() => setGroupToDelete(null)}
                             >
-                                Add option group
+                                Cancel
+                            </button>
+
+                            {/* Confirm group deletion */}
+                            <button
+                                type="button"
+                                className="btn bakery-delete-modal-button"
+                                onClick={confirmDeleteCustomizationGroup}
+                            >
+                                Delete group
                             </button>
 
                         </div>
 
                     </div>
+
                 </div>
             )}
         </div>
