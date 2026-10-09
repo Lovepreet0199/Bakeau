@@ -40,6 +40,21 @@ const orderItemSchema = new mongoose.Schema({
         min: 0
     },
 
+    //Payment rule used by the Product when the order was placed
+    payment_rule: {
+        type: String,
+        required: true,
+        enum: ["full_payment", "deposit"]
+    },
+
+    //Deposit percentage used when the order was placed
+    deposit_percentage: {
+        type: Number,
+        default: null,
+        min: 1,
+        max: 100
+    },
+
     //Optional special instructions provided by the customer for this order item
     special_notes: {
         type: String,
@@ -54,6 +69,11 @@ const orderItemSchema = new mongoose.Schema({
         min: 0
     }
 
+});
+
+//Helps load all items belonging to an Order
+orderItemSchema.index({
+    order_id: 1
 });
 
 //Create the Order Item model using the Order Item Schema

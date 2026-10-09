@@ -31,7 +31,14 @@ const orderItemCustomizationSchema = new mongoose.Schema({
         required: true,
         default: 0,
         min: 0
-    }
+    },
+
+    //Name of the customization group when the order was placed
+    group_name: {
+        type: String,
+        required: true,
+        trim: true
+    },
 
 });
 

@@ -33,6 +33,19 @@ const orderSchema = new mongoose.Schema({
         required: true
     },
 
+    //Pickup date selected when the order was placed
+    pickup_date: {
+        type: Date,
+        required: true
+    },
+
+    //Pickup time selected when the order was placed
+    pickup_time: {
+        type: String,
+        required: true,
+        trim: true
+    },
+
     //Final total price of the order
     total_price: {
         type: Number,
@@ -45,14 +58,14 @@ const orderSchema = new mongoose.Schema({
         type: String,
         required: true,
         enum: [
-            "Pending",
-            "Confirmed",
-            "In Progress",
-            "Ready for Pickup",
-            "Completed",
-            "Cancelled"
+            "pending",
+            "confirmed",
+            "preparing",
+            "ready",
+            "completed",
+            "cancelled"
         ],
-        default: "Pending"
+        default: "pending"
     },
 
     //Indicates whether a deposit is required for this order
@@ -60,6 +73,35 @@ const orderSchema = new mongoose.Schema({
         type: Boolean,
         required: true,
         default: false
+    },
+
+    //Amount the customer must pay when placing the order
+    amount_due_now: {
+        type: Number,
+        required: true,
+        default: 0,
+        min: 0
+    },
+
+    //Amount already paid by the customer
+    amount_paid: {
+        type: Number,
+        required: true,
+        default: 0,
+        min: 0
+    },
+
+    //Current payment state of the order
+    payment_status: {
+        type: String,
+        required: true,
+        enum: [
+            "unpaid",
+            "partially_paid",
+            "paid",
+            "refunded"
+        ],
+        default: "unpaid"
     }
 
 }, {
@@ -69,6 +111,19 @@ const orderSchema = new mongoose.Schema({
         updatedAt: "updated_at"
     }
 
+});
+
+//Helps load Bakery Owner orders efficiently
+orderSchema.index({
+    bakery_id: 1,
+    status: 1,
+    created_at: -1
+});
+
+//Helps load a customer's order history efficiently
+orderSchema.index({
+    customer_id: 1,
+    created_at: -1
 });
 
 //Create the Order model using the Order Schema
