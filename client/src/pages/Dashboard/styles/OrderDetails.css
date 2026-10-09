@@ -1,0 +1,874 @@
+/* Order details page */
+.bakery-order-details-page {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    padding: 20px;
+    overflow-x: hidden;
+    box-sizing: border-box;
+}
+
+/* Order details error message */
+.bakery-order-details-error {
+    color: #B42318;
+}
+
+/* Order details heading */
+.bakery-order-details-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    width: 100%;
+    min-width: 0;
+}
+
+/* Prevent Bootstrap columns from causing horizontal overflow */
+.bakery-order-details-page .row {
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.bakery-order-details-page [class*="col-"] {
+    min-width: 0;
+}
+
+.bakery-order-details-contact-wrapper {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.bakery-order-details-contact-menu {
+    position: absolute;
+    top: calc(100% + 7px);
+    right: 0;
+    z-index: 20;
+    width: 240px;
+    max-width: calc(100vw - 32px);
+}
+
+/* Orders breadcrumb */
+.bakery-order-details-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 10px;
+    font-size: 12px;
+    color: #8A827D;
+}
+
+/* Breadcrumb Orders button */
+.bakery-order-details-breadcrumb button {
+    padding: 0;
+    border: 0;
+    background-color: transparent;
+    font-size: 12px;
+    color: #8A827D;
+}
+
+/* Breadcrumb Orders hover */
+.bakery-order-details-breadcrumb button:hover {
+    color: #B65435;
+}
+
+/* Current breadcrumb Order */
+.bakery-order-details-breadcrumb strong {
+    font-weight: 600;
+    color: #4D4541;
+}
+
+/* Order number heading */
+.bakery-order-details-heading h1 {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.4px;
+    color: #25201E;
+}
+
+/* Customer contact button */
+.bakery-order-details-contact-button {
+    min-height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    flex-shrink: 0;
+    padding: 8px 14px;
+    border: 1px solid #D8D2CE;
+    border-radius: 7px;
+    background-color: #FFFFFF;
+    font-size: 13px;
+    font-weight: 600;
+    color: #4D4541;
+}
+
+/* Contact button hover */
+.bakery-order-details-contact-button:hover {
+    border-color: #C65F3A;
+    background-color: #FFF9F6;
+    color: #A84C2F;
+}
+
+/* Reusable Order details card */
+.bakery-order-details-card {
+    margin-bottom: 20px;
+    border: 1px solid #E4E1DE;
+    border-radius: 9px;
+    background-color: #FFFFFF;
+    overflow: hidden;
+}
+
+/* Order details card heading */
+.bakery-order-details-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 16px 18px;
+    border-bottom: 1px solid #ECE8E5;
+    background-color: #FFFFFF;
+}
+
+/* Order details card title */
+.bakery-order-details-card-header h2 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 700;
+    color: #25201E;
+}
+
+/* Supporting text inside card heading */
+.bakery-order-details-card-header span {
+    font-size: 12px;
+    color: #8A827D;
+}
+
+/* Order details card content */
+.bakery-order-details-card-body {
+    padding: 18px;
+}
+
+/* Customer information row */
+.bakery-order-details-customer-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Customer icon */
+.bakery-order-details-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background-color: #F5F1EE;
+    color: #A34F32;
+}
+
+/* Customer name */
+.bakery-order-details-customer-row strong {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #25201E;
+}
+
+/* Customer email */
+.bakery-order-details-customer-email {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 4px;
+    font-size: 12px;
+    color: #746D68;
+}
+
+/* Individual Order item */
+.bakery-order-details-item {
+    padding: 18px;
+    border-bottom: 1px solid #ECE8E5;
+}
+
+/* Removes border from the final Order item */
+.bakery-order-details-item:last-child {
+    border-bottom: 0;
+}
+
+/* Main Product information */
+.bakery-order-details-item-main {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+/* Product name */
+.bakery-order-details-product-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #25201E;
+}
+
+/* Product quantity */
+.bakery-order-details-item-meta {
+    margin-top: 4px;
+    font-size: 12px;
+    color: #8A827D;
+}
+
+/* Product price */
+.bakery-order-details-item-main>strong {
+    flex-shrink: 0;
+    font-size: 14px;
+    font-weight: 700;
+    color: #25201E;
+}
+
+/* Product customization area */
+.bakery-order-details-customizations {
+    margin-top: 14px;
+    padding: 12px 14px;
+    border-radius: 7px;
+    background-color: #FAF9F8;
+}
+
+/* Individual Product customization */
+.bakery-order-details-customization {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 5px 0;
+}
+
+/* Customization group name */
+.bakery-order-details-customization span {
+    font-size: 12px;
+    color: #746D68;
+}
+
+/* Selected customization */
+.bakery-order-details-customization strong {
+    font-size: 12px;
+    font-weight: 600;
+    color: #3E3733;
+    text-align: right;
+}
+
+/* Customer Product note */
+.bakery-order-details-note {
+    margin-top: 14px;
+    padding: 12px 14px;
+    border: 1px solid #F0D6C7;
+    border-radius: 7px;
+    background-color: #FFF9F6;
+}
+
+/* Customer note label */
+.bakery-order-details-note span {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #A34F32;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+/* Customer note text */
+.bakery-order-details-note p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #5E5651;
+}
+
+/* Products listed inside the Order summary */
+.bakery-order-details-summary-products {
+    padding: 14px 18px;
+    border-bottom: 1px solid #ECE8E5;
+}
+
+/* Individual summary Product */
+.bakery-order-details-summary-product {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+}
+
+/* Space between summary Products */
+.bakery-order-details-summary-product+.bakery-order-details-summary-product {
+    margin-top: 9px;
+}
+
+/* Summary Product name */
+.bakery-order-details-summary-product span {
+    font-size: 12px;
+    line-height: 1.4;
+    color: #5E5651;
+}
+
+/* Summary Product price */
+.bakery-order-details-summary-product strong {
+    flex-shrink: 0;
+    font-size: 12px;
+    font-weight: 600;
+    color: #25201E;
+}
+
+/* Payment summary row */
+.bakery-order-details-summary-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 7px 0;
+}
+
+/* Payment summary label */
+.bakery-order-details-summary-row span {
+    font-size: 12px;
+    color: #746D68;
+}
+
+/* Payment summary value */
+.bakery-order-details-summary-row strong {
+    font-size: 13px;
+    font-weight: 600;
+    color: #25201E;
+}
+
+/* Final remaining balance row */
+.bakery-order-details-summary-total {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 10px;
+    padding-top: 14px;
+    border-top: 1px solid #E8E4E1;
+}
+
+/* Remaining balance label */
+.bakery-order-details-summary-total span {
+    font-size: 13px;
+    font-weight: 600;
+    color: #4D4541;
+}
+
+/* Remaining balance value */
+.bakery-order-details-summary-total strong {
+    font-size: 16px;
+    font-weight: 700;
+    color: #25201E;
+}
+
+/* Pickup information row */
+.bakery-order-details-info-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+}
+
+/* Space between Pickup rows */
+.bakery-order-details-info-row+.bakery-order-details-info-row {
+    margin-top: 18px;
+}
+
+/* Pickup icons */
+.bakery-order-details-info-row>svg {
+    flex-shrink: 0;
+    margin-top: 2px;
+    color: #A34F32;
+}
+
+/* Pickup label */
+.bakery-order-details-info-row span {
+    display: block;
+    margin-bottom: 2px;
+    font-size: 11px;
+    font-weight: 500;
+    color: #8A827D;
+}
+
+/* Pickup value */
+.bakery-order-details-info-row strong {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #25201E;
+}
+
+/* Activity timeline */
+.bakery-order-details-activity {
+    position: relative;
+}
+
+/* Activity item */
+.bakery-order-details-activity-item {
+    position: relative;
+    display: flex;
+    gap: 12px;
+    padding-bottom: 20px;
+}
+
+/* Removes spacing from the final Activity item */
+.bakery-order-details-activity-item:last-child {
+    padding-bottom: 0;
+}
+
+/* Activity timeline line */
+.bakery-order-details-activity-item:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: 12px;
+    left: 5px;
+    width: 1px;
+    height: calc(100% - 4px);
+    background-color: #DDD7D2;
+}
+
+/* Activity timeline dot */
+.bakery-order-details-activity-dot {
+    position: relative;
+    z-index: 1;
+    width: 11px;
+    height: 11px;
+    flex-shrink: 0;
+    margin-top: 4px;
+    border-radius: 50%;
+    background-color: #C65F3A;
+}
+
+/* Activity description */
+.bakery-order-details-activity-item strong {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #25201E;
+}
+
+/* Activity date */
+.bakery-order-details-activity-item div>span {
+    display: block;
+    margin-top: 3px;
+    font-size: 11px;
+    color: #8A827D;
+}
+
+/* Status control group */
+.bakery-order-details-control-group {
+    margin-bottom: 20px;
+}
+
+/* Status control label */
+.bakery-order-details-control-group label {
+    display: block;
+    margin-bottom: 7px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #3E3733;
+}
+
+/* Order status selector */
+.bakery-order-details-status-select {
+    min-height: 42px;
+    border: 1px solid #DED9D5;
+    border-radius: 7px;
+    background-color: #FFFFFF;
+    font-size: 13px;
+    color: #3E3733;
+    box-shadow: none;
+}
+
+/* Order status selector focus */
+.bakery-order-details-status-select:focus {
+    border-color: #C9C3BF;
+    box-shadow: 0 0 0 2px rgba(198, 95, 58, 0.08);
+}
+
+/* Order status selector disabled */
+.bakery-order-details-status-select:disabled {
+    background-color: #F5F3F1;
+    color: #8A827D;
+}
+
+/* Supporting information under status controls */
+.bakery-order-details-control-help {
+    display: block;
+    margin-top: 6px;
+    font-size: 11px;
+    line-height: 1.45;
+    color: #918985;
+}
+
+/* Read-only payment status area */
+.bakery-order-details-payment-display {
+    min-height: 42px;
+    display: flex;
+    align-items: center;
+    padding: 7px 10px;
+    border: 1px solid #E2DEDA;
+    border-radius: 7px;
+    background-color: #FAF9F8;
+}
+
+/* Quick actions area */
+.bakery-order-details-quick-actions {
+    padding-top: 18px;
+    border-top: 1px solid #E8E4E1;
+}
+
+/* Quick action heading */
+.bakery-order-details-quick-actions-heading {
+    margin-bottom: 12px;
+}
+
+/* Quick action title */
+.bakery-order-details-quick-actions-heading strong {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: #25201E;
+}
+
+/* Quick action supporting text */
+.bakery-order-details-quick-actions-heading span {
+    display: block;
+    margin-top: 3px;
+    font-size: 11px;
+    color: #8A827D;
+}
+
+/* Main Order workflow action */
+.bakery-order-details-primary-action {
+    width: 100%;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 8px 14px;
+    border: 1px solid #B95434;
+    border-radius: 7px;
+    background-color: #C65F3A;
+    font-size: 13px;
+    font-weight: 600;
+    color: #FFFFFF;
+}
+
+/* Main action hover */
+.bakery-order-details-primary-action:hover:not(:disabled) {
+    border-color: #A84C2F;
+    background-color: #B65435;
+}
+
+/* Cancel Order action */
+.bakery-order-details-danger-action {
+    width: 100%;
+    min-height: 40px;
+    margin-top: 8px;
+    padding: 8px 14px;
+    border: 1px solid #D9A6A2;
+    border-radius: 7px;
+    background-color: #FFFFFF;
+    font-size: 13px;
+    font-weight: 600;
+    color: #B42318;
+}
+
+/* Cancel action hover */
+.bakery-order-details-danger-action:hover:not(:disabled) {
+    border-color: #B42318;
+    background-color: #FFF4F2;
+}
+
+/* Disabled Order action */
+.bakery-order-details-primary-action:disabled,
+.bakery-order-details-danger-action:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* Completed or cancelled Order display */
+.bakery-order-details-final-status {
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 8px 14px;
+    border-radius: 7px;
+    background-color: #E7F7EE;
+    font-size: 13px;
+    font-weight: 600;
+    color: #28714A;
+}
+
+/* Cancelled Order display */
+.bakery-order-details-final-status.cancelled {
+    background-color: #FDECEC;
+    color: #B42318;
+}
+
+/* Order status updating message */
+.bakery-order-details-updating {
+    margin-top: 10px;
+    font-size: 12px !important;
+    color: #8A827D !important;
+}
+
+/* Secondary Order action */
+.bakery-order-details-secondary-action {
+    width: 100%;
+    min-height: 40px;
+    margin-top: 10px;
+    padding: 8px 14px;
+    border: 1px solid #D8D2CE;
+    border-radius: 7px;
+    background-color: #FFFFFF;
+    font-size: 13px;
+    font-weight: 600;
+    color: #4D4541;
+}
+
+/* Secondary Order action hover */
+.bakery-order-details-secondary-action:hover:not(:disabled) {
+    border-color: #C65F3A;
+    background-color: #FFF9F6;
+    color: #A34F32;
+}
+
+/* Contact Customer menu wrapper */
+.bakery-order-details-contact-wrapper {
+    position: relative;
+}
+
+/* Contact Customer dropdown */
+.bakery-order-details-contact-menu {
+    position: absolute;
+    top: calc(100% + 7px);
+    right: 0;
+    z-index: 20;
+    min-width: 220px;
+    padding: 6px;
+    border: 1px solid #E4E1DE;
+    border-radius: 8px;
+    background-color: #FFFFFF;
+    box-shadow: 0 8px 24px rgba(37, 32, 30, 0.1);
+}
+
+/* Contact option */
+.bakery-order-details-contact-menu a {
+    display: block;
+    padding: 9px 10px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    color: #4D4541;
+}
+
+/* Contact detail */
+.bakery-order-details-contact-menu a span {
+    display: block;
+    margin-top: 2px;
+    font-size: 11px;
+    font-weight: 400;
+    color: #8A827D;
+}
+
+/* Contact option hover */
+.bakery-order-details-contact-menu a:hover {
+    background-color: #FFF7F2;
+    color: #A34F32;
+}
+
+/* Final Product total */
+.bakery-order-details-item-total {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid #E8E4E1;
+}
+
+/* Item total label */
+.bakery-order-details-item-total span {
+    font-size: 12px;
+    font-weight: 600;
+    color: #746D68;
+}
+
+/* Item total amount */
+.bakery-order-details-item-total strong {
+    font-size: 14px;
+    font-weight: 700;
+    color: #25201E;
+}
+
+/* Order summary Product group */
+.bakery-order-details-summary-product-group {
+    padding: 14px 0;
+    border-bottom: 1px solid #EEEAE7;
+}
+
+/* Removes the border from the final Product */
+.bakery-order-details-summary-product-group:last-child {
+    border-bottom: none;
+}
+
+/* Summary Customizations */
+.bakery-order-details-summary-customizations {
+    margin-top: 8px;
+}
+
+/* One Customization in the summary */
+.bakery-order-details-summary-customization {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 3px 0;
+    font-size: 12px;
+    color: #746D68;
+}
+
+/* Final total for one Product */
+.bakery-order-details-summary-item-total {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px dashed #E3DEDA;
+    font-size: 12px;
+}
+
+/* Item total amount */
+.bakery-order-details-summary-item-total strong {
+    color: #25201E;
+}
+
+/* Order details loading state */
+.bakery-order-details-loading {
+    min-height: 260px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    color: #746D68;
+}
+
+/* Loading text */
+.bakery-order-details-loading strong {
+    display: block;
+    margin-bottom: 2px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #25201E;
+}
+
+/* Loading supporting text */
+.bakery-order-details-loading span {
+    display: block;
+    font-size: 12px;
+    color: #8A827D;
+}
+
+/* Loading spinner */
+.bakery-order-details-loading-icon {
+    flex-shrink: 0;
+    color: #C65F3A;
+    animation: bakery-order-loading-spin 0.8s linear infinite;
+}
+
+/* Spinner animation */
+@keyframes bakery-order-loading-spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Tablet Order details layout */
+@media (min-width: 768px) {
+
+    .bakery-order-details-heading h1 {
+        font-size: 28px;
+    }
+
+    .bakery-order-details-card-header {
+        padding: 17px 20px;
+    }
+
+    .bakery-order-details-card-body {
+        padding: 20px;
+    }
+
+    .bakery-order-details-item {
+        padding: 20px;
+    }
+
+    .bakery-order-details-summary-products {
+        padding: 16px 20px;
+    }
+}
+
+/* Mobile Order details layout */
+@media (max-width: 767px) {
+
+    .bakery-order-details-heading {
+        flex-direction: column;
+        align-items: stretch;
+        margin-bottom: 18px;
+    }
+
+    .bakery-order-details-heading h1 {
+        font-size: 22px;
+    }
+
+    .bakery-order-details-contact-button {
+        width: 100%;
+    }
+
+    .bakery-order-details-card {
+        margin-bottom: 16px;
+    }
+
+    .bakery-order-details-card-header {
+        padding: 14px 15px;
+    }
+
+    .bakery-order-details-card-body {
+        padding: 15px;
+    }
+
+    .bakery-order-details-item {
+        padding: 15px;
+    }
+
+    .bakery-order-details-summary-products {
+        padding: 14px 15px;
+    }
+
+    .bakery-order-details-item-main {
+        gap: 12px;
+    }
+
+    .bakery-order-details-customization {
+        align-items: flex-start;
+    }
+}

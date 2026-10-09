@@ -1,0 +1,311 @@
+/* Bakery Orders page */
+.bakery-orders-page {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    padding: 20px;
+    overflow-x: hidden;
+    box-sizing: border-box;
+
+}
+
+/* Orders page description */
+.bakery-orders-description {
+    color: #746D68;
+    font-size: 14px;
+}
+
+/* Orders search area */
+.bakery-orders-search {
+    position: relative;
+    width: 100%;
+}
+
+/* Orders search icon */
+.bakery-orders-search-icon {
+    position: absolute;
+    top: 50%;
+    left: 13px;
+    z-index: 2;
+    color: #8A827D;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+/* Orders search input */
+.bakery-orders-search .form-control {
+    min-height: 42px;
+    padding-left: 40px;
+    padding-right: 14px;
+    border: 1px solid #DED9D5;
+    border-radius: 7px;
+    background-color: #FFFFFF;
+    font-size: 13px;
+    color: #25201E;
+    box-shadow: none;
+}
+
+/* Orders search placeholder */
+.bakery-orders-search .form-control::placeholder {
+    color: #9A938E;
+}
+
+/* Orders search focus */
+.bakery-orders-search .form-control:focus {
+    border-color: #C9C3BF;
+    background-color: #FFFFFF;
+    box-shadow: 0 0 0 2px rgba(198, 95, 58, 0.08);
+}
+
+/* Orders filter dropdowns */
+.bakery-orders-filter {
+    min-height: 42px;
+    min-width: 145px;
+    border: 1px solid #DED9D5;
+    border-radius: 7px;
+    background-color: #FFFFFF;
+    font-size: 13px;
+    color: #4D4541;
+    box-shadow: none;
+}
+
+/* Orders filter focus */
+.bakery-orders-filter:focus {
+    border-color: #C9C3BF;
+    box-shadow: 0 0 0 2px rgba(198, 95, 58, 0.08);
+}
+
+/* Displays the number of matching Orders */
+.bakery-orders-count {
+    margin-bottom: 10px;
+    font-size: 12px !important;
+    color: #8A827D !important;
+}
+
+/* Orders loading error */
+.bakery-orders-error {
+    color: #B42318;
+}
+
+/* Orders empty state */
+.bakery-orders-empty-state {
+    padding: 48px 24px;
+    border: 1px dashed #D8D2CE;
+    border-radius: 10px;
+    background-color: #FFFFFF;
+    text-align: center;
+}
+
+/* Orders empty state heading */
+.bakery-orders-empty-state h2 {
+    margin-bottom: 8px;
+    font-size: 17px;
+    font-weight: 700;
+    color: #25201E;
+}
+
+/* Orders empty state description */
+.bakery-orders-empty-state p {
+    font-size: 13px;
+    color: #746D68;
+}
+
+/* Orders table */
+.bakery-orders-table {
+    min-width: 980px;
+}
+
+/* Orders table row */
+.bakery-orders-table tbody tr {
+    transition: background-color 0.15s ease;
+}
+
+/* Orders table row hover */
+.bakery-orders-table tbody tr:hover {
+    background-color: #FCFBFA;
+}
+
+/* Orders table first column */
+.bakery-orders-table tbody td:first-child {
+    white-space: nowrap;
+}
+
+/* Orders table customer column */
+.bakery-orders-table tbody td:nth-child(2) {
+    min-width: 150px;
+}
+
+/* Orders table product column */
+.bakery-orders-table tbody td:nth-child(3) {
+    min-width: 170px;
+}
+
+/* Orders table pickup column */
+.bakery-orders-table tbody td:nth-child(4) {
+    min-width: 130px;
+    white-space: nowrap;
+}
+
+/* Pickup time displayed under the pickup date */
+.bakery-orders-pickup-time {
+    margin-top: 3px;
+    font-size: 12px;
+    color: #8A827D;
+}
+
+/* Base payment status badge */
+.bakery-orders-payment {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 9px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: capitalize;
+    white-space: nowrap;
+}
+
+/* Unpaid payment */
+.bakery-orders-payment-unpaid {
+    background-color: #FFF4DB;
+    color: #966515;
+}
+
+/* Partially paid payment */
+.bakery-orders-payment-partially_paid {
+    background-color: #EAF2FF;
+    color: #315DA8;
+}
+
+/* Paid payment */
+.bakery-orders-payment-paid {
+    background-color: #E7F7EE;
+    color: #28714A;
+}
+
+/* Refunded payment */
+.bakery-orders-payment-refunded {
+    background-color: #F1EFED;
+    color: #665E59;
+}
+
+/* Pending Order */
+.bakery-order-status-pending {
+    background-color: #FFF7E8;
+    color: #8A6116;
+}
+
+/* Confirmed Order */
+.bakery-order-status-confirmed {
+    background-color: #EAF2FF;
+    color: #315DA8;
+}
+
+/* Preparing Order */
+.bakery-order-status-preparing {
+    background-color: #FFF0E8;
+    color: #B55732;
+}
+
+/* Ready Order */
+.bakery-order-status-ready {
+    background-color: #E7F7EE;
+    color: #28714A;
+}
+
+/* Completed Order */
+.bakery-order-status-completed {
+    background-color: #F1EFED;
+    color: #665E59;
+}
+
+/* Cancelled Order */
+.bakery-order-status-cancelled {
+    background-color: #FDECEC;
+    color: #B42318;
+}
+
+/* Makes Order status badges consistent */
+.bakery-order-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 9px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: capitalize;
+    white-space: nowrap;
+}
+
+/* Order details action */
+.bakery-orders-table .bakery-dashboard-table-action {
+    white-space: nowrap;
+}
+
+/* Orders loading state */
+.bakery-orders-loading {
+    min-height: 260px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    color: #746D68;
+}
+
+/* Orders loading heading */
+.bakery-orders-loading strong {
+    display: block;
+    margin-bottom: 2px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #25201E;
+}
+
+/* Orders loading supporting text */
+.bakery-orders-loading span {
+    display: block;
+    font-size: 12px;
+    color: #8A827D;
+}
+
+/* Orders loading spinner */
+.bakery-orders-loading-icon {
+    flex-shrink: 0;
+    color: #C65F3A;
+    animation: bakery-orders-loading-spin 0.8s linear infinite;
+}
+
+/* Spinner animation */
+@keyframes bakery-orders-loading-spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Tablet Orders layout */
+@media (min-width: 768px) {
+
+    .bakery-orders-search {
+        max-width: 430px;
+    }
+}
+
+/* Mobile Orders layout */
+@media (max-width: 767px) {
+
+    .bakery-orders-filter {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .bakery-orders-empty-state {
+        padding: 36px 18px;
+    }
+}

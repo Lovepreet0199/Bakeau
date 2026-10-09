@@ -31,6 +31,10 @@ import BakeryProducts from "./pages/Dashboard/BakeryProducts";
 //Import the Bakery Owner Add Product page
 import BakeryAddProduct from "./pages/Dashboard/BakeryAddProduct";
 
+//Import Bakery Orders pages
+import BakeryOrders from "./pages/Dashboard/BakeryOrders.jsx";
+import BakeryOrderDetails from "./pages/Dashboard/BakeryOrderDetails.jsx";
+
 //Displays the Bakeau application routes
 export default function App() {
 
@@ -97,10 +101,21 @@ export default function App() {
           element={<BakeryAddProduct />}
         />
 
+        {/* Bakery Owner Edit Product page */}
         <Route
           path="products/:id/edit"
           element={<BakeryAddProduct />} />
-          
+
+        {/* Bakery Owner Orders page */}
+        <Route
+          path="orders"
+          element={<BakeryOrders />} />
+
+        {/* Bakery Owner Order Details page */}
+        <Route
+          path="orders/:id"
+          element={<BakeryOrderDetails />} />
+
       </Route>
 
     </Routes>

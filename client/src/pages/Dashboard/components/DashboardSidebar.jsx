@@ -99,13 +99,14 @@ export default function DashboardSidebar({
                     </NavLink>
 
                     {/* Orders page */}
-                    <button
-                        type="button"
-                        className="bakery-dashboard-nav-item"
+                    <NavLink
+                        to="/bakery/orders"
+                        className={({ isActive }) => `bakery-dashboard-nav-item text-decoration-none ${isActive ? "active" : ""}`}
+                        onClick={closeSidebar}
                     >
                         <ShoppingBag size={18} strokeWidth={1.8} />
                         <span>Orders</span>
-                    </button>
+                    </NavLink>
 
                     {/* Products page */}
                     <NavLink

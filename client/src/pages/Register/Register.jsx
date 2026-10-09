@@ -23,6 +23,7 @@ export default function Register() {
         firstName: "",
         lastName: "",
         email: "",
+        phone_number: "",
         password: "",
         confirmPassword: "",
         terms: false
@@ -66,6 +67,7 @@ export default function Register() {
             first_name: formData.firstName,
             last_name: formData.lastName,
             email: formData.email,
+            phone_number: formData.phone_number,
             password: formData.password,
         };
 
@@ -230,6 +232,29 @@ export default function Register() {
                                     onChange={handleChange}
                                     required
                                 />
+                            </div>
+
+                            {/* Phone number */}
+                            <div className="mb-3">
+
+                                <label
+                                    htmlFor="phone_number"
+                                    className="form-label"
+                                >
+                                    Phone number <span className="required-field">*</span>
+                                </label>
+
+                                <input
+                                    type="tel"
+                                    id="phone_number"
+                                    name="phone_number"
+                                    className="form-control"
+                                    autoComplete="tel"
+                                    value={formData.phone_number}
+                                    onChange={handleChange}
+                                    required
+                                />
+
                             </div>
 
                             {/* Password */}
