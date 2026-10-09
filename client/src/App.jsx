@@ -35,6 +35,9 @@ import BakeryAddProduct from "./pages/Dashboard/BakeryAddProduct";
 import BakeryOrders from "./pages/Dashboard/BakeryOrders.jsx";
 import BakeryOrderDetails from "./pages/Dashboard/BakeryOrderDetails.jsx";
 
+//Bakery Pickup SLots page
+import BakeryPickupSlots from "./pages/Dashboard/BakeryPickupSlots.jsx";
+
 //Displays the Bakeau application routes
 export default function App() {
 
@@ -115,6 +118,11 @@ export default function App() {
         <Route
           path="orders/:id"
           element={<BakeryOrderDetails />} />
+
+        <Route
+          path="pickup-slots"
+          element={<BakeryPickupSlots />}
+        />
 
       </Route>
 

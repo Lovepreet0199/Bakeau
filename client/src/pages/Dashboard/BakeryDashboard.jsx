@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 
 //Import reusable dashboard components
-import DashboardStatCard from "./components/DashboardStatCard";
+import DashboardStatCard from "./components/dashboard/DashboardStatCard";
 
 //Displays the Bakery Owner dashboard overview
 export default function BakeryDashboard() {

@@ -5,8 +5,8 @@ import { useState } from "react";
 import { Outlet } from "react-router-dom";
 
 //Import shared dashboard components
-import DashboardSidebar from "./components/DashboardSidebar";
-import DashboardTopbar from "./components/DashboardTopbar";
+import DashboardSidebar from "./components/dashboard/DashboardSidebar";
+import DashboardTopbar from "./components/dashboard/DashboardTopbar";
 
 //Import shared dashboard layout styles
 import "./styles/DashboardLayout.css";

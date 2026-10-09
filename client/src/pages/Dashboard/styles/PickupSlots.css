@@ -1,0 +1,819 @@
+/* Pickup Schedule page */
+.bakery-pickup-page {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+
+/* Pickup page heading */
+.bakery-pickup-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+/* Pickup heading */
+.bakery-pickup-heading h1 {
+    margin: 0 0 5px;
+    font-size: 26px;
+    font-weight: 700;
+    color: #25201E;
+}
+
+/* Pickup description */
+.bakery-pickup-heading p {
+    margin: 0;
+    font-size: 13px;
+    color: #746D68;
+}
+
+
+/* Main Pickup action button */
+.bakery-pickup-add-button {
+    min-height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 7px;
+    background-color: #C65F3A;
+    font-size: 13px;
+    font-weight: 600;
+    color: #FFFFFF;
+}
+
+/* Main button hover */
+.bakery-pickup-add-button:hover:not(:disabled) {
+    background-color: #A95031;
+}
+
+/* Disabled main button */
+.bakery-pickup-add-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+}
+
+
+/* Add Pickup form */
+.bakery-pickup-form-card {
+    margin-bottom: 20px;
+    padding: 20px;
+    border: 1px solid #E4E1DE;
+    border-radius: 9px;
+    background-color: #FFFFFF;
+}
+
+/* Pickup form heading */
+.bakery-pickup-form-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+/* Pickup form title */
+.bakery-pickup-form-heading h2 {
+    margin: 0 0 4px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #25201E;
+}
+
+/* Pickup form description */
+.bakery-pickup-form-heading p {
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #746D68;
+}
+
+
+/* Pickup form labels */
+.bakery-pickup-form-card .form-label {
+    margin-bottom: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #3E3733;
+}
+
+/* Pickup form controls */
+.bakery-pickup-form-card .form-control {
+    min-height: 48px;
+    border: 1px solid #DED9D5;
+    border-radius: 7px;
+    background-color: #FFFFFF;
+    font-family: "Inter", sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: #25201E;
+    box-shadow: none;
+}
+
+/* Pickup form control focus */
+.bakery-pickup-form-card .form-control:focus {
+    border-color: #C65F3A;
+    box-shadow: 0 0 0 3px rgba(198, 95, 58, 0.08);
+}
+
+
+/* Pickup date and time inputs */
+.bakery-pickup-form-card input[type="date"],
+.bakery-pickup-form-card input[type="time"] {
+    min-height: 48px;
+    padding: 10px 14px;
+    cursor: pointer;
+}
+
+/* Pickup date and time hover */
+.bakery-pickup-form-card input[type="date"]:hover,
+.bakery-pickup-form-card input[type="time"]:hover {
+    border-color: #C9C2BD;
+}
+
+/* Native picker icons */
+.bakery-pickup-form-card input[type="date"]::-webkit-calendar-picker-indicator,
+.bakery-pickup-form-card input[type="time"]::-webkit-calendar-picker-indicator {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    opacity: 0.72;
+}
+
+/* Native picker icon hover */
+.bakery-pickup-form-card input[type="date"]::-webkit-calendar-picker-indicator:hover,
+.bakery-pickup-form-card input[type="time"]::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
+}
+
+
+/* Pickup window preview */
+.bakery-pickup-window-preview {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 16px;
+    padding: 12px 14px;
+    border: 1px solid #E9D8CE;
+    border-radius: 7px;
+    background-color: #FFF9F6;
+    color: #C65F3A;
+}
+
+/* Pickup preview icon */
+.bakery-pickup-window-preview svg {
+    flex-shrink: 0;
+}
+
+/* Pickup preview label */
+.bakery-pickup-window-preview span {
+    display: block;
+    margin-bottom: 2px;
+    font-size: 11px;
+    color: #8A827D;
+}
+
+/* Pickup preview time */
+.bakery-pickup-window-preview strong {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: #25201E;
+}
+
+
+/* Weekly Pickup recurrence */
+.bakery-pickup-repeat {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 16px;
+    padding: 14px;
+    border: 1px solid #E8E4E1;
+    border-radius: 7px;
+    background-color: #FAF9F8;
+}
+
+/* Weekly repeat toggle */
+.bakery-pickup-repeat-toggle {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+/* Repeat checkbox */
+.bakery-pickup-repeat-toggle input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    accent-color: #C65F3A;
+    cursor: pointer;
+}
+
+/* Repeat label */
+.bakery-pickup-repeat-toggle label {
+    margin: 0;
+    cursor: pointer;
+}
+
+/* Repeat heading */
+.bakery-pickup-repeat-toggle strong {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #25201E;
+}
+
+/* Repeat supporting text */
+.bakery-pickup-repeat-toggle span {
+    display: block;
+    margin-top: 3px;
+    font-size: 11px;
+    line-height: 1.45;
+    color: #8A827D;
+}
+
+
+/* Repeat number of weeks */
+.bakery-pickup-repeat-weeks {
+    width: 150px;
+    flex-shrink: 0;
+}
+
+/* Repeat weeks label */
+.bakery-pickup-repeat-weeks label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #625A56;
+}
+
+/* Repeat weeks selector */
+.bakery-pickup-repeat-weeks .form-select {
+    min-height: 40px;
+    border: 1px solid #DED9D5;
+    border-radius: 7px;
+    background-color: #FFFFFF;
+    font-size: 12px;
+    color: #25201E;
+    box-shadow: none;
+}
+
+/* Repeat weeks selector focus */
+.bakery-pickup-repeat-weeks .form-select:focus {
+    border-color: #C65F3A;
+    box-shadow: 0 0 0 2px rgba(198, 95, 58, 0.08);
+}
+
+
+/* Pickup form actions */
+.bakery-pickup-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 18px;
+}
+
+/* Pickup Cancel buttons */
+.bakery-pickup-cancel-button,
+.bakery-pickup-form-close {
+    min-height: 38px;
+    padding: 7px 12px;
+    border: 1px solid #DDD8D4;
+    border-radius: 7px;
+    background-color: #FFFFFF;
+    font-size: 12px;
+    font-weight: 600;
+    color: #625A56;
+}
+
+/* Pickup Cancel button hover */
+.bakery-pickup-cancel-button:hover:not(:disabled),
+.bakery-pickup-form-close:hover:not(:disabled) {
+    background-color: #F7F6F5;
+}
+
+/* Disabled Cancel button */
+.bakery-pickup-cancel-button:disabled,
+.bakery-pickup-form-close:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+
+/* Pickup table card */
+.bakery-pickup-card {
+    width: 100%;
+    overflow: hidden;
+    border: 1px solid #E4E1DE;
+    border-radius: 9px;
+    background-color: #FFFFFF;
+}
+
+/* Pickup table */
+.bakery-pickup-table {
+    width: 100%;
+}
+
+/* Pickup table heading */
+.bakery-pickup-table th {
+    padding: 12px 16px;
+    border-bottom: 1px solid #E8E4E1;
+    background-color: #FAF9F8;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: #746D68;
+}
+
+/* Pickup table cells */
+.bakery-pickup-table td {
+    padding: 14px 16px;
+    vertical-align: middle;
+    border-bottom: 1px solid #EEEAE7;
+    font-size: 13px;
+    color: #3E3733;
+}
+
+/* Remove last row border */
+.bakery-pickup-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Pickup table row hover */
+.bakery-pickup-table tbody tr:hover td {
+    background-color: #FCFBFA;
+}
+
+
+/* Pickup date and time */
+.bakery-pickup-date,
+.bakery-pickup-time {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    white-space: nowrap;
+}
+
+/* Pickup date and time icons */
+.bakery-pickup-date svg,
+.bakery-pickup-time svg {
+    flex-shrink: 0;
+    color: #8A827D;
+}
+
+
+/* Pickup availability badge */
+.bakery-pickup-status {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 8px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* Available Pickup Slot */
+.bakery-pickup-status.available {
+    background-color: #E7F7EE;
+    color: #28714A;
+}
+
+/* Unavailable Pickup Slot */
+.bakery-pickup-status.unavailable {
+    background-color: #F1EFED;
+    color: #746D68;
+}
+
+
+/* Pickup Slot actions */
+.bakery-pickup-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 7px;
+    white-space: nowrap;
+}
+
+/* Pickup availability action */
+.bakery-pickup-action-button {
+    min-height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border: 1px solid #DDD8D4;
+    border-radius: 6px;
+    background-color: #FFFFFF;
+    font-size: 12px;
+    font-weight: 600;
+    color: #4D4541;
+}
+
+/* Pickup availability hover */
+.bakery-pickup-action-button:hover:not(:disabled) {
+    border-color: #C65F3A;
+    background-color: #FFF9F6;
+    color: #A95031;
+}
+
+/* Delete Pickup Slot */
+.bakery-pickup-delete-button {
+    min-height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border: 1px solid #E7C8C5;
+    border-radius: 6px;
+    background-color: #FFFFFF;
+    font-size: 12px;
+    font-weight: 600;
+    color: #B42318;
+}
+
+/* Delete hover */
+.bakery-pickup-delete-button:hover:not(:disabled) {
+    border-color: #DFAAA5;
+    background-color: #FFF3F2;
+}
+
+/* Disabled Pickup actions */
+.bakery-pickup-action-button:disabled,
+.bakery-pickup-delete-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* Pickup action spinner */
+.bakery-pickup-action-spinner {
+    flex-shrink: 0;
+    animation: bakery-pickup-spin 0.8s linear infinite;
+}
+
+
+/* Empty Pickup state */
+.bakery-pickup-empty {
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    border: 1px solid #E4E1DE;
+    border-radius: 9px;
+    background-color: #FFFFFF;
+    text-align: center;
+    color: #746D68;
+}
+
+/* Empty state icon */
+.bakery-pickup-empty>svg {
+    color: #A79E99;
+}
+
+/* Empty state heading */
+.bakery-pickup-empty h2 {
+    margin: 12px 0 5px;
+    font-size: 17px;
+    color: #25201E;
+}
+
+/* Empty state text */
+.bakery-pickup-empty p {
+    max-width: 420px;
+    margin: 0 0 16px;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+
+/* Pickup loading state */
+.bakery-pickup-loading {
+    min-height: 260px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+/* Loading heading */
+.bakery-pickup-loading strong {
+    display: block;
+    margin-bottom: 2px;
+    font-size: 14px;
+    color: #25201E;
+}
+
+/* Loading text */
+.bakery-pickup-loading span {
+    display: block;
+    font-size: 12px;
+    color: #8A827D;
+}
+
+/* Loading spinner */
+.bakery-pickup-loading-icon {
+    flex-shrink: 0;
+    color: #C65F3A;
+    animation: bakery-pickup-spin 0.8s linear infinite;
+}
+
+/* Pickup loading animation */
+@keyframes bakery-pickup-spin {
+
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* Pickup error */
+.bakery-pickup-error {
+    margin-bottom: 16px;
+    padding: 12px 14px;
+    border: 1px solid #F2C7C4;
+    border-radius: 7px;
+    background-color: #FFF3F2;
+    font-size: 13px;
+    color: #B42318;
+}
+
+/* Pickup confirmation overlay */
+.bakery-pickup-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-color: rgba(28, 24, 22, 0.5);
+}
+
+/* Pickup confirmation modal */
+.bakery-pickup-modal {
+    width: 100%;
+    max-width: 430px;
+    padding: 22px;
+    border: 1px solid #E4E1DE;
+    border-radius: 10px;
+    background-color: #FFFFFF;
+    box-shadow: 0 18px 50px rgba(37, 32, 30, 0.18);
+}
+
+/* Confirmation modal heading */
+.bakery-pickup-modal-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+/* Delete confirmation icon */
+.bakery-pickup-modal-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background-color: #FFF1F0;
+    color: #B42318;
+}
+
+/* Modal close button */
+.bakery-pickup-modal-close {
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: none;
+    border-radius: 6px;
+    background-color: transparent;
+    color: #8A827D;
+}
+
+/* Modal close hover */
+.bakery-pickup-modal-close:hover:not(:disabled) {
+    background-color: #F5F3F2;
+    color: #4D4541;
+}
+
+/* Confirmation title */
+.bakery-pickup-modal h2 {
+    margin: 0 0 7px;
+    font-size: 18px;
+    font-weight: 700;
+    color: #25201E;
+}
+
+/* Confirmation description */
+.bakery-pickup-modal>p {
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.55;
+    color: #746D68;
+}
+
+/* Pickup being deleted */
+.bakery-pickup-modal-slot {
+    margin-top: 18px;
+    padding: 13px 14px;
+    border: 1px solid #E8E4E1;
+    border-radius: 7px;
+    background-color: #FAF9F8;
+}
+
+/* Pickup confirmation information */
+.bakery-pickup-modal-slot>div {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #4D4541;
+}
+
+/* Space between date and time */
+.bakery-pickup-modal-slot>div+div {
+    margin-top: 8px;
+}
+
+/* Confirmation information icons */
+.bakery-pickup-modal-slot svg {
+    flex-shrink: 0;
+    color: #8A827D;
+}
+
+/* Confirmation actions */
+.bakery-pickup-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 22px;
+}
+
+/* Confirmation cancel button */
+.bakery-pickup-modal-cancel {
+    min-height: 39px;
+    padding: 8px 14px;
+    border: 1px solid #DDD8D4;
+    border-radius: 7px;
+    background-color: #FFFFFF;
+    font-size: 12px;
+    font-weight: 600;
+    color: #4D4541;
+}
+
+/* Confirmation cancel hover */
+.bakery-pickup-modal-cancel:hover:not(:disabled) {
+    background-color: #F7F6F5;
+}
+
+/* Confirmation delete button */
+.bakery-pickup-modal-delete {
+    min-height: 39px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 8px 14px;
+    border: 1px solid #B42318;
+    border-radius: 7px;
+    background-color: #B42318;
+    font-size: 12px;
+    font-weight: 600;
+    color: #FFFFFF;
+}
+
+/* Confirmation delete hover */
+.bakery-pickup-modal-delete:hover:not(:disabled) {
+    border-color: #912018;
+    background-color: #912018;
+}
+
+/* Disabled confirmation buttons */
+.bakery-pickup-modal-delete:disabled,
+.bakery-pickup-modal-cancel:disabled,
+.bakery-pickup-modal-close:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* Tablet Pickup page */
+@media (max-width: 991px) {
+
+    .bakery-pickup-form-card {
+        padding: 18px;
+    }
+
+    .bakery-pickup-actions {
+        gap: 6px;
+    }
+}
+
+
+/* Mobile Pickup page */
+@media (max-width: 767px) {
+
+    .bakery-pickup-page {
+        padding: 16px;
+    }
+
+    .bakery-pickup-heading {
+        flex-direction: column;
+        margin-bottom: 20px;
+    }
+
+    .bakery-pickup-heading h1 {
+        font-size: 23px;
+    }
+
+    .bakery-pickup-heading>.bakery-pickup-add-button {
+        width: 100%;
+    }
+
+
+    /* Mobile form */
+    .bakery-pickup-form-card {
+        padding: 16px;
+    }
+
+    .bakery-pickup-form-heading {
+        flex-direction: column;
+    }
+
+    .bakery-pickup-form-close {
+        align-self: flex-start;
+    }
+
+
+    /* Mobile weekly recurrence */
+    .bakery-pickup-repeat {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .bakery-pickup-repeat-weeks {
+        width: 100%;
+    }
+
+
+    /* Mobile form actions */
+    .bakery-pickup-form-actions {
+        flex-direction: column-reverse;
+    }
+
+    .bakery-pickup-form-actions button {
+        width: 100%;
+    }
+
+
+    /* Mobile table */
+    .bakery-pickup-table th,
+    .bakery-pickup-table td {
+        padding: 12px;
+    }
+
+    .bakery-pickup-actions {
+        justify-content: flex-start;
+    }
+}
+
+/* Mobile confirmation modal */
+@media (max-width: 575px) {
+
+    .bakery-pickup-modal {
+        padding: 18px;
+    }
+
+    .bakery-pickup-modal-actions {
+        flex-direction: column-reverse;
+    }
+
+    .bakery-pickup-modal-actions button {
+        width: 100%;
+    }
+}

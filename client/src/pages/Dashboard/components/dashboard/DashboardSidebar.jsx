@@ -128,13 +128,22 @@ export default function DashboardSidebar({
                     </button>
 
                     {/* Pickup schedule page */}
-                    <button
-                        type="button"
-                        className="bakery-dashboard-nav-item"
+                    <NavLink
+                        to="/bakery/pickup-slots"
+                        className={({ isActive }) =>
+                            `bakery-dashboard-nav-item text-decoration-none ${isActive ? "active" : ""}`
+                        }
+                        onClick={closeSidebar}
                     >
-                        <CalendarDays size={18} strokeWidth={1.8} />
-                        <span>Pickup Schedule</span>
-                    </button>
+                        <CalendarDays
+                            size={18}
+                            strokeWidth={1.8}
+                        />
+
+                        <span>
+                            Pickup Schedule
+                        </span>
+                    </NavLink>
 
                     {/* Customers page */}
                     <button
