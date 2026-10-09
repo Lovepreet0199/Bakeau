@@ -58,6 +58,12 @@ const userSchema = new mongoose.Schema({
         default: null
     },
 
+    phone_number: {
+        type: String,
+        trim: true,
+        default: null
+    },
+
     //Stores the hashed password reset token when a password reset is required
     password_reset_token_hash: {
         type: String,

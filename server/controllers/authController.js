@@ -18,7 +18,14 @@ const registerUser = async (request, response) => {
     try {
         //Get the registration information sent in the request
         //This is object destructuring.
-        const { first_name, last_name, email, password, role } = request.body;
+        const {
+            first_name,
+            last_name,
+            email,
+            phone_number,
+            password,
+            role
+        } = request.body;
 
         //Only Customer & Bakery accounts can register publicly.
         if (role !== "customer" && role !== "bakeryOwner") {
@@ -58,6 +65,7 @@ const registerUser = async (request, response) => {
             first_name: first_name,
             last_name: last_name,
             email: email,
+            phone_number: phone_number || null,
             password_hash: password_hash,
             role: role,
             email_verification_token_hash: emailVerificationTokenHash,
@@ -88,6 +96,7 @@ const registerUser = async (request, response) => {
                 first_name: newUser.first_name,
                 last_name: newUser.last_name,
                 email: newUser.email,
+                phone_number: newUser.phone_number,
                 role: newUser.role
             }
         });

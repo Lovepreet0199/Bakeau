@@ -22,6 +22,9 @@ import CustomizationGroup from "../models/CustomizationGroup.js";
 //Import Customization Options to validate selected Product options
 import CustomizationOption from "../models/CustomizationOption.js";
 
+//Import Order Activity model
+import OrderActivity from "../models/OrderActivity.js";
+
 //Rounds money values to two decimal places
 const roundMoney = (amount) => {
     return Math.round((amount + Number.EPSILON) * 100) / 100;
@@ -62,10 +65,18 @@ const getCompleteOrderDetails = async (order) => {
         };
     });
 
+    //Find all Activity records belonging to this Order
+    const activities = await OrderActivity.find({
+        order_id: order._id
+    }).sort({
+        created_at: 1
+    });
+
     //Return the Order with its complete item information
     return {
         ...order.toObject(),
-        items: itemsWithCustomizations
+        items: itemsWithCustomizations,
+        activities: activities
     };
 };
 
@@ -92,13 +103,36 @@ const getBakeryOrders = async (request, response) => {
         //Find all Orders belonging to this Bakery
         const orders = await Order.find({
             bakery_id: bakery._id
-        }).sort({
-            created_at: -1
-        });
+        })
+            .populate(
+                "customer_id",
+                "first_name last_name email phone_number"
+            )
+            .sort({
+                created_at: -1
+            });
+
+        //Add Order Items to each Bakery Order
+        const ordersWithItems = await Promise.all(
+
+            orders.map(async (order) => {
+
+                //Find all Product items belonging to this Order
+                const orderItems = await OrderItem.find({
+                    order_id: order._id
+                });
+
+                //Return the Order together with its Product items
+                return {
+                    ...order.toObject(),
+                    items: orderItems
+                };
+            })
+        );
 
         //Return the Bakery Orders
         return response.status(200).json({
-            orders: orders
+            orders: ordersWithItems
         });
 
     } catch (error) {
@@ -141,7 +175,10 @@ const getBakeryOrderById = async (request, response) => {
         const order = await Order.findOne({
             _id: orderId,
             bakery_id: bakery._id
-        });
+        }).populate(
+            "customer_id",
+            "first_name last_name email phone_number"
+        );
 
         //Stop if the Order does not exist
         if (!order) {
@@ -218,6 +255,19 @@ const updateBakeryOrderStatus = async (request, response) => {
         if (!order) {
             return response.status(404).json({
                 message: "Order not found"
+            });
+        }
+
+        //Get the Activity information for the new Order status
+        const activity = getOrderStatusActivity(status);
+
+        //Store the Order status change in its Activity history
+        if (activity) {
+
+            await OrderActivity.create({
+                order_id: order._id,
+                activity_type: activity.activity_type,
+                description: activity.description
             });
         }
 
@@ -606,6 +656,39 @@ const saveOrderItems = async (
     }
 };
 
+//Creates the Activity description for an Order status change
+const getOrderStatusActivity = (status) => {
+
+    const activities = {
+        confirmed: {
+            activity_type: "order_confirmed",
+            description: "Order accepted by bakery"
+        },
+
+        preparing: {
+            activity_type: "order_preparing",
+            description: "Bakery started preparing the Order"
+        },
+
+        ready: {
+            activity_type: "order_ready",
+            description: "Order marked ready for pickup"
+        },
+
+        completed: {
+            activity_type: "order_completed",
+            description: "Order completed"
+        },
+
+        cancelled: {
+            activity_type: "order_cancelled",
+            description: "Order cancelled"
+        }
+    };
+
+    return activities[status];
+};
+
 //Create a new Order for the authenticated Customer
 const createOrder = async (request, response) => {
 
@@ -689,6 +772,13 @@ const createOrder = async (request, response) => {
             amount_due_now: amountDueNow,
             amount_paid: 0,
             payment_status: "unpaid"
+        });
+
+        //Store the Order creation in its Activity history
+        await OrderActivity.create({
+            order_id: order._id,
+            activity_type: "order_placed",
+            description: "Order placed"
         });
 
         await saveOrderItems(

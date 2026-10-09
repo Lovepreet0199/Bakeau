@@ -55,6 +55,30 @@ const bakeryValidation = [
         .notEmpty()
         .withMessage("Bakery description is required"),
 
+    body("pickup_instructions")
+        .optional()
+        .trim()
+        .isLength({ max: 1000 })
+        .withMessage("Pickup instructions cannot exceed 1000 characters"),
+
+    body("cancellation_policy")
+        .optional()
+        .trim()
+        .isLength({ max: 1000 })
+        .withMessage("Cancellation policy cannot exceed 1000 characters"),
+
+    body("custom_order_policy")
+        .optional()
+        .trim()
+        .isLength({ max: 1000 })
+        .withMessage("Custom order policy cannot exceed 1000 characters"),
+
+    body("additional_policy_information")
+        .optional()
+        .trim()
+        .isLength({ max: 1000 })
+        .withMessage("Additional policy information cannot exceed 1000 characters"),
+
     body("address.street")
         .trim()
         .notEmpty()

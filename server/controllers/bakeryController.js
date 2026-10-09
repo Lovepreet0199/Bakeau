@@ -213,6 +213,9 @@ const updateMyBakery = async (request, response) => {
             contact_phone,
             description,
             pickup_instructions,
+            cancellation_policy,
+            custom_order_policy,
+            additional_policy_information,
             address,
             storefront_theme,
             primary_color,
@@ -250,6 +253,9 @@ const updateMyBakery = async (request, response) => {
         bakery.contact_phone = contact_phone;
         bakery.description = description;
         bakery.pickup_instructions = pickup_instructions;
+        bakery.cancellation_policy = cancellation_policy;
+        bakery.custom_order_policy = custom_order_policy;
+        bakery.additional_policy_information = additional_policy_information;
         bakery.address = address;
         bakery.storefront_theme = storefront_theme;
         bakery.primary_color = primary_color;

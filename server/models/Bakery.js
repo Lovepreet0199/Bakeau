@@ -57,6 +57,27 @@ const bakerySchema = new mongoose.Schema({
         default: ""
     },
 
+    //Explains the Bakery's order cancellation rules
+    cancellation_policy: {
+        type: String,
+        trim: true,
+        default: ""
+    },
+
+    //Explains requirements for custom or special orders
+    custom_order_policy: {
+        type: String,
+        trim: true,
+        default: ""
+    },
+
+    //Stores any additional policy information shown to customers
+    additional_policy_information: {
+        type: String,
+        trim: true,
+        default: ""
+    },
+
     //Physical address where customers can pick up their orders
     address: {
         street: {
