@@ -1,0 +1,1232 @@
+/* Bakery Settings page */
+.bakery-settings-page {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+
+/* Settings heading */
+.bakery-settings-heading {
+    margin-bottom: 22px;
+}
+
+/* Settings page title */
+.bakery-settings-heading h1 {
+    margin: 0 0 5px;
+    font-size: 26px;
+    font-weight: 700;
+    color: #25201E;
+}
+
+/* Settings page description */
+.bakery-settings-heading p {
+    max-width: 650px;
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #746D68;
+}
+
+
+/* Settings navigation */
+.bakery-settings-tabs {
+    width: 100%;
+    max-width: 920px;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    margin-bottom: 20px;
+    overflow-x: auto;
+    border-bottom: 1px solid #DDD8D4;
+    scrollbar-width: none;
+}
+
+/* Hides Settings tab scrollbar */
+.bakery-settings-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+/* Individual Settings tab */
+.bakery-settings-tab {
+    position: relative;
+    min-height: 46px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    flex-shrink: 0;
+    padding: 9px 14px;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    background-color: transparent;
+    font-size: 12px;
+    font-weight: 600;
+    color: #746D68;
+    cursor: pointer;
+}
+
+/* Settings tab icon */
+.bakery-settings-tab svg {
+    flex-shrink: 0;
+    color: #918985;
+}
+
+/* Settings tab hover */
+.bakery-settings-tab:hover {
+    color: #25201E;
+}
+
+/* Settings tab hover icon */
+.bakery-settings-tab:hover svg {
+    color: #625A56;
+}
+
+/* Active Settings tab */
+.bakery-settings-tab.active {
+    border-bottom-color: #C65F3A;
+    color: #C65F3A;
+}
+
+/* Active Settings tab icon */
+.bakery-settings-tab.active svg {
+    color: #C65F3A;
+}
+
+
+/* Settings card */
+.bakery-settings-card {
+    width: 100%;
+    max-width: 920px;
+    padding: 22px;
+    border: 1px solid #E4E1DE;
+    border-radius: 9px;
+    background-color: #FFFFFF;
+    box-sizing: border-box;
+}
+
+
+/* Settings section heading */
+.bakery-settings-section-heading {
+    margin-bottom: 17px;
+}
+
+/* Settings section title */
+.bakery-settings-section-heading h2 {
+    margin: 0 0 4px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #25201E;
+}
+
+/* Settings section description */
+.bakery-settings-section-heading p {
+    max-width: 600px;
+    margin: 0;
+    font-size: 11px;
+    line-height: 1.5;
+    color: #8A827D;
+}
+
+
+/* Settings form labels */
+.bakery-settings-card .form-label {
+    margin-bottom: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #3E3733;
+}
+
+/* Settings form fields */
+.bakery-settings-card .form-control,
+.bakery-settings-card .form-select {
+    min-height: 43px;
+    padding: 9px 12px;
+    border: 1px solid #DED9D5;
+    border-radius: 7px;
+    background-color: #FFFFFF;
+    font-family: "Inter", sans-serif;
+    font-size: 13px;
+    color: #25201E;
+    box-shadow: none;
+}
+
+/* Settings form placeholder */
+.bakery-settings-card .form-control::placeholder {
+    color: #AAA39F;
+}
+
+/* Settings field hover */
+.bakery-settings-card .form-control:hover,
+.bakery-settings-card .form-select:hover {
+    border-color: #CBC5C1;
+}
+
+/* Settings field focus */
+.bakery-settings-card .form-control:focus,
+.bakery-settings-card .form-select:focus {
+    border-color: #C65F3A;
+    background-color: #FFFFFF;
+    box-shadow: 0 0 0 3px rgba(198, 95, 58, 0.08);
+}
+
+/* Settings textarea */
+.bakery-settings-textarea {
+    min-height: 110px;
+    resize: vertical;
+    line-height: 1.55;
+}
+
+
+/* Settings section divider */
+.bakery-settings-divider {
+    margin: 26px 0;
+    border-top: 1px solid #E8E4E1;
+}
+
+
+/* Settings actions */
+.bakery-settings-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 24px;
+    padding-top: 18px;
+    border-top: 1px solid #E8E4E1;
+}
+
+
+/* Save Settings button */
+.bakery-settings-save-button {
+    min-height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 8px 15px;
+    border: 0;
+    border-radius: 7px;
+    background-color: #C65F3A;
+    font-size: 13px;
+    font-weight: 600;
+    color: #FFFFFF;
+    cursor: pointer;
+}
+
+/* Save Settings button hover */
+.bakery-settings-save-button:hover:not(:disabled) {
+    background-color: #A95031;
+}
+
+/* Disabled Save Settings button */
+.bakery-settings-save-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+}
+
+
+/* Settings secondary button */
+.bakery-settings-secondary-button {
+    min-height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 8px 14px;
+    border: 1px solid #DDD8D4;
+    border-radius: 7px;
+    background-color: #FFFFFF;
+    font-size: 13px;
+    font-weight: 600;
+    color: #4D4541;
+    cursor: pointer;
+}
+
+/* Settings secondary button hover */
+.bakery-settings-secondary-button:hover:not(:disabled) {
+    border-color: #C65F3A;
+    background-color: #FFF9F6;
+    color: #A95031;
+}
+
+
+/* Settings error */
+.bakery-settings-error {
+    width: 100%;
+    max-width: 920px;
+    margin-bottom: 14px;
+    padding: 11px 13px;
+    border: 1px solid #F2C7C4;
+    border-radius: 7px;
+    background-color: #FFF3F2;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #B42318;
+    box-sizing: border-box;
+}
+
+
+/* Settings success */
+.bakery-settings-success {
+    width: 100%;
+    max-width: 920px;
+    margin-bottom: 14px;
+    padding: 11px 13px;
+    border: 1px solid #CBE7D7;
+    border-radius: 7px;
+    background-color: #F0FAF4;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #28714A;
+    box-sizing: border-box;
+}
+
+
+/* Settings loading state */
+.bakery-settings-loading {
+    width: 100%;
+    max-width: 920px;
+    min-height: 260px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+/* Settings loading heading */
+.bakery-settings-loading strong {
+    display: block;
+    margin-bottom: 2px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #25201E;
+}
+
+/* Settings loading supporting text */
+.bakery-settings-loading span {
+    display: block;
+    font-size: 12px;
+    color: #8A827D;
+}
+
+
+/* Settings spinner */
+.bakery-settings-spinner {
+    flex-shrink: 0;
+    color: #C65F3A;
+    animation: bakery-settings-spin 0.8s linear infinite;
+}
+
+/* Settings spinner animation */
+@keyframes bakery-settings-spin {
+
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* Settings placeholder */
+.bakery-settings-placeholder {
+    min-height: 190px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 13px;
+    color: #8A827D;
+}
+
+
+/* Settings information box */
+.bakery-settings-info-box {
+    padding: 13px 14px;
+    border: 1px solid #E8E4E1;
+    border-radius: 7px;
+    background-color: #FAF9F8;
+}
+
+/* Settings information box heading */
+.bakery-settings-info-box strong {
+    display: block;
+    margin-bottom: 3px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #25201E;
+}
+
+/* Settings information box text */
+.bakery-settings-info-box p {
+    margin: 0;
+    font-size: 11px;
+    line-height: 1.5;
+    color: #746D68;
+}
+
+
+/* Settings toggle row */
+.bakery-settings-toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 14px 0;
+}
+
+/* Settings toggle heading */
+.bakery-settings-toggle-row strong {
+    display: block;
+    margin-bottom: 3px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #25201E;
+}
+
+/* Settings toggle description */
+.bakery-settings-toggle-row p {
+    margin: 0;
+    font-size: 11px;
+    line-height: 1.45;
+    color: #8A827D;
+}
+
+
+/* Storefront Settings helper text */
+.bakery-settings-field-help {
+    margin: -1px 0 12px;
+    font-size: 11px;
+    line-height: 1.5;
+    color: #8A827D;
+}
+
+
+/* Storefront media section */
+.bakery-settings-media-section {
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+}
+
+
+/* Storefront upload section */
+.bakery-settings-upload-section {
+    width: 100%;
+}
+
+
+/* Hidden Storefront file input */
+.bakery-settings-file-input {
+    display: none;
+}
+
+
+/* Storefront upload area */
+.bakery-settings-upload-area {
+    width: 100%;
+    min-height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    padding: 22px;
+    border: 2px dashed #D9CCC4;
+    border-radius: 12px;
+    background-color: #FFFCF8;
+    cursor: pointer;
+    box-sizing: border-box;
+    transition:
+        border-color 0.2s ease,
+        background-color 0.2s ease;
+}
+
+/* Storefront upload area hover */
+.bakery-settings-upload-area:hover {
+    border-color: #C65F3A;
+    background-color: #FFF9F5;
+}
+
+/* Disabled Storefront upload area */
+.bakery-settings-upload-area.disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+    pointer-events: none;
+}
+
+
+/* Storefront upload information */
+.bakery-settings-upload-area-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+/* Storefront upload icon */
+.bakery-settings-upload-area-content svg {
+    margin-bottom: 7px;
+    color: #C65F3A;
+}
+
+/* Storefront upload heading */
+.bakery-settings-upload-area-content strong {
+    margin-bottom: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #3E3733;
+}
+
+/* Storefront upload supporting text */
+.bakery-settings-upload-area-content span {
+    font-size: 10px;
+    line-height: 1.5;
+    color: #918985;
+}
+
+
+/* Storefront logo preview */
+.bakery-settings-upload-preview-logo {
+    width: 82px;
+    height: 82px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+    border: 1px solid #E4E1DE;
+    border-radius: 10px;
+    background-color: #FFFFFF;
+}
+
+/* Storefront logo preview image */
+.bakery-settings-upload-preview-logo img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: contain;
+}
+
+
+/* Storefront Bakery initials */
+.bakery-settings-upload-preview-initials {
+    width: 82px;
+    height: 82px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border-radius: 10px;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+
+/* Storefront empty Bakery image placeholder */
+.bakery-settings-upload-placeholder {
+    width: 82px;
+    height: 82px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: 1px solid #E4E1DE;
+    border-radius: 10px;
+    background-color: #FFFFFF;
+    color: #918985;
+}
+
+
+/* Bakery image upload area */
+.bakery-settings-upload-area-image {
+    min-height: 190px;
+}
+
+
+/* Uploaded Bakery preview image */
+.bakery-settings-upload-preview-image {
+    width: 190px;
+    height: 125px;
+    display: block;
+    flex-shrink: 0;
+    object-fit: cover;
+    border-radius: 9px;
+}
+
+
+/* Storefront colour section */
+.bakery-settings-color-section {
+    padding: 15px 0;
+    border-bottom: 1px solid #EEEAE7;
+}
+
+/* Removes the final colour section border */
+.bakery-settings-color-section:last-of-type {
+    border-bottom: 0;
+}
+
+
+/* Storefront colour section heading */
+.bakery-settings-color-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 12px;
+}
+
+/* Storefront colour heading */
+.bakery-settings-color-heading strong {
+    display: block;
+    margin-bottom: 3px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #25201E;
+}
+
+/* Storefront colour description */
+.bakery-settings-color-heading div span {
+    display: block;
+    font-size: 11px;
+    line-height: 1.45;
+    color: #8A827D;
+}
+
+/* Storefront colour hex code */
+.bakery-settings-color-code {
+    flex-shrink: 0;
+    padding: 4px 7px;
+    border: 1px solid #E4E1DE;
+    border-radius: 5px;
+    background-color: #FAF9F8;
+    font-size: 10px;
+    font-weight: 600;
+    color: #625A56;
+}
+
+
+/* Storefront colour options */
+.bakery-settings-color-options {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+
+/* Storefront preset colour */
+.bakery-settings-color-option {
+    width: 42px;
+    height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    padding: 0;
+    border: 2px solid transparent;
+    border-radius: 50%;
+    color: #FFFFFF;
+    box-shadow: 0 0 0 1px #D8D2CE;
+    cursor: pointer;
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+/* Storefront preset colour hover */
+.bakery-settings-color-option:hover {
+    transform: scale(1.06);
+}
+
+/* Selected Storefront colour */
+.bakery-settings-color-option.active {
+    border-color: #FFFFFF;
+    box-shadow: 0 0 0 2px #C65F3A;
+}
+
+
+/* Custom Storefront colour */
+.bakery-settings-custom-color {
+    min-height: 42px;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 4px 10px 4px 6px;
+    border: 1px solid #DDD8D4;
+    border-radius: 8px;
+    background-color: #FFFFFF;
+    cursor: pointer;
+}
+
+/* Custom Storefront colour hover */
+.bakery-settings-custom-color:hover {
+    border-color: #C65F3A;
+    background-color: #FFF9F6;
+}
+
+/* Custom Storefront colour input */
+.bakery-settings-custom-color input {
+    width: 30px;
+    height: 30px;
+    padding: 1px;
+    border: 0;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+/* Custom Storefront colour text */
+.bakery-settings-custom-color span {
+    font-size: 11px;
+    font-weight: 600;
+    color: #625A56;
+}
+
+
+/* Storefront live preview */
+.bakery-settings-storefront-preview {
+    width: 100%;
+    overflow: hidden;
+    border: 1px solid #DDD8D4;
+    border-radius: 10px;
+    background-color: #FFFFFF;
+}
+
+
+/* Storefront preview header */
+.bakery-settings-preview-header {
+    min-height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 11px 18px;
+}
+
+
+/* Storefront preview brand */
+.bakery-settings-preview-brand {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    min-width: 0;
+}
+
+/* Storefront preview logo */
+.bakery-settings-preview-brand img {
+    width: 32px;
+    height: 32px;
+    display: block;
+    flex-shrink: 0;
+    object-fit: contain;
+    border-radius: 6px;
+    background-color: #FFFFFF;
+}
+
+/* Storefront preview initials */
+.bakery-settings-preview-brand>span {
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border-radius: 6px;
+    font-size: 10px;
+    font-weight: 700;
+    color: #FFFFFF;
+}
+
+/* Storefront preview Bakery name */
+.bakery-settings-preview-brand strong {
+    overflow: hidden;
+    font-family: "Fraunces", serif;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: #FFFFFF;
+}
+
+
+/* Storefront preview navigation */
+.bakery-settings-preview-navigation {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+/* Storefront preview navigation link */
+.bakery-settings-preview-navigation span {
+    font-size: 10px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+
+/* Storefront preview content */
+.bakery-settings-preview-content {
+    min-height: 230px;
+    display: grid;
+    grid-template-columns: 1fr 240px;
+    align-items: center;
+    gap: 28px;
+    padding: 28px;
+}
+
+
+/* Storefront preview label */
+.bakery-settings-preview-label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+}
+
+
+/* Storefront preview heading */
+.bakery-settings-preview-content h3 {
+    margin: 0 0 7px;
+    font-family: "Fraunces", serif;
+    font-size: 25px;
+    font-weight: 600;
+}
+
+
+/* Storefront preview description */
+.bakery-settings-preview-content p {
+    max-width: 360px;
+    margin: 0 0 15px;
+    font-size: 11px;
+    line-height: 1.55;
+    opacity: 0.78;
+}
+
+
+/* Storefront preview button */
+.bakery-settings-preview-content button {
+    min-height: 35px;
+    padding: 7px 13px;
+    border: 0;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #FFFFFF;
+}
+
+
+/* Storefront preview Bakery image */
+.bakery-settings-preview-image {
+    width: 100%;
+    height: 160px;
+    display: block;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+/* Business Settings input with unit */
+.bakery-settings-input-unit {
+    position: relative;
+}
+
+/* Business Settings unit input */
+.bakery-settings-input-unit .form-control {
+    padding-right: 60px;
+}
+
+/* Business Settings input unit text */
+.bakery-settings-input-unit>span {
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    font-size: 11px;
+    font-weight: 500;
+    color: #8A827D;
+    pointer-events: none;
+}
+
+
+/* Settings helper text below fields */
+.bakery-settings-field-help-bottom {
+    margin: 7px 0 0;
+}
+
+
+/* Business Settings toggle */
+.bakery-settings-business-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 2px 0 16px;
+}
+
+/* Business Settings toggle heading */
+.bakery-settings-business-toggle strong {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #25201E;
+}
+
+/* Business Settings toggle description */
+.bakery-settings-business-toggle p {
+    max-width: 580px;
+    margin: 0;
+    font-size: 11px;
+    line-height: 1.5;
+    color: #8A827D;
+}
+
+
+/* Bakery Settings switch */
+.bakery-settings-switch {
+    position: relative;
+    width: 42px;
+    height: 23px;
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+/* Hides the original switch checkbox */
+.bakery-settings-switch input {
+    width: 0;
+    height: 0;
+    opacity: 0;
+}
+
+/* Settings switch slider */
+.bakery-settings-switch-slider {
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    background-color: #CEC8C4;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+/* Settings switch circle */
+.bakery-settings-switch-slider::before {
+    content: "";
+    position: absolute;
+    width: 17px;
+    height: 17px;
+    top: 3px;
+    left: 3px;
+    border-radius: 50%;
+    background-color: #FFFFFF;
+    box-shadow: 0 1px 3px rgba(37, 32, 30, 0.18);
+    transition: transform 0.2s ease;
+}
+
+/* Active Settings switch */
+.bakery-settings-switch input:checked+.bakery-settings-switch-slider {
+    background-color: #C65F3A;
+}
+
+/* Active Settings switch circle */
+.bakery-settings-switch input:checked+.bakery-settings-switch-slider::before {
+    transform: translateX(19px);
+}
+
+/* Settings switch focus */
+.bakery-settings-switch input:focus-visible+.bakery-settings-switch-slider {
+    box-shadow: 0 0 0 3px rgba(198, 95, 58, 0.12);
+}
+
+
+/* Order availability status */
+.bakery-settings-order-status {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 13px 14px;
+    border: 1px solid;
+    border-radius: 8px;
+}
+
+/* Accepting orders status */
+.bakery-settings-order-status.accepting {
+    border-color: #CBE7D7;
+    background-color: #F2FAF5;
+}
+
+/* Paused orders status */
+.bakery-settings-order-status.paused {
+    border-color: #E5D6C6;
+    background-color: #FFF9F3;
+}
+
+/* Order availability status dot */
+.bakery-settings-order-status-dot {
+    width: 8px;
+    height: 8px;
+    flex-shrink: 0;
+    margin-top: 5px;
+    border-radius: 50%;
+}
+
+/* Accepting orders status dot */
+.bakery-settings-order-status.accepting .bakery-settings-order-status-dot {
+    background-color: #3C8A5F;
+}
+
+/* Paused orders status dot */
+.bakery-settings-order-status.paused .bakery-settings-order-status-dot {
+    background-color: #C6843E;
+}
+
+/* Order availability status heading */
+.bakery-settings-order-status strong {
+    display: block;
+    margin-bottom: 2px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #25201E;
+}
+
+/* Order availability status description */
+.bakery-settings-order-status p {
+    margin: 0;
+    font-size: 11px;
+    line-height: 1.5;
+    color: #746D68;
+}
+
+
+/* Business Settings information box */
+.bakery-settings-business-info {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    padding: 14px 42px 14px 14px;
+    border: 1px solid #E4E1DE;
+    border-radius: 8px;
+    background-color: #FAF9F8;
+}
+
+/* Business Settings information icon */
+.bakery-settings-business-info-icon {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border-radius: 7px;
+    background-color: #F4E8DF;
+    color: #C65F3A;
+}
+
+/* Business Settings information heading */
+.bakery-settings-business-info strong {
+    display: block;
+    margin-bottom: 3px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #25201E;
+}
+
+/* Business Settings information description */
+.bakery-settings-business-info p {
+    max-width: 600px;
+    margin: 0;
+    font-size: 11px;
+    line-height: 1.5;
+    color: #746D68;
+}
+
+/* Business Settings secondary information icon */
+.bakery-settings-business-info-secondary-icon {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    color: #AAA39F;
+}
+
+/* Tablet Settings */
+@media (max-width: 991px) {
+
+    /* Settings card */
+    .bakery-settings-card {
+        padding: 20px;
+    }
+
+
+    /* Storefront preview content */
+    .bakery-settings-preview-content {
+        grid-template-columns: 1fr 200px;
+    }
+}
+
+
+/* Mobile Settings */
+@media (max-width: 767px) {
+
+    /* Settings page */
+    .bakery-settings-page {
+        padding: 16px;
+    }
+
+
+    /* Settings heading */
+    .bakery-settings-heading {
+        margin-bottom: 18px;
+    }
+
+
+    /* Settings page title */
+    .bakery-settings-heading h1 {
+        font-size: 23px;
+    }
+
+
+    /* Settings navigation */
+    .bakery-settings-tabs {
+        margin-bottom: 16px;
+    }
+
+
+    /* Individual Settings tab */
+    .bakery-settings-tab {
+        min-height: 43px;
+        padding: 8px 11px;
+    }
+
+
+    /* Settings card */
+    .bakery-settings-card {
+        padding: 16px;
+    }
+
+
+    /* Settings divider */
+    .bakery-settings-divider {
+        margin: 22px 0;
+    }
+
+
+    /* Settings actions */
+    .bakery-settings-actions {
+        display: block;
+    }
+
+
+    /* Settings action buttons */
+    .bakery-settings-save-button,
+    .bakery-settings-secondary-button {
+        width: 100%;
+    }
+
+
+    /* Settings toggle row */
+    .bakery-settings-toggle-row {
+        align-items: flex-start;
+    }
+
+
+    /* Storefront colour heading */
+    .bakery-settings-color-heading {
+        flex-direction: column;
+        gap: 6px;
+    }
+
+
+    /* Storefront preview navigation */
+    .bakery-settings-preview-navigation {
+        display: none;
+    }
+
+
+    /* Storefront preview content */
+    .bakery-settings-preview-content {
+        grid-template-columns: 1fr;
+        padding: 22px;
+    }
+
+
+    /* Storefront preview image */
+    .bakery-settings-preview-image {
+        height: 180px;
+    }
+}
+
+
+/* Small mobile Settings */
+@media (max-width: 575px) {
+
+    /* Settings page */
+    .bakery-settings-page {
+        padding: 14px;
+    }
+
+
+    /* Settings card */
+    .bakery-settings-card {
+        padding: 14px;
+    }
+
+
+    /* Settings page title */
+    .bakery-settings-heading h1 {
+        font-size: 22px;
+    }
+
+
+    /* Storefront upload area */
+    .bakery-settings-upload-area {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 18px;
+    }
+
+
+    /* Storefront upload information */
+    .bakery-settings-upload-area-content {
+        align-items: center;
+    }
+
+
+    /* Storefront Bakery image */
+    .bakery-settings-upload-preview-image {
+        width: 100%;
+        max-width: 260px;
+        height: 150px;
+    }
+
+
+    /* Storefront colour options */
+    .bakery-settings-color-options {
+        gap: 9px;
+    }
+
+
+    /* Storefront preview content */
+    .bakery-settings-preview-content {
+        padding: 18px;
+    }
+
+    /* Mobile Business Settings toggle */
+    .bakery-settings-business-toggle {
+        align-items: flex-start;
+    }
+
+    /* Mobile Business Settings information */
+    .bakery-settings-business-info {
+        padding-right: 14px;
+    }
+
+    /* Hides secondary information icon on small screens */
+    .bakery-settings-business-info-secondary-icon {
+        display: none;
+    }
+}

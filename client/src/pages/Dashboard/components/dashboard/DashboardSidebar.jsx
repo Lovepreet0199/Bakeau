@@ -195,14 +195,22 @@ export default function DashboardSidebar({
                 {/* Bottom sidebar navigation */}
                 <div className="bakery-dashboard-sidebar-bottom">
 
-                    {/* Settings page */}
-                    <button
-                        type="button"
-                        className="bakery-dashboard-nav-item"
+                    <NavLink
+                        to="/bakery/settings"
+                        className={({ isActive }) =>
+                            `bakery-dashboard-nav-item text-decoration-none ${isActive ? "active" : ""}`
+                        }
+                        onClick={closeSidebar}
                     >
-                        <Settings size={18} strokeWidth={1.8} />
-                        <span>Settings</span>
-                    </button>
+                        <Settings
+                            size={18}
+                            strokeWidth={1.8}
+                        />
+
+                        <span>
+                            Settings
+                        </span>
+                    </NavLink>
 
                     {/* Help and support */}
                     <button
