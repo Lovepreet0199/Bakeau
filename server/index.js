@@ -21,6 +21,9 @@ import productRoutes from "./routes/productRoutes.js";
 //Import customization routes
 import customizationRoutes from "./routes/customizationRoutes.js";
 
+//Import Pickup Slot routes
+import pickupSlotRoutes from "./routes/pickupSlotRoutes.js";
+
 // Create an Express app and store it in the app variable
 const app = express();
 
@@ -45,6 +48,9 @@ app.use("/api/products", productRoutes);
 
 //Use customization routes for customization API requests
 app.use("/api/customizations", customizationRoutes);
+
+//Use Pickup Slot routes for Pickup Slot API requests
+app.use("/api/pickup-slots", pickupSlotRoutes);
 
 //Connect to MongoDB
 connectDB();
