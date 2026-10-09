@@ -9,7 +9,7 @@ const sendVerificationEmail = async (email, verificationUrl) => {
 
     //Send the verification email using Resend
     const { error } = await resend.emails.send({
-        from: "Bakeau <onboarding@resend.dev>",
+        from: "Bakeau <npreply@mail.lovesandhu.com>",
         to: email,
         subject: "Verify your Bakeau email",
         html: `

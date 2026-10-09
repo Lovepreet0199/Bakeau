@@ -318,6 +318,294 @@ const getMyOrderById = async (request, response) => {
     }
 };
 
+//Validates one requested Product and prepares its Order Item information
+const prepareOrderItem = async (
+    requestedItem,
+    bakery,
+    pickupSlot
+) => {
+
+    //Convert the requested quantity into a number
+    const quantity = Number(requestedItem.quantity);
+
+    //Make sure the quantity is a valid whole number
+    if (!Number.isInteger(quantity) || quantity < 1) {
+        throw new Error(
+            "Product quantity must be at least 1"
+        );
+    }
+
+    //Find the Product only inside the selected Bakery
+    const product = await Product.findOne({
+        _id: requestedItem.product_id,
+        bakery_id: bakery._id
+    });
+
+    //Stop if the Product does not exist
+    if (!product) {
+        throw new Error(
+            "Product not found"
+        );
+    }
+
+    //Draft Products cannot be ordered
+    if (product.status === "draft") {
+        throw new Error(
+            `${product.name} is not published`
+        );
+    }
+
+    //Unavailable Products cannot be ordered
+    if (!product.is_available) {
+        throw new Error(
+            `${product.name} is currently unavailable`
+        );
+    }
+
+    //Check inventory when this Product tracks inventory
+    if (
+        product.stock_type === "track_inventory" &&
+        product.inventory_quantity < quantity
+    ) {
+        throw new Error(
+            `Not enough inventory is available for ${product.name}`
+        );
+    }
+
+    //Get the selected Pickup day
+    const pickupDay = new Date(
+        pickupSlot.pickup_date
+    ).toLocaleDateString(
+        "en-US",
+        {
+            weekday: "long",
+            timeZone: "UTC"
+        }
+    ).toLowerCase();
+
+    //Make sure the Product can be picked up on this day
+    if (
+        product.available_pickup_days.length > 0 &&
+        !product.available_pickup_days.includes(pickupDay)
+    ) {
+        throw new Error(
+            `${product.name} is not available for pickup on ${pickupDay}`
+        );
+    }
+
+    //Load all Customization Groups belonging to this Product
+    const customizationGroups =
+        await CustomizationGroup.find({
+            product_id: product._id
+        });
+
+    //Get selected Customization Option IDs
+    const selectedOptionIds =
+        requestedItem.customization_option_ids || [];
+
+    //Make sure Customization Options are sent as an array
+    if (!Array.isArray(selectedOptionIds)) {
+        throw new Error(
+            "Customization options must be an array"
+        );
+    }
+
+    //Stores the selected Customization Options
+    let selectedOptions = [];
+
+    //Load selected Options only when the Customer selected some
+    if (selectedOptionIds.length > 0) {
+
+        const groupIds =
+            customizationGroups.map(
+                (group) => group._id
+            );
+
+        selectedOptions =
+            await CustomizationOption.find({
+                _id: {
+                    $in: selectedOptionIds
+                },
+                group_id: {
+                    $in: groupIds
+                }
+            });
+
+        //Make sure every selected Option belongs to this Product
+        if (
+            selectedOptions.length !==
+            selectedOptionIds.length
+        ) {
+            throw new Error(
+                `Invalid customization selected for ${product.name}`
+            );
+        }
+    }
+
+    //Tracks which Groups already have a selected Option
+    const selectedGroupIds = new Set();
+
+    //Stores customization snapshots for the Order
+    const customizations = [];
+
+    //Tracks additional customization cost
+    let customizationPrice = 0;
+
+    for (const option of selectedOptions) {
+
+        const group =
+            customizationGroups.find(
+                (currentGroup) =>
+                    currentGroup._id.toString() ===
+                    option.group_id.toString()
+            );
+
+        //Only allow one Option from each Group
+        if (
+            selectedGroupIds.has(
+                option.group_id.toString()
+            )
+        ) {
+            throw new Error(
+                `Only one option can be selected from each customization group for ${product.name}`
+            );
+        }
+
+        selectedGroupIds.add(
+            option.group_id.toString()
+        );
+
+        customizationPrice +=
+            option.additional_price;
+
+        customizations.push({
+            customization_option_id:
+                option._id,
+            group_name:
+                group.name,
+            option_name:
+                option.name,
+            additional_price:
+                option.additional_price
+        });
+    }
+
+    //Make sure required Groups have a selected Option
+    for (const group of customizationGroups) {
+
+        if (
+            group.is_required &&
+            !selectedGroupIds.has(
+                group._id.toString()
+            )
+        ) {
+            throw new Error(
+                `${group.name} is required for ${product.name}`
+            );
+        }
+    }
+
+    //Calculate the full price of this Order Item
+    const unitPrice = roundMoney(
+        product.base_price +
+        customizationPrice
+    );
+
+    const itemTotal = roundMoney(
+        unitPrice * quantity
+    );
+
+    //Full payment is due by default
+    let amountDueNow = itemTotal;
+
+    //Calculate deposit amount when required
+    if (product.payment_rule === "deposit") {
+
+        amountDueNow = roundMoney(
+            itemTotal *
+            (product.deposit_percentage / 100)
+        );
+    }
+
+    //Return the cleaned and validated Order Item information
+    return {
+        product: product,
+        quantity: quantity,
+        special_notes:
+            requestedItem.special_notes || null,
+        item_total: itemTotal,
+        amount_due_now: amountDueNow,
+        customizations: customizations
+    };
+};
+
+//Saves the validated Products and Customizations for an Order
+const saveOrderItems = async (
+    order,
+    preparedItems
+) => {
+
+    //Go through every validated Product in the Order
+    for (const preparedItem of preparedItems) {
+
+        const product = preparedItem.product;
+
+        //Create the Order Item
+        const orderItem = await OrderItem.create({
+            order_id: order._id,
+            product_id: product._id,
+            product_name: product.name,
+            quantity: preparedItem.quantity,
+            base_price: product.base_price,
+            payment_rule: product.payment_rule,
+            deposit_percentage:
+                product.payment_rule === "deposit"
+                    ? product.deposit_percentage
+                    : null,
+            special_notes:
+                preparedItem.special_notes,
+            item_total:
+                preparedItem.item_total
+        });
+
+        //Save selected Customizations for this Order Item
+        for (
+            const customization
+            of preparedItem.customizations
+        ) {
+
+            await OrderItemCustomization.create({
+                order_item_id: orderItem._id,
+                customization_option_id:
+                    customization.customization_option_id,
+                group_name:
+                    customization.group_name,
+                option_name:
+                    customization.option_name,
+                additional_price:
+                    customization.additional_price
+            });
+        }
+
+        //Reduce inventory when this Product tracks inventory
+        if (
+            product.stock_type === "track_inventory"
+        ) {
+            await Product.updateOne(
+                {
+                    _id: product._id
+                },
+                {
+                    $inc: {
+                        inventory_quantity:
+                            -preparedItem.quantity
+                    }
+                }
+            );
+        }
+    }
+};
+
 //Create a new Order for the authenticated Customer
 const createOrder = async (request, response) => {
 
@@ -364,7 +652,8 @@ const createOrder = async (request, response) => {
             const preparedItem =
                 await prepareOrderItem(
                     requestedItem,
-                    bakery
+                    bakery,
+                    pickupSlot
                 );
 
             preparedItems.push(preparedItem);
@@ -430,6 +719,7 @@ const createOrder = async (request, response) => {
 
 //Export Order controller functions
 export {
+    createOrder,
     getBakeryOrders,
     getBakeryOrderById,
     updateBakeryOrderStatus,
