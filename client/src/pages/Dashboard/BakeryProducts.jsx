@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { Plus, Search, Star } from "lucide-react";
 
 //Import the reusable product card
-import ProductCard from "./components/products/ProductCard";
+import ProductCard from "../../components/BakeryOwner/products/ProductCard";
 
 //Import the authentication token helper
 import { getAuthToken } from "../../utils/authStorage";

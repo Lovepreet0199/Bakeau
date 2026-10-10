@@ -2,22 +2,22 @@
 import { useState } from "react";
 
 //Import the Bakery Basics step
-import BakeryBasicsStep from "./components/BakeryBasicsStep";
+import BakeryBasicsStep from "../../components/BakeryOwner/bakerySetup/BakeryBasicsStep";
 
 //Import the Location and Contact step
-import LocationStep from "./components/LocationStep";
+import LocationStep from "../../components/BakeryOwner/bakerySetup/LocationStep";
 
 //Import the Branding step
-import BrandingStep from "./components/BrandingStep";
+import BrandingStep from "../../components/BakeryOwner/bakerySetup/BrandingStep";
 
 //Import the Business Settings step
-import BusinessSettingsStep from "./components/BusinessSettingsStep";
+import BusinessSettingsStep from "../../components/BakeryOwner/bakerySetup/BusinessSettingsStep";
 
 //Import the Payments step
-import PaymentStep from "./components/PaymentStep";
+import PaymentStep from "../../components/BakeryOwner/bakerySetup/PaymentStep";
 
 //Import the Plan step
-import PlanStep from "./components/PlanStep";
+import PlanStep from "../../components/BakeryOwner/bakerySetup/PlanStep";
 
 //Import helper used to get the saved authentication token
 import { getAuthToken } from "../../utils/authStorage";

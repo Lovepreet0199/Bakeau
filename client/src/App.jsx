@@ -47,6 +47,9 @@ import BakeryHelpSupport from "./pages/Dashboard/BakeryHelpSupport.jsx";
 //Import Bakery Inventory page
 import BakeryInventory from "./pages/Dashboard/BakeryInventory.jsx";
 
+//Import the public Bakery customer Storefront
+import BakeryStorefront from "./pages/Storefront/BakeryStorefront";
+
 //Displays the Bakeau application routes
 export default function App() {
 
@@ -89,6 +92,12 @@ export default function App() {
         element={<BakerySetup />}
       />
 
+      {/* Public customer Bakery Storefront */}
+      <Route
+        path="/store/:slug"
+        element={<BakeryStorefront />}
+      />
+      
       {/* Shared layout for all Bakery Owner dashboard pages */}
       <Route
         path="/bakery"
