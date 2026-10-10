@@ -27,6 +27,9 @@ import pickupSlotRoutes from "./routes/pickupSlotRoutes.js";
 //Import Order routes
 import orderRoutes from "./routes/orderRoutes.js";
 
+//Import Ingredient routes
+import ingredientRoutes from "./routes/ingredientRoutes.js";
+
 // Create an Express app and store it in the app variable
 const app = express();
 
@@ -57,6 +60,9 @@ app.use("/api/pickup-slots", pickupSlotRoutes);
 
 //Use Order routes for Customer and Bakery Owner order requests
 app.use("/api/orders", orderRoutes);
+
+//Use Ingredient routes for Bakery inventory requests
+app.use("/api/ingredients", ingredientRoutes);
 
 //Connect to MongoDB
 connectDB();

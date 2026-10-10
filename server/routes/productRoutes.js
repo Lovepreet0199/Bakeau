@@ -12,6 +12,7 @@ import {
     getMyProductById,
     updateProductStatus,
     updateProductAvailability,
+    updateProductInventory,
     updateProductFeatured,
     updateMyProduct,
     deleteMyProduct
@@ -151,6 +152,32 @@ const productAvailabilityValidation = [
         .withMessage("Product availability must be true or false")
 ];
 
+//Validate a Product inventory update
+const productInventoryValidation = [
+
+    body("inventory_quantity")
+        .notEmpty()
+        .withMessage("Inventory quantity is required")
+        .isInt({
+            min: 0
+        })
+        .withMessage(
+            "Inventory quantity must be 0 or greater"
+        ),
+
+    body("low_inventory_threshold")
+        .notEmpty()
+        .withMessage(
+            "Low inventory threshold is required"
+        )
+        .isInt({
+            min: 0
+        })
+        .withMessage(
+            "Low inventory threshold must be 0 or greater"
+        )
+];
+
 //Validate a product featured update
 const productFeaturedValidation = [
     body("is_featured")
@@ -256,6 +283,16 @@ router.delete(
     authenticateUser,
     authorizeRoles("bakeryOwner"),
     deleteMyProduct
+);
+
+//Update only a Product's inventory values
+router.patch(
+    "/:id/inventory",
+    authenticateUser,
+    authorizeRoles("bakeryOwner"),
+    productInventoryValidation,
+    validateRequest,
+    updateProductInventory
 );
 
 //Export the product router so it can be used in the main server file

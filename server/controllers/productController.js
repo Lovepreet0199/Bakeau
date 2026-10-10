@@ -657,6 +657,106 @@ const deleteMyProduct = async (request, response) => {
     }
 };
 
+//Update inventory values for a Bakery Owner's product
+const updateProductInventory = async (request, response) => {
+
+    try {
+
+        //Get the authenticated Bakery Owner's user ID
+        const ownerId = request.user.userId;
+
+        //Get the Product ID from the URL
+        const productId = request.params.id;
+
+        //Get the updated inventory values
+        const {
+            inventory_quantity,
+            low_inventory_threshold
+        } = request.body;
+
+
+        //Find the Bakery belonging to the authenticated Bakery Owner
+        const bakery = await Bakery.findOne({
+            owner_id: ownerId
+        });
+
+
+        //Stop if the Bakery Owner does not have a Bakery
+        if (!bakery) {
+
+            return response.status(404).json({
+                message: "Bakery not found"
+            });
+        }
+
+
+        //Find the Product only if it belongs to this Bakery
+        const product = await Product.findOne({
+            _id: productId,
+            bakery_id: bakery._id
+        });
+
+
+        //Stop if the Product does not exist
+        if (!product) {
+
+            return response.status(404).json({
+                message: "Product not found"
+            });
+        }
+
+
+        //Made-to-order Products do not use inventory tracking
+        if (product.stock_type !== "track_inventory") {
+
+            return response.status(400).json({
+                message:
+                    "Inventory cannot be adjusted for a made-to-order product"
+            });
+        }
+
+
+        //Update the Product inventory quantity
+        product.inventory_quantity =
+            inventory_quantity;
+
+
+        //Update the low inventory warning threshold
+        product.low_inventory_threshold =
+            low_inventory_threshold;
+
+
+        //Save the updated Product
+        await product.save();
+
+
+        //Return the updated inventory information
+        return response.status(200).json({
+
+            message:
+                "Product inventory updated successfully",
+
+            product: product
+        });
+
+
+    } catch (error) {
+
+        //Log the inventory update error
+        console.error(
+            "Product inventory update error:",
+            error.message
+        );
+
+
+        //Return a server error
+        return response.status(500).json({
+            message:
+                "Unable to update product inventory"
+        });
+    }
+};
+
 //Export the product controller functions so they can be used in product routes
 export {
     createProduct,
@@ -666,6 +766,7 @@ export {
     updateMyProduct,
     updateProductStatus,
     updateProductAvailability,
+    updateProductInventory,
     updateProductFeatured,
     deleteMyProduct
 };
