@@ -212,14 +212,23 @@ export default function DashboardSidebar({
                         </span>
                     </NavLink>
 
-                    {/* Help and support */}
-                    <button
-                        type="button"
-                        className="bakery-dashboard-nav-item"
+                    {/* Help and support page */}
+                    <NavLink
+                        to="/bakery/help"
+                        className={({ isActive }) =>
+                            `bakery-dashboard-nav-item text-decoration-none ${isActive ? "active" : ""}`
+                        }
+                        onClick={closeSidebar}
                     >
-                        <CircleHelp size={18} strokeWidth={1.8} />
-                        <span>Help & Support</span>
-                    </button>
+                        <CircleHelp
+                            size={18}
+                            strokeWidth={1.8}
+                        />
+
+                        <span>
+                            Help & Support
+                        </span>
+                    </NavLink>
 
                     {/* Displays the logged-in Bakery Owner */}
                     <div className="bakery-dashboard-user">

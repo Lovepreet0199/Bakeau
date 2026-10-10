@@ -41,6 +41,9 @@ import BakeryPickupSlots from "./pages/Dashboard/BakeryPickupSlots.jsx";
 //Bakery settings page
 import BakerySettings from "./pages/Dashboard/Settings/BakerySettings.jsx";
 
+//Import Bakery Help & Support page
+import BakeryHelpSupport from "./pages/Dashboard/BakeryHelpSupport.jsx";
+
 //Displays the Bakeau application routes
 export default function App() {
 
@@ -130,6 +133,11 @@ export default function App() {
         <Route
           path="settings"
           element={<BakerySettings />}
+        />
+
+        <Route
+          path="help"
+          element={<BakeryHelpSupport />}
         />
 
       </Route>
