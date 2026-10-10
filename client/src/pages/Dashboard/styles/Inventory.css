@@ -1,0 +1,704 @@
+/* Inventory page */
+.bakery-inventory-page {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+
+/* Inventory page heading */
+.bakery-inventory-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+
+/* Inventory title */
+.bakery-inventory-heading h1 {
+    margin: 0 0 5px;
+    font-size: 26px;
+    font-weight: 700;
+    color: #25201E;
+}
+
+
+/* Inventory description */
+.bakery-inventory-heading p {
+    margin: 0;
+    font-size: 13px;
+    color: #746D68;
+}
+
+
+/* Inventory tabs */
+.bakery-inventory-tabs {
+    width: 100%;
+    max-width: 1050px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 20px;
+    overflow-x: auto;
+    border-bottom: 1px solid #DDD8D4;
+}
+
+
+/* Individual Inventory tab */
+.bakery-inventory-tab {
+    min-height: 45px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    flex-shrink: 0;
+    padding: 9px 14px;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    background-color: transparent;
+    font-size: 12px;
+    font-weight: 600;
+    color: #746D68;
+}
+
+
+/* Inventory tab hover */
+.bakery-inventory-tab:hover {
+    color: #25201E;
+}
+
+
+/* Active Inventory tab */
+.bakery-inventory-tab.active {
+    border-bottom-color: #C65F3A;
+    color: #C65F3A;
+}
+
+
+/* Ingredient count */
+.bakery-inventory-tab-count {
+    min-width: 20px;
+    height: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 6px;
+    border-radius: 20px;
+    background-color: #F1EEEB;
+    font-size: 10px;
+    color: #746D68;
+}
+
+
+/* Inventory primary button */
+.bakery-inventory-primary-button {
+    min-height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 8px 14px;
+    border: 0;
+    border-radius: 7px;
+    background-color: #C65F3A;
+    font-size: 12px;
+    font-weight: 600;
+    color: #FFFFFF;
+}
+
+
+/* Primary button hover */
+.bakery-inventory-primary-button:hover:not(:disabled) {
+    background-color: #A95031;
+}
+
+
+/* Disabled primary button */
+.bakery-inventory-primary-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+}
+
+
+/* Inventory warning */
+.bakery-inventory-warning {
+    width: 100%;
+    max-width: 1050px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 16px;
+    padding: 13px 14px;
+    border: 1px solid #F0D69B;
+    border-radius: 8px;
+    background-color: #FFF9E9;
+    color: #A66B00;
+}
+
+
+/* Warning heading */
+.bakery-inventory-warning strong {
+    display: block;
+    margin-bottom: 2px;
+    font-size: 12px;
+    color: #6F4C0A;
+}
+
+
+/* Warning text */
+.bakery-inventory-warning p {
+    margin: 0;
+    font-size: 11px;
+    color: #8A681F;
+}
+
+
+/* Inventory error */
+.bakery-inventory-error {
+    width: 100%;
+    max-width: 1050px;
+    margin-bottom: 15px;
+    padding: 11px 13px;
+    border: 1px solid #F2C7C4;
+    border-radius: 7px;
+    background-color: #FFF3F2;
+    font-size: 12px;
+    color: #B42318;
+}
+
+
+/* Inventory toolbar */
+.bakery-inventory-toolbar {
+    width: 100%;
+    max-width: 1050px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+
+/* Inventory search */
+.bakery-inventory-search {
+    width: 100%;
+    max-width: 360px;
+    position: relative;
+}
+
+
+/* Inventory search icon */
+.bakery-inventory-search svg {
+    position: absolute;
+    top: 50%;
+    left: 12px;
+    transform: translateY(-50%);
+    color: #918985;
+    z-index: 1;
+}
+
+
+/* Inventory search field */
+.bakery-inventory-search .form-control {
+    min-height: 40px;
+    padding-left: 38px;
+    border: 1px solid #DDD8D4;
+    border-radius: 7px;
+    font-size: 12px;
+    box-shadow: none;
+}
+
+
+/* Inventory search focus */
+.bakery-inventory-search .form-control:focus {
+    border-color: #C65F3A;
+    box-shadow: 0 0 0 3px rgba(198, 95, 58, 0.08);
+}
+
+
+/* Inventory card */
+.bakery-inventory-card {
+    width: 100%;
+    max-width: 1050px;
+    overflow: hidden;
+    border: 1px solid #E4E1DE;
+    border-radius: 9px;
+    background-color: #FFFFFF;
+}
+
+
+/* Inventory card heading */
+.bakery-inventory-card-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 18px 20px;
+    border-bottom: 1px solid #E8E4E1;
+}
+
+
+/* Inventory card title */
+.bakery-inventory-card-heading h2 {
+    margin: 0 0 3px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #25201E;
+}
+
+
+/* Inventory card description */
+.bakery-inventory-card-heading p {
+    margin: 0;
+    font-size: 11px;
+    color: #8A827D;
+}
+
+
+/* Inventory table */
+.bakery-inventory-table {
+    width: 100%;
+    margin: 0;
+    vertical-align: middle;
+}
+
+
+/* Inventory table heading */
+.bakery-inventory-table thead th {
+    padding: 11px 16px;
+    border-bottom: 1px solid #E8E4E1;
+    background-color: #FAF9F8;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #918985;
+    white-space: nowrap;
+}
+
+
+/* Inventory table cells */
+.bakery-inventory-table tbody td {
+    padding: 13px 16px;
+    border-bottom: 1px solid #F0EDEA;
+    font-size: 12px;
+    color: #4D4541;
+}
+
+
+/* Removes border from last row */
+.bakery-inventory-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+
+/* Product information */
+.bakery-inventory-product {
+    min-width: 220px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+
+/* Product image */
+.bakery-inventory-product-image {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+    border: 1px solid #E4E1DE;
+    border-radius: 7px;
+    background-color: #F7F7F6;
+    color: #918985;
+}
+
+
+/* Product image file */
+.bakery-inventory-product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+/* Product name */
+.bakery-inventory-product strong {
+    display: block;
+    margin-bottom: 2px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #25201E;
+}
+
+
+/* Product stock type */
+.bakery-inventory-product span {
+    display: block;
+    font-size: 10px;
+    color: #918985;
+}
+
+
+/* Inventory status */
+.bakery-inventory-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 8px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+
+/* In stock */
+.bakery-inventory-status.in_stock {
+    background-color: #EDF8F1;
+    color: #28714A;
+}
+
+
+/* Low stock */
+.bakery-inventory-status.low_stock {
+    background-color: #FFF5DC;
+    color: #946200;
+}
+
+
+/* Out of stock */
+.bakery-inventory-status.out_of_stock {
+    background-color: #FFF0EF;
+    color: #B42318;
+}
+
+
+/* Made to order */
+.bakery-inventory-status.made_to_order {
+    background-color: #F1EEEB;
+    color: #625A56;
+}
+
+
+/* Adjust Product button */
+.bakery-inventory-adjust-button {
+    min-height: 33px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 6px 10px;
+    border: 1px solid #DDD8D4;
+    border-radius: 6px;
+    background-color: #FFFFFF;
+    font-size: 11px;
+    font-weight: 600;
+    color: #4D4541;
+}
+
+
+/* Adjust Product button hover */
+.bakery-inventory-adjust-button:hover {
+    border-color: #C65F3A;
+    color: #C65F3A;
+}
+
+
+/* Ingredient row actions */
+.bakery-inventory-row-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 6px;
+}
+
+
+/* Inventory icon button */
+.bakery-inventory-icon-button {
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #DDD8D4;
+    border-radius: 6px;
+    background-color: #FFFFFF;
+    color: #746D68;
+}
+
+
+/* Inventory icon hover */
+.bakery-inventory-icon-button:hover:not(:disabled) {
+    border-color: #C65F3A;
+    color: #C65F3A;
+}
+
+
+/* Delete Inventory button */
+.bakery-inventory-icon-button.danger:hover:not(:disabled) {
+    border-color: #E3AAA5;
+    background-color: #FFF5F4;
+    color: #B42318;
+}
+
+
+/* Inventory loading */
+.bakery-inventory-loading {
+    width: 100%;
+    max-width: 1050px;
+    min-height: 260px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    color: #C65F3A;
+}
+
+
+/* Loading spinner */
+.bakery-inventory-loading > svg {
+    animation: bakery-inventory-spin 0.8s linear infinite;
+}
+
+
+/* Loading title */
+.bakery-inventory-loading strong {
+    display: block;
+    margin-bottom: 2px;
+    font-size: 13px;
+    color: #25201E;
+}
+
+
+/* Loading description */
+.bakery-inventory-loading span {
+    display: block;
+    font-size: 11px;
+    color: #8A827D;
+}
+
+
+/* Empty Inventory state */
+.bakery-inventory-empty {
+    min-height: 230px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 30px;
+    text-align: center;
+    color: #918985;
+}
+
+
+/* Empty Inventory title */
+.bakery-inventory-empty h3 {
+    margin: 10px 0 4px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #25201E;
+}
+
+
+/* Empty Inventory description */
+.bakery-inventory-empty p {
+    margin: 0 0 14px;
+    font-size: 11px;
+    color: #8A827D;
+}
+
+
+/* Ingredient modal background */
+.bakery-inventory-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1050;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-color: rgba(37, 32, 30, 0.45);
+}
+
+
+/* Ingredient modal */
+.bakery-inventory-modal {
+    width: 100%;
+    max-width: 500px;
+    padding: 22px;
+    border-radius: 10px;
+    background-color: #FFFFFF;
+    box-shadow: 0 18px 45px rgba(37, 32, 30, 0.16);
+}
+
+
+/* Ingredient modal heading */
+.bakery-inventory-modal-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+
+/* Modal title */
+.bakery-inventory-modal-heading h2 {
+    margin: 0 0 4px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #25201E;
+}
+
+
+/* Modal description */
+.bakery-inventory-modal-heading p {
+    margin: 0;
+    font-size: 11px;
+    color: #8A827D;
+}
+
+
+/* Modal close button */
+.bakery-inventory-modal-close {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: 0;
+    border-radius: 6px;
+    background-color: transparent;
+    color: #746D68;
+}
+
+
+/* Modal close hover */
+.bakery-inventory-modal-close:hover {
+    background-color: #F5F2F0;
+}
+
+
+/* Ingredient form label */
+.bakery-inventory-modal .form-label {
+    margin-bottom: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #3E3733;
+}
+
+
+/* Ingredient form fields */
+.bakery-inventory-modal .form-control {
+    min-height: 42px;
+    border: 1px solid #DDD8D4;
+    border-radius: 7px;
+    font-size: 12px;
+    box-shadow: none;
+}
+
+
+/* Ingredient form focus */
+.bakery-inventory-modal .form-control:focus {
+    border-color: #C65F3A;
+    box-shadow: 0 0 0 3px rgba(198, 95, 58, 0.08);
+}
+
+
+/* Ingredient field note */
+.bakery-inventory-field-note {
+    display: block;
+    margin-top: 5px;
+    font-size: 10px;
+    color: #918985;
+}
+
+
+/* Modal actions */
+.bakery-inventory-modal-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 22px;
+    padding-top: 17px;
+    border-top: 1px solid #E8E4E1;
+}
+
+
+/* Inventory secondary button */
+.bakery-inventory-secondary-button {
+    min-height: 40px;
+    padding: 8px 14px;
+    border: 1px solid #DDD8D4;
+    border-radius: 7px;
+    background-color: #FFFFFF;
+    font-size: 12px;
+    font-weight: 600;
+    color: #4D4541;
+}
+
+
+/* Secondary button hover */
+.bakery-inventory-secondary-button:hover:not(:disabled) {
+    border-color: #C65F3A;
+    color: #C65F3A;
+}
+
+
+/* Small loading spinner */
+.bakery-inventory-small-spinner {
+    animation: bakery-inventory-spin 0.8s linear infinite;
+}
+
+
+/* Inventory spinner animation */
+@keyframes bakery-inventory-spin {
+
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* Inventory mobile layout */
+@media (max-width: 767px) {
+
+    .bakery-inventory-page {
+        padding: 16px;
+    }
+
+
+    .bakery-inventory-heading {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+
+    .bakery-inventory-heading
+    .bakery-inventory-primary-button {
+        width: 100%;
+    }
+
+
+    .bakery-inventory-search {
+        max-width: 100%;
+    }
+
+
+    .bakery-inventory-modal {
+        padding: 18px;
+    }
+
+}

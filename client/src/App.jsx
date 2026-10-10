@@ -44,6 +44,9 @@ import BakerySettings from "./pages/Dashboard/Settings/BakerySettings.jsx";
 //Import Bakery Help & Support page
 import BakeryHelpSupport from "./pages/Dashboard/BakeryHelpSupport.jsx";
 
+//Import Bakery Inventory page
+import BakeryInventory from "./pages/Dashboard/BakeryInventory.jsx";
+
 //Displays the Bakeau application routes
 export default function App() {
 
@@ -138,6 +141,11 @@ export default function App() {
         <Route
           path="help"
           element={<BakeryHelpSupport />}
+        />
+
+        <Route
+          path="inventory"
+          element={<BakeryInventory />}
         />
 
       </Route>
