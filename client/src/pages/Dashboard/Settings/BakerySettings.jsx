@@ -11,7 +11,8 @@ import {
     Image,
     BriefcaseBusiness,
     CreditCard,
-    ScrollText
+    ScrollText,
+    UserRound
 } from "lucide-react";
 
 //Import authentication helper
@@ -21,6 +22,9 @@ import { getAuthToken } from "../../../utils/authStorage.js";
 import GeneralSettings from "./GeneralSettings.jsx";
 import StorefrontSettings from "./StorefrontSettings.jsx";
 import BusinessSettings from "./BusinessSettings.jsx";
+import PaymentSettings from "./PaymentSettings.jsx";
+import PolicySettings from "./PolicySettings.jsx";
+import AccountSettings from "./AccountSettings.jsx";
 
 //Import Settings styles
 import "../styles/Settings.css";
@@ -283,6 +287,26 @@ export default function BakerySettings() {
                                 Policies
                             </button>
 
+                            {/* Account */}
+                            <button
+                                type="button"
+                                className={
+                                    activeTab === "account"
+                                        ? "bakery-settings-tab active"
+                                        : "bakery-settings-tab"
+                                }
+                                onClick={() =>
+                                    setActiveTab("account")
+                                }
+                            >
+                                <UserRound
+                                    size={16}
+                                    strokeWidth={1.8}
+                                />
+
+                                Account
+                            </button>
+
                         </div>
 
 
@@ -321,9 +345,10 @@ export default function BakerySettings() {
                         {/* Payment Settings */}
                         {activeTab === "payments" && (
 
-                            <div className="bakery-settings-card bakery-settings-placeholder">
-                                Payment settings are next.
-                            </div>
+                            <PaymentSettings
+                                bakery={bakery}
+                                setBakery={setBakery}
+                            />
 
                         )}
 
@@ -331,12 +356,19 @@ export default function BakerySettings() {
                         {/* Policy Settings */}
                         {activeTab === "policies" && (
 
-                            <div className="bakery-settings-card bakery-settings-placeholder">
-                                Policy settings are next.
-                            </div>
+                            <PolicySettings
+                                bakery={bakery}
+                                setBakery={setBakery}
+                            />
 
                         )}
 
+                        {/* Account Settings */}
+                        {activeTab === "account" && (
+
+                            <AccountSettings />
+
+                        )}
                     </>
 
                 )

@@ -109,9 +109,10 @@ export default function GeneralSettings({
             const token = getAuthToken();
 
 
-            //Preserves existing Bakery information while updating General fields
+            //Preserves the complete Bakery while updating General Settings
             const updatedBakeryData = {
 
+                //General Bakery information
                 name:
                     formData.name.trim(),
 
@@ -124,6 +125,8 @@ export default function GeneralSettings({
                 contact_phone:
                     formData.contact_phone.trim(),
 
+
+                //Policies
                 pickup_instructions:
                     bakery.pickup_instructions || "",
 
@@ -136,8 +139,9 @@ export default function GeneralSettings({
                 additional_policy_information:
                     bakery.additional_policy_information || "",
 
-                address: {
 
+                //Bakery address
+                address: {
                     street:
                         formData.street_address.trim(),
 
@@ -154,6 +158,11 @@ export default function GeneralSettings({
                         bakery.address?.country ||
                         "Canada"
                 },
+
+
+                //Storefront Settings
+                storefront_theme:
+                    bakery.storefront_theme,
 
                 primary_color:
                     bakery.primary_color ||
@@ -179,21 +188,35 @@ export default function GeneralSettings({
                 bakery_image_public_id:
                     bakery.bakery_image_public_id || "",
 
+
+                //Business Settings
                 minimum_order_notice:
-                    bakery.minimum_order_notice || 72,
+                    bakery.minimum_order_notice ?? 72,
 
                 timezone:
                     bakery.timezone ||
                     "America/Toronto",
 
                 currency:
-                    bakery.currency || "CAD",
+                    bakery.currency ||
+                    "CAD",
 
                 maximum_orders_per_day:
-                    bakery.maximum_orders_per_day || 10,
+                    bakery.maximum_orders_per_day ?? 10,
 
                 accepting_orders:
-                    bakery.accepting_orders ?? true
+                    bakery.accepting_orders ?? true,
+
+
+                //Payment Settings
+                payment_rule:
+                    bakery.payment_rule || "full",
+
+                deposit_percentage:
+                    bakery.deposit_percentage ?? 25,
+
+                allow_manual_payment:
+                    bakery.allow_manual_payment ?? false
             };
 
 
@@ -216,9 +239,14 @@ export default function GeneralSettings({
                 await response.json();
 
 
+            //Stop if the Bakery could not be updated
             if (!response.ok) {
 
+                const validationMessage =
+                    data.errors?.[0]?.msg;
+
                 throw new Error(
+                    validationMessage ||
                     data.message ||
                     "Unable to update bakery settings"
                 );
