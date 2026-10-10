@@ -148,6 +148,41 @@ const getStripeStatus = async (request, response) => {
         const onboardingComplete =
             stripeAccount.requirements?.entries?.length === 0;
 
+        //Get the current Stripe card payment status
+        const cardPaymentsStatus =
+            stripeAccount
+                .configuration
+                ?.merchant
+                ?.capabilities
+                ?.card_payments
+                ?.status;
+
+
+        //Get the current Stripe transfer status
+        const transfersStatus =
+            stripeAccount
+                .configuration
+                ?.recipient
+                ?.capabilities
+                ?.stripe_balance
+                ?.stripe_transfers
+                ?.status;
+
+
+        //Keep the saved Bakery Stripe status synchronized
+        bakery.stripe_details_submitted =
+            onboardingComplete;
+
+        bakery.stripe_charges_enabled =
+            cardPaymentsStatus === "active";
+
+        bakery.stripe_payouts_enabled =
+            transfersStatus === "active";
+
+
+        //Save the current Stripe status
+        await bakery.save();
+
         //Return the current Stripe setup state to the frontend
         return response.status(200).json({
             connected: true,

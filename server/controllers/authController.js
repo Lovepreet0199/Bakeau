@@ -325,11 +325,348 @@ const loginUser = async (request, response) => {
     }
 };
 
+//Gets the authenticated user's account information
+const getMyAccount = async (request, response) => {
 
-//Export the authentication controller functions so they can be used in the authentication routes
+    try {
+
+        //Get the authenticated user's ID
+        const userId =
+            request.user.userId;
+
+
+        //Find the user without returning their password
+        const user = await User.findById(userId)
+            .select(
+                "first_name last_name email phone_number role email_verified"
+            );
+
+
+        //Stop if the user no longer exists
+        if (!user) {
+
+            return response.status(404).json({
+                message: "User account not found"
+            });
+        }
+
+
+        //Return safe account information
+        return response.status(200).json({
+            user: user
+        });
+
+
+    } catch (error) {
+
+        //Log the account loading error
+        console.error(
+            "Get account error:",
+            error.message
+        );
+
+
+        //Return a server error
+        return response.status(500).json({
+            message: "Unable to load account"
+        });
+    }
+};
+
+
+//Updates the authenticated user's account information
+const updateMyAccount = async (request, response) => {
+
+    try {
+
+        //Get the authenticated user's ID
+        const userId =
+            request.user.userId;
+
+
+        //Get the account information sent by the frontend
+        const {
+            first_name,
+            last_name,
+            email,
+            phone_number
+        } = request.body;
+
+
+        //Find the authenticated user
+        const user =
+            await User.findById(userId);
+
+
+        //Stop if the user no longer exists
+        if (!user) {
+
+            return response.status(404).json({
+                message: "User account not found"
+            });
+        }
+
+
+        //Normalize the new email address
+        const normalizedEmail =
+            email.trim().toLowerCase();
+
+
+        //Check whether the email address is changing
+        const emailChanged =
+            normalizedEmail !== user.email;
+
+
+        //Check whether another account already uses the new email
+        if (emailChanged) {
+
+            const existingUser =
+                await User.findOne({
+                    email: normalizedEmail,
+                    _id: {
+                        $ne: userId
+                    }
+                });
+
+
+            //Stop if another user already owns the email
+            if (existingUser) {
+
+                return response.status(400).json({
+                    message:
+                        "An account with this email already exists."
+                });
+            }
+        }
+
+
+        //Update the user's personal information
+        user.first_name =
+            first_name.trim();
+
+        user.last_name =
+            last_name.trim();
+
+        user.email =
+            normalizedEmail;
+
+        user.phone_number =
+            phone_number?.trim() || null;
+
+
+        //Require verification again if the email changed
+        if (emailChanged) {
+
+            //Create a secure email verification token
+            const emailVerificationToken =
+                crypto.randomBytes(32).toString("hex");
+
+
+            //Hash the verification token before storing it
+            const emailVerificationTokenHash =
+                crypto
+                    .createHash("sha256")
+                    .update(emailVerificationToken)
+                    .digest("hex");
+
+
+            //Set the verification token expiry
+            const emailVerificationExpiresAt =
+                new Date(
+                    Date.now() +
+                    24 * 60 * 60 * 1000
+                );
+
+
+            //Mark the new email as unverified
+            user.email_verified = false;
+
+            user.email_verification_token_hash =
+                emailVerificationTokenHash;
+
+            user.email_verification_expires_at =
+                emailVerificationExpiresAt;
+
+
+            //Create the verification link
+            const verificationUrl =
+                `http://localhost:5173/verify-email?token=${emailVerificationToken}`;
+
+
+            try {
+
+                //Send verification to the new email address
+                await sendVerificationEmail(
+                    normalizedEmail,
+                    verificationUrl
+                );
+
+            } catch (emailError) {
+
+                //Log email errors without losing the account update
+                console.error(
+                    "Account email verification error:",
+                    emailError.message
+                );
+            }
+        }
+
+
+        //Save the updated user
+        await user.save();
+
+
+        //Return safe updated account information
+        return response.status(200).json({
+
+            message:
+                emailChanged
+                    ? "Account updated. Please verify your new email address."
+                    : "Account updated successfully",
+
+            emailChanged: emailChanged,
+
+            user: {
+                id: user._id,
+                first_name: user.first_name,
+                last_name: user.last_name,
+                email: user.email,
+                phone_number: user.phone_number,
+                role: user.role,
+                email_verified: user.email_verified
+            }
+        });
+
+
+    } catch (error) {
+
+        //Log the account update error
+        console.error(
+            "Update account error:",
+            error.message
+        );
+
+
+        //Return a server error
+        return response.status(500).json({
+            message: "Unable to update account"
+        });
+    }
+};
+
+
+//Changes the authenticated user's password
+const changeMyPassword = async (request, response) => {
+
+    try {
+
+        //Get the authenticated user's ID
+        const userId =
+            request.user.userId;
+
+
+        //Get the current and new passwords
+        const {
+            current_password,
+            new_password
+        } = request.body;
+
+
+        //Find the authenticated user
+        const user =
+            await User.findById(userId);
+
+
+        //Stop if the user no longer exists
+        if (!user) {
+
+            return response.status(404).json({
+                message: "User account not found"
+            });
+        }
+
+
+        //Check the current password
+        const passwordMatches =
+            await bcrypt.compare(
+                current_password,
+                user.password_hash
+            );
+
+
+        //Stop if the current password is incorrect
+        if (!passwordMatches) {
+
+            return response.status(400).json({
+                message: "Current password is incorrect"
+            });
+        }
+
+
+        //Prevent reusing the same password
+        const samePassword =
+            await bcrypt.compare(
+                new_password,
+                user.password_hash
+            );
+
+
+        //Stop if the new password matches the old password
+        if (samePassword) {
+
+            return response.status(400).json({
+                message:
+                    "New password must be different from your current password"
+            });
+        }
+
+
+        //Hash the new password
+        const passwordHash =
+            await bcrypt.hash(
+                new_password,
+                10
+            );
+
+
+        //Store the new password
+        user.password_hash =
+            passwordHash;
+
+
+        //Save the user
+        await user.save();
+
+
+        //Return successful password change
+        return response.status(200).json({
+            message: "Password changed successfully"
+        });
+
+
+    } catch (error) {
+
+        //Log the password change error
+        console.error(
+            "Change password error:",
+            error.message
+        );
+
+
+        //Return a server error
+        return response.status(500).json({
+            message: "Unable to change password"
+        });
+    }
+};
+
+//Export authentication controller functions
 export {
     registerUser,
     loginUser,
     verifyEmail,
-    resendVerificationEmail
+    resendVerificationEmail,
+    getMyAccount,
+    updateMyAccount,
+    changeMyPassword
 };

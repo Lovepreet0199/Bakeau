@@ -6,7 +6,10 @@ import {
     registerUser,
     loginUser,
     verifyEmail,
-    resendVerificationEmail
+    resendVerificationEmail,
+    getMyAccount,
+    updateMyAccount,
+    changeMyPassword
 } from "../controllers/authController.js";
 
 //Import body to validate request fields and validationResult to check for validation errors
@@ -61,6 +64,64 @@ const loginValidation = [
         .notEmpty()
         .withMessage("Password is required")
 
+];
+
+//Validation rules for updating an account
+const accountValidation = [
+
+    body("first_name")
+        .trim()
+        .notEmpty()
+        .withMessage("First name is required"),
+
+    body("last_name")
+        .trim()
+        .notEmpty()
+        .withMessage("Last name is required"),
+
+    body("email")
+        .trim()
+        .notEmpty()
+        .withMessage("Email is required")
+        .isEmail()
+        .withMessage("Please enter a valid email address"),
+
+    body("phone_number")
+        .optional({
+            values: "falsy"
+        })
+        .trim()
+];
+
+
+//Validation rules for changing a password
+const passwordChangeValidation = [
+
+    body("current_password")
+        .notEmpty()
+        .withMessage("Current password is required"),
+
+    body("new_password")
+        .notEmpty()
+        .withMessage("New password is required")
+        .isLength({
+            min: 8
+        })
+        .withMessage(
+            "Password must be at least 8 characters long"
+        )
+        .matches(/[A-Z]/)
+        .withMessage(
+            "Password must contain an uppercase letter"
+        )
+        .matches(/[a-z]/)
+        .withMessage(
+            "Password must contain a lowercase letter"
+        )
+        .matches(/[0-9]/)
+        .withMessage(
+            "Password must contain a number"
+        )
 ];
 
 //Check the request for validation errors.
@@ -142,6 +203,33 @@ router.get(
             user: request.user
         });
     }
+);
+
+//Get the authenticated user's account
+router.get(
+    "/me",
+    authenticateUser,
+    getMyAccount
+);
+
+
+//Update the authenticated user's account
+router.put(
+    "/me",
+    authenticateUser,
+    accountValidation,
+    validateRequest,
+    updateMyAccount
+);
+
+
+//Change the authenticated user's password
+router.patch(
+    "/me/password",
+    authenticateUser,
+    passwordChangeValidation,
+    validateRequest,
+    changeMyPassword
 );
 
 //Export the authentication router so it can be used in the main server file
