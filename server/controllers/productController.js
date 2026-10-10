@@ -657,7 +657,7 @@ const deleteMyProduct = async (request, response) => {
     }
 };
 
-//Update inventory values for a Bakery Owner's product
+//Update only the inventory values of a Bakery Owner's product
 const updateProductInventory = async (request, response) => {
 
     try {
@@ -681,7 +681,7 @@ const updateProductInventory = async (request, response) => {
         });
 
 
-        //Stop if the Bakery Owner does not have a Bakery
+        //Stop if the Bakery does not exist
         if (!bakery) {
 
             return response.status(404).json({
@@ -706,43 +706,43 @@ const updateProductInventory = async (request, response) => {
         }
 
 
-        //Made-to-order Products do not use inventory tracking
+        //Only tracked Products have quantity inventory
         if (product.stock_type !== "track_inventory") {
 
             return response.status(400).json({
                 message:
-                    "Inventory cannot be adjusted for a made-to-order product"
+                    "This product does not use inventory tracking"
             });
         }
 
 
-        //Update the Product inventory quantity
+        //Update the current inventory quantity
         product.inventory_quantity =
             inventory_quantity;
-
 
         //Update the low inventory warning threshold
         product.low_inventory_threshold =
             low_inventory_threshold;
 
 
-        //Save the updated Product
+        //Save the Product
         await product.save();
 
 
-        //Return the updated inventory information
+        //Return the updated Product
         return response.status(200).json({
 
             message:
                 "Product inventory updated successfully",
 
-            product: product
+            product:
+                product
         });
 
 
     } catch (error) {
 
-        //Log the inventory update error
+        //Log Product inventory update errors
         console.error(
             "Product inventory update error:",
             error.message
@@ -766,7 +766,7 @@ export {
     updateMyProduct,
     updateProductStatus,
     updateProductAvailability,
-    updateProductInventory,
     updateProductFeatured,
-    deleteMyProduct
+    deleteMyProduct,
+    updateProductInventory,
 };

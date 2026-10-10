@@ -285,6 +285,7 @@ router.delete(
     deleteMyProduct
 );
 
+
 //Update only a Product's inventory values
 router.patch(
     "/:id/inventory",
