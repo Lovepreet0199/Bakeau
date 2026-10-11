@@ -50,6 +50,9 @@ import BakeryInventory from "./pages/Dashboard/BakeryInventory.jsx";
 //Import the public Bakery customer Storefront
 import BakeryStorefront from "./pages/Storefront/BakeryStorefront";
 
+//Import public Storefront Product page
+import StorefrontProduct from "./pages/Storefront/StorefrontProduct.jsx"
+
 //Displays the Bakeau application routes
 export default function App() {
 
@@ -97,7 +100,13 @@ export default function App() {
         path="/store/:slug"
         element={<BakeryStorefront />}
       />
-      
+
+      {/* Public Storefront Product */}
+      <Route
+        path="/store/:slug/product/:productId"
+        element={<StorefrontProduct />}
+      />
+
       {/* Shared layout for all Bakery Owner dashboard pages */}
       <Route
         path="/bakery"

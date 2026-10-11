@@ -9,7 +9,8 @@
 .storefront-announcement {
     background-color: var(--storefront-dark);
     color: #ffffff;
-    font-size: 12px;
+    font-size: 11px;
+    line-height: 1.5;
 }
 
 
@@ -22,11 +23,18 @@
 
 /* Bakery branding */
 .storefront-brand {
+    min-width: 0;
     color: #2f221d;
 }
 
 .storefront-brand:hover {
     color: #2f221d;
+}
+
+
+/* Bakery name */
+.storefront-brand-name {
+    max-width: clamp(110px, 32vw, 230px);
 }
 
 
@@ -86,14 +94,108 @@
     font-size: 12px;
     font-weight: 500;
     padding: 8px 12px;
-    transition:
-        border-color 0.2s ease,
-        color 0.2s ease;
+    transition: border-color 0.2s ease, color 0.2s ease;
 }
 
 .storefront-bakery-login:hover {
     border-color: var(--storefront-primary);
     color: var(--storefront-primary);
+}
+
+
+/* Mobile Cart action */
+.storefront-mobile-action {
+    border: none;
+    background-color: transparent;
+    color: #554840;
+    padding: 5px;
+}
+
+
+/* Mobile Burger button */
+.storefront-mobile-menu-button {
+    width: 38px;
+    height: 38px;
+    border: 1px solid #e1d5cd;
+    border-radius: 8px;
+    background-color: #ffffff;
+    color: #44352d;
+}
+
+
+/* Mobile Burger button hover */
+.storefront-mobile-menu-button:hover {
+    border-color: var(--storefront-primary);
+    color: var(--storefront-primary);
+}
+
+
+/* Mobile navigation container */
+.storefront-mobile-menu {
+    border: 1px solid #eee4dc;
+    border-radius: 12px;
+    background-color: #ffffff;
+    box-shadow: 0 12px 30px rgba(66, 44, 35, 0.08);
+    animation: storefront-mobile-menu-in 0.2s ease;
+}
+
+
+/* Mobile navigation links */
+.storefront-mobile-nav-link {
+    border-radius: 7px;
+    color: #44352d;
+    font-size: 14px;
+    font-weight: 500;
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
+}
+
+.storefront-mobile-nav-link:hover {
+    background-color: var(--storefront-secondary);
+    color: var(--storefront-primary);
+}
+
+
+/* Mobile Customer Sign In */
+.storefront-mobile-signin {
+    border: 1px solid #e1d5cd;
+    border-radius: 8px;
+    background-color: #ffffff;
+    color: #44352d;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+/* Mobile Bakery Login */
+.storefront-mobile-bakery-login {
+    border: 1px solid var(--storefront-primary);
+    border-radius: 8px;
+    background-color: var(--storefront-primary);
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.storefront-mobile-bakery-login:hover {
+    color: #ffffff;
+    opacity: 0.92;
+}
+
+
+/* Mobile Menu opening animation */
+@keyframes storefront-mobile-menu-in {
+
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 
@@ -110,7 +212,7 @@
 /* Smaller section heading */
 .storefront-small-section-title {
     font-family: "Fraunces", serif;
-    font-size: 23px;
+    font-size: clamp(20px, 3vw, 23px);
     font-weight: 600;
     color: #2e211b;
 }
@@ -148,7 +250,7 @@
 
 /* Featured Product image placeholder */
 .storefront-feature-placeholder {
-    min-height: 400px;
+    min-height: 280px;
     background-color: #f0ebe6;
     color: #7e6e65;
 }
@@ -157,7 +259,7 @@
 /* Featured Product title */
 .storefront-feature-title {
     font-family: "Fraunces", serif;
-    font-size: 38px;
+    font-size: clamp(30px, 5vw, 38px);
     line-height: 1.1;
     color: #2f211b;
 }
@@ -195,9 +297,7 @@
     padding: 12px 19px;
     font-size: 13px;
     font-weight: 600;
-    transition:
-        opacity 0.2s ease,
-        transform 0.2s ease;
+    transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 .storefront-primary-button:hover {
@@ -273,12 +373,10 @@
 /* Product card */
 .storefront-product-card {
     overflow: hidden;
-    border: 1px solid #eee3da;
+    border: 1px solid #e9ddd4;
     border-radius: 12px;
     background-color: #ffffff;
-    transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .storefront-product-card:hover {
@@ -289,56 +387,63 @@
 
 /* Product image */
 .storefront-product-image {
-    height: 225px;
+    aspect-ratio: 4 / 3;
     object-fit: cover;
 }
 
 
 /* Product image placeholder */
 .storefront-product-placeholder {
-    height: 225px;
+    aspect-ratio: 4 / 3;
     background-color: #f4ece6;
     font-size: 42px;
-}
-
-
-/* Product category */
-.storefront-product-category {
-    color: var(--storefront-primary);
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.7px;
-    text-transform: uppercase;
 }
 
 
 /* Product name */
 .storefront-product-title {
     font-family: "Fraunces", serif;
-    font-size: 19px;
+    font-size: 18px;
+    line-height: 1.3;
     color: #33251f;
 }
 
 
-/* Product description */
-.storefront-product-description {
-    min-height: 39px;
+/* Product starting price */
+.storefront-product-price {
+    color: #76665e;
     font-size: 13px;
-    line-height: 1.5;
-
-    /* Limit the Product description to two lines */
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-
-    overflow: hidden;
 }
 
 
-/* View Product text */
-.storefront-product-view {
+/* Full-width Product action */
+.storefront-product-action {
+    width: 100%;
+    min-height: 38px;
+    border: 1px solid color-mix(
+        in srgb,
+        var(--storefront-primary) 30%,
+        #ffffff
+    );
+    border-radius: 8px;
+    background-color: color-mix(
+        in srgb,
+        var(--storefront-primary) 6%,
+        #ffffff
+    );
     color: var(--storefront-primary);
     font-size: 12px;
+    font-weight: 600;
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease;
+}
+
+.storefront-product-action:hover {
+    border-color: var(--storefront-primary);
+    background-color: var(--storefront-primary);
+    color: #ffffff;
 }
 
 
@@ -360,7 +465,7 @@
 /* How it works title */
 .storefront-how-title {
     font-family: "Fraunces", serif;
-    font-size: 30px;
+    font-size: clamp(26px, 4vw, 30px);
 }
 
 
@@ -380,7 +485,7 @@
 }
 
 
-/* How it works title */
+/* How it works card title */
 .storefront-how-card h3 {
     color: #ffffff;
     font-size: 15px;
@@ -427,7 +532,9 @@
 
 /* Bakery About image */
 .storefront-about-image {
+    width: 100%;
     max-height: 470px;
+    aspect-ratio: 4 / 3;
     object-fit: cover;
     border-radius: 16px;
 }
@@ -436,7 +543,7 @@
 /* Bakery About title */
 .storefront-about-title {
     font-family: "Fraunces", serif;
-    font-size: 36px;
+    font-size: clamp(28px, 4vw, 36px);
     color: #30221c;
 }
 
@@ -496,6 +603,7 @@
     color: #ffffff;
 }
 
+
 /* Smooth transition when the featured Product changes */
 .storefront-feature-transition {
     animation: storefront-feature-slide 0.55s cubic-bezier(0.22, 0.61, 0.36, 1);
@@ -515,6 +623,7 @@
         transform: translateX(0);
     }
 }
+
 
 /* Gives the featured Product image a subtle reveal */
 .storefront-feature-transition .storefront-feature-image {
@@ -536,3 +645,13 @@
     }
 }
 
+
+/* Respect users who prefer less motion */
+@media (prefers-reduced-motion: reduce) {
+
+    .storefront-feature-transition,
+    .storefront-feature-transition .storefront-feature-image,
+    .storefront-mobile-menu {
+        animation: none;
+    }
+}

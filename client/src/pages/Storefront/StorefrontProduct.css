@@ -1,0 +1,446 @@
+/* Main public Product page */
+.storefront-product-page {
+    background-color: #fffdf9;
+    color: #33251f;
+}
+
+
+/* Product announcement bar */
+.storefront-product-announcement {
+    background-color: var(--storefront-dark);
+    color: #ffffff;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+
+/* Product Storefront header */
+.storefront-product-header {
+    background-color: #fffdf9;
+    border-bottom: 1px solid #eee4dc;
+}
+
+
+/* Product Bakery branding */
+.storefront-product-brand {
+    min-width: 0;
+    color: #2f221d;
+}
+
+.storefront-product-brand:hover {
+    color: #2f221d;
+}
+
+
+/* Bakery name */
+.storefront-product-brand-name {
+    max-width: clamp(110px, 32vw, 230px);
+}
+
+
+/* Bakery logo */
+.storefront-product-logo,
+.storefront-product-logo-fallback {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+}
+
+.storefront-product-logo {
+    object-fit: cover;
+}
+
+.storefront-product-logo-fallback {
+    background-color: var(--storefront-dark);
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+/* Product navigation link */
+.storefront-product-nav-link {
+    color: #554840;
+    font-size: 13px;
+    transition: color 0.2s ease;
+}
+
+.storefront-product-nav-link:hover {
+    color: var(--storefront-primary);
+}
+
+
+/* Header actions */
+.storefront-product-header-action {
+    border: none;
+    background-color: transparent;
+    color: #554840;
+    font-size: 13px;
+    padding: 0;
+}
+
+.storefront-product-header-action:hover {
+    color: var(--storefront-primary);
+}
+
+
+/* Mobile Menu button */
+.storefront-product-menu-button {
+    width: 38px;
+    height: 38px;
+    border: 1px solid #e1d5cd;
+    border-radius: 8px;
+    background-color: #ffffff;
+    color: #44352d;
+}
+
+.storefront-product-menu-button:hover {
+    border-color: var(--storefront-primary);
+    color: var(--storefront-primary);
+}
+
+
+/* Mobile Menu */
+.storefront-product-mobile-menu {
+    border: 1px solid #eee4dc;
+    border-radius: 12px;
+    background-color: #ffffff;
+    box-shadow: 0 12px 30px rgba(66, 44, 35, 0.08);
+}
+
+
+/* Mobile navigation link */
+.storefront-product-mobile-link {
+    border-radius: 7px;
+    color: #44352d;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.storefront-product-mobile-link:hover {
+    background-color: var(--storefront-secondary);
+    color: var(--storefront-primary);
+}
+
+
+/* Mobile Sign In */
+.storefront-product-mobile-signin {
+    border: 1px solid #e1d5cd;
+    border-radius: 8px;
+    background-color: #ffffff;
+    color: #44352d;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+/* Product breadcrumb */
+.storefront-product-breadcrumb {
+    color: #8a7a71;
+    font-size: 12px;
+}
+
+.storefront-product-breadcrumb a {
+    color: #7b6a61;
+}
+
+.storefront-product-breadcrumb a:hover {
+    color: var(--storefront-primary);
+}
+
+
+/* Main Product image */
+.storefront-product-main-image {
+    border-radius: 16px;
+    object-fit: cover;
+}
+
+
+/* Missing Product image */
+.storefront-product-image-placeholder {
+    overflow: hidden;
+    border-radius: 16px;
+    background-color: #f3ebe5;
+    color: #827269;
+}
+
+
+/* Product thumbnail */
+.storefront-product-thumbnail {
+    width: 68px;
+    height: 68px;
+    overflow: hidden;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    background-color: transparent;
+}
+
+.storefront-product-thumbnail.active {
+    border-color: var(--storefront-primary);
+}
+
+.storefront-product-thumbnail img {
+    object-fit: cover;
+}
+
+
+/* Product category */
+.storefront-product-category-label {
+    color: var(--storefront-primary);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+
+/* Product title */
+.storefront-product-page-title {
+    font-family: "Fraunces", serif;
+    font-size: clamp(32px, 5vw, 46px);
+    line-height: 1.08;
+    color: #30221c;
+}
+
+
+/* Product Reviews placeholder */
+.storefront-product-review-placeholder {
+    color: #8a786e;
+    font-size: 12px;
+}
+
+.storefront-product-review-placeholder svg {
+    color: var(--storefront-primary);
+}
+
+
+/* Product description */
+.storefront-product-page-description {
+    max-width: 620px;
+    color: #665850;
+    font-size: 14px;
+    line-height: 1.75;
+}
+
+
+/* Product price */
+.storefront-product-page-price {
+    color: #30221c;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+
+/* Product notice */
+.storefront-product-notice {
+    border-left: 3px solid var(--storefront-primary);
+    border-radius: 8px;
+    background-color: var(--storefront-secondary);
+    color: #65574e;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.storefront-product-notice svg {
+    color: var(--storefront-primary);
+}
+
+
+/* Customization section heading */
+.storefront-customization-title {
+    color: #33251f;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+
+/* Required customization label */
+.storefront-required-label {
+    border-radius: 20px;
+    background-color: color-mix(
+        in srgb,
+        var(--storefront-primary) 10%,
+        #ffffff
+    );
+    color: var(--storefront-primary);
+    padding: 4px 9px;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+
+/* Optional customization label */
+.storefront-optional-label {
+    color: #94837a;
+    font-size: 10px;
+    font-weight: 500;
+}
+
+
+/* Customization option */
+.storefront-option-card {
+    width: 100%;
+    border: 1px solid #e6dad2;
+    border-radius: 9px;
+    background-color: #ffffff;
+    color: #44352d;
+    font-size: 13px;
+    transition:
+        border-color 0.2s ease,
+        background-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+/* Selected customization option */
+.storefront-option-card.selected {
+    border-color: var(--storefront-primary);
+    background-color: color-mix(
+        in srgb,
+        var(--storefront-primary) 4%,
+        #ffffff
+    );
+    box-shadow: 0 0 0 1px var(--storefront-primary);
+}
+
+
+/* Custom radio circle */
+.storefront-option-radio {
+    width: 18px;
+    height: 18px;
+    border: 1px solid #cbbdb4;
+    border-radius: 50%;
+    background-color: #ffffff;
+}
+
+
+/* Selected radio circle */
+.storefront-option-radio.selected {
+    border-color: var(--storefront-primary);
+}
+
+
+/* Inner selected radio dot */
+.storefront-option-radio.selected span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background-color: var(--storefront-primary);
+}
+
+
+/* Customization option price */
+.storefront-option-price {
+    color: #76665e;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+
+/* Simple Product message */
+.storefront-simple-product-message {
+    border: 1px solid #eadfd7;
+    border-radius: 9px;
+    background-color: var(--storefront-secondary);
+    color: #65574e;
+    font-size: 13px;
+}
+
+
+/* Special instructions */
+.storefront-product-textarea {
+    border-color: #ddd0c7;
+    border-radius: 9px;
+    background-color: #ffffff;
+    color: #44352d;
+    font-size: 13px;
+    resize: vertical;
+}
+
+.storefront-product-textarea:focus {
+    border-color: var(--storefront-primary);
+    box-shadow: 0 0 0 0.2rem color-mix(
+        in srgb,
+        var(--storefront-primary) 15%,
+        transparent
+    );
+}
+
+
+/* Quantity button */
+.storefront-quantity-button {
+    width: 38px;
+    height: 38px;
+    border: 1px solid #d9ccc3;
+    border-radius: 7px;
+    background-color: #ffffff;
+    color: #44352d;
+}
+
+.storefront-quantity-button:hover {
+    border-color: var(--storefront-primary);
+    color: var(--storefront-primary);
+}
+
+
+/* Product quantity */
+.storefront-product-quantity {
+    min-width: 24px;
+}
+
+
+/* Product pricing summary */
+.storefront-product-summary {
+    border: 1px solid #e7dbd3;
+    border-radius: 12px;
+    background-color: #ffffff;
+    color: #514139;
+    font-size: 13px;
+}
+
+
+/* Selected option summary */
+.storefront-product-summary-option {
+    color: #76665e;
+    font-size: 12px;
+}
+
+
+/* Estimated total */
+.storefront-product-total {
+    color: #30221c;
+    font-family: "Fraunces", serif;
+    font-size: 25px;
+}
+
+
+/* Product deposit */
+.storefront-product-deposit {
+    border-radius: 8px;
+    background-color: var(--storefront-secondary);
+    color: #54443b;
+}
+
+
+/* Main Add to Cart button */
+.storefront-product-primary-button {
+    border: none;
+    border-radius: 8px;
+    background-color: var(--storefront-primary);
+    color: #ffffff;
+    padding: 13px 20px;
+    font-size: 13px;
+    font-weight: 600;
+    transition:
+        opacity 0.2s ease,
+        transform 0.2s ease;
+}
+
+.storefront-product-primary-button:hover {
+    color: #ffffff;
+    opacity: 0.92;
+}
+
+.storefront-product-primary-button:active {
+    transform: translateY(1px);
+}

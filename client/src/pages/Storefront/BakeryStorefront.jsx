@@ -10,8 +10,10 @@ import {
     ArrowRight,
     Clock3,
     MapPin,
+    Menu,
     ShoppingCart,
-    Star
+    Star,
+    X
 } from "lucide-react";
 
 //Import Storefront styles
@@ -32,6 +34,9 @@ export default function BakeryStorefront() {
 
     //Tracks the currently displayed featured Product
     const [currentFeatureIndex, setCurrentFeatureIndex] = useState(0);
+
+    //Tracks whether the mobile navigation is open
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     //Tracks whether the Storefront is loading
     const [isLoading, setIsLoading] = useState(true);
@@ -94,6 +99,7 @@ export default function BakeryStorefront() {
 
     }, [slug]);
 
+
     //Automatically changes the featured Product every 5 seconds
     useEffect(() => {
 
@@ -122,7 +128,6 @@ export default function BakeryStorefront() {
             );
 
         }, 5000);
-
 
         //Clean up the timer
         return () => clearInterval(interval);
@@ -198,6 +203,25 @@ export default function BakeryStorefront() {
         }
 
         return "🍰";
+    }
+
+
+    //Returns the correct action text for a Product
+    function getProductActionLabel(product) {
+
+        const categoryName = product?.category?.toLowerCase() || "";
+
+        if (categoryName.includes("cake")) {
+            return "Customize";
+        }
+
+        return "View item";
+    }
+
+
+    //Closes the mobile navigation
+    function closeMobileMenu() {
+        setIsMobileMenuOpen(false);
     }
 
 
@@ -319,8 +343,6 @@ export default function BakeryStorefront() {
 
         <div
             className="bakery-storefront-page min-vh-100"
-
-            //Use the Bakery Owner's branding colours
             style={{
                 "--storefront-primary": bakery.primary_color || "#C65F3A",
                 "--storefront-secondary": bakery.secondary_color || "#F4E8DF",
@@ -337,7 +359,7 @@ export default function BakeryStorefront() {
 
                         {bakery.minimum_order_notice && (
                             <>
-                                Custom cake orders require{" "}
+                                Orders require{" "}
                                 {bakery.minimum_order_notice} hours' notice
                             </>
                         )}
@@ -362,89 +384,196 @@ export default function BakeryStorefront() {
             {/* Storefront navigation */}
             <header className="storefront-header">
 
-                <div className="container-xxl d-flex align-items-center justify-content-between gap-3 py-3 px-3">
+                <div className="container-xxl px-3">
 
-                    {/* Bakery logo and name */}
-                    <Link
-                        to={`/store/${slug}`}
-                        className="storefront-brand d-flex align-items-center gap-2 text-decoration-none flex-shrink-0"
-                    >
+                    {/* Main navigation row */}
+                    <div className="d-flex align-items-center justify-content-between gap-2 py-3">
 
-                        {bakery.logo_image_url ? (
+                        {/* Bakery logo and name */}
+                        <Link
+                            to={`/store/${slug}`}
+                            onClick={closeMobileMenu}
+                            className="storefront-brand d-flex align-items-center gap-2 text-decoration-none flex-shrink-1"
+                        >
 
-                            <img
-                                src={bakery.logo_image_url}
-                                alt={`${bakery.name} logo`}
-                                className="storefront-logo"
-                            />
+                            {bakery.logo_image_url ? (
 
-                        ) : (
+                                <img
+                                    src={bakery.logo_image_url}
+                                    alt={`${bakery.name} logo`}
+                                    className="storefront-logo flex-shrink-0"
+                                />
 
-                            <div className="storefront-logo-fallback d-flex align-items-center justify-content-center">
-                                {getBakeryInitials()}
-                            </div>
-                        )}
+                            ) : (
 
-                        <span className="fw-semibold">
-                            {bakery.name}
-                        </span>
+                                <div className="storefront-logo-fallback d-flex align-items-center justify-content-center flex-shrink-0">
+                                    {getBakeryInitials()}
+                                </div>
+                            )}
 
-                    </Link>
-
-
-                    {/* Desktop navigation */}
-                    <nav className="d-none d-lg-flex align-items-center gap-4">
-
-                        <a href="#menu" className="storefront-nav-link">
-                            Menu
-                        </a>
-
-                        <a href="#categories" className="storefront-nav-link">
-                            Custom Cakes
-                        </a>
-
-                        <a href="#reviews" className="storefront-nav-link">
-                            Reviews
-                        </a>
-
-                        <a href="#about" className="storefront-nav-link">
-                            About
-                        </a>
-
-                    </nav>
-
-
-                    {/* Storefront actions */}
-                    <div className="d-flex align-items-center gap-2 gap-md-3 flex-shrink-0">
-
-                        {/* Cart will be connected later */}
-                        <button type="button" className="storefront-text-action d-flex align-items-center gap-1">
-
-                            <ShoppingCart size={17} />
-
-                            <span className="d-none d-sm-inline">
-                                Cart
+                            <span className="storefront-brand-name fw-semibold text-truncate">
+                                {bakery.name}
                             </span>
 
-                            <span>
-                                (0)
-                            </span>
-
-                        </button>
-
-
-                        {/* Customer Sign In will be connected later */}
-                        <button type="button" className="storefront-text-action d-none d-md-inline-block">
-                            Sign In
-                        </button>
-
-
-                        {/* Bakery Owner Login */}
-                        <Link to="/login" className="storefront-bakery-login text-decoration-none">
-                            Bakery Login
                         </Link>
 
+
+                        {/* Desktop navigation */}
+                        <nav className="d-none d-lg-flex align-items-center gap-4">
+
+                            <a href="#menu" className="storefront-nav-link">
+                                Menu
+                            </a>
+
+                            <a href="#how-it-works" className="storefront-nav-link">
+                                How It Works
+                            </a>
+
+                            <a href="#reviews" className="storefront-nav-link">
+                                Reviews
+                            </a>
+
+                            <a href="#about" className="storefront-nav-link">
+                                About
+                            </a>
+
+                        </nav>
+
+
+                        {/* Desktop actions */}
+                        <div className="d-none d-lg-flex align-items-center gap-3 flex-shrink-0">
+
+                            {/* Cart will be connected later */}
+                            <button type="button" className="storefront-text-action d-flex align-items-center gap-1">
+                                <ShoppingCart size={17} />
+                                Cart (0)
+                            </button>
+
+
+                            {/* Customer Sign In will be connected later */}
+                            <button type="button" className="storefront-text-action">
+                                Sign In
+                            </button>
+
+
+                            {/* Bakery Owner Login */}
+                            <Link to="/login" className="storefront-bakery-login text-decoration-none">
+                                Bakery Login
+                            </Link>
+
+                        </div>
+
+
+                        {/* Mobile actions */}
+                        <div className="d-flex d-lg-none align-items-center gap-2 flex-shrink-0">
+
+                            {/* Mobile Cart */}
+                            <button
+                                type="button"
+                                aria-label="Open cart"
+                                className="storefront-mobile-action d-flex align-items-center gap-1"
+                            >
+                                <ShoppingCart size={19} />
+
+                                <span className="small">
+                                    (0)
+                                </span>
+                            </button>
+
+
+                            {/* Burger Menu */}
+                            <button
+                                type="button"
+                                aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+                                aria-expanded={isMobileMenuOpen}
+                                aria-controls="storefront-mobile-menu"
+                                onClick={() => setIsMobileMenuOpen((currentValue) => !currentValue)}
+                                className="storefront-mobile-menu-button d-flex align-items-center justify-content-center"
+                            >
+                                {isMobileMenuOpen ? (
+                                    <X size={21} />
+                                ) : (
+                                    <Menu size={21} />
+                                )}
+                            </button>
+
+                        </div>
+
                     </div>
+
+
+                    {/* Mobile navigation */}
+                    {isMobileMenuOpen && (
+
+                        <div id="storefront-mobile-menu" className="d-lg-none pb-3">
+
+                            <div className="storefront-mobile-menu p-3">
+
+                                {/* Mobile navigation links */}
+                                <nav className="d-grid gap-1">
+
+                                    <a
+                                        href="#menu"
+                                        onClick={closeMobileMenu}
+                                        className="storefront-mobile-nav-link text-decoration-none px-3 py-2"
+                                    >
+                                        Menu
+                                    </a>
+
+                                    <a
+                                        href="#how-it-works"
+                                        onClick={closeMobileMenu}
+                                        className="storefront-mobile-nav-link text-decoration-none px-3 py-2"
+                                    >
+                                        How It Works
+                                    </a>
+
+                                    <a
+                                        href="#reviews"
+                                        onClick={closeMobileMenu}
+                                        className="storefront-mobile-nav-link text-decoration-none px-3 py-2"
+                                    >
+                                        Reviews
+                                    </a>
+
+                                    <a
+                                        href="#about"
+                                        onClick={closeMobileMenu}
+                                        className="storefront-mobile-nav-link text-decoration-none px-3 py-2"
+                                    >
+                                        About
+                                    </a>
+
+                                </nav>
+
+
+                                <hr className="my-3" />
+
+
+                                {/* Mobile account actions */}
+                                <div className="d-grid gap-2">
+
+                                    {/* Customer Sign In will be connected later */}
+                                    <button type="button" className="storefront-mobile-signin py-2 px-3">
+                                        Sign In
+                                    </button>
+
+
+                                    {/* Bakery Owner Login */}
+                                    <Link
+                                        to="/login"
+                                        onClick={closeMobileMenu}
+                                        className="storefront-mobile-bakery-login text-center text-decoration-none py-2 px-3"
+                                    >
+                                        Bakery Login
+                                    </Link>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    )}
 
                 </div>
 
@@ -554,18 +683,15 @@ export default function BakeryStorefront() {
                                         </div>
 
 
-                                        {/* Product page will be connected next */}
-                                        <button type="button" className="storefront-primary-button d-inline-flex align-items-center justify-content-center gap-2">
-
-                                            {featuredProduct.category
-                                                ?.toLowerCase()
-                                                .includes("cake")
-                                                ? "Customize this cake"
-                                                : "View this item"}
+                                        {/* Open Product page */}
+                                        <Link
+                                            to={`/store/${slug}/product/${featuredProduct._id}`}
+                                            className="storefront-primary-button d-inline-flex align-items-center justify-content-center gap-2 text-decoration-none"
+                                        >
+                                            {getProductActionLabel(featuredProduct)}
 
                                             <ArrowRight size={17} />
-
-                                        </button>
+                                        </Link>
 
                                     </div>
 
@@ -649,14 +775,14 @@ export default function BakeryStorefront() {
 
                                     <button
                                         type="button"
-                                        className="storefront-category-card w-100 h-100 d-flex flex-column align-items-center justify-content-center gap-2 p-4"
+                                        className="storefront-category-card w-100 h-100 d-flex flex-column align-items-center justify-content-center gap-2 p-3 p-md-4"
                                     >
 
                                         <span className="storefront-category-icon">
                                             {category.icon}
                                         </span>
 
-                                        <span className="fw-semibold">
+                                        <span className="fw-semibold text-center">
                                             {category.name}
                                         </span>
 
@@ -700,7 +826,7 @@ export default function BakeryStorefront() {
 
                     {bestSellerProducts.length > 0 ? (
 
-                        <div className="row g-4">
+                        <div className="row g-3 g-md-4">
 
                             {bestSellerProducts.map((product) => (
 
@@ -708,6 +834,7 @@ export default function BakeryStorefront() {
 
                                     <article className="storefront-product-card h-100 d-flex flex-column">
 
+                                        {/* Product image */}
                                         {product.image_url ? (
 
                                             <img
@@ -724,35 +851,25 @@ export default function BakeryStorefront() {
                                         )}
 
 
-                                        <div className="d-flex flex-column flex-grow-1 p-3 p-lg-4">
+                                        {/* Product information */}
+                                        <div className="d-flex flex-column flex-grow-1 p-3">
 
-                                            <p className="storefront-product-category mb-2">
-                                                {product.category}
-                                            </p>
-
-                                            <h3 className="storefront-product-title mb-2">
+                                            <h3 className="storefront-product-title mb-1">
                                                 {product.name}
                                             </h3>
 
-                                            <p className="storefront-product-description text-secondary mb-4">
-                                                {product.description}
+                                            <p className="storefront-product-price mb-3">
+                                                From {formatPrice(product.base_price)}
                                             </p>
 
 
-                                            <div className="d-flex align-items-center justify-content-between gap-3 mt-auto">
-
-                                                <strong>
-                                                    {formatPrice(
-                                                        product.base_price
-                                                    )}
-                                                </strong>
-
-                                                <span className="storefront-product-view d-flex align-items-center gap-1 fw-semibold">
-                                                    View
-                                                    <ArrowRight size={15} />
-                                                </span>
-
-                                            </div>
+                                            {/* Product action */}
+                                            <Link
+                                                to={`/store/${slug}/product/${product._id}`}
+                                                className="storefront-product-action d-flex align-items-center justify-content-center text-decoration-none mt-auto"
+                                            >
+                                                {getProductActionLabel(product)}
+                                            </Link>
 
                                         </div>
 
@@ -765,7 +882,7 @@ export default function BakeryStorefront() {
 
                     ) : (
 
-                        <div className="storefront-empty-products text-center p-5">
+                        <div className="storefront-empty-products text-center p-4 p-md-5">
 
                             <h3 className="mb-2">
                                 Menu coming soon
@@ -782,16 +899,16 @@ export default function BakeryStorefront() {
 
 
                 {/* How it works */}
-                <section className="storefront-how-section py-5">
+                <section id="how-it-works" className="storefront-how-section py-5">
 
                     <div className="container-xxl px-3 py-lg-4">
 
-                        <h2 className="storefront-how-title text-center mb-5">
+                        <h2 className="storefront-how-title text-center mb-4 mb-md-5">
                             How it works
                         </h2>
 
 
-                        <div className="row g-4">
+                        <div className="row g-3 g-md-4">
 
                             {/* Step 1 */}
                             <div className="col-12 col-md-4">
@@ -957,7 +1074,7 @@ export default function BakeryStorefront() {
                                     {/* Pickup location */}
                                     {pickupAddress && (
 
-                                        <div className="d-flex align-items-center gap-2">
+                                        <div className="d-flex align-items-start align-items-sm-center gap-2">
 
                                             <MapPin size={18} className="storefront-about-icon" />
 
@@ -972,7 +1089,7 @@ export default function BakeryStorefront() {
                                     {/* Minimum order notice */}
                                     {bakery.minimum_order_notice && (
 
-                                        <div className="d-flex align-items-center gap-2">
+                                        <div className="d-flex align-items-start align-items-sm-center gap-2">
 
                                             <Clock3 size={18} className="storefront-about-icon" />
 
@@ -985,7 +1102,7 @@ export default function BakeryStorefront() {
 
 
                                     {/* Reviews */}
-                                    <div className="d-flex align-items-center gap-2">
+                                    <div className="d-flex align-items-start align-items-sm-center gap-2">
 
                                         <Star size={18} className="storefront-about-icon" />
 
@@ -1045,7 +1162,7 @@ export default function BakeryStorefront() {
 
 
                         {/* Pickup */}
-                        <div className="col-6 col-md-3">
+                        <div className="col-12 col-sm-6 col-md-3">
 
                             <h4 className="mb-3">
                                 Pickup
@@ -1066,7 +1183,7 @@ export default function BakeryStorefront() {
 
 
                         {/* Contact */}
-                        <div className="col-6 col-md-4">
+                        <div className="col-12 col-sm-6 col-md-4">
 
                             <h4 className="mb-3">
                                 Contact
