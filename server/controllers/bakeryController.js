@@ -13,6 +13,14 @@ import CustomizationOption from "../models/CustomizationOption.js";
 //Import Cloudinary to upload and manage bakery images
 import cloudinary from "../config/cloudinary.js";
 
+//Rounds money values to two decimal places
+const roundMoney = (amount) => {
+
+    return Math.round(
+        (Number(amount) + Number.EPSILON) * 100
+    ) / 100;
+};
+
 //Create a bakery for the authenticated Bakery Owner
 const createBakery = async (request, response) => {
     try {
@@ -476,6 +484,336 @@ const getPublicBakery = async (request, response) => {
     }
 };
 
+//Calculate a trusted price quote for a public Product
+const getPublicBakeryProductQuote = async (request, response) => {
+
+    try {
+
+        //Get the Bakery slug and Product ID from the URL
+        const slug = request.params.slug;
+        const productId = request.params.productId;
+
+        //Get only Customer selections from the request
+        const {
+            quantity,
+            customization_option_ids = []
+        } = request.body;
+
+        //Convert quantity into a number
+        const requestedQuantity = Number(quantity);
+
+        //Make sure quantity is valid
+        if (!Number.isInteger(requestedQuantity) || requestedQuantity < 1) {
+            return response.status(400).json({
+                message: "Quantity must be at least 1"
+            });
+        }
+
+        //Make sure customization Options were sent as an array
+        if (!Array.isArray(customization_option_ids)) {
+            return response.status(400).json({
+                message: "Customization options must be an array"
+            });
+        }
+
+        //Find the approved Bakery
+        const bakery = await Bakery.findOne({
+            slug: slug,
+            account_status: "Approved"
+        });
+
+        //Stop if the Bakery does not exist
+        if (!bakery) {
+
+            return response.status(404).json({
+                message: "Bakery not found"
+            });
+        }
+
+        //Find the public Product and make sure it belongs to this Bakery
+        const product = await Product.findOne({
+            _id: productId,
+            bakery_id: bakery._id,
+            is_visible: true,
+            is_available: true
+        });
+
+
+        //Stop if the Product does not exist
+        if (!product) {
+
+            return response.status(404).json({
+                message: "Product not found"
+            });
+        }
+
+        //Check inventory when this Product tracks stock
+        if (product.stock_type === "track_inventory" && Number(product.inventory_quantity) < requestedQuantity) {
+            return response.status(400).json({
+                message: `Only ${product.inventory_quantity} ${product.name} available`
+            });
+        }
+
+        //Fund all customization Groups for this Product
+        const customizationGroups = await CustomizationGroup.find({
+            product_id: product._id
+        });
+
+        //Stores selected Options from MongoDB
+        let selectedOptions = [];
+
+        //Load selected customization Options
+        if (customization_option_ids.length > 0) {
+
+            //Get all Group IDs belonging to this Product
+            const groupIds = customizationGroups.map((group) => group._id);
+
+
+            //Find only Options belonging to this Product
+            selectedOptions =
+                await CustomizationOption.find({
+                    _id: {
+                        $in: customization_option_ids
+                    },
+                    group_id: {
+                        $in: groupIds
+                    }
+                });
+
+
+            //Make sure every submitted Option was valid
+            if (
+                selectedOptions.length !==
+                customization_option_ids.length
+            ) {
+
+                return response.status(400).json({
+                    message:
+                        "One or more customization options are invalid"
+                });
+            }
+        }
+
+
+        //Tracks which Groups already have a selected Option
+        const selectedGroupIds = new Set();
+
+
+        //Stores the trusted customization price breakdown
+        const customizationBreakdown = [];
+
+
+        //Tracks customization pricing
+        let customizationTotal = 0;
+
+
+        //Validate each selected Option
+        for (const option of selectedOptions) {
+
+            //Find the Group this Option belongs to
+            const group = customizationGroups.find(
+                (currentGroup) =>
+                    currentGroup._id.toString() ===
+                    option.group_id.toString()
+            );
+
+
+            //Stop if the Group cannot be found
+            if (!group) {
+
+                return response.status(400).json({
+                    message: "Invalid customization group"
+                });
+            }
+
+
+            //Only allow one Option from each Group
+            if (
+                selectedGroupIds.has(
+                    group._id.toString()
+                )
+            ) {
+
+                return response.status(400).json({
+                    message:
+                        `Only one option can be selected from ${group.name}`
+                });
+            }
+
+
+            //Remember this Group already has a selected Option
+            selectedGroupIds.add(
+                group._id.toString()
+            );
+
+
+            //Use the trusted Option price stored in MongoDB
+            const optionPrice =
+                roundMoney(option.additional_price);
+
+
+            //Add Option price to customization total
+            customizationTotal +=
+                optionPrice;
+
+
+            //Add trusted Option information to the breakdown
+            customizationBreakdown.push({
+
+                group_id:
+                    group._id,
+
+                group_name:
+                    group.name,
+
+                option_id:
+                    option._id,
+
+                option_name:
+                    option.name,
+
+                additional_price:
+                    optionPrice
+            });
+        }
+
+
+        //Make sure every required Group has a selection
+        for (const group of customizationGroups) {
+
+            if (
+                group.is_required &&
+                !selectedGroupIds.has(
+                    group._id.toString()
+                )
+            ) {
+
+                return response.status(400).json({
+                    message:
+                        `${group.name} is required`
+                });
+            }
+        }
+
+
+        //Get the trusted Product base price from MongoDB
+        const basePrice =
+            roundMoney(product.base_price);
+
+
+        //Round the customization total
+        customizationTotal =
+            roundMoney(customizationTotal);
+
+
+        //Calculate one configured Product price
+        const unitPrice =
+            roundMoney(
+                basePrice +
+                customizationTotal
+            );
+
+
+        //Calculate the full price using quantity
+        const itemTotal =
+            roundMoney(
+                unitPrice *
+                requestedQuantity
+            );
+
+
+        //Full amount is due by default
+        let amountDueNow =
+            itemTotal;
+
+
+        //Use the Bakery payment settings
+        const paymentRule =
+            bakery.payment_rule;
+
+
+        //Get the Bakery deposit percentage
+        const depositPercentage =
+            Number(bakery.deposit_percentage || 0);
+
+
+        //Calculate deposit when the Bakery requires one
+        if (
+            paymentRule === "deposit" &&
+            depositPercentage > 0
+        ) {
+
+            amountDueNow =
+                roundMoney(
+                    itemTotal *
+                    (
+                        depositPercentage /
+                        100
+                    )
+                );
+        }
+
+
+        //Return trusted backend-calculated pricing
+        return response.status(200).json({
+
+            quote: {
+
+                product_id:
+                    product._id,
+
+                product_name:
+                    product.name,
+
+                base_price:
+                    basePrice,
+
+                customizations:
+                    customizationBreakdown,
+
+                customization_total:
+                    customizationTotal,
+
+                unit_price:
+                    unitPrice,
+
+                quantity:
+                    requestedQuantity,
+
+                item_total:
+                    itemTotal,
+
+                payment_rule:
+                    paymentRule,
+
+                deposit_percentage:
+                    paymentRule === "deposit"
+                        ? depositPercentage
+                        : null,
+
+                amount_due_now:
+                    amountDueNow
+            }
+        });
+
+
+    } catch (error) {
+
+        //Log Product quote errors
+        console.error(
+            "Public Product quote error:",
+            error.message
+        );
+
+
+        //Return server error
+        return response.status(500).json({
+            message:
+                "Unable to calculate product price"
+        });
+    }
+};
+
 //Get the public products for a bakery using its unique slug
 const getPublicBakeryProducts = async (request, response) => {
     try {
@@ -600,5 +938,6 @@ export {
     uploadBakeryImage,
     getPublicBakery,
     getPublicBakeryProducts,
-    getPublicBakeryProduct
+    getPublicBakeryProduct,
+    getPublicBakeryProductQuote
 };

@@ -2,7 +2,7 @@
 import express from "express";
 
 //Import express-validator to validate bakery information
-import { body, validationResult } from "express-validator";
+import { body, validationResult, param } from "express-validator";
 
 //Import upload middleware to receive bakery image files
 import upload from "../middleware/upload.js";
@@ -24,7 +24,8 @@ import {
     uploadBakeryImage,
     getPublicBakery,
     getPublicBakeryProducts,
-    getPublicBakeryProduct
+    getPublicBakeryProduct,
+    getPublicBakeryProductQuote
 } from "../controllers/bakeryController.js";
 
 //Import authentication middleware to protect bakery routes
@@ -158,6 +159,32 @@ const paymentSettingsValidation = [
         .withMessage("Manual payment setting must be true or false")
 ];
 
+//Validate information used to calculate a public Product price quote
+const productQuoteValidation = [
+
+    //Make sure the Product ID from the URL is a valid MongoDB ID
+    param("productId")
+        .isMongoId()
+        .withMessage("Invalid Product ID"),
+
+    //Make sure the Customer orders at least one Product
+    body("quantity")
+        .isInt({ min: 1 })
+        .withMessage("Quantity must be at least 1"),
+
+    //Make sure customization Option IDs are sent as an array
+    body("customization_option_ids")
+        .optional()
+        .isArray()
+        .withMessage("Customization options must be an array"),
+
+    //Make sure every selected customization Option has a valid MongoDB ID
+    body("customization_option_ids.*")
+        .optional()
+        .isMongoId()
+        .withMessage("Invalid customization option")
+];
+
 //Check the bakery validation results
 const validateRequest = (request, response, next) => {
 
@@ -271,6 +298,14 @@ router.get(
 router.get(
     "/public/:slug/products/:productId",
     getPublicBakeryProduct
+);
+
+//Calculate a trusted backend price quote for a public Product
+router.post(
+    "/public/:slug/products/:productId/quote",
+    productQuoteValidation,
+    validateRequest,
+    getPublicBakeryProductQuote
 );
 
 //Export the bakery router so it can be connected to the main Express application
