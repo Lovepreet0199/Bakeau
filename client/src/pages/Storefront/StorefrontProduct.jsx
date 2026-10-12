@@ -17,6 +17,8 @@ import {
 //Import Product page styles
 import "./StorefrontProduct.css";
 
+//Import Customer Cart hook
+import { useCart } from "../../context/useCart";
 
 //Displays a Product from a public Bakery Storefront
 export default function StorefrontProduct() {
@@ -63,6 +65,11 @@ export default function StorefrontProduct() {
     //Stores loading errors
     const [error, setError] = useState("");
 
+    //Get Customer Cart functions and information
+    const {
+        addToCart,
+        cartCount
+    } = useCart();
 
     //Loads the Bakery and selected Product
     useEffect(() => {
@@ -485,34 +492,34 @@ export default function StorefrontProduct() {
         setValidationError("");
 
 
-        //Cart storage will be connected next
-        console.log(
-            "Product ready for cart",
-            {
-                product_id:
-                    product._id,
+        //Add the configured Product to the Customer Cart
+        addToCart({
 
-                quantity:
-                    quantity,
+            //Store the Bakery information
+            bakery_id: bakery._id,
+            bakery_slug: slug,
+            bakery_name: bakery.name,
 
-                customization_option_ids:
-                    Object.values(
-                        selectedOptions
-                    )
-                        .map(
-                            (option) =>
-                                option?._id
-                        )
-                        .filter(Boolean),
+            //Store the product information
+            product_id: product._id,
+            product_name: product.name,
+            product_image_url: product.image_url,
 
-                special_instructions:
-                    specialInstructions,
+            //Store the selected quantity
+            quantity: quantity,
 
-                //Trusted price returned from the backend
-                quote:
-                    quote
-            }
-        );
+            //Store only the selected customization Option Ids
+            customization_option_ids: Object.values(selectedOptions).map((option) => option?._id).filter(Boolean),
+
+            //Store customization information for Cart display'
+            customizations: quote.customizations,
+
+            //Store Customer instructions
+            special_instructions: specialInstructions,
+
+            //Store the backend quote for display
+            quote: quote
+        });
     }
 
 
@@ -715,7 +722,7 @@ export default function StorefrontProduct() {
                                 className="storefront-product-header-action d-flex align-items-center gap-1"
                             >
                                 <ShoppingCart size={17} />
-                                Cart (0)
+                                Cart ({cartCount})
                             </button>
 
                             {/* Customer Sign In will be connected later */}
@@ -741,7 +748,7 @@ export default function StorefrontProduct() {
                                 <ShoppingCart size={19} />
 
                                 <span className="small">
-                                    (0)
+                                    ({cartCount})
                                 </span>
                             </button>
 

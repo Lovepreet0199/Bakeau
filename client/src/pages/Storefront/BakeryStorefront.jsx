@@ -19,9 +19,16 @@ import {
 //Import Storefront styles
 import "./BakeryStorefront.css";
 
+//Import Customer Cart hook
+import { useCart } from "../../context/useCart";
 
 //Displays the public customer Storefront for a Bakery
 export default function BakeryStorefront() {
+
+    //Get Customer Cart information
+    const {
+        cartCount
+    } = useCart();
 
     //Get the Bakery slug from the URL
     const { slug } = useParams();
@@ -595,7 +602,7 @@ export default function BakeryStorefront() {
                                     size={17}
                                 />
 
-                                Cart (0)
+                                Cart ({cartCount})
 
                             </button>
 
@@ -636,7 +643,7 @@ export default function BakeryStorefront() {
 
 
                                 <span className="small">
-                                    (0)
+                                    ({cartCount})
                                 </span>
 
                             </button>

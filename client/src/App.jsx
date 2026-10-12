@@ -53,121 +53,127 @@ import BakeryStorefront from "./pages/Storefront/BakeryStorefront";
 //Import public Storefront Product page
 import StorefrontProduct from "./pages/Storefront/StorefrontProduct.jsx"
 
+//Import Customer Cart Provider
+import CartProvider from "./context/CartProvider";
+
 //Displays the Bakeau application routes
 export default function App() {
 
   return (
-    <Routes>
+    //Make the Customer Cart available throughout Bakeau
+    <CartProvider>
+      <Routes>
 
-      {/* Public Bakeau landing page */}
-      <Route
-        path="/"
-        element={<LandingPage />}
-      />
-
-      {/* Bakery Owner registration page */}
-      <Route
-        path="/register"
-        element={<Register />}
-      />
-
-      {/* Shows instructions after account registration */}
-      <Route
-        path="/check-email"
-        element={<CheckEmail />}
-      />
-
-      {/* Verifies the email token sent to the user's inbox */}
-      <Route
-        path="/verify-email"
-        element={<VerifyEmail />}
-      />
-
-      {/* Bakeau login page */}
-      <Route
-        path="/login"
-        element={<Login />}
-      />
-
-      {/* Bakery setup page for new Bakery Owners */}
-      <Route
-        path="/bakery-setup"
-        element={<BakerySetup />}
-      />
-
-      {/* Public customer Bakery Storefront */}
-      <Route
-        path="/store/:slug"
-        element={<BakeryStorefront />}
-      />
-
-      {/* Public Storefront Product */}
-      <Route
-        path="/store/:slug/product/:productId"
-        element={<StorefrontProduct />}
-      />
-
-      {/* Shared layout for all Bakery Owner dashboard pages */}
-      <Route
-        path="/bakery"
-        element={<BakeryDashboardLayout />}
-      >
-
-        {/* Bakery Owner dashboard overview */}
+        {/* Public Bakeau landing page */}
         <Route
-          path="dashboard"
-          element={<BakeryDashboard />}
+          path="/"
+          element={<LandingPage />}
         />
 
-        {/* Bakery Owner products page */}
+        {/* Bakery Owner registration page */}
         <Route
-          path="products"
-          element={<BakeryProducts />}
+          path="/register"
+          element={<Register />}
         />
 
-        {/* Bakery Owner Add Product page */}
+        {/* Shows instructions after account registration */}
         <Route
-          path="products/new"
-          element={<BakeryAddProduct />}
+          path="/check-email"
+          element={<CheckEmail />}
         />
 
-        {/* Bakery Owner Edit Product page */}
+        {/* Verifies the email token sent to the user's inbox */}
         <Route
-          path="products/:id/edit"
-          element={<BakeryAddProduct />} />
-
-        {/* Bakery Owner Orders page */}
-        <Route
-          path="orders"
-          element={<BakeryOrders />} />
-
-        {/* Bakery Owner Order Details page */}
-        <Route
-          path="orders/:id"
-          element={<BakeryOrderDetails />} />
-
-        <Route
-          path="pickup-slots"
-          element={<BakeryPickupSlots />}
+          path="/verify-email"
+          element={<VerifyEmail />}
         />
 
+        {/* Bakeau login page */}
         <Route
-          path="settings"
-          element={<BakerySettings />}
+          path="/login"
+          element={<Login />}
         />
 
+        {/* Bakery setup page for new Bakery Owners */}
         <Route
-          path="help"
-          element={<BakeryHelpSupport />}
+          path="/bakery-setup"
+          element={<BakerySetup />}
         />
 
+        {/* Public customer Bakery Storefront */}
         <Route
-          path="inventory"
-          element={<BakeryInventory />}
+          path="/store/:slug"
+          element={<BakeryStorefront />}
         />
 
-      </Route>
+        {/* Public Storefront Product */}
+        <Route
+          path="/store/:slug/product/:productId"
+          element={<StorefrontProduct />}
+        />
 
-    </Routes>
+        {/* Shared layout for all Bakery Owner dashboard pages */}
+        <Route
+          path="/bakery"
+          element={<BakeryDashboardLayout />}
+        >
+
+          {/* Bakery Owner dashboard overview */}
+          <Route
+            path="dashboard"
+            element={<BakeryDashboard />}
+          />
+
+          {/* Bakery Owner products page */}
+          <Route
+            path="products"
+            element={<BakeryProducts />}
+          />
+
+          {/* Bakery Owner Add Product page */}
+          <Route
+            path="products/new"
+            element={<BakeryAddProduct />}
+          />
+
+          {/* Bakery Owner Edit Product page */}
+          <Route
+            path="products/:id/edit"
+            element={<BakeryAddProduct />} />
+
+          {/* Bakery Owner Orders page */}
+          <Route
+            path="orders"
+            element={<BakeryOrders />} />
+
+          {/* Bakery Owner Order Details page */}
+          <Route
+            path="orders/:id"
+            element={<BakeryOrderDetails />} />
+
+          <Route
+            path="pickup-slots"
+            element={<BakeryPickupSlots />}
+          />
+
+          <Route
+            path="settings"
+            element={<BakerySettings />}
+          />
+
+          <Route
+            path="help"
+            element={<BakeryHelpSupport />}
+          />
+
+          <Route
+            path="inventory"
+            element={<BakeryInventory />}
+          />
+
+        </Route>
+
+      </Routes>
+    </CartProvider>
   );
 }
