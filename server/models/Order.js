@@ -26,6 +26,35 @@ const orderSchema = new mongoose.Schema({
         required: true
     },
 
+    //First name used as the Contact for this Order
+    contact_first_name: {
+        type: String,
+        required: true,
+        trim: true
+    },
+
+    //Last name used as the Contact for this Order
+    contact_last_name: {
+        type: String,
+        required: true,
+        trim: true
+    },
+
+    //Email used as the Contact for this Order
+    contact_email: {
+        type: String,
+        required: true,
+        trim: true,
+        lowercase: true
+    },
+
+    //Phone number used as the Contact for this Order
+    contact_phone: {
+        type: String,
+        required: true,
+        trim: true
+    },
+
     //Pickup slot selected by the customer for this order
     pickup_slot_id: {
         type: mongoose.Schema.Types.ObjectId,
@@ -57,7 +86,7 @@ const orderSchema = new mongoose.Schema({
     bakery_note: {
         type: String,
         trim: true,
-        length: 300,
+        maxLength: 300,
         default: ""
     },
 

@@ -30,6 +30,88 @@ const roundMoney = (amount) => {
     return Math.round((amount + Number.EPSILON) * 100) / 100;
 };
 
+//Customer Pickup times are available every 30 minutes
+const PICKUP_INTERVAL = 30;
+
+//Converts a 12-hour time such as 9:30 AM into minutes
+const convert12HourTimeToMinutes = (time) => {
+
+    const match = time.trim().match(
+        /^(\d{1,2}):(\d{2})\s(AM|PM)$/i
+    );
+
+    if (!match) {
+        return null;
+    }
+
+    let hours = Number(match[1]);
+    const minutes = Number(match[2]);
+    const period = match[3].toUpperCase();
+
+    if (period === "PM" && hours !== 12) {
+        hours += 12;
+    }
+
+    if (period === "AM" && hours === 12) {
+        hours = 0;
+    }
+
+    return (hours * 60) + minutes;
+};
+
+
+//Converts a 24-hour time such as 14:00 into minutes
+const convert24HourTimeToMinutes = (time) => {
+
+    const match = time.trim().match(
+        /^([01]\d|2[0-3]):([0-5]\d)$/
+    );
+
+    if (!match) {
+        return null;
+    }
+
+    return (Number(match[1]) * 60) + Number(match[2]);
+};
+
+
+//Checks if the selected Customer time belongs to the Bakery Pickup window
+const isPickupTimeValid = (pickupWindow, selectedTime) => {
+
+    //Split 9:30 AM - 7:30 PM into start and end
+    const windowParts = pickupWindow.split(" - ");
+
+    if (windowParts.length !== 2) {
+        return false;
+    }
+
+    const startMinutes = convert12HourTimeToMinutes(windowParts[0]);
+    const endMinutes = convert12HourTimeToMinutes(windowParts[1]);
+    const selectedMinutes = convert24HourTimeToMinutes(selectedTime);
+
+    if (
+        startMinutes === null ||
+        endMinutes === null ||
+        selectedMinutes === null
+    ) {
+        return false;
+    }
+
+    //Selected time must fall inside the Pickup window
+    if (
+        selectedMinutes < startMinutes ||
+        selectedMinutes >= endMinutes
+    ) {
+        return false;
+    }
+
+    //Selected time must follow the 30-minute Pickup interval
+    return (
+        (selectedMinutes - startMinutes) %
+        PICKUP_INTERVAL === 0
+    );
+};
+
 //Builds complete Order details including items and customizations
 const getCompleteOrderDetails = async (order) => {
 
@@ -696,9 +778,13 @@ const createOrder = async (request, response) => {
 
         const customerId = request.user.userId;
 
+        //Get Checkout information submitted by the Customer
         const {
             bakery_id,
             pickup_slot_id,
+            pickup_time,
+            contact,
+            bakery_note,
             items
         } = request.body;
 
@@ -725,6 +811,18 @@ const createOrder = async (request, response) => {
         if (!pickupSlot) {
             return response.status(400).json({
                 message: "Selected pickup slot is unavailable"
+            });
+        }
+
+        //Make sure the selected Customer time belongs to the Bakery Pickup window
+        if (
+            !isPickupTimeValid(
+                pickupSlot.pickup_time,
+                pickup_time
+            )
+        ) {
+            return response.status(400).json({
+                message: "Selected pickup time is unavailable"
             });
         }
 
@@ -758,19 +856,41 @@ const createOrder = async (request, response) => {
             )
         );
 
+        //Create the Order using trusted Backend information
         const order = await Order.create({
+
             customer_id: customerId,
+
             order_number: `BAK-${Date.now()}`,
+
             bakery_id: bakery._id,
+
+            //Save Contact information used for this specific Order
+            contact_first_name: contact.first_name,
+            contact_last_name: contact.last_name,
+            contact_email: contact.email,
+            contact_phone: contact.phone_number,
+
+            //Save the original Pickup window and exact Customer time
             pickup_slot_id: pickupSlot._id,
             pickup_date: pickupSlot.pickup_date,
-            pickup_time: pickupSlot.pickup_time,
+            pickup_time: pickup_time,
+
+            //Save optional Customer note
+            bakery_note: bakery_note || "",
+
+            //Trusted prices calculated by the Backend
             total_price: totalPrice,
+
             status: "pending",
+
             deposit_required:
                 amountDueNow < totalPrice,
+
             amount_due_now: amountDueNow,
+
             amount_paid: 0,
+
             payment_status: "unpaid"
         });
 

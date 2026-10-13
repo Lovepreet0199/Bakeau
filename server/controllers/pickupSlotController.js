@@ -4,6 +4,9 @@ import PickupSlot from "../models/PickupSlot.js";
 //Import the Bakery model to identify the authenticated Bakery Owner's bakery
 import Bakery from "../models/Bakery.js";
 
+//Import Order model to check booked Pickup Slots
+import Order from "../models/Order.js";
+
 //Creates a Pickup Slot for the authenticated Bakery Owner
 const createPickupSlot = async (request, response) => {
 
@@ -147,6 +150,139 @@ const getPublicPickupSlots = async (request, response) => {
     }
 };
 
+//Gets Pickup availability for one Bakery and month
+const getPublicPickupAvailability = async (request, response) => {
+
+    try {
+
+        //Get Bakery slug and requested month
+        const slug = request.params.slug;
+        const month = request.query.month;
+
+        //Make sure month looks like 2026-10
+        if (!month || !/^\d{4}-\d{2}$/.test(month)) {
+            return response.status(400).json({
+                message: "Month must use YYYY-MM format"
+            });
+        }
+
+        //Find approved Bakery
+        const bakery = await Bakery.findOne({
+            slug: slug,
+            account_status: "Approved"
+        });
+
+        if (!bakery) {
+            return response.status(404).json({
+                message: "Bakery not found"
+            });
+        }
+
+        //Stop if Bakery is not accepting orders
+        if (!bakery.accepting_orders) {
+            return response.status(200).json({
+                availability: {
+                    days: []
+                }
+            });
+        }
+
+        //Split requested year and month
+        const [year, monthNumber] = month.split("-").map(Number);
+
+        //Start and end of requested month
+        const startDate = new Date(Date.UTC(year, monthNumber - 1, 1));
+        const endDate = new Date(Date.UTC(year, monthNumber, 1));
+
+        //Get available Pickup Slots for this month
+        const pickupSlots = await PickupSlot.find({
+            bakery_id: bakery._id,
+            pickup_date: {
+                $gte: startDate,
+                $lt: endDate
+            },
+            is_available: true
+        }).sort({
+            pickup_date: 1,
+            pickup_time: 1
+        });
+
+        //Get existing Orders for this month
+        const orders = await Order.find({
+            bakery_id: bakery._id,
+            pickup_date: {
+                $gte: startDate,
+                $lt: endDate
+            },
+            status: {
+                $ne: "cancelled"
+            }
+        }).select("pickup_date");
+
+
+        //Stores number of Orders for each date
+        const orderCountByDate = {};
+
+        orders.forEach((order) => {
+
+            const dateKey = order.pickup_date.toISOString().split("T")[0];
+
+            orderCountByDate[dateKey] = (orderCountByDate[dateKey] || 0) + 1;
+        });
+
+
+        //Stores Pickup dates for Calendar
+        const days = {};
+
+        pickupSlots.forEach((slot) => {
+
+            const dateKey = slot.pickup_date.toISOString().split("T")[0];
+
+            //Check how many Orders already exist for this day
+            const currentOrders = orderCountByDate[dateKey] || 0;
+
+            //Do not show day when maximum Orders are reached
+            if (currentOrders >= bakery.maximum_orders_per_day) {
+                return;
+            }
+
+            //Create date if it is not already added
+            if (!days[dateKey]) {
+                days[dateKey] = {
+                    date: dateKey,
+                    available: true,
+                    windows: []
+                };
+            }
+
+            //Add the Bakery Pickup window
+            days[dateKey].windows.push({
+                pickup_slot_id: slot._id,
+                pickup_window: slot.pickup_time
+            });
+        });
+
+
+        //Convert object into array
+        const availableDays = Object.values(days);
+
+
+        //Return availability
+        return response.status(200).json({
+            availability: {
+                days: availableDays
+            }
+        });
+
+    } catch (error) {
+
+        console.error("Get Pickup availability error:", error.message);
+
+        return response.status(500).json({
+            message: "Unable to load Pickup availability"
+        });
+    }
+};
 
 //Updates a Pickup Slot belonging to the authenticated Bakery Owner
 const updatePickupSlot = async (request, response) => {
@@ -298,5 +434,6 @@ export {
     getBakeryPickupSlots,
     getPublicPickupSlots,
     updatePickupSlot,
-    deletePickupSlot
+    deletePickupSlot,
+    getPublicPickupAvailability
 };

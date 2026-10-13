@@ -39,6 +39,40 @@ const orderValidation = [
         .isMongoId()
         .withMessage("Pickup slot ID must be valid"),
 
+    body("pickup_time")
+        .notEmpty()
+        .withMessage("Pickup time is required")
+        .matches(/^([01]\d|2[0-3]):[0-5]\d$/)
+        .withMessage("Pickup time must use HH:mm format"),
+
+    body("contact.first_name")
+        .trim()
+        .notEmpty()
+        .withMessage("First name is required"),
+
+    body("contact.last_name")
+        .trim()
+        .notEmpty()
+        .withMessage("Last name is required"),
+
+    body("contact.email")
+        .trim()
+        .notEmpty()
+        .withMessage("Email is required")
+        .isEmail()
+        .withMessage("Email must be valid"),
+
+    body("contact.phone_number")
+        .trim()
+        .notEmpty()
+        .withMessage("Phone number is required"),
+
+    body("bakery_note")
+        .optional()
+        .trim()
+        .isLength({ max: 300 })
+        .withMessage("Order note cannot be more than 300 characters"),
+
     body("items")
         .isArray({ min: 1 })
         .withMessage("Order must contain at least one product"),

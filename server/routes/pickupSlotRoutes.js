@@ -7,7 +7,8 @@ import {
     getBakeryPickupSlots,
     getPublicPickupSlots,
     updatePickupSlot,
-    deletePickupSlot
+    deletePickupSlot,
+    getPublicPickupAvailability
 } from "../controllers/pickupSlotController.js";
 
 //Import authentication middleware to protect Bakery Owner routes
@@ -76,6 +77,11 @@ const validateRequest = (request, response, next) => {
     next();
 };
 
+//Get Pickup availability for a public Bakery storefront
+router.get(
+    "/public/:slug/availability",
+    getPublicPickupAvailability
+);
 
 //Get available Pickup Slots for a public Bakery storefront
 router.get(
