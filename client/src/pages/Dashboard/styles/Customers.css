@@ -1,0 +1,306 @@
+/* Bakery Customers page */
+.bakery-customers-page {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    padding: 20px;
+    overflow-x: hidden;
+    box-sizing: border-box;
+}
+
+
+/* Customers page description */
+.bakery-customers-description {
+    color: #746D68;
+    font-size: 14px;
+}
+
+
+/* Customer search area */
+.bakery-customers-search {
+    position: relative;
+    width: 100%;
+}
+
+
+/* Customer search icon */
+.bakery-customers-search-icon {
+    position: absolute;
+    top: 50%;
+    left: 13px;
+    z-index: 2;
+    color: #8A827D;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+
+/* Customer search input */
+.bakery-customers-search .form-control {
+    min-height: 42px;
+    padding-left: 40px;
+    padding-right: 14px;
+    border: 1px solid #DED9D5;
+    border-radius: 7px;
+    background-color: #FFFFFF;
+    font-size: 13px;
+    color: #25201E;
+    box-shadow: none;
+}
+
+
+/* Customer search placeholder */
+.bakery-customers-search .form-control::placeholder {
+    color: #9A938E;
+}
+
+
+/* Customer search focus */
+.bakery-customers-search .form-control:focus {
+    border-color: #C9C3BF;
+    background-color: #FFFFFF;
+    box-shadow: 0 0 0 2px rgba(198, 95, 58, 0.08);
+}
+
+
+/* Customer count */
+.bakery-customers-count {
+    margin-bottom: 10px;
+    font-size: 12px;
+    color: #8A827D;
+}
+
+
+/* Customers table */
+.bakery-customers-table {
+    min-width: 820px;
+}
+
+
+/* Customer table row */
+.bakery-customers-table tbody tr {
+    transition: background-color 0.15s ease;
+}
+
+
+/* Customer table hover */
+.bakery-customers-table tbody tr:hover {
+    background-color: #FCFBFA;
+}
+
+
+/* Customer information */
+.bakery-customers-customer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 180px;
+}
+
+
+/* Customer initials */
+.bakery-customers-avatar {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background-color: #F5E9E3;
+    color: #A34F32;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+
+/* Customer name */
+.bakery-customers-customer strong {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #25201E;
+}
+
+
+/* Customer supporting text */
+.bakery-customers-customer span {
+    display: block;
+    margin-top: 2px;
+    font-size: 11px;
+    color: #918985;
+}
+
+
+/* Customer contact */
+.bakery-customers-contact {
+    min-width: 210px;
+}
+
+
+/* Individual Contact row */
+.bakery-customers-contact div {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #746D68;
+}
+
+
+/* Space between Contact rows */
+.bakery-customers-contact div+div {
+    margin-top: 4px;
+}
+
+
+/* Contact icon */
+.bakery-customers-contact svg {
+    flex-shrink: 0;
+    color: #9A938E;
+}
+
+
+/* Order count */
+.bakery-customers-order-count {
+    font-size: 12px;
+    color: #5E5651;
+    white-space: nowrap;
+}
+
+
+/* Customer total spent */
+.bakery-customers-spent {
+    font-size: 13px;
+    font-weight: 600;
+    color: #25201E;
+    white-space: nowrap;
+}
+
+
+/* Customer last Order date */
+.bakery-customers-date {
+    font-size: 12px;
+    color: #746D68;
+    white-space: nowrap;
+}
+
+
+/* Customer loading error */
+.bakery-customers-error {
+    color: #B42318;
+}
+
+
+/* Customer loading state */
+.bakery-customers-loading {
+    min-height: 260px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    color: #746D68;
+}
+
+
+/* Loading heading */
+.bakery-customers-loading strong {
+    display: block;
+    margin-bottom: 2px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #25201E;
+}
+
+
+/* Loading supporting text */
+.bakery-customers-loading span {
+    display: block;
+    font-size: 12px;
+    color: #8A827D;
+}
+
+
+/* Loading spinner */
+.bakery-customers-loading-icon {
+    flex-shrink: 0;
+    color: #C65F3A;
+    animation: bakery-customers-loading-spin 0.8s linear infinite;
+}
+
+
+/* Customers empty state */
+.bakery-customers-empty-state {
+    padding: 48px 24px;
+    border: 1px dashed #D8D2CE;
+    border-radius: 10px;
+    background-color: #FFFFFF;
+    text-align: center;
+}
+
+
+/* Customer empty icon */
+.bakery-customers-empty-icon {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 12px;
+    border-radius: 50%;
+    background-color: #F5F1EE;
+    color: #A34F32;
+}
+
+
+/* Empty state heading */
+.bakery-customers-empty-state h2 {
+    margin-bottom: 8px;
+    font-size: 17px;
+    font-weight: 700;
+    color: #25201E;
+}
+
+
+/* Empty state description */
+.bakery-customers-empty-state p {
+    font-size: 13px;
+    color: #746D68;
+}
+
+
+/* Spinner animation */
+@keyframes bakery-customers-loading-spin {
+
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* Tablet Customers layout */
+@media (min-width: 768px) {
+
+    .bakery-customers-search {
+        max-width: 430px;
+    }
+}
+
+
+/* Mobile Customers layout */
+@media (max-width: 767px) {
+
+    .bakery-customers-page {
+        padding: 15px;
+    }
+
+
+    .bakery-customers-empty-state {
+        padding: 36px 18px;
+    }
+}

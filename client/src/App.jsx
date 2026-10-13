@@ -86,6 +86,9 @@ import StorefrontOrderTracking from "./pages/Storefront/StorefrontOrderTracking"
 //Import Customer My Orders page
 import StorefrontMyOrders from "./pages/Storefront/StorefrontMyOrders";
 
+//Import Bakery Owner Customers page
+import BakeryCustomers from "./pages/Dashboard/BakeryCustomers.jsx";
+
 //Displays the Bakeau application routes
 export default function App() {
 
@@ -260,6 +263,12 @@ export default function App() {
             element={<BakeryInventory />}
           />
 
+          {/* Bakery Owner Customers page */}
+          <Route
+            path="customers"
+            element={<BakeryCustomers />}
+          />
+          
         </Route>
 
       </Routes>

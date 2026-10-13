@@ -155,13 +155,22 @@ export default function DashboardSidebar({
                     </NavLink>
 
                     {/* Customers page */}
-                    <button
-                        type="button"
-                        className="bakery-dashboard-nav-item"
+                    <NavLink
+                        to="/bakery/customers"
+                        className={({ isActive }) =>
+                            `bakery-dashboard-nav-item text-decoration-none ${isActive ? "active" : ""}`
+                        }
+                        onClick={closeSidebar}
                     >
-                        <Users size={18} strokeWidth={1.8} />
-                        <span>Customers</span>
-                    </button>
+                        <Users
+                            size={18}
+                            strokeWidth={1.8}
+                        />
+
+                        <span>
+                            Customers
+                        </span>
+                    </NavLink>
 
                     {/* Payments page */}
                     <button
