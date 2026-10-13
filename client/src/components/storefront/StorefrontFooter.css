@@ -1,0 +1,40 @@
+/* Storefront Footer */
+.storefront-footer {
+    background-color: var(--storefront-dark);
+    color: #ffffff;
+}
+
+
+/* Footer Bakery name */
+.storefront-footer h3 {
+    font-family: "Fraunces", serif;
+    font-size: 20px;
+}
+
+
+/* Footer headings */
+.storefront-footer h4 {
+    font-size: 14px;
+}
+
+
+/* Footer text */
+.storefront-footer p {
+    max-width: 500px;
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 12px;
+    line-height: 1.8;
+}
+
+
+/* Footer links */
+.storefront-footer-link {
+    color: rgba(255, 255, 255, 0.55);
+    font-size: 11px;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.storefront-footer-link:hover {
+    color: #ffffff;
+}

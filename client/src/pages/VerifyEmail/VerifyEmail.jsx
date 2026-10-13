@@ -10,6 +10,29 @@ import "./VerifyEmail.css";
 //Verifies the user's email address when they open the verification link
 export default function VerifyEmail() {
 
+    //Gets the Bakery Storefront the Customer came from
+    const bakerySlug =
+        localStorage.getItem(
+            "authBakerySlug"
+        );
+
+    //Gets where the Customer should return after Login
+    const returnTo =
+        localStorage.getItem(
+            "authReturnTo"
+        );
+
+    //Creates the correct Sign In link
+    const signInPath =
+        bakerySlug
+            ? `/store/${bakerySlug}/login${returnTo
+                ? `?redirect=${encodeURIComponent(
+                    returnTo
+                )}`
+                : ""
+            }`
+            : "/login";
+
     //Get access to the query parameters in the current URL
     const [searchParam] = useSearchParams();
 
@@ -128,7 +151,7 @@ export default function VerifyEmail() {
 
                     {/* Sign in link */}
                     <Link
-                        to="/login"
+                        to={signInPath}
                         className="verify-email-signin text-decoration-none"
                     >
                         Sign in <span aria-hidden="true">→</span>
@@ -206,7 +229,7 @@ export default function VerifyEmail() {
 
                                     {/* Continue to the login page */}
                                     <Link
-                                        to="/login"
+                                        to={signInPath}
                                         className="verify-email-button d-inline-flex align-items-center justify-content-center gap-2 text-decoration-none"
                                     >
                                         Continue to sign in
@@ -241,9 +264,12 @@ export default function VerifyEmail() {
                                         {verificationMessage}
                                     </p>
 
-                                    <p className="verify-email-secondary-text">
-                                        The link may have expired or already been used.
-                                        You can request a new verification email below.
+                                    <p className="verify-email-description">
+
+                                        {bakerySlug
+                                            ? "Your email address has been confirmed successfully. You can now sign in and continue your order."
+                                            : "Your email address has been confirmed successfully. You can now sign in and continue setting up your bakery."}
+
                                     </p>
 
                                     {/* Return to the page where a new email can be requested */}

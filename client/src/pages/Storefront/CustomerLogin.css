@@ -1,0 +1,332 @@
+/* Main Customer Login page */
+.customer-login-page {
+    min-height: 100vh;
+    background-color: #fffdf9;
+    color: #3b2a23;
+}
+
+
+/* Left Bakery information panel */
+.customer-login-sidebar {
+    min-height: 100vh;
+    padding: 40px;
+    background-color: var(--storefront-dark);
+    color: #fffdf9;
+}
+
+
+/* Bakery logo image */
+.customer-login-logo-image {
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+
+/* Bakery Brand */
+.customer-login-logo {
+    font-family: "Fraunces", sans-serif;
+    font-size: 28px;
+    font-weight: 600;
+}
+
+
+/* Main Customer message */
+.customer-login-tagline {
+    max-width: 280px;
+    margin-bottom: 32px;
+    font-family: "Fraunces", sans-serif;
+    font-size: 36px;
+    font-weight: 600;
+    line-height: 1.15;
+}
+
+
+/* Customer feature list */
+.customer-login-features p {
+    margin-bottom: 16px;
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+
+/* Remove final feature spacing */
+.customer-login-features p:last-child {
+    margin-bottom: 0;
+}
+
+
+/* Sidebar bottom message */
+.customer-login-sidebar-note {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.58);
+    font-size: 12px;
+}
+
+
+/* Right Login area */
+.customer-login-content {
+    min-height: 100vh;
+    padding: 48px;
+    background-color: #fffdf9;
+}
+
+
+/* Keeps Login form from becoming too wide */
+.customer-login-form-container {
+    width: 100%;
+    max-width: 480px;
+}
+
+
+/* Main Login heading */
+.customer-login-form-container h1 {
+    margin-bottom: 8px;
+    color: #3b2a23;
+    font-family: "Fraunces", serif;
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+
+/* Login intro */
+.customer-login-intro {
+    margin-bottom: 32px;
+    color: #5f514a;
+}
+
+
+/* Login labels */
+.customer-login-form-container .form-label {
+    margin-bottom: 8px;
+    color: #3b2a23;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+
+/* Login inputs */
+.customer-login-form-container .form-control {
+    min-height: 46px;
+    padding: 10px 14px;
+    border: 1px solid #d8cec7;
+    border-radius: 8px;
+    background-color: #ffffff;
+    color: #3b2a23;
+}
+
+
+/* Input focus */
+.customer-login-form-container .form-control:focus {
+    border-color: var(--storefront-primary);
+    box-shadow:
+        0 0 0 3px
+        color-mix(
+            in srgb,
+            var(--storefront-primary) 15%,
+            transparent
+        );
+    outline: none;
+}
+
+
+/* Password wrapper */
+.customer-login-password-wrapper {
+    position: relative;
+}
+
+
+/* Leaves room for Password button */
+.customer-login-password-wrapper .form-control {
+    padding-right: 70px;
+}
+
+
+/* Password visibility button */
+.customer-login-password-toggle {
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    z-index: 2;
+    transform: translateY(-50%);
+    padding: 4px 6px;
+    border: 0;
+    background-color: transparent;
+    color: #6f625c;
+}
+
+
+/* Password visibility hover */
+.customer-login-password-toggle:hover {
+    color: var(--storefront-primary);
+}
+
+
+/* Forgot Password */
+.customer-login-forgot-link {
+    color: var(--storefront-primary);
+    font-size: 13px;
+    text-decoration: none;
+}
+
+
+/* Main Sign In button */
+.customer-login-submit-btn {
+    min-height: 46px;
+    border: 1px solid var(--storefront-primary);
+    border-radius: 8px;
+    background-color: var(--storefront-primary);
+    color: #ffffff;
+    font-weight: 600;
+}
+
+
+/* Sign In hover */
+.customer-login-submit-btn:hover:not(:disabled) {
+    border-color: var(--storefront-primary);
+    background-color: var(--storefront-primary);
+    color: #ffffff;
+    opacity: 0.9;
+}
+
+
+/* Disabled Sign In */
+.customer-login-submit-btn:disabled {
+    border-color: var(--storefront-primary);
+    background-color: var(--storefront-primary);
+    color: #ffffff;
+    opacity: 0.65;
+}
+
+
+/* Checkbox label */
+.customer-login-form-container .form-check-label {
+    color: #5f514a;
+    font-size: 13px;
+}
+
+
+/* Themed checkbox */
+.customer-login-form-container .form-check-input:checked {
+    border-color: var(--storefront-primary);
+    background-color: var(--storefront-primary);
+}
+
+
+/* Checkbox focus */
+.customer-login-form-container .form-check-input:focus {
+    border-color: var(--storefront-primary);
+    box-shadow:
+        0 0 0 0.2rem
+        color-mix(
+            in srgb,
+            var(--storefront-primary) 18%,
+            transparent
+        );
+}
+
+
+/* Customer Login links */
+.customer-login-form-container a {
+    color: var(--storefront-primary);
+    text-decoration: none;
+}
+
+
+/* Link hover */
+.customer-login-form-container a:hover {
+    text-decoration: underline;
+}
+
+
+/* Back to Bakery */
+.customer-login-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 28px;
+    color: #6f5145 !important;
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none !important;
+}
+
+
+/* Back link hover */
+.customer-login-back-link:hover {
+    color: var(--storefront-primary) !important;
+}
+
+
+/* Login error */
+.customer-login-error {
+    color: #b42318;
+    font-size: 13px;
+}
+
+
+/* Customer registration message */
+.customer-login-register {
+    color: #5f514a;
+    font-size: 14px;
+}
+
+
+/* Bakery Owner Login */
+.customer-login-owner {
+    color: #8a7970;
+    font-size: 12px;
+}
+
+
+/* Tablet and mobile Login */
+@media (max-width: 991.98px) {
+
+    /* Hide Bakery sidebar */
+    .customer-login-sidebar {
+        display: none !important;
+    }
+
+
+    /* Login form fills screen */
+    .customer-login-content {
+        min-height: 100vh;
+        padding: 48px 32px;
+    }
+
+
+    .customer-login-form-container {
+        width: 100%;
+        max-width: 520px;
+    }
+}
+
+
+/* Phone Login */
+@media (max-width: 575.98px) {
+
+    .customer-login-content {
+        align-items: flex-start !important;
+        min-height: 100vh;
+        padding: 72px 24px 40px;
+    }
+
+
+    .customer-login-form-container {
+        width: 100%;
+        max-width: none;
+    }
+
+
+    .customer-login-form-container h1 {
+        font-size: 28px;
+    }
+
+
+    .customer-login-back-link {
+        margin-bottom: 24px;
+    }
+}

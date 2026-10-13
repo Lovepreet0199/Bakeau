@@ -5,135 +5,6 @@
 }
 
 
-/* Product announcement bar */
-.storefront-product-announcement {
-    background-color: var(--storefront-dark);
-    color: #ffffff;
-    font-size: 11px;
-    line-height: 1.5;
-}
-
-
-/* Product Storefront header */
-.storefront-product-header {
-    background-color: #fffdf9;
-    border-bottom: 1px solid #eee4dc;
-}
-
-
-/* Product Bakery branding */
-.storefront-product-brand {
-    min-width: 0;
-    color: #2f221d;
-}
-
-.storefront-product-brand:hover {
-    color: #2f221d;
-}
-
-
-/* Bakery name */
-.storefront-product-brand-name {
-    max-width: clamp(110px, 32vw, 230px);
-}
-
-
-/* Bakery logo */
-.storefront-product-logo,
-.storefront-product-logo-fallback {
-    width: 36px;
-    height: 36px;
-    border-radius: 8px;
-}
-
-.storefront-product-logo {
-    object-fit: cover;
-}
-
-.storefront-product-logo-fallback {
-    background-color: var(--storefront-dark);
-    color: #ffffff;
-    font-size: 12px;
-    font-weight: 600;
-}
-
-
-/* Product navigation link */
-.storefront-product-nav-link {
-    color: #554840;
-    font-size: 13px;
-    transition: color 0.2s ease;
-}
-
-.storefront-product-nav-link:hover {
-    color: var(--storefront-primary);
-}
-
-
-/* Header actions */
-.storefront-product-header-action {
-    border: none;
-    background-color: transparent;
-    color: #554840;
-    font-size: 13px;
-    padding: 0;
-}
-
-.storefront-product-header-action:hover {
-    color: var(--storefront-primary);
-}
-
-
-/* Mobile Menu button */
-.storefront-product-menu-button {
-    width: 38px;
-    height: 38px;
-    border: 1px solid #e1d5cd;
-    border-radius: 8px;
-    background-color: #ffffff;
-    color: #44352d;
-}
-
-.storefront-product-menu-button:hover {
-    border-color: var(--storefront-primary);
-    color: var(--storefront-primary);
-}
-
-
-/* Mobile Menu */
-.storefront-product-mobile-menu {
-    border: 1px solid #eee4dc;
-    border-radius: 12px;
-    background-color: #ffffff;
-    box-shadow: 0 12px 30px rgba(66, 44, 35, 0.08);
-}
-
-
-/* Mobile navigation link */
-.storefront-product-mobile-link {
-    border-radius: 7px;
-    color: #44352d;
-    font-size: 14px;
-    font-weight: 500;
-}
-
-.storefront-product-mobile-link:hover {
-    background-color: var(--storefront-secondary);
-    color: var(--storefront-primary);
-}
-
-
-/* Mobile Sign In */
-.storefront-product-mobile-signin {
-    border: 1px solid #e1d5cd;
-    border-radius: 8px;
-    background-color: #ffffff;
-    color: #44352d;
-    font-size: 13px;
-    font-weight: 600;
-}
-
-
 /* Product breadcrumb */
 .storefront-product-breadcrumb {
     color: #8a7a71;
@@ -257,9 +128,11 @@
 /* Required customization label */
 .storefront-required-label {
     border-radius: 20px;
-    background-color: color-mix(in srgb,
-            var(--storefront-primary) 10%,
-            #ffffff);
+    background-color: color-mix(
+        in srgb,
+        var(--storefront-primary) 10%,
+        #ffffff
+    );
     color: var(--storefront-primary);
     padding: 4px 9px;
     font-size: 10px;
@@ -293,10 +166,14 @@
 /* Selected customization option */
 .storefront-option-card.selected {
     border-color: var(--storefront-primary);
-    background-color: color-mix(in srgb,
-            var(--storefront-primary) 4%,
-            #ffffff);
-    box-shadow: 0 0 0 1px var(--storefront-primary);
+    background-color: color-mix(
+        in srgb,
+        var(--storefront-primary) 4%,
+        #ffffff
+    );
+    box-shadow:
+        0 0 0 1px
+        var(--storefront-primary);
 }
 
 
@@ -355,9 +232,13 @@
 
 .storefront-product-textarea:focus {
     border-color: var(--storefront-primary);
-    box-shadow: 0 0 0 0.2rem color-mix(in srgb,
+    box-shadow:
+        0 0 0 0.2rem
+        color-mix(
+            in srgb,
             var(--storefront-primary) 15%,
-            transparent);
+            transparent
+        );
 }
 
 
@@ -390,6 +271,14 @@
     background-color: #ffffff;
     color: #514139;
     font-size: 13px;
+}
+
+
+/* Price breakdown heading */
+.storefront-product-summary-title {
+    color: #33251f;
+    font-size: 14px;
+    font-weight: 600;
 }
 
 
@@ -437,13 +326,6 @@
 
 .storefront-product-primary-button:active {
     transform: translateY(1px);
-}
-
-/* Price breakdown heading */
-.storefront-product-summary-title {
-    color: #33251f;
-    font-size: 14px;
-    font-weight: 600;
 }
 
 

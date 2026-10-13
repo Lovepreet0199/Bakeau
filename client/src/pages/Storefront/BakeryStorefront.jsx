@@ -2,7 +2,11 @@
 import { useEffect, useState } from "react";
 
 //Import React Router tools
-import { Link, useParams } from "react-router-dom";
+import {
+    Link,
+    useLocation,
+    useParams
+} from "react-router-dom";
 
 //Import Storefront icons
 import {
@@ -10,28 +14,27 @@ import {
     ArrowRight,
     Clock3,
     MapPin,
-    Menu,
-    ShoppingCart,
-    Star,
-    X
+    Star
 } from "lucide-react";
 
 //Import Storefront styles
 import "./BakeryStorefront.css";
 
-//Import Customer Cart hook
-import { useCart } from "../../context/useCart";
+//Import shared Storefront components
+import StorefrontNavbar from "../../components/storefront/StorefrontNavbar";
+import StorefrontFooter from "../../components/storefront/StorefrontFooter";
+
+//Import Storefront theme helper
+import { getStorefrontTheme } from "../../utils/storefrontTheme";
 
 //Displays the public customer Storefront for a Bakery
 export default function BakeryStorefront() {
 
-    //Get Customer Cart information
-    const {
-        cartCount
-    } = useCart();
-
     //Get the Bakery slug from the URL
     const { slug } = useParams();
+
+    //Gets the current Storefront URL
+    const location = useLocation();
 
     //Stores the public Bakery information
     const [bakery, setBakery] = useState(null);
@@ -41,9 +44,6 @@ export default function BakeryStorefront() {
 
     //Tracks the currently displayed featured Product
     const [currentFeatureIndex, setCurrentFeatureIndex] = useState(0);
-
-    //Tracks whether the mobile navigation is open
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     //Tracks whether the Storefront is loading
     const [isLoading, setIsLoading] = useState(true);
@@ -116,6 +116,47 @@ export default function BakeryStorefront() {
     }, [slug]);
 
 
+    //Scrolls to a Storefront section when the URL contains a hash
+    useEffect(() => {
+
+        //Wait until the Storefront has finished loading
+        if (
+            isLoading ||
+            !bakery ||
+            !location.hash
+        ) {
+            return;
+        }
+
+        //Get the section ID from the URL
+        const sectionId =
+            location.hash.replace(
+                "#",
+                ""
+            );
+
+        //Find the Storefront section
+        const section =
+            document.getElementById(
+                sectionId
+            );
+
+        //Scroll to the section when it exists
+        if (section) {
+
+            section.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+        }
+
+    }, [
+        location.hash,
+        isLoading,
+        bakery
+    ]);
+
+
     //Automatically changes the featured Product every 5 seconds
     useEffect(() => {
 
@@ -156,34 +197,6 @@ export default function BakeryStorefront() {
     }, [products, currentFeatureIndex]);
 
 
-    //Creates Bakery initials when no logo exists
-    function getBakeryInitials() {
-
-        //Use B when there is no Bakery name
-        if (!bakery?.name?.trim()) {
-            return "B";
-        }
-
-        //Split the Bakery name into words
-        const nameParts =
-            bakery.name.trim().split(" ");
-
-        //Use one letter for a one-word Bakery name
-        if (nameParts.length === 1) {
-
-            return nameParts[0]
-                .charAt(0)
-                .toUpperCase();
-        }
-
-        //Use the first two Bakery initials
-        return (
-            nameParts[0].charAt(0) +
-            nameParts[1].charAt(0)
-        ).toUpperCase();
-    }
-
-
     //Formats Product prices using the Bakery currency
     function formatPrice(price) {
 
@@ -195,7 +208,9 @@ export default function BakeryStorefront() {
                     bakery?.currency ||
                     "CAD"
             }
-        ).format(price || 0);
+        ).format(
+            price || 0
+        );
     }
 
 
@@ -288,13 +303,6 @@ export default function BakeryStorefront() {
     }
 
 
-    //Closes the mobile navigation
-    function closeMobileMenu() {
-
-        setIsMobileMenuOpen(false);
-    }
-
-
     //Displays the loading screen
     if (isLoading) {
 
@@ -306,13 +314,10 @@ export default function BakeryStorefront() {
                     className="spinner-border"
                     role="status"
                 >
-
                     <span className="visually-hidden">
                         Loading storefront...
                     </span>
-
                 </div>
-
 
                 <p className="mb-0">
                     Loading bakery...
@@ -337,11 +342,9 @@ export default function BakeryStorefront() {
                     Storefront unavailable
                 </h1>
 
-
                 <p className="text-secondary mb-1">
                     {error || "Bakery not found"}
                 </p>
-
 
                 <Link
                     to="/"
@@ -372,9 +375,7 @@ export default function BakeryStorefront() {
 
     //Get the currently selected featured Product
     const featuredProduct =
-        heroProducts[
-        currentFeatureIndex
-        ] ||
+        heroProducts[currentFeatureIndex] ||
         products[0];
 
 
@@ -397,7 +398,9 @@ export default function BakeryStorefront() {
             .slice(0, 5)
             .map(
                 (category) => ({
-                    name: category,
+                    name:
+                        category,
+
                     icon:
                         getCategoryIcon(
                             category
@@ -447,341 +450,20 @@ export default function BakeryStorefront() {
 
     return (
 
+        //Theme comes from the Bakery Owner and applies to the whole Storefront
         <div
             className="bakery-storefront-page min-vh-100"
-            style={{
-                "--storefront-primary":
-                    bakery.primary_color ||
-                    "#C65F3A",
-
-                "--storefront-secondary":
-                    bakery.secondary_color ||
-                    "#F4E8DF",
-
-                "--storefront-dark":
-                    bakery.dark_color ||
-                    "#432C23"
-            }}
+            style={
+                getStorefrontTheme(
+                    bakery
+                )
+            }
         >
 
-            {/* Announcement bar */}
-            <div className="storefront-announcement">
-
-                <div className="container-xxl text-center py-2 px-3">
-
-                    <small>
-
-                        {bakery.minimum_order_notice && (
-                            <>
-                                Orders require{" "}
-                                {
-                                    bakery.minimum_order_notice
-                                }{" "}
-                                hours' notice
-                            </>
-                        )}
-
-
-                        {bakery.minimum_order_notice &&
-                            pickupAddress && (
-                                <> • </>
-                            )}
-
-
-                        {pickupAddress && (
-                            <>
-                                Pickup from{" "}
-                                {pickupAddress}
-                            </>
-                        )}
-
-                    </small>
-
-                </div>
-
-            </div>
-
-
-            {/* Storefront navigation */}
-            <header className="storefront-header">
-
-                <div className="container-xxl px-3">
-
-                    {/* Main navigation row */}
-                    <div className="d-flex align-items-center justify-content-between gap-2 py-3">
-
-                        {/* Bakery logo and name */}
-                        <Link
-                            to={`/store/${slug}`}
-                            onClick={
-                                closeMobileMenu
-                            }
-                            className="storefront-brand d-flex align-items-center gap-2 text-decoration-none flex-shrink-1"
-                        >
-
-                            {bakery.logo_image_url ? (
-
-                                <img
-                                    src={
-                                        bakery.logo_image_url
-                                    }
-                                    alt={
-                                        `${bakery.name} logo`
-                                    }
-                                    className="storefront-logo flex-shrink-0"
-                                />
-
-                            ) : (
-
-                                <div className="storefront-logo-fallback d-flex align-items-center justify-content-center flex-shrink-0">
-
-                                    {
-                                        getBakeryInitials()
-                                    }
-
-                                </div>
-                            )}
-
-
-                            <span className="storefront-brand-name fw-semibold text-truncate">
-
-                                {bakery.name}
-
-                            </span>
-
-                        </Link>
-
-
-                        {/* Desktop navigation */}
-                        <nav className="d-none d-lg-flex align-items-center gap-4">
-
-                            <a
-                                href="#menu"
-                                className="storefront-nav-link"
-                            >
-                                Menu
-                            </a>
-
-
-                            <a
-                                href="#how-it-works"
-                                className="storefront-nav-link"
-                            >
-                                How It Works
-                            </a>
-
-
-                            <a
-                                href="#reviews"
-                                className="storefront-nav-link"
-                            >
-                                Reviews
-                            </a>
-
-
-                            <a
-                                href="#about"
-                                className="storefront-nav-link"
-                            >
-                                About
-                            </a>
-
-                        </nav>
-
-
-                        {/* Desktop actions */}
-                        <div className="d-none d-lg-flex align-items-center gap-3 flex-shrink-0">
-
-                            {/* Cart will be connected later */}
-                            <button
-                                type="button"
-                                className="storefront-text-action d-flex align-items-center gap-1"
-                            >
-
-                                <ShoppingCart
-                                    size={17}
-                                />
-
-                                Cart ({cartCount})
-
-                            </button>
-
-
-                            {/* Customer Sign In will be connected later */}
-                            <button
-                                type="button"
-                                className="storefront-text-action"
-                            >
-                                Sign In
-                            </button>
-
-
-                            {/* Bakery Owner Login */}
-                            <Link
-                                to="/login"
-                                className="storefront-bakery-login text-decoration-none"
-                            >
-                                Bakery Login
-                            </Link>
-
-                        </div>
-
-
-                        {/* Mobile actions */}
-                        <div className="d-flex d-lg-none align-items-center gap-2 flex-shrink-0">
-
-                            {/* Mobile Cart */}
-                            <button
-                                type="button"
-                                aria-label="Open cart"
-                                className="storefront-mobile-action d-flex align-items-center gap-1"
-                            >
-
-                                <ShoppingCart
-                                    size={19}
-                                />
-
-
-                                <span className="small">
-                                    ({cartCount})
-                                </span>
-
-                            </button>
-
-
-                            {/* Burger Menu */}
-                            <button
-                                type="button"
-                                aria-label={
-                                    isMobileMenuOpen
-                                        ? "Close navigation menu"
-                                        : "Open navigation menu"
-                                }
-                                aria-expanded={
-                                    isMobileMenuOpen
-                                }
-                                aria-controls="storefront-mobile-menu"
-                                onClick={() =>
-                                    setIsMobileMenuOpen(
-                                        (currentValue) =>
-                                            !currentValue
-                                    )
-                                }
-                                className="storefront-mobile-menu-button d-flex align-items-center justify-content-center"
-                            >
-
-                                {isMobileMenuOpen ? (
-
-                                    <X size={21} />
-
-                                ) : (
-
-                                    <Menu size={21} />
-
-                                )}
-
-                            </button>
-
-                        </div>
-
-                    </div>
-
-
-                    {/* Mobile navigation */}
-                    {isMobileMenuOpen && (
-
-                        <div
-                            id="storefront-mobile-menu"
-                            className="d-lg-none pb-3"
-                        >
-
-                            <div className="storefront-mobile-menu p-3">
-
-                                {/* Mobile navigation links */}
-                                <nav className="d-grid gap-1">
-
-                                    <a
-                                        href="#menu"
-                                        onClick={
-                                            closeMobileMenu
-                                        }
-                                        className="storefront-mobile-nav-link text-decoration-none px-3 py-2"
-                                    >
-                                        Menu
-                                    </a>
-
-
-                                    <a
-                                        href="#how-it-works"
-                                        onClick={
-                                            closeMobileMenu
-                                        }
-                                        className="storefront-mobile-nav-link text-decoration-none px-3 py-2"
-                                    >
-                                        How It Works
-                                    </a>
-
-
-                                    <a
-                                        href="#reviews"
-                                        onClick={
-                                            closeMobileMenu
-                                        }
-                                        className="storefront-mobile-nav-link text-decoration-none px-3 py-2"
-                                    >
-                                        Reviews
-                                    </a>
-
-
-                                    <a
-                                        href="#about"
-                                        onClick={
-                                            closeMobileMenu
-                                        }
-                                        className="storefront-mobile-nav-link text-decoration-none px-3 py-2"
-                                    >
-                                        About
-                                    </a>
-
-                                </nav>
-
-
-                                <hr className="my-3" />
-
-
-                                {/* Mobile account actions */}
-                                <div className="d-grid gap-2">
-
-                                    {/* Customer Sign In will be connected later */}
-                                    <button
-                                        type="button"
-                                        className="storefront-mobile-signin py-2 px-3"
-                                    >
-                                        Sign In
-                                    </button>
-
-
-                                    {/* Bakery Owner Login */}
-                                    <Link
-                                        to="/login"
-                                        onClick={
-                                            closeMobileMenu
-                                        }
-                                        className="storefront-mobile-bakery-login text-center text-decoration-none py-2 px-3"
-                                    >
-                                        Bakery Login
-                                    </Link>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-                    )}
-
-                </div>
-
-            </header>
+            {/* Shared Storefront Navbar */}
+            <StorefrontNavbar
+                bakery={bakery}
+            />
 
 
             <main>
@@ -798,7 +480,6 @@ export default function BakeryStorefront() {
                                 Baker's Picks
                             </p>
 
-
                             <h2 className="storefront-small-section-title mb-0">
                                 Featured this week
                             </h2>
@@ -810,13 +491,11 @@ export default function BakeryStorefront() {
                             href="#menu"
                             className="storefront-view-all d-none d-sm-inline-flex align-items-center gap-1 text-decoration-none"
                         >
-
                             View all
 
                             <ArrowRight
                                 size={14}
                             />
-
                         </a>
 
                     </div>
@@ -872,29 +551,17 @@ export default function BakeryStorefront() {
                                     <div className="d-flex flex-column align-items-start justify-content-center w-100 p-4 p-md-5">
 
                                         <p className="storefront-eyebrow mb-2">
-
-                                            {
-                                                featuredProduct.category
-                                            }
-
+                                            {featuredProduct.category}
                                         </p>
 
 
                                         <h1 className="storefront-feature-title mb-3">
-
-                                            {
-                                                featuredProduct.name
-                                            }
-
+                                            {featuredProduct.name}
                                         </h1>
 
 
                                         <p className="storefront-feature-description mb-4">
-
-                                            {
-                                                featuredProduct.description
-                                            }
-
+                                            {featuredProduct.description}
                                         </p>
 
 
@@ -940,7 +607,6 @@ export default function BakeryStorefront() {
                                                 )
                                             }
 
-
                                             <ArrowRight
                                                 size={17}
                                             />
@@ -967,11 +633,9 @@ export default function BakeryStorefront() {
                                         }
                                         className="storefront-carousel-arrow position-absolute top-50 start-0 translate-middle-y ms-3 d-none d-md-flex align-items-center justify-content-center"
                                     >
-
                                         <ArrowLeft
                                             size={18}
                                         />
-
                                     </button>
 
 
@@ -984,11 +648,9 @@ export default function BakeryStorefront() {
                                         }
                                         className="storefront-carousel-arrow position-absolute top-50 end-0 translate-middle-y me-3 d-none d-md-flex align-items-center justify-content-center"
                                     >
-
                                         <ArrowRight
                                             size={18}
                                         />
-
                                     </button>
 
 
@@ -1035,9 +697,7 @@ export default function BakeryStorefront() {
                     ) : (
 
                         <div className="storefront-empty-products text-center p-5">
-
                             Products coming soon.
-
                         </div>
                     )}
 
@@ -1070,20 +730,11 @@ export default function BakeryStorefront() {
                                         >
 
                                             <span className="storefront-category-icon">
-
-                                                {
-                                                    category.icon
-                                                }
-
+                                                {category.icon}
                                             </span>
 
-
                                             <span className="fw-semibold text-center">
-
-                                                {
-                                                    category.name
-                                                }
-
+                                                {category.name}
                                             </span>
 
                                         </button>
@@ -1112,7 +763,6 @@ export default function BakeryStorefront() {
                             <h2 className="storefront-small-section-title mb-1">
                                 Best Sellers
                             </h2>
-
 
                             <p className="text-secondary mb-0">
                                 Customer favorites, baked fresh.
@@ -1175,11 +825,7 @@ export default function BakeryStorefront() {
                                             <div className="d-flex flex-column flex-grow-1 p-3">
 
                                                 <h3 className="storefront-product-title mb-1">
-
-                                                    {
-                                                        product.name
-                                                    }
-
+                                                    {product.name}
                                                 </h3>
 
 
@@ -1201,13 +847,11 @@ export default function BakeryStorefront() {
                                                     to={`/store/${slug}/product/${product._id}`}
                                                     className="storefront-product-action d-flex align-items-center justify-content-center text-decoration-none mt-auto"
                                                 >
-
                                                     {
                                                         getProductActionLabel(
                                                             product
                                                         )
                                                     }
-
                                                 </Link>
 
                                             </div>
@@ -1228,11 +872,8 @@ export default function BakeryStorefront() {
                                 Menu coming soon
                             </h3>
 
-
                             <p className="text-secondary mb-0">
-
                                 This bakery has not published any products yet.
-
                             </p>
 
                         </div>
@@ -1250,9 +891,7 @@ export default function BakeryStorefront() {
                     <div className="container-xxl px-3 py-lg-4">
 
                         <h2 className="storefront-how-title text-center mb-4 mb-md-5">
-
                             How it works
-
                         </h2>
 
 
@@ -1267,16 +906,12 @@ export default function BakeryStorefront() {
                                         01
                                     </span>
 
-
                                     <h3 className="mt-3 mb-2">
                                         Customize
                                     </h3>
 
-
                                     <p className="mb-0">
-
                                         Choose your product options and add any special instructions for the bakery.
-
                                     </p>
 
                                 </div>
@@ -1293,11 +928,9 @@ export default function BakeryStorefront() {
                                         02
                                     </span>
 
-
                                     <h3 className="mt-3 mb-2">
                                         Choose pickup
                                     </h3>
-
 
                                     <p className="mb-0">
 
@@ -1325,16 +958,12 @@ export default function BakeryStorefront() {
                                         03
                                     </span>
 
-
                                     <h3 className="mt-3 mb-2">
                                         Confirm order
                                     </h3>
 
-
                                     <p className="mb-0">
-
                                         Sign in or create your customer account, review your details, and place your order.
-
                                     </p>
 
                                 </div>
@@ -1382,7 +1011,6 @@ export default function BakeryStorefront() {
                                     Reviews
                                 </p>
 
-
                                 <h2 className="storefront-small-section-title mb-0">
                                     What customers say
                                 </h2>
@@ -1406,20 +1034,16 @@ export default function BakeryStorefront() {
                         {/* Real customer Reviews will be added later */}
                         <div className="storefront-reviews-empty text-center p-4 p-md-5">
 
-                            <Star size={25} />
-
+                            <Star
+                                size={25}
+                            />
 
                             <h3 className="mt-3 mb-2">
-
                                 Customer reviews coming soon
-
                             </h3>
 
-
                             <p className="text-secondary mb-0">
-
                                 Reviews from verified Bakeau orders will appear here.
-
                             </p>
 
                         </div>
@@ -1449,25 +1073,17 @@ export default function BakeryStorefront() {
                             >
 
                                 <p className="storefront-eyebrow mb-2">
-
                                     About the bakery
-
                                 </p>
 
 
                                 <h2 className="storefront-about-title mb-3">
-
                                     {bakery.name}
-
                                 </h2>
 
 
                                 <p className="storefront-about-description mb-4">
-
-                                    {
-                                        bakery.description
-                                    }
-
+                                    {bakery.description}
                                 </p>
 
 
@@ -1483,14 +1099,8 @@ export default function BakeryStorefront() {
                                                 className="storefront-about-icon"
                                             />
 
-
                                             <span>
-
-                                                {
-                                                    pickupAddress
-                                                }{" "}
-                                                · Pickup orders only
-
+                                                {pickupAddress} · Pickup orders only
                                             </span>
 
                                         </div>
@@ -1507,14 +1117,9 @@ export default function BakeryStorefront() {
                                                 className="storefront-about-icon"
                                             />
 
-
                                             <span>
-
-                                                {
-                                                    bakery.minimum_order_notice
-                                                }{" "}
+                                                {bakery.minimum_order_notice}{" "}
                                                 hours minimum notice required
-
                                             </span>
 
                                         </div>
@@ -1529,11 +1134,8 @@ export default function BakeryStorefront() {
                                             className="storefront-about-icon"
                                         />
 
-
                                         <span>
-
                                             Verified customer reviews coming soon
-
                                         </span>
 
                                     </div>
@@ -1570,115 +1172,10 @@ export default function BakeryStorefront() {
             </main>
 
 
-            {/* Storefront footer */}
-            <footer className="storefront-footer py-5">
-
-                <div className="container-xxl px-3">
-
-                    <div className="row g-4">
-
-                        {/* Bakery information */}
-                        <div className="col-12 col-md-5">
-
-                            <h3 className="mb-3">
-                                {bakery.name}
-                            </h3>
-
-
-                            <p className="mb-0">
-                                {bakery.description}
-                            </p>
-
-                        </div>
-
-
-                        {/* Pickup */}
-                        <div className="col-12 col-sm-6 col-md-3">
-
-                            <h4 className="mb-3">
-                                Pickup
-                            </h4>
-
-
-                            <p className="mb-0">
-
-                                {
-                                    bakery.address
-                                        ?.street
-                                }
-
-                                <br />
-
-                                {
-                                    bakery.address
-                                        ?.city
-                                }
-                                ,{" "}
-                                {
-                                    bakery.address
-                                        ?.province
-                                }
-
-                            </p>
-
-                        </div>
-
-
-                        {/* Contact */}
-                        <div className="col-12 col-sm-6 col-md-4">
-
-                            <h4 className="mb-3">
-                                Contact
-                            </h4>
-
-
-                            <p className="mb-2">
-
-                                {
-                                    bakery.contact_email
-                                }
-
-
-                                {bakery.contact_phone && (
-                                    <>
-
-                                        <br />
-
-                                        {
-                                            bakery.contact_phone
-                                        }
-
-                                    </>
-                                )}
-
-                            </p>
-
-
-                            <div className="d-flex flex-wrap gap-3">
-
-                                <span className="storefront-footer-link">
-                                    Privacy
-                                </span>
-
-
-                                <span className="storefront-footer-link">
-                                    Pickup Policy
-                                </span>
-
-
-                                <span className="storefront-footer-link">
-                                    Terms
-                                </span>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </footer>
+            {/* Shared Storefront Footer */}
+            <StorefrontFooter
+                bakery={bakery}
+            />
 
         </div>
     );

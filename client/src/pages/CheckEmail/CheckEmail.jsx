@@ -2,7 +2,7 @@
 import { useState } from "react";
 
 //Allows this page to receive information passed from the registration page
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 //Import the page styles
 import "./CheckEmail.css";
@@ -12,6 +12,29 @@ export default function CheckEmail() {
 
     //Gets the information passed to this page during navigation
     const location = useLocation();
+
+    //Gets the Bakery Storefront the Customer came from
+    const bakerySlug =
+        localStorage.getItem(
+            "authBakerySlug"
+        );
+
+    //Gets where the Customer should return after Login
+    const returnTo =
+        localStorage.getItem(
+            "authReturnTo"
+        );
+
+    //Creates the correct Login path
+    const signInPath =
+        bakerySlug
+            ? `/store/${bakerySlug}/login${returnTo
+                ? `?redirect=${encodeURIComponent(
+                    returnTo
+                )}`
+                : ""
+            }`
+            : "/login";
 
     //Gets the email from navigation state, or from session storage after a page refresh
     const email =
@@ -98,9 +121,12 @@ export default function CheckEmail() {
                             Bakeau
                         </a>
 
-                        <a href="/login" className="check-email-signin">
+                        <Link
+                            to={signInPath}
+                            className="check-email-signin"
+                        >
                             Sign in →
-                        </a>
+                        </Link>
 
                     </div>
                 </div>
@@ -198,7 +224,7 @@ export default function CheckEmail() {
                             {/* Gives the user another way to get help */}
                             <p className="check-email-support mb-0">
                                 Still having trouble?{" "}
-                                <a href="/login">
+                                <a href="mailto:support@bakeau.ca">
                                     Contact support
                                 </a>
                             </p>
@@ -207,13 +233,13 @@ export default function CheckEmail() {
                             <hr className="check-email-divider mx-auto my-4" />
 
                             {/* Returns the user to the login page */}
-                            <a
-                                href="/login"
+                            <Link
+                                to={signInPath}
                                 className="check-email-back d-inline-flex align-items-center gap-2"
                             >
                                 <span aria-hidden="true">←</span>
                                 Back to sign in
-                            </a>
+                            </Link>
 
                         </div>
                     </div>

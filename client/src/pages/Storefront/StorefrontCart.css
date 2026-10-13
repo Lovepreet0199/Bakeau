@@ -1,0 +1,397 @@
+/* Cart page */
+.storefront-cart-page {
+    background-color: color-mix(
+        in srgb,
+        var(--storefront-secondary) 16%,
+        #fffdf9
+    );
+    color: #2f211b;
+}
+
+
+/* Cart page title */
+.storefront-cart-title {
+    color: #2f211b;
+    font-family: "Fraunces", serif;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+
+/* Empty Cart */
+.storefront-cart-empty {
+    background-color: #fffdf9;
+    border: 1px solid #eadfd5;
+    border-radius: 12px;
+}
+
+
+/* Empty Cart icon */
+.storefront-cart-empty svg {
+    color: var(--storefront-primary);
+}
+
+
+/* Cart Product card */
+.storefront-cart-item {
+    background-color: #fffdf9;
+    border: 1px solid #eadfd5;
+    border-radius: 12px;
+}
+
+
+/* Product image */
+.storefront-cart-product-image {
+    width: 86px;
+    height: 86px;
+    border-radius: 9px;
+    object-fit: cover;
+}
+
+
+/* Product image fallback */
+.storefront-cart-product-placeholder {
+    width: 86px;
+    height: 86px;
+    border-radius: 9px;
+    background-color: var(--storefront-secondary);
+    font-size: 28px;
+}
+
+
+/* Product name */
+.storefront-cart-product-name {
+    color: #2d201a;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+
+/* Product customization details */
+.storefront-cart-options {
+    color: #78675f;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+
+/* Customer instructions */
+.storefront-cart-instructions {
+    color: #78675f;
+    font-size: 13px;
+}
+
+
+/* Remove Product */
+.storefront-cart-remove-button {
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background-color: transparent;
+    color: #a5948b;
+}
+
+
+/* Remove Product hover */
+.storefront-cart-remove-button:hover {
+    background-color: color-mix(
+        in srgb,
+        var(--storefront-primary) 8%,
+        #ffffff
+    );
+    color: var(--storefront-primary);
+}
+
+
+/* Quantity control */
+.storefront-cart-quantity {
+    overflow: hidden;
+    border: 1px solid #dfd1c6;
+    border-radius: 9px;
+}
+
+
+/* Quantity buttons */
+.storefront-cart-quantity-button {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 0;
+    background-color: #fffdf9;
+    color: #655249;
+}
+
+
+/* Quantity button hover */
+.storefront-cart-quantity-button:hover:not(:disabled) {
+    background-color: color-mix(
+        in srgb,
+        var(--storefront-primary) 7%,
+        #ffffff
+    );
+    color: var(--storefront-primary);
+}
+
+
+/* Disabled quantity button */
+.storefront-cart-quantity-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.4;
+}
+
+
+/* Quantity number */
+.storefront-cart-quantity-value {
+    width: 32px;
+    color: #2d201a;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+/* Product price */
+.storefront-cart-item-price {
+    color: #2d201a;
+    font-size: 15px;
+}
+
+
+/* Bakery note */
+.storefront-cart-note {
+    overflow: hidden;
+    border: 1px solid #eadfd5;
+    border-radius: 12px;
+    background-color: #ffffff;
+}
+
+
+/* Bakery note button */
+.storefront-cart-note-button {
+    border: 0;
+    background-color: transparent;
+    padding: 14px 16px;
+    color: #3b2a22;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+
+/* Bakery note button hover */
+.storefront-cart-note-button:hover {
+    background-color: color-mix(
+        in srgb,
+        var(--storefront-primary) 5%,
+        #ffffff
+    );
+}
+
+
+/* Optional note */
+.storefront-cart-note-optional {
+    color: #a39288;
+    font-weight: 400;
+}
+
+
+/* Open note area */
+.storefront-cart-note-body {
+    border-top: 1px solid #eadfd5;
+}
+
+
+/* Note textarea */
+.storefront-cart-note-textarea {
+    min-height: 95px;
+    resize: vertical;
+    border-color: #e5d8ce;
+    font-size: 13px;
+}
+
+
+/* Note textarea focus */
+.storefront-cart-note-textarea:focus {
+    border-color: var(--storefront-primary);
+    box-shadow:
+        0 0 0 0.2rem
+        color-mix(
+            in srgb,
+            var(--storefront-primary) 15%,
+            transparent
+        );
+}
+
+
+/* Note character count */
+.storefront-cart-note-count {
+    color: #9a8a81;
+    font-size: 11px;
+}
+
+
+/* Order Summary card */
+.storefront-cart-summary {
+    background-color: #fffdf9;
+    border: 1px solid #eadfd5;
+    border-radius: 12px;
+}
+
+
+/* Order Summary heading */
+.storefront-cart-summary-title {
+    color: #30221c;
+    font-family: "Fraunces", serif;
+    font-size: 21px;
+}
+
+
+/* Keep Order Summary visible on desktop */
+@media (min-width: 992px) {
+
+    .storefront-cart-summary {
+        position: sticky;
+        top: 24px;
+    }
+}
+
+
+/* Product inside Order Summary */
+.storefront-cart-summary-product {
+    padding: 2px 0;
+}
+
+
+/* Product name inside Summary */
+.storefront-cart-summary-product-name {
+    color: #3b2a22;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+/* Product total */
+.storefront-cart-summary-product-total {
+    color: #2d201a;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+
+/* Individual Product pricing details */
+.storefront-cart-summary-detail {
+    color: #88766c;
+    font-size: 11px;
+}
+
+
+/* Divider between Products */
+.storefront-cart-summary-product-divider {
+    margin: 14px 0;
+    border-color: #eadfd5;
+    opacity: 1;
+}
+
+
+/* Main Summary divider */
+.storefront-cart-summary-divider {
+    border-color: #e5d8ce;
+    opacity: 1;
+}
+
+
+/* Final Cart total */
+.storefront-cart-summary-total {
+    color: var(--storefront-primary);
+    font-family: "Fraunces", serif;
+    font-size: 22px;
+}
+
+
+/* Pricing message */
+.storefront-cart-pricing-note {
+    color: #7b6a62;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+
+/* Amount due now */
+.storefront-cart-deposit {
+    border-radius: 8px;
+    background-color: var(--storefront-secondary);
+    color: #54443b;
+    font-size: 13px;
+}
+
+
+/* Main Cart button */
+.storefront-cart-primary-button {
+    min-height: 42px;
+    padding: 10px 18px;
+    border: 0;
+    border-radius: 9px;
+    background-color: var(--storefront-primary);
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+    transition:
+        opacity 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+/* Main Cart button hover */
+.storefront-cart-primary-button:hover:not(:disabled) {
+    color: #ffffff;
+    opacity: 0.92;
+}
+
+
+/* Main Cart button active */
+.storefront-cart-primary-button:active:not(:disabled) {
+    transform: translateY(1px);
+}
+
+
+/* Disabled checkout */
+.storefront-cart-primary-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+}
+
+
+/* Pickup message */
+.storefront-cart-pickup-note {
+    color: #8a776d;
+    font-size: 11px;
+}
+
+
+/* Continue shopping */
+.storefront-cart-shopping-link {
+    color: #60463a;
+    font-size: 13px;
+}
+
+
+/* Continue shopping hover */
+.storefront-cart-shopping-link:hover {
+    color: var(--storefront-primary);
+}
+
+
+/* Mobile adjustments */
+@media (max-width: 575px) {
+
+    .storefront-cart-product-image,
+    .storefront-cart-product-placeholder {
+        width: 68px;
+        height: 68px;
+    }
+
+
+    .storefront-cart-title {
+        font-size: 24px;
+    }
+}

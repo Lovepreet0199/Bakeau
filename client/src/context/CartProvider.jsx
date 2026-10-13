@@ -42,6 +42,15 @@ export default function CartProvider({ children }) {
         }
     });
 
+    //Stores the optional note for the Bakery
+    const [cartNote, setCartNote] = useState(() => {
+
+        //Get the saved Bakery note
+        return localStorage.getItem(
+            "bakeau_cart_note"
+        ) || "";
+    });
+
 
     //Save the Cart whenever Cart items change
     useEffect(() => {
@@ -63,6 +72,15 @@ export default function CartProvider({ children }) {
 
     }, [cartItems]);
 
+    //Save the Bakery note whenever it changes
+    useEffect(() => {
+
+        localStorage.setItem(
+            "bakeau_cart_note",
+            cartNote
+        );
+
+    }, [cartNote]);
 
     //Add a configured Product to the Cart
     function addToCart(cartItem) {
@@ -138,10 +156,49 @@ export default function CartProvider({ children }) {
     }
 
 
-    //Remove every Product from the Cart
+    ///Updates information for one Cart item
+    function updateCartItem(
+        cartItemId,
+        updates
+    ) {
+
+        setCartItems(
+            (currentItems) =>
+                currentItems.map(
+                    (item) => {
+
+                        //Update the matching Cart item
+                        if (
+                            item.cart_item_id ===
+                            cartItemId
+                        ) {
+
+                            return {
+                                ...item,
+                                ...updates
+                            };
+                        }
+
+                        //Leave other Cart items unchanged
+                        return item;
+                    }
+                )
+        );
+    }
+
+    //Clears the Customer Cart
     function clearCart() {
 
+        //Remove all Cart Products
         setCartItems([]);
+
+        //Remove the Bakery note
+        setCartNote("");
+
+        //Remove saved Bakery note
+        localStorage.removeItem(
+            "bakeau_cart_note"
+        );
     }
 
 
@@ -163,9 +220,12 @@ export default function CartProvider({ children }) {
             value={{
                 cartItems,
                 cartCount,
+                cartNote,
+                setCartNote,
                 addToCart,
                 removeFromCart,
                 updateCartQuantity,
+                updateCartItem,
                 clearCart
             }}
         >

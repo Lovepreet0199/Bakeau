@@ -1,0 +1,257 @@
+/* Storefront announcement bar */
+.storefront-announcement {
+    background-color: var(--storefront-dark);
+    color: #ffffff;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+
+/* Storefront header */
+.storefront-header {
+    background-color: #fffdf9;
+    border-bottom: 1px solid #eee4dc;
+}
+
+
+/* Bakery branding */
+.storefront-brand {
+    min-width: 0;
+    color: #2f221d;
+}
+
+.storefront-brand:hover {
+    color: #2f221d;
+}
+
+
+/* Bakery name */
+.storefront-brand-name {
+    max-width: clamp(110px, 32vw, 230px);
+}
+
+
+/* Bakery logo */
+.storefront-logo,
+.storefront-logo-fallback {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+}
+
+
+/* Uploaded Bakery logo */
+.storefront-logo {
+    object-fit: cover;
+}
+
+
+/* Bakery initials when there is no logo */
+.storefront-logo-fallback {
+    background-color: var(--storefront-dark);
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+/* Main Storefront navigation */
+.storefront-nav-link {
+    color: #554840;
+    text-decoration: none;
+    font-size: 13px;
+    transition: color 0.2s ease;
+}
+
+.storefront-nav-link:hover {
+    color: var(--storefront-primary);
+}
+
+
+/* Header text actions */
+.storefront-text-action {
+    border: none;
+    background-color: transparent;
+    color: #554840;
+    font-size: 13px;
+    padding: 0;
+}
+
+.storefront-text-action:hover {
+    color: var(--storefront-primary);
+}
+
+
+/* Bakery Owner Login */
+.storefront-bakery-login {
+    border: 1px solid #d9ccc3;
+    border-radius: 7px;
+    background-color: #ffffff;
+    color: #3f3029;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 8px 12px;
+    transition:
+        border-color 0.2s ease,
+        color 0.2s ease;
+}
+
+.storefront-bakery-login:hover {
+    border-color: var(--storefront-primary);
+    color: var(--storefront-primary);
+}
+
+
+/* Mobile Cart action */
+.storefront-mobile-action {
+    border: none;
+    background-color: transparent;
+    color: #554840;
+    padding: 5px;
+}
+
+.storefront-mobile-action:hover {
+    color: var(--storefront-primary);
+}
+
+
+/* Mobile Burger button */
+.storefront-mobile-menu-button {
+    width: 38px;
+    height: 38px;
+    border: 1px solid #e1d5cd;
+    border-radius: 8px;
+    background-color: #ffffff;
+    color: #44352d;
+}
+
+
+/* Mobile Burger button hover */
+.storefront-mobile-menu-button:hover {
+    border-color: var(--storefront-primary);
+    color: var(--storefront-primary);
+}
+
+
+/* Mobile navigation container */
+.storefront-mobile-menu {
+    border: 1px solid #eee4dc;
+    border-radius: 12px;
+    background-color: #ffffff;
+    box-shadow:
+        0 12px 30px rgba(66, 44, 35, 0.08);
+    animation:
+        storefront-mobile-menu-in 0.2s ease;
+}
+
+
+/* Mobile navigation links */
+.storefront-mobile-nav-link {
+    border-radius: 7px;
+    color: #44352d;
+    font-size: 14px;
+    font-weight: 500;
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
+}
+
+.storefront-mobile-nav-link:hover {
+    background-color: var(--storefront-secondary);
+    color: var(--storefront-primary);
+}
+
+
+/* Mobile Customer Sign In */
+.storefront-mobile-signin {
+    border: 1px solid #e1d5cd;
+    border-radius: 8px;
+    background-color: #ffffff;
+    color: #44352d;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+/* Mobile Bakery Login */
+.storefront-mobile-bakery-login {
+    border: 1px solid var(--storefront-primary);
+    border-radius: 8px;
+    background-color: var(--storefront-primary);
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.storefront-mobile-bakery-login:hover {
+    color: #ffffff;
+    opacity: 0.92;
+}
+
+/* Customer Create Account button */
+.storefront-create-account {
+    border: 1px solid var(--storefront-primary);
+    border-radius: 7px;
+    background-color: var(--storefront-primary);
+    color: #ffffff;
+    padding: 8px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    transition:
+        opacity 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+/* Create Account hover */
+.storefront-create-account:hover {
+    color: #ffffff;
+    opacity: 0.92;
+}
+
+
+/* Create Account active */
+.storefront-create-account:active {
+    transform: translateY(1px);
+}
+
+
+/* Mobile Create Account */
+.storefront-mobile-create-account {
+    border: 1px solid var(--storefront-primary);
+    border-radius: 8px;
+    background-color: var(--storefront-primary);
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+/* Mobile Create Account hover */
+.storefront-mobile-create-account:hover {
+    color: #ffffff;
+    opacity: 0.92;
+}
+
+/* Mobile Menu opening animation */
+@keyframes storefront-mobile-menu-in {
+
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* Respect users who prefer less motion */
+@media (prefers-reduced-motion: reduce) {
+
+    .storefront-mobile-menu {
+        animation: none;
+    }
+}

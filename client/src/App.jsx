@@ -56,6 +56,15 @@ import StorefrontProduct from "./pages/Storefront/StorefrontProduct.jsx"
 //Import Customer Cart Provider
 import CartProvider from "./context/CartProvider";
 
+//Import public Storefront Cart page
+import StorefrontCart from "./pages/Storefront/StorefrontCart.jsx";
+
+//Import Customer registration
+import CustomerRegister from "./pages/Storefront/CustomerRegister";
+
+//Import Customer Storefront Login
+import CustomerLogin from "./pages/Storefront/CustomerLogin";
+
 //Displays the Bakeau application routes
 export default function App() {
 
@@ -76,6 +85,12 @@ export default function App() {
           element={<Register />}
         />
 
+        {/* Bakery Customer registration page */}
+        <Route
+          path="/store/:slug/register"
+          element={<CustomerRegister />}
+        />
+
         {/* Shows instructions after account registration */}
         <Route
           path="/check-email"
@@ -94,6 +109,12 @@ export default function App() {
           element={<Login />}
         />
 
+        {/* Customer login page */}
+        <Route
+          path="/store/:slug/login"
+          element={<CustomerLogin />}
+        />
+
         {/* Bakery setup page for new Bakery Owners */}
         <Route
           path="/bakery-setup"
@@ -110,6 +131,12 @@ export default function App() {
         <Route
           path="/store/:slug/product/:productId"
           element={<StorefrontProduct />}
+        />
+
+        {/* Public Storefront Cart */}
+        <Route
+          path="/store/:slug/cart"
+          element={<StorefrontCart />}
         />
 
         {/* Shared layout for all Bakery Owner dashboard pages */}

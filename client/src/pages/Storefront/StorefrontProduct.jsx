@@ -7,11 +7,9 @@ import { Link, useParams } from "react-router-dom";
 //Import Product icons
 import {
     Clock3,
-    Menu,
     Minus,
     Plus,
-    ShoppingCart,
-    X
+    ShoppingCart
 } from "lucide-react";
 
 //Import Product page styles
@@ -19,6 +17,13 @@ import "./StorefrontProduct.css";
 
 //Import Customer Cart hook
 import { useCart } from "../../context/useCart";
+
+//Import shared Storefront components
+import StorefrontNavbar from "../../components/storefront/StorefrontNavbar";
+import StorefrontFooter from "../../components/storefront/StorefrontFooter";
+
+//Import Storefront theme helper
+import { getStorefrontTheme } from "../../utils/storefrontTheme";
 
 //Displays a Product from a public Bakery Storefront
 export default function StorefrontProduct() {
@@ -53,9 +58,6 @@ export default function StorefrontProduct() {
     //Tracks Product quantity
     const [quantity, setQuantity] = useState(1);
 
-    //Tracks whether the mobile navigation is open
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
     //Stores Product validation errors
     const [validationError, setValidationError] = useState("");
 
@@ -65,11 +67,11 @@ export default function StorefrontProduct() {
     //Stores loading errors
     const [error, setError] = useState("");
 
-    //Get Customer Cart functions and information
+    //Get Customer Cart functions
     const {
-        addToCart,
-        cartCount
+        addToCart
     } = useCart();
+
 
     //Loads the Bakery and selected Product
     useEffect(() => {
@@ -111,7 +113,8 @@ export default function StorefrontProduct() {
 
                 //Get Product customization information
                 const details =
-                    productData.customizationDetails || [];
+                    productData.customizationDetails ||
+                    [];
 
                 //Stores default required selections
                 const defaultSelections = {};
@@ -134,7 +137,9 @@ export default function StorefrontProduct() {
                 });
 
                 //Save Bakery information
-                setBakery(bakeryData.bakery);
+                setBakery(
+                    bakeryData.bakery
+                );
 
                 //Save Product information
                 setProduct(
@@ -143,15 +148,21 @@ export default function StorefrontProduct() {
                 );
 
                 //Save customization information
-                setCustomizationDetails(details);
+                setCustomizationDetails(
+                    details
+                );
 
                 //Save default required Options
-                setSelectedOptions(defaultSelections);
+                setSelectedOptions(
+                    defaultSelections
+                );
 
             } catch (error) {
 
                 //Display loading error
-                setError(error.message);
+                setError(
+                    error.message
+                );
 
             } finally {
 
@@ -173,21 +184,21 @@ export default function StorefrontProduct() {
             return;
         }
 
-
         //Check if any required Group does not have a selection
         const missingRequiredGroup =
-            customizationDetails.find((detail) => {
+            customizationDetails.find(
+                (detail) => {
 
-                const groupKey =
-                    detail.group?._id ||
-                    detail.group?.name;
+                    const groupKey =
+                        detail.group?._id ||
+                        detail.group?.name;
 
-                return (
-                    detail.group?.is_required &&
-                    !selectedOptions[groupKey]
-                );
-            });
-
+                    return (
+                        detail.group?.is_required &&
+                        !selectedOptions[groupKey]
+                    );
+                }
+            );
 
         //Do not request a quote until required Options are selected
         if (missingRequiredGroup) {
@@ -198,95 +209,119 @@ export default function StorefrontProduct() {
         const controller =
             new AbortController();
 
-
         //Wait briefly before requesting a new quote
-        const quoteTimer = setTimeout(async () => {
+        const quoteTimer =
+            setTimeout(
+                async () => {
 
-            setIsQuoteLoading(true);
-            setQuoteError("");
+                    setIsQuoteLoading(true);
+                    setQuoteError("");
 
-            try {
+                    try {
 
-                //Get only the selected Option IDs
-                const customizationOptionIds =
-                    Object.values(selectedOptions)
-                        .map((option) => option?._id)
-                        .filter(Boolean);
+                        //Get only the selected Option IDs
+                        const customizationOptionIds =
+                            Object.values(
+                                selectedOptions
+                            )
+                                .map(
+                                    (option) =>
+                                        option?._id
+                                )
+                                .filter(Boolean);
 
+                        //Request trusted pricing from the backend
+                        const quoteResponse =
+                            await fetch(
+                                `http://localhost:3000/api/bakeries/public/${slug}/products/${productId}/quote`,
+                                {
+                                    method: "POST",
 
-                //Request trusted pricing from the backend
-                const quoteResponse = await fetch(
-                    `http://localhost:3000/api/bakeries/public/${slug}/products/${productId}/quote`,
-                    {
-                        method: "POST",
+                                    headers: {
+                                        "Content-Type":
+                                            "application/json"
+                                    },
 
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
+                                    body:
+                                        JSON.stringify({
 
-                        body: JSON.stringify({
+                                            //Send quantity but never calculate its price here
+                                            quantity:
+                                                quantity,
 
-                            //Send quantity but never calculate its price here
-                            quantity: quantity,
+                                            //Send only selected Option IDs
+                                            customization_option_ids:
+                                                customizationOptionIds
+                                        }),
 
-                            //Send only selected Option IDs
-                            customization_option_ids:
-                                customizationOptionIds
-                        }),
+                                    signal:
+                                        controller.signal
+                                }
+                            );
 
-                        signal: controller.signal
+                        //Convert the backend response into JavaScript data
+                        const quoteData =
+                            await quoteResponse.json();
+
+                        //Stop if the backend could not create the quote
+                        if (!quoteResponse.ok) {
+
+                            const errorMessage =
+                                quoteData.message ||
+                                quoteData.errors?.[0]?.msg ||
+                                "Unable to calculate product price";
+
+                            throw new Error(
+                                errorMessage
+                            );
+                        }
+
+                        //Save the trusted backend-calculated quote
+                        setQuote(
+                            quoteData.quote
+                        );
+
+                    } catch (error) {
+
+                        //Ignore cancelled quote requests
+                        if (
+                            error.name ===
+                            "AbortError"
+                        ) {
+                            return;
+                        }
+
+                        //Remove the old quote when pricing fails
+                        setQuote(null);
+
+                        //Display the backend pricing error
+                        setQuoteError(
+                            error.message
+                        );
+
+                    } finally {
+
+                        //Only stop loading when this request was not cancelled
+                        if (
+                            !controller.signal.aborted
+                        ) {
+                            setIsQuoteLoading(
+                                false
+                            );
+                        }
                     }
-                );
 
-
-                //Convert the backend response into JavaScript data
-                const quoteData =
-                    await quoteResponse.json();
-
-
-                //Stop if the backend could not create the quote
-                if (!quoteResponse.ok) {
-
-                    const errorMessage =
-                        quoteData.message ||
-                        quoteData.errors?.[0]?.msg ||
-                        "Unable to calculate product price";
-
-                    throw new Error(errorMessage);
-                }
-
-
-                //Save the trusted backend-calculated quote
-                setQuote(quoteData.quote);
-
-            } catch (error) {
-
-                //Ignore cancelled quote requests
-                if (error.name === "AbortError") {
-                    return;
-                }
-
-                //Remove the old quote when pricing fails
-                setQuote(null);
-
-                //Display the backend pricing error
-                setQuoteError(error.message);
-
-            } finally {
-
-                //Only stop loading when this request was not cancelled
-                if (!controller.signal.aborted) {
-                    setIsQuoteLoading(false);
-                }
-            }
-
-        }, 250);
-
+                },
+                250
+            );
 
         //Cancel old quote requests when selections change quickly
         return () => {
 
-            clearTimeout(quoteTimer);
+            clearTimeout(
+                quoteTimer
+            );
+
             controller.abort();
         };
 
@@ -300,81 +335,72 @@ export default function StorefrontProduct() {
     ]);
 
 
-    //Creates Bakery initials when no logo exists
-    function getBakeryInitials() {
-
-        //Use B when there is no Bakery name
-        if (!bakery?.name?.trim()) {
-            return "B";
-        }
-
-        //Split the Bakery name into words
-        const nameParts =
-            bakery.name.trim().split(" ");
-
-        //Use one letter for a one-word Bakery name
-        if (nameParts.length === 1) {
-
-            return nameParts[0]
-                .charAt(0)
-                .toUpperCase();
-        }
-
-        //Use the first two Bakery initials
-        return (
-            nameParts[0].charAt(0) +
-            nameParts[1].charAt(0)
-        ).toUpperCase();
-    }
-
-
     //Returns a unique key for a customization Group
     function getGroupKey(group) {
 
-        return group?._id ||
-            group?.name;
+        return (
+            group?._id ||
+            group?.name
+        );
     }
 
 
     //Returns a unique key for a customization Option
     function getOptionKey(option) {
 
-        return option?._id ||
-            option?.name;
+        return (
+            option?._id ||
+            option?.name
+        );
     }
 
 
     //Formats backend price values for display
     function formatPrice(price) {
 
-        return new Intl.NumberFormat("en-CA", {
+        return new Intl.NumberFormat(
+            "en-CA",
+            {
+                style:
+                    "currency",
 
-            style: "currency",
-
-            currency:
-                bakery?.currency ||
-                "CAD"
-
-        }).format(Number(price) || 0);
+                currency:
+                    bakery?.currency ||
+                    "CAD"
+            }
+        ).format(
+            Number(price) ||
+            0
+        );
     }
 
 
     //Selects a Product customization Option
-    function selectOption(detail, option) {
+    function selectOption(
+        detail,
+        option
+    ) {
 
         const groupKey =
-            getGroupKey(detail.group);
+            getGroupKey(
+                detail.group
+            );
 
         const currentOption =
-            selectedOptions[groupKey];
-
+            selectedOptions[
+            groupKey
+            ];
 
         //Allow an optional Option to be removed
         if (
             !detail.group?.is_required &&
             currentOption &&
-            getOptionKey(currentOption) ===
-            getOptionKey(option)
+            getOptionKey(
+                currentOption
+            ) ===
+            getOptionKey(
+                option
+            )
         ) {
 
             setSelectedOptions(
@@ -397,18 +423,15 @@ export default function StorefrontProduct() {
             return;
         }
 
-
         //Save the selected Option
         setSelectedOptions(
             (currentSelections) => ({
-
                 ...currentSelections,
 
                 [groupKey]:
                     option
             })
         );
-
 
         //Clear previous validation error
         setValidationError("");
@@ -438,13 +461,6 @@ export default function StorefrontProduct() {
     }
 
 
-    //Closes the mobile navigation
-    function closeMobileMenu() {
-
-        setIsMobileMenuOpen(false);
-    }
-
-
     //Validates the configured Product before adding it to Cart
     function handleAddToCart() {
 
@@ -460,14 +476,17 @@ export default function StorefrontProduct() {
 
                     return (
                         detail.group?.is_required &&
-                        !selectedOptions[groupKey]
+                        !selectedOptions[
+                        groupKey
+                        ]
                     );
                 }
             );
 
-
         //Stop if a required Option is missing
-        if (missingRequiredGroup) {
+        if (
+            missingRequiredGroup
+        ) {
 
             setValidationError(
                 `Please select an option for ${missingRequiredGroup.group.name}.`
@@ -475,7 +494,6 @@ export default function StorefrontProduct() {
 
             return;
         }
-
 
         //Do not continue without a trusted backend quote
         if (!quote) {
@@ -487,38 +505,58 @@ export default function StorefrontProduct() {
             return;
         }
 
-
         //Clear previous validation errors
         setValidationError("");
-
 
         //Add the configured Product to the Customer Cart
         addToCart({
 
             //Store the Bakery information
-            bakery_id: bakery._id,
-            bakery_slug: slug,
-            bakery_name: bakery.name,
+            bakery_id:
+                bakery._id,
 
-            //Store the product information
-            product_id: product._id,
-            product_name: product.name,
-            product_image_url: product.image_url,
+            bakery_slug:
+                slug,
+
+            bakery_name:
+                bakery.name,
+
+            //Store the Product information
+            product_id:
+                product._id,
+
+            product_name:
+                product.name,
+
+            product_image_url:
+                product.image_url,
 
             //Store the selected quantity
-            quantity: quantity,
+            quantity:
+                quantity,
 
-            //Store only the selected customization Option Ids
-            customization_option_ids: Object.values(selectedOptions).map((option) => option?._id).filter(Boolean),
+            //Store only the selected customization Option IDs
+            customization_option_ids:
+                Object.values(
+                    selectedOptions
+                )
+                    .map(
+                        (option) =>
+                            option?._id
+                    )
+                    .filter(Boolean),
 
-            //Store customization information for Cart display'
-            customizations: quote.customizations,
+            //Store customization information for Cart display
+            customizations:
+                quote.customizations,
 
             //Store Customer instructions
-            special_instructions: specialInstructions,
+            special_instructions:
+                specialInstructions,
 
             //Store the backend quote for display
-            quote: quote
+            quote:
+                quote
         });
     }
 
@@ -562,7 +600,12 @@ export default function StorefrontProduct() {
                 </h1>
 
                 <p className="text-secondary mb-0">
-                    {error || "Product not found"}
+
+                    {
+                        error ||
+                        "Product not found"
+                    }
+
                 </p>
 
                 <Link
@@ -585,277 +628,23 @@ export default function StorefrontProduct() {
 
     return (
 
+        //Theme comes from the Bakery Owner and applies to the whole Product page
         <div
             className="storefront-product-page min-vh-100"
-            style={{
-                "--storefront-primary":
-                    bakery.primary_color ||
-                    "#C65F3A",
-
-                "--storefront-secondary":
-                    bakery.secondary_color ||
-                    "#F4E8DF",
-
-                "--storefront-dark":
-                    bakery.dark_color ||
-                    "#432C23"
-            }}
+            style={
+                getStorefrontTheme(
+                    bakery
+                )
+            }
         >
 
-            {/* Announcement bar */}
-            <div className="storefront-product-announcement">
-
-                <div className="container-xxl text-center py-2 px-3">
-
-                    <small>
-
-                        {orderNotice && (
-                            <>
-                                Orders require at least{" "}
-                                {orderNotice} hours' notice
-                            </>
-                        )}
-
-                        {orderNotice &&
-                            bakery.address?.city && (
-                                <> • </>
-                            )}
-
-                        {bakery.address?.city && (
-                            <>
-                                Pickup in{" "}
-                                {bakery.address.city}
-                            </>
-                        )}
-
-                    </small>
-
-                </div>
-
-            </div>
-
-
-            {/* Storefront Product navigation */}
-            <header className="storefront-product-header">
-
-                <div className="container-xxl px-3">
-
-                    <div className="d-flex align-items-center justify-content-between gap-2 py-3">
-
-                        {/* Bakery logo and name */}
-                        <Link
-                            to={`/store/${slug}`}
-                            onClick={closeMobileMenu}
-                            className="storefront-product-brand d-flex align-items-center gap-2 text-decoration-none flex-shrink-1"
-                        >
-
-                            {bakery.logo_image_url ? (
-
-                                <img
-                                    src={
-                                        bakery.logo_image_url
-                                    }
-                                    alt={
-                                        `${bakery.name} logo`
-                                    }
-                                    className="storefront-product-logo flex-shrink-0"
-                                />
-
-                            ) : (
-
-                                <div className="storefront-product-logo-fallback d-flex align-items-center justify-content-center flex-shrink-0">
-
-                                    {getBakeryInitials()}
-
-                                </div>
-                            )}
-
-                            <span className="storefront-product-brand-name fw-semibold text-truncate">
-
-                                {bakery.name}
-
-                            </span>
-
-                        </Link>
-
-
-                        {/* Desktop navigation */}
-                        <nav className="d-none d-lg-flex align-items-center gap-4">
-
-                            <Link
-                                to={`/store/${slug}#menu`}
-                                className="storefront-product-nav-link text-decoration-none"
-                            >
-                                Menu
-                            </Link>
-
-                            <Link
-                                to={`/store/${slug}#how-it-works`}
-                                className="storefront-product-nav-link text-decoration-none"
-                            >
-                                How It Works
-                            </Link>
-
-                            <Link
-                                to={`/store/${slug}#reviews`}
-                                className="storefront-product-nav-link text-decoration-none"
-                            >
-                                Reviews
-                            </Link>
-
-                            <Link
-                                to={`/store/${slug}#about`}
-                                className="storefront-product-nav-link text-decoration-none"
-                            >
-                                About
-                            </Link>
-
-                        </nav>
-
-
-                        {/* Desktop actions */}
-                        <div className="d-none d-lg-flex align-items-center gap-3">
-
-                            {/* Cart will be connected next */}
-                            <button
-                                type="button"
-                                className="storefront-product-header-action d-flex align-items-center gap-1"
-                            >
-                                <ShoppingCart size={17} />
-                                Cart ({cartCount})
-                            </button>
-
-                            {/* Customer Sign In will be connected later */}
-                            <button
-                                type="button"
-                                className="storefront-product-header-action"
-                            >
-                                Sign In
-                            </button>
-
-                        </div>
-
-
-                        {/* Mobile actions */}
-                        <div className="d-flex d-lg-none align-items-center gap-2">
-
-                            {/* Mobile Cart */}
-                            <button
-                                type="button"
-                                aria-label="Open cart"
-                                className="storefront-product-header-action d-flex align-items-center gap-1"
-                            >
-                                <ShoppingCart size={19} />
-
-                                <span className="small">
-                                    ({cartCount})
-                                </span>
-                            </button>
-
-
-                            {/* Mobile Burger Menu */}
-                            <button
-                                type="button"
-                                aria-expanded={
-                                    isMobileMenuOpen
-                                }
-                                aria-label={
-                                    isMobileMenuOpen
-                                        ? "Close menu"
-                                        : "Open menu"
-                                }
-                                onClick={() =>
-                                    setIsMobileMenuOpen(
-                                        (currentValue) =>
-                                            !currentValue
-                                    )
-                                }
-                                className="storefront-product-menu-button d-flex align-items-center justify-content-center"
-                            >
-
-                                {isMobileMenuOpen ? (
-                                    <X size={21} />
-                                ) : (
-                                    <Menu size={21} />
-                                )}
-
-                            </button>
-
-                        </div>
-
-                    </div>
-
-
-                    {/* Mobile navigation */}
-                    {isMobileMenuOpen && (
-
-                        <div className="d-lg-none pb-3">
-
-                            <div className="storefront-product-mobile-menu p-3">
-
-                                <nav className="d-grid gap-1">
-
-                                    <Link
-                                        to={`/store/${slug}#menu`}
-                                        onClick={
-                                            closeMobileMenu
-                                        }
-                                        className="storefront-product-mobile-link text-decoration-none px-3 py-2"
-                                    >
-                                        Menu
-                                    </Link>
-
-                                    <Link
-                                        to={`/store/${slug}#how-it-works`}
-                                        onClick={
-                                            closeMobileMenu
-                                        }
-                                        className="storefront-product-mobile-link text-decoration-none px-3 py-2"
-                                    >
-                                        How It Works
-                                    </Link>
-
-                                    <Link
-                                        to={`/store/${slug}#reviews`}
-                                        onClick={
-                                            closeMobileMenu
-                                        }
-                                        className="storefront-product-mobile-link text-decoration-none px-3 py-2"
-                                    >
-                                        Reviews
-                                    </Link>
-
-                                    <Link
-                                        to={`/store/${slug}#about`}
-                                        onClick={
-                                            closeMobileMenu
-                                        }
-                                        className="storefront-product-mobile-link text-decoration-none px-3 py-2"
-                                    >
-                                        About
-                                    </Link>
-
-                                </nav>
-
-
-                                <hr className="my-3" />
-
-
-                                <button
-                                    type="button"
-                                    className="storefront-product-mobile-signin w-100 py-2"
-                                >
-                                    Sign In
-                                </button>
-
-                            </div>
-
-                        </div>
-                    )}
-
-                </div>
-
-            </header>
+            {/* Shared Storefront Navbar */}
+            <StorefrontNavbar
+                bakery={bakery}
+                orderNotice={
+                    orderNotice
+                }
+            />
 
 
             <main className="container-xxl px-3 py-4 py-lg-5">
@@ -938,9 +727,7 @@ export default function StorefrontProduct() {
                                         src={
                                             product.image_url
                                         }
-                                        alt={
-                                            `${product.name} thumbnail`
-                                        }
+                                        alt={`${product.name} thumbnail`}
                                         className="w-100 h-100"
                                     />
 
@@ -958,7 +745,9 @@ export default function StorefrontProduct() {
                         {/* Product category */}
                         <p className="storefront-product-category-label mb-2">
 
-                            {product.category}
+                            {
+                                product.category
+                            }
 
                         </p>
 
@@ -966,7 +755,9 @@ export default function StorefrontProduct() {
                         {/* Product name */}
                         <h1 className="storefront-product-page-title mb-3">
 
-                            {product.name}
+                            {
+                                product.name
+                            }
 
                         </h1>
 
@@ -974,7 +765,9 @@ export default function StorefrontProduct() {
                         {/* Product description */}
                         <p className="storefront-product-page-description mb-4">
 
-                            {product.description}
+                            {
+                                product.description
+                            }
 
                         </p>
 
@@ -996,8 +789,10 @@ export default function StorefrontProduct() {
                                     </strong>
 
                                     <div>
+
                                         Please order at least{" "}
                                         {orderNotice} hours before pickup.
+
                                     </div>
 
                                 </div>
@@ -1015,10 +810,12 @@ export default function StorefrontProduct() {
 
                             <h2 className="storefront-product-page-price mb-0">
 
-                                {formatPrice(
-                                    quote?.base_price ??
-                                    product.base_price
-                                )}
+                                {
+                                    formatPrice(
+                                        quote?.base_price ??
+                                        product.base_price
+                                    )
+                                }
 
                             </h2>
 
@@ -1042,7 +839,6 @@ export default function StorefrontProduct() {
                                             selectedOptions[
                                             groupKey
                                             ];
-
 
                                         return (
 
@@ -1101,7 +897,6 @@ export default function StorefrontProduct() {
                                                                 getOptionKey(
                                                                     option
                                                                 );
-
 
                                                             return (
 
@@ -1163,9 +958,11 @@ export default function StorefrontProduct() {
                                                                             <span className="storefront-option-price flex-shrink-0">
 
                                                                                 +
-                                                                                {formatPrice(
-                                                                                    option.additional_price
-                                                                                )}
+                                                                                {
+                                                                                    formatPrice(
+                                                                                        option.additional_price
+                                                                                    )
+                                                                                }
 
                                                                             </span>
                                                                         )}
@@ -1261,13 +1058,19 @@ export default function StorefrontProduct() {
                                     }
                                     className="storefront-quantity-button d-flex align-items-center justify-content-center"
                                 >
-                                    <Minus size={16} />
+
+                                    <Minus
+                                        size={16}
+                                    />
+
                                 </button>
 
 
                                 <span className="storefront-product-quantity fw-semibold text-center">
 
-                                    {quantity}
+                                    {
+                                        quantity
+                                    }
 
                                 </span>
 
@@ -1280,7 +1083,11 @@ export default function StorefrontProduct() {
                                     }
                                     className="storefront-quantity-button d-flex align-items-center justify-content-center"
                                 >
-                                    <Plus size={16} />
+
+                                    <Plus
+                                        size={16}
+                                    />
+
                                 </button>
 
                             </div>
@@ -1297,9 +1104,11 @@ export default function StorefrontProduct() {
                                     className="spinner-border spinner-border-sm"
                                     role="status"
                                 >
+
                                     <span className="visually-hidden">
                                         Updating price...
                                     </span>
+
                                 </div>
 
                                 Updating price...
@@ -1313,7 +1122,9 @@ export default function StorefrontProduct() {
 
                             <div className="alert alert-danger py-2 mb-3">
 
-                                {quoteError}
+                                {
+                                    quoteError
+                                }
 
                             </div>
                         )}
@@ -1324,7 +1135,9 @@ export default function StorefrontProduct() {
 
                             <div className="alert alert-danger py-2 mb-3">
 
-                                {validationError}
+                                {
+                                    validationError
+                                }
 
                             </div>
                         )}
@@ -1347,11 +1160,13 @@ export default function StorefrontProduct() {
 
                                 <strong>
 
-                                    {quote
-                                        ? formatPrice(
-                                            quote.base_price
-                                        )
-                                        : "—"}
+                                    {
+                                        quote
+                                            ? formatPrice(
+                                                quote.base_price
+                                            )
+                                            : "—"
+                                    }
 
                                 </strong>
 
@@ -1392,9 +1207,11 @@ export default function StorefrontProduct() {
                                             <span>
 
                                                 +
-                                                {formatPrice(
-                                                    customization.additional_price
-                                                )}
+                                                {
+                                                    formatPrice(
+                                                        customization.additional_price
+                                                    )
+                                                }
 
                                             </span>
 
@@ -1442,11 +1259,13 @@ export default function StorefrontProduct() {
 
                                 <strong className="storefront-product-total">
 
-                                    {quote
-                                        ? formatPrice(
-                                            quote.item_total
-                                        )
-                                        : "—"}
+                                    {
+                                        quote
+                                            ? formatPrice(
+                                                quote.item_total
+                                            )
+                                            : "—"
+                                    }
 
                                 </strong>
 
@@ -1474,9 +1293,11 @@ export default function StorefrontProduct() {
 
                                         <strong>
 
-                                            {formatPrice(
-                                                quote.amount_due_now
-                                            )}
+                                            {
+                                                formatPrice(
+                                                    quote.amount_due_now
+                                                )
+                                            }
 
                                         </strong>
 
@@ -1497,15 +1318,19 @@ export default function StorefrontProduct() {
                                 className="storefront-product-primary-button w-100 d-flex align-items-center justify-content-center gap-2 mt-4"
                             >
 
-                                <ShoppingCart size={18} />
+                                <ShoppingCart
+                                    size={18}
+                                />
 
-                                {isQuoteLoading
-                                    ? "Updating price..."
-                                    : quote
-                                        ? `Add to Cart · ${formatPrice(
-                                            quote.item_total
-                                        )}`
-                                        : "Add to Cart"}
+                                {
+                                    isQuoteLoading
+                                        ? "Updating price..."
+                                        : quote
+                                            ? `Add to Cart · ${formatPrice(
+                                                quote.item_total
+                                            )}`
+                                            : "Add to Cart"
+                                }
 
                             </button>
 
@@ -1516,6 +1341,12 @@ export default function StorefrontProduct() {
                 </div>
 
             </main>
+
+
+            {/* Shared Storefront Footer */}
+            <StorefrontFooter
+                bakery={bakery}
+            />
 
         </div>
     );
