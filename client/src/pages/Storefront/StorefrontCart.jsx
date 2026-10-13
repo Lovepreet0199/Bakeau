@@ -8,7 +8,8 @@ import {
 //Import React Router tools
 import {
     Link,
-    useParams
+    useParams,
+    useNavigate
 } from "react-router-dom";
 
 //Import Cart icons
@@ -37,6 +38,9 @@ export default function StorefrontCart() {
 
     //Get the Bakery slug from the URL
     const { slug } = useParams();
+
+    //Used to navigate Customer to login or Checkout
+    const navigate = useNavigate();
 
     //Stores public Bakery information
     const [bakery, setBakery] = useState(null);
@@ -448,6 +452,87 @@ export default function StorefrontCart() {
         }
     }
 
+    //Gets the currently logged-in Customer
+    function getStoredCustomer() {
+
+        //User may be stored in either storage location
+        const storedUser =
+            localStorage.getItem("user") || sessionStorage.getItem("user");
+
+        //No logged-in User
+        if (!storedUser) {
+            return null;
+        }
+
+        try {
+
+            //Convert stored User back into JavaScript
+            const user = JSON.parse(storedUser);
+
+            //Only Customer accounts can Checkout
+            if (user.role !== "customer") {
+                return null;
+            }
+
+            return user;
+
+        } catch (error) {
+
+            console.error("Unable to read Customer account:", error);
+
+            return null;
+        }
+    }
+
+
+    //Gets Customer authentication token
+    function getAuthToken() {
+
+        return (localStorage.getItem("token") || sessionStorage.getItem("token"));
+    }
+
+
+    //Handles Proceed to Checkout
+    function handleProceedToCheckout() {
+
+        //Do not continue without a valid Cart quote
+        if (!cartQuote || isCartQuoteLoading || cartQuoteError) {
+
+            return;
+        }
+
+        const customer = getStoredCustomer();
+
+        const token = getAuthToken();
+
+        //Checkout page Customer should return to
+        const checkoutPath = `/store/${slug}/checkout`;
+
+        //Customer is not logged in
+        if (!customer || !token) {
+
+            //Save Customer authentication context
+            //This also helps if email verification is needed
+            localStorage.setItem("authBakerySlug", slug);
+
+            localStorage.setItem("authReturnTo", checkoutPath);
+
+
+            //Send Customer to Bakery login
+            navigate(
+                `/store/${slug}/login?redirect=${encodeURIComponent(
+                    checkoutPath
+                )}`
+            );
+
+            return;
+        }
+
+
+        //Logged-in Customer can continue to Checkout
+        navigate(checkoutPath);
+
+    }
 
     //Display Bakery loading state
     if (isBakeryLoading) {
@@ -1263,10 +1348,23 @@ export default function StorefrontCart() {
                                 {/* Checkout */}
                                 <button
                                     type="button"
-                                    disabled
+                                    onClick={
+                                        handleProceedToCheckout
+                                    }
+                                    disabled={
+                                        !cartQuote ||
+                                        isCartQuoteLoading ||
+                                        Boolean(cartQuoteError)
+                                    }
                                     className="storefront-cart-primary-button w-100"
                                 >
-                                    Proceed to Checkout
+
+                                    {
+                                        isCartQuoteLoading
+                                            ? "Updating Price..."
+                                            : "Proceed to Checkout"
+                                    }
+
                                 </button>
 
 

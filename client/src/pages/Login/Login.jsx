@@ -113,13 +113,37 @@ export default function Login() {
                 return;
             }
 
-            //Choose where to save the login based on the Remember this device option
+            //Only Bakery Owners should use this Login page
+            if (data.user.role !== "bakeryOwner") {
+
+                setFormError(
+                    "This sign in page is for Bakery Owners."
+                );
+
+                return;
+            }
+
+            //Choose where to save the login
             const storage = rememberDevice ? localStorage : sessionStorage;
 
-            //Save the JWT so it can be used for authenticated API requests
+
+            //Remove any previous Customer or Bakery Owner Login
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
+
+            sessionStorage.removeItem("token");
+            sessionStorage.removeItem("user");
+
+            //Remove old Customer authentication information
+            localStorage.removeItem("authReturnTo");
+            localStorage.removeItem("authBakerySlug");
+            sessionStorage.removeItem("pendingVerificationEmail");
+
+            //Save the Bakery Owner JWT
             storage.setItem("token", data.token);
 
-            //Save the logged-in user's information for use in the frontend
+
+            //Save the Bakery Owner information
             storage.setItem(
                 "user",
                 JSON.stringify(data.user)

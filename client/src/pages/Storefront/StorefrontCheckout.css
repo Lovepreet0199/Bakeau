@@ -1,0 +1,485 @@
+/* Checkout page */
+.storefront-checkout-page {
+    background-color: #fffaf6;
+    color: #3f3029;
+}
+
+
+/* Checkout loading */
+.storefront-checkout-loading {
+    min-height: 100vh;
+    background-color: #fffaf6;
+}
+
+
+/* Main Checkout area */
+.storefront-checkout-main {
+    min-height: 650px;
+}
+
+
+/* Back to Cart link */
+.storefront-checkout-back {
+    color: #75645b;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+
+/* Back to Cart hover */
+.storefront-checkout-back:hover {
+    color: var(--storefront-primary);
+}
+
+
+/* Checkout main heading */
+.storefront-checkout-heading h1 {
+    color: var(--storefront-dark);
+    font-size: 27px;
+    font-weight: 700;
+}
+
+
+/* Checkout heading description */
+.storefront-checkout-heading p {
+    color: #78675e;
+    font-size: 13px;
+}
+
+
+/* Pickup notice */
+.storefront-checkout-notice {
+    padding: 14px 16px;
+    border: 1px solid
+        color-mix(
+            in srgb,
+            var(--storefront-primary) 25%,
+            #dbe5ed
+        );
+    border-radius: 10px;
+    background-color: color-mix(
+        in srgb,
+        var(--storefront-secondary) 30%,
+        #eef5fa
+    );
+    color: #40586b;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+
+/* Checkout Card */
+.storefront-checkout-card {
+    padding: 22px;
+    border: 1px solid #e8dcd4;
+    border-radius: 13px;
+    background-color: #ffffff;
+}
+
+
+/* Calendar heading */
+.storefront-checkout-calendar-header {
+    margin-bottom: 24px;
+    color: var(--storefront-dark);
+    font-size: 14px;
+}
+
+
+/* Calendar previous and next buttons */
+.storefront-checkout-calendar-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: 0;
+    border-radius: 8px;
+    background-color: transparent;
+    color: #584840;
+}
+
+
+/* Calendar navigation hover */
+.storefront-checkout-calendar-nav:hover {
+    background-color: var(--storefront-secondary);
+    color: var(--storefront-primary);
+}
+
+
+/* Weekday headings */
+.storefront-checkout-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    margin-bottom: 8px;
+}
+
+
+/* Individual weekday */
+.storefront-checkout-weekdays span {
+    padding: 6px;
+    color: #8c7b72;
+    font-size: 10px;
+    text-align: center;
+}
+
+
+/* Calendar Grid */
+.storefront-checkout-calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 7px;
+}
+
+
+/* Empty Calendar space */
+.storefront-checkout-calendar-empty {
+    min-height: 58px;
+}
+
+
+/* Calendar date */
+.storefront-checkout-calendar-day {
+    min-height: 58px;
+    padding: 0;
+    border: 1px solid transparent;
+    border-radius: 9px;
+    background-color: transparent;
+    color: #3f3029;
+    font-size: 12px;
+    font-weight: 500;
+    transition:
+        border-color 0.2s ease,
+        background-color 0.2s ease,
+        color 0.2s ease;
+}
+
+
+/* Available Calendar day */
+.storefront-checkout-calendar-day-available {
+    cursor: pointer;
+}
+
+
+/* Available Calendar hover */
+.storefront-checkout-calendar-day-available:hover {
+    border-color: var(--storefront-primary);
+    background-color: color-mix(
+        in srgb,
+        var(--storefront-secondary) 35%,
+        #ffffff
+    );
+}
+
+
+/* Blocked Calendar day */
+.storefront-checkout-calendar-day-blocked {
+    background-color: color-mix(
+        in srgb,
+        var(--storefront-secondary) 45%,
+        #f5f1ed
+    );
+    color: #c7b8ae;
+    cursor: not-allowed;
+}
+
+
+/* Selected Calendar day */
+.storefront-checkout-calendar-day-selected {
+    border-color: var(--storefront-primary);
+    background-color: var(--storefront-primary);
+    color: #ffffff;
+}
+
+
+/* Selected Calendar hover */
+.storefront-checkout-calendar-day-selected:hover {
+    background-color: var(--storefront-primary);
+    color: #ffffff;
+}
+
+
+/* Calendar loading */
+.storefront-checkout-calendar-loading {
+    min-height: 260px;
+}
+
+
+/* Calendar legend */
+.storefront-checkout-calendar-legend {
+    margin-top: 18px;
+    color: #7e6d65;
+    font-size: 10px;
+}
+
+
+/* Calendar legend square */
+.storefront-checkout-legend {
+    display: inline-block;
+    width: 11px;
+    height: 11px;
+    border-radius: 3px;
+}
+
+
+/* Selected legend */
+.storefront-checkout-legend-selected {
+    background-color: var(--storefront-primary);
+}
+
+
+/* Available legend */
+.storefront-checkout-legend-available {
+    border: 1px solid #e2d4ca;
+    background-color: #ffffff;
+}
+
+
+/* Blocked legend */
+.storefront-checkout-legend-blocked {
+    background-color: var(--storefront-secondary);
+}
+
+
+/* Section heading */
+.storefront-checkout-section-title {
+    color: var(--storefront-dark);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+
+/* Pickup time button */
+.storefront-checkout-time {
+    min-width: 90px;
+    min-height: 40px;
+    padding: 8px 14px;
+    border: 1px solid #dfd2c9;
+    border-radius: 8px;
+    background-color: #ffffff;
+    color: #42342d;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+/* Pickup time hover */
+.storefront-checkout-time:hover {
+    border-color: var(--storefront-primary);
+    color: var(--storefront-primary);
+}
+
+
+/* Selected Pickup time */
+.storefront-checkout-time-selected {
+    border-color: var(--storefront-primary);
+    background-color: color-mix(
+        in srgb,
+        var(--storefront-secondary) 55%,
+        #ffffff
+    );
+    color: var(--storefront-primary);
+}
+
+
+/* Pickup location */
+.storefront-checkout-pickup-location {
+    padding: 16px 18px;
+    border-radius: 11px;
+    background-color: color-mix(
+        in srgb,
+        var(--storefront-secondary) 55%,
+        #f6f1ed
+    );
+    color: #59483f;
+    font-size: 12px;
+}
+
+
+/* Pickup location icon */
+.storefront-checkout-pickup-location svg {
+    color: var(--storefront-primary);
+}
+
+
+/* Main Checkout button */
+.storefront-checkout-primary-button {
+    min-height: 43px;
+    padding: 10px 18px;
+    border: 1px solid var(--storefront-primary);
+    border-radius: 8px;
+    background-color: var(--storefront-primary);
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+
+/* Main Checkout button hover */
+.storefront-checkout-primary-button:hover:not(:disabled) {
+    opacity: 0.92;
+}
+
+
+/* Disabled Checkout button */
+.storefront-checkout-primary-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+
+/* Checkout helper */
+.storefront-checkout-helper {
+    color: #8e7d74;
+    font-size: 10px;
+}
+
+
+/* Order Summary */
+.storefront-checkout-summary {
+    position: sticky;
+    top: 24px;
+    padding: 20px;
+    border: 1px solid #e8dcd4;
+    border-radius: 13px;
+    background-color: #ffffff;
+}
+
+
+/* Order Summary heading */
+.storefront-checkout-summary-title {
+    margin-bottom: 18px;
+    color: var(--storefront-dark);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+
+/* Summary Product */
+.storefront-checkout-summary-item {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: 11px;
+}
+
+
+/* Product image */
+.storefront-checkout-product-image,
+.storefront-checkout-product-placeholder {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+}
+
+
+/* Product image */
+.storefront-checkout-product-image {
+    object-fit: cover;
+}
+
+
+/* Product placeholder */
+.storefront-checkout-product-placeholder {
+    background-color: var(--storefront-secondary);
+    color: var(--storefront-primary);
+}
+
+
+/* Product name */
+.storefront-checkout-product-name {
+    color: #3e3029;
+    font-size: 12px;
+}
+
+
+/* Product details */
+.storefront-checkout-product-details {
+    margin-top: 2px;
+    color: #8e7d74;
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+
+/* Deposit price */
+.storefront-checkout-deposit {
+    color: var(--storefront-primary);
+}
+
+
+/* Selected Pickup summary */
+.storefront-checkout-selected-pickup {
+    padding: 12px;
+    border-radius: 9px;
+    background-color: color-mix(
+        in srgb,
+        var(--storefront-secondary) 55%,
+        #f6f1ed
+    );
+    color: #5b4941;
+    font-size: 11px;
+}
+
+
+/* Selected Pickup heading */
+.storefront-checkout-selected-pickup strong {
+    color: var(--storefront-dark);
+}
+
+
+/* Tablet and Mobile */
+@media (max-width: 991.98px) {
+
+    /* Summary no longer sticky */
+    .storefront-checkout-summary {
+        position: static;
+    }
+}
+
+
+/* Mobile */
+@media (max-width: 575.98px) {
+
+    /* Smaller Checkout heading */
+    .storefront-checkout-heading h1 {
+        font-size: 24px;
+    }
+
+
+    /* Smaller Cards */
+    .storefront-checkout-card {
+        padding: 16px;
+    }
+
+
+    /* Smaller Calendar spacing */
+    .storefront-checkout-calendar-grid {
+        gap: 4px;
+    }
+
+
+    /* Smaller Calendar dates */
+    .storefront-checkout-calendar-day,
+    .storefront-checkout-calendar-empty {
+        min-height: 46px;
+    }
+
+
+    /* Smaller Calendar date text */
+    .storefront-checkout-calendar-day {
+        font-size: 11px;
+    }
+
+
+    /* Full width Continue button */
+    .storefront-checkout-primary-button {
+        width: 100%;
+    }
+
+
+    /* Time options fit mobile width */
+    .storefront-checkout-time {
+        flex: 1 1 calc(50% - 8px);
+    }
+}
