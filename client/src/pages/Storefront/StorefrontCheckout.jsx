@@ -1,5 +1,5 @@
 //Import React hooks
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 //Import React Router tools
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -48,7 +48,14 @@ export default function StorefrontCheckout() {
     const [availabilityError, setAvailabilityError] = useState("");
 
     //Only get Cart items for this Bakery
-    const bakeryCartItems = cartItems.filter((item) => item.bakery_slug === slug);
+    const bakeryCartItems = useMemo(() => {
+
+        return cartItems.filter(
+            (item) =>
+                item.bakery_slug === slug
+        );
+
+    }, [cartItems, slug]);
 
 
     //Gets Customer token

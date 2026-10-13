@@ -1,5 +1,5 @@
 //Import React hooks
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 //Import React Router tools
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -48,8 +48,15 @@ export default function StorefrontCheckoutPayment() {
     const [error, setError] = useState("");
 
 
-    //Only use Cart items belonging to this Bakery
-    const bakeryCartItems = cartItems.filter((item) => item.bakery_slug === slug);
+    //Only get Cart items for this Bakery
+    const bakeryCartItems = useMemo(() => {
+
+        return cartItems.filter(
+            (item) =>
+                item.bakery_slug === slug
+        );
+
+    }, [cartItems, slug]);
 
 
     //Gets Customer authentication token
@@ -780,7 +787,7 @@ export default function StorefrontCheckoutPayment() {
                                             <div className="text-start">
 
                                                 <strong className="d-block">
-                                                    Interact e-Transfer / Manual Payment
+                                                    Interac e-Transfer / Manual Payment
                                                 </strong>
 
                                                 <small>

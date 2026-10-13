@@ -70,6 +70,12 @@ export default function BakeryOrderDetails() {
     //Tracks whether the Order status is updating
     const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
 
+    //Tracks whether a Manual Payment is updating
+    const [isUpdatingPayment, setIsUpdatingPayment] = useState(false);
+
+    //Stores the Payment action waiting for confirmation
+    const [paymentConfirmation, setPaymentConfirmation] = useState(null);
+
     //Stores any Order loading or update error
     const [error, setError] = useState("");
 
@@ -89,7 +95,6 @@ export default function BakeryOrderDetails() {
                 const orderData = await getBakeryOrder(id);
 
                 if (!isCancelled) {
-
                     setOrder(orderData);
                     setError("");
                 }
@@ -156,7 +161,8 @@ export default function BakeryOrderDetails() {
                 );
             }
 
-            //Reload the complete Order so new status and Activity are displayed
+
+            //Reload complete Order
             const updatedOrder = await getBakeryOrder(id);
 
             setOrder(updatedOrder);
@@ -172,8 +178,78 @@ export default function BakeryOrderDetails() {
     }
 
 
+    //Updates a Manual Payment after Owner confirmation
+    async function updateManualPayment(paymentId, action) {
+
+        setIsUpdatingPayment(true);
+        setError("");
+
+        try {
+
+            //Get Bakery Owner token
+            const token = getAuthToken();
+
+
+            //Choose receive or revert endpoint
+            const endpoint =
+                action === "receive"
+                    ? `http://localhost:3000/api/payments/${paymentId}/receive`
+                    : `http://localhost:3000/api/payments/${paymentId}/revert`;
+
+
+            //Update Manual Payment
+            const response = await fetch(
+                endpoint,
+                {
+                    method: "PATCH",
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+
+            const data = await response.json();
+
+
+            //Stop if Payment could not be updated
+            if (!response.ok) {
+                throw new Error(
+                    data.message || "Unable to update payment"
+                );
+            }
+
+
+            //Close confirmation modal
+            setPaymentConfirmation(null);
+
+
+            //Reload complete Order so Payment and totals update
+            const updatedOrder = await getBakeryOrder(id);
+
+            setOrder(updatedOrder);
+
+        } catch (error) {
+
+            setError(error.message);
+
+        } finally {
+
+            setIsUpdatingPayment(false);
+        }
+    }
+
+
+    //Find the Manual Payment belonging to this Order
+    const manualPayment = order?.payments?.find(
+        (payment) =>
+            payment.payment_method === "Manual"
+    );
+
+
     return (
+
         <div className="bakery-order-details-page">
+
 
             {/* Order loading state */}
             {isLoading && (
@@ -187,6 +263,7 @@ export default function BakeryOrderDetails() {
                     />
 
                     <div>
+
                         <strong>
                             Loading order
                         </strong>
@@ -194,6 +271,7 @@ export default function BakeryOrderDetails() {
                         <span>
                             Getting the latest Order details...
                         </span>
+
                     </div>
 
                 </div>
@@ -203,9 +281,11 @@ export default function BakeryOrderDetails() {
 
             {/* Order error state */}
             {!isLoading && error && (
+
                 <p className="bakery-order-details-error">
                     {error}
                 </p>
+
             )}
 
 
@@ -213,6 +293,7 @@ export default function BakeryOrderDetails() {
             {!isLoading &&
                 !error &&
                 order && (
+
                     <>
 
                         {/* Order heading */}
@@ -283,12 +364,14 @@ export default function BakeryOrderDetails() {
                                                 )
                                             }
                                         >
+
                                             <ContactRound
                                                 size={16}
                                                 strokeWidth={1.8}
                                             />
 
                                             Contact customer
+
                                         </button>
 
 
@@ -296,6 +379,7 @@ export default function BakeryOrderDetails() {
                                         {isContactMenuOpen && (
 
                                             <div className="bakery-order-details-contact-menu">
+
 
                                                 {/* Call Customer */}
                                                 {order.customer_id?.phone_number && (
@@ -311,6 +395,7 @@ export default function BakeryOrderDetails() {
                                                         <span>
                                                             {order.customer_id.phone_number}
                                                         </span>
+
                                                     </a>
 
                                                 )}
@@ -330,6 +415,7 @@ export default function BakeryOrderDetails() {
                                                         <span>
                                                             {order.customer_id.email}
                                                         </span>
+
                                                     </a>
 
                                                 )}
@@ -347,6 +433,7 @@ export default function BakeryOrderDetails() {
 
                         <div className="row g-4">
 
+
                             {/* Main Order information */}
                             <div className="col-12 col-xl-8">
 
@@ -362,6 +449,7 @@ export default function BakeryOrderDetails() {
 
                                     </div>
 
+
                                     <div className="bakery-order-details-card-body">
 
                                         <div className="bakery-order-details-customer-row">
@@ -374,6 +462,7 @@ export default function BakeryOrderDetails() {
                                                 />
 
                                             </div>
+
 
                                             <div>
 
@@ -439,7 +528,8 @@ export default function BakeryOrderDetails() {
                                             {order.items?.length || 0}{" "}
                                             {order.items?.length === 1
                                                 ? "item"
-                                                : "items"}
+                                                : "items"
+                                            }
                                         </span>
 
                                     </div>
@@ -453,6 +543,7 @@ export default function BakeryOrderDetails() {
                                                 key={item._id}
                                                 className="bakery-order-details-item"
                                             >
+
 
                                                 {/* Main Product information */}
                                                 <div className="bakery-order-details-item-main">
@@ -494,6 +585,7 @@ export default function BakeryOrderDetails() {
                                                                     key={customization._id}
                                                                     className="bakery-order-details-customization"
                                                                 >
+
                                                                     <span>
                                                                         {customization.group_name}
                                                                     </span>
@@ -505,6 +597,7 @@ export default function BakeryOrderDetails() {
                                                                             ` (+$${customization.additional_price.toFixed(2)})`
                                                                         }
                                                                     </strong>
+
                                                                 </div>
 
                                                             )
@@ -515,7 +608,7 @@ export default function BakeryOrderDetails() {
                                                 )}
 
 
-                                                {/* Final Product total including Customizations */}
+                                                {/* Final Product total */}
                                                 <div className="bakery-order-details-item-total">
 
                                                     <span>
@@ -566,6 +659,7 @@ export default function BakeryOrderDetails() {
 
                                     </div>
 
+
                                     <div className="bakery-order-details-card-body">
 
                                         {order.activities?.length > 0 ? (
@@ -579,7 +673,6 @@ export default function BakeryOrderDetails() {
                                                         className="bakery-order-details-activity-item"
                                                     >
 
-                                                        {/* Activity timeline marker */}
                                                         <span className="bakery-order-details-activity-dot"></span>
 
                                                         <div>
@@ -649,6 +742,7 @@ export default function BakeryOrderDetails() {
                                                 className="bakery-order-details-summary-product-group"
                                             >
 
+
                                                 {/* Product heading */}
                                                 <div className="bakery-order-details-summary-product">
 
@@ -679,6 +773,7 @@ export default function BakeryOrderDetails() {
                                                                     key={customization._id}
                                                                     className="bakery-order-details-summary-customization"
                                                                 >
+
                                                                     <span>
                                                                         {customization.option_name}
                                                                     </span>
@@ -722,6 +817,7 @@ export default function BakeryOrderDetails() {
 
                                     {/* Order totals */}
                                     <div className="bakery-order-details-card-body">
+
 
                                         {/* Order total */}
                                         <div className="bakery-order-details-summary-row">
@@ -799,7 +895,9 @@ export default function BakeryOrderDetails() {
 
                                     </div>
 
+
                                     <div className="bakery-order-details-card-body">
+
 
                                         {/* Pickup date */}
                                         <div className="bakery-order-details-info-row">
@@ -873,6 +971,7 @@ export default function BakeryOrderDetails() {
 
                                     </div>
 
+
                                     <div className="bakery-order-details-card-body">
 
 
@@ -881,7 +980,6 @@ export default function BakeryOrderDetails() {
 
                                             <div className="bakery-order-details-pending-actions">
 
-                                                {/* Pending Order explanation */}
                                                 <div className="bakery-order-details-pending-message">
 
                                                     <strong>
@@ -896,7 +994,6 @@ export default function BakeryOrderDetails() {
                                                 </div>
 
 
-                                                {/* Accept Order */}
                                                 <button
                                                     type="button"
                                                     className="bakery-order-details-primary-action"
@@ -905,16 +1002,17 @@ export default function BakeryOrderDetails() {
                                                         updateOrderStatus("confirmed")
                                                     }
                                                 >
+
                                                     <Check
                                                         size={16}
                                                         strokeWidth={2}
                                                     />
 
                                                     Accept order
+
                                                 </button>
 
 
-                                                {/* Cancel pending Order */}
                                                 <button
                                                     type="button"
                                                     className="bakery-order-details-danger-action"
@@ -931,11 +1029,13 @@ export default function BakeryOrderDetails() {
                                         )}
 
 
-                                        {/* Accepted Orders can move through their normal workflow */}
+                                        {/* Accepted Orders */}
                                         {order.status !== "pending" &&
                                             order.status !== "completed" &&
                                             order.status !== "cancelled" && (
+
                                                 <>
+
 
                                                     {/* Order status control */}
                                                     <div className="bakery-order-details-control-group">
@@ -955,6 +1055,7 @@ export default function BakeryOrderDetails() {
                                                                 )
                                                             }
                                                         >
+
                                                             <option value="confirmed">
                                                                 Confirmed
                                                             </option>
@@ -974,7 +1075,9 @@ export default function BakeryOrderDetails() {
                                                             <option value="cancelled">
                                                                 Cancelled
                                                             </option>
+
                                                         </select>
+
 
                                                         <span className="bakery-order-details-control-help">
                                                             Changing the Order status updates what
@@ -1028,12 +1131,14 @@ export default function BakeryOrderDetails() {
                                                                     updateOrderStatus("ready")
                                                                 }
                                                             >
+
                                                                 <Check
                                                                     size={16}
                                                                     strokeWidth={2}
                                                                 />
 
                                                                 Mark ready for pickup
+
                                                             </button>
 
                                                         )}
@@ -1050,12 +1155,14 @@ export default function BakeryOrderDetails() {
                                                                     updateOrderStatus("completed")
                                                                 }
                                                             >
+
                                                                 <Check
                                                                     size={16}
                                                                     strokeWidth={2}
                                                                 />
 
                                                                 Complete order
+
                                                             </button>
 
                                                         )}
@@ -1076,6 +1183,7 @@ export default function BakeryOrderDetails() {
                                                     </div>
 
                                                 </>
+
                                             )
                                         }
 
@@ -1096,6 +1204,7 @@ export default function BakeryOrderDetails() {
 
                                                 </div>
 
+
                                                 <button
                                                     type="button"
                                                     className="bakery-order-details-secondary-action"
@@ -1106,6 +1215,7 @@ export default function BakeryOrderDetails() {
                                                 >
                                                     Reopen order
                                                 </button>
+
 
                                                 <span className="bakery-order-details-control-help">
                                                     Use this if the Order was marked completed by mistake.
@@ -1132,6 +1242,7 @@ export default function BakeryOrderDetails() {
 
                                                 </div>
 
+
                                                 <button
                                                     type="button"
                                                     className="bakery-order-details-secondary-action"
@@ -1143,6 +1254,7 @@ export default function BakeryOrderDetails() {
                                                     Restore order
                                                 </button>
 
+
                                                 <span className="bakery-order-details-control-help">
                                                     Use this if the Order was cancelled by mistake.
                                                 </span>
@@ -1152,15 +1264,17 @@ export default function BakeryOrderDetails() {
                                         )}
 
 
-                                        {/* Payment status */}
+                                        {/* Payment */}
                                         <div className="bakery-order-details-payment-section">
 
                                             <div className="bakery-order-details-control-group mb-0">
 
                                                 <label>
-                                                    Payment status
+                                                    Payment
                                                 </label>
 
+
+                                                {/* Current Order Payment status */}
                                                 <div className="bakery-order-details-payment-display">
 
                                                     <span
@@ -1174,10 +1288,169 @@ export default function BakeryOrderDetails() {
 
                                                 </div>
 
-                                                <span className="bakery-order-details-control-help">
-                                                    Payment status is currently read-only and
-                                                    will update through the payment system.
-                                                </span>
+
+                                                {/* Manual Payment */}
+                                                {manualPayment ? (
+
+                                                    <div className="bakery-order-details-manual-payment">
+
+
+                                                        {/* Payment information */}
+                                                        <div className="bakery-order-details-payment-info">
+
+                                                            <div>
+
+                                                                <span>
+                                                                    Payment method
+                                                                </span>
+
+                                                                <strong>
+                                                                    Manual Interac e-Transfer
+                                                                </strong>
+
+                                                            </div>
+
+
+                                                            <div>
+
+                                                                <span>
+                                                                    Payment type
+                                                                </span>
+
+                                                                <strong>
+                                                                    {manualPayment.payment_type}
+                                                                </strong>
+
+                                                            </div>
+
+
+                                                            <div>
+
+                                                                <span>
+                                                                    Amount
+                                                                </span>
+
+                                                                <strong>
+                                                                    ${manualPayment.amount.toFixed(2)}
+                                                                </strong>
+
+                                                            </div>
+
+                                                        </div>
+
+
+                                                        {/* Pending Payment */}
+                                                        {manualPayment.payment_status === "Pending" && (
+
+                                                            <div className="bakery-order-details-payment-pending">
+
+                                                                <div>
+
+                                                                    <strong>
+                                                                        Pending verification
+                                                                    </strong>
+
+                                                                    <span>
+                                                                        Confirm this payment only after you have received the Interac e-Transfer.
+                                                                    </span>
+
+                                                                </div>
+
+
+                                                                <button
+                                                                    type="button"
+                                                                    className="bakery-order-details-payment-button"
+                                                                    disabled={isUpdatingPayment}
+                                                                    onClick={() =>
+                                                                        setPaymentConfirmation({
+                                                                            action: "receive",
+                                                                            paymentId: manualPayment._id,
+                                                                            amount: manualPayment.amount
+                                                                        })
+                                                                    }
+                                                                >
+                                                                    Mark ${manualPayment.amount.toFixed(2)} as received
+                                                                </button>
+
+                                                            </div>
+
+                                                        )}
+
+
+                                                        {/* Received Payment */}
+                                                        {manualPayment.payment_status === "Received" && (
+
+                                                            <div className="bakery-order-details-payment-received-wrapper">
+
+                                                                <div className="bakery-order-details-payment-received">
+
+                                                                    <div className="bakery-order-details-payment-received-icon">
+
+                                                                        <Check
+                                                                            size={16}
+                                                                            strokeWidth={2.5}
+                                                                        />
+
+                                                                    </div>
+
+
+                                                                    <div>
+
+                                                                        <strong>
+                                                                            Payment received
+                                                                        </strong>
+
+
+                                                                        {manualPayment.received_at && (
+
+                                                                            <span>
+                                                                                {new Date(
+                                                                                    manualPayment.received_at
+                                                                                ).toLocaleString(
+                                                                                    "en-CA",
+                                                                                    {
+                                                                                        dateStyle: "medium",
+                                                                                        timeStyle: "short"
+                                                                                    }
+                                                                                )}
+                                                                            </span>
+
+                                                                        )}
+
+                                                                    </div>
+
+                                                                </div>
+
+
+                                                                {/* Revert Payment */}
+                                                                <button
+                                                                    type="button"
+                                                                    className="bakery-order-details-payment-revert"
+                                                                    disabled={isUpdatingPayment}
+                                                                    onClick={() =>
+                                                                        setPaymentConfirmation({
+                                                                            action: "revert",
+                                                                            paymentId: manualPayment._id,
+                                                                            amount: manualPayment.amount
+                                                                        })
+                                                                    }
+                                                                >
+                                                                    Mark as pending again
+                                                                </button>
+
+                                                            </div>
+
+                                                        )}
+
+                                                    </div>
+
+                                                ) : (
+
+                                                    <span className="bakery-order-details-control-help">
+                                                        No payment has been created for this Order.
+                                                    </span>
+
+                                                )}
 
                                             </div>
 
@@ -1202,9 +1475,153 @@ export default function BakeryOrderDetails() {
                         </div>
 
                     </>
-                )
-            }
+
+                )}
+
+
+            {/* Manual Payment confirmation modal */}
+            {paymentConfirmation && (
+
+                <>
+
+                    {/* Modal */}
+                    <div
+                        className="modal d-block bakery-payment-confirm-modal-wrapper"
+                        tabIndex="-1"
+                        role="dialog"
+                        aria-modal="true"
+                    >
+
+                        <div className="modal-dialog modal-dialog-centered">
+
+                            <div className="modal-content bakery-payment-confirm-modal">
+
+
+                                {/* Modal heading */}
+                                <div className="modal-header">
+
+                                    <h5 className="modal-title">
+
+                                        {paymentConfirmation.action === "receive"
+                                            ? "Confirm payment received?"
+                                            : "Change payment back to pending?"
+                                        }
+
+                                    </h5>
+
+
+                                    <button
+                                        type="button"
+                                        className="btn-close"
+                                        aria-label="Close"
+                                        disabled={isUpdatingPayment}
+                                        onClick={() =>
+                                            setPaymentConfirmation(null)
+                                        }
+                                    ></button>
+
+                                </div>
+
+
+                                {/* Modal content */}
+                                <div className="modal-body">
+
+                                    {paymentConfirmation.action === "receive" ? (
+
+                                        <>
+
+                                            <p>
+                                                You are about to confirm that you received:
+                                            </p>
+
+                                            <strong className="bakery-payment-confirm-amount">
+                                                ${paymentConfirmation.amount.toFixed(2)}
+                                            </strong>
+
+                                            <p className="bakery-payment-confirm-warning mb-0">
+                                                Only confirm this after you have verified that the Interac e-Transfer was received.
+                                            </p>
+
+                                        </>
+
+                                    ) : (
+
+                                        <>
+
+                                            <p>
+                                                This payment is currently marked as received.
+                                            </p>
+
+                                            <strong className="bakery-payment-confirm-amount">
+                                                ${paymentConfirmation.amount.toFixed(2)}
+                                            </strong>
+
+                                            <p className="bakery-payment-confirm-warning mb-0">
+                                                Changing it back to pending will update the Order's amount paid and Payment status.
+                                            </p>
+
+                                        </>
+
+                                    )}
+
+                                </div>
+
+
+                                {/* Modal actions */}
+                                <div className="modal-footer">
+
+                                    <button
+                                        type="button"
+                                        className="btn btn-outline-secondary"
+                                        disabled={isUpdatingPayment}
+                                        onClick={() =>
+                                            setPaymentConfirmation(null)
+                                        }
+                                    >
+                                        Cancel
+                                    </button>
+
+
+                                    <button
+                                        type="button"
+                                        className={
+                                            paymentConfirmation.action === "receive"
+                                                ? "btn bakery-payment-confirm-button"
+                                                : "btn btn-outline-danger"
+                                        }
+                                        disabled={isUpdatingPayment}
+                                        onClick={() =>
+                                            updateManualPayment(
+                                                paymentConfirmation.paymentId,
+                                                paymentConfirmation.action
+                                            )
+                                        }
+                                    >
+                                        {isUpdatingPayment
+                                            ? "Updating..."
+                                            : paymentConfirmation.action === "receive"
+                                                ? "Yes, mark received"
+                                                : "Mark as pending"
+                                        }
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    {/* Modal background */}
+                    <div className="modal-backdrop show"></div>
+
+                </>
+
+            )}
 
         </div>
+
     );
 }
