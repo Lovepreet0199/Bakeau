@@ -1,0 +1,369 @@
+/* My Orders page */
+.storefront-orders-page {
+    background-color: #fffaf6;
+    color: var(--storefront-dark);
+}
+
+
+/* Loading page */
+.storefront-orders-loading {
+    min-height: 100vh;
+    background-color: #fffaf6;
+}
+
+
+/* Main page */
+.storefront-orders-main {
+    min-height: 700px;
+}
+
+
+/* Page heading */
+.storefront-orders-heading {
+    margin-bottom: 25px;
+}
+
+
+/* Main heading */
+.storefront-orders-heading h1 {
+    margin-bottom: 5px;
+    font-size: 26px;
+    font-weight: 700;
+}
+
+
+/* Heading text */
+.storefront-orders-heading p {
+    margin: 0;
+    color: #877167;
+    font-size: 12px;
+}
+
+
+/* Orders tabs */
+.storefront-orders-tabs {
+    display: flex;
+    gap: 22px;
+    border-bottom: 1px solid #e3d5ca;
+}
+
+
+/* One tab */
+.storefront-orders-tab {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 3px;
+    border: none;
+    border-bottom: 2px solid transparent;
+    background-color: transparent;
+    color: #917a6d;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+/* Active tab */
+.storefront-orders-tab-active {
+    border-bottom-color: var(--storefront-primary);
+    color: var(--storefront-primary);
+}
+
+
+/* Order count */
+.storefront-orders-tab span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: 10px;
+    background-color: #f0e7e1;
+    color: #796459;
+    font-size: 9px;
+}
+
+
+/* Active tab count */
+.storefront-orders-tab-active span {
+    background-color: var(--storefront-secondary);
+    color: var(--storefront-primary);
+}
+
+
+/* Orders list */
+.storefront-orders-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+}
+
+
+/* One Order card */
+.storefront-orders-card {
+    padding: 18px 20px;
+    border: 1px solid #e3d5ca;
+    border-radius: 12px;
+    background-color: #ffffff;
+}
+
+
+/* Order card header */
+.storefront-orders-card-header {
+    padding-bottom: 11px;
+    border-bottom: 1px solid #eee4dd;
+}
+
+
+/* Small Order label */
+.storefront-orders-label {
+    color: #9a7f6e;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+
+/* Order number */
+.storefront-orders-number {
+    margin: 2px 0 0;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+
+/* Order status */
+.storefront-orders-status {
+    padding: 6px 11px;
+    border-radius: 20px;
+    background-color: #eee8e3;
+    color: #77655c;
+    font-size: 9px;
+    font-weight: 600;
+}
+
+
+/* Pending status */
+.storefront-orders-status-pending {
+    background-color: #f2e9e2;
+    color: #826b5c;
+}
+
+
+/* Confirmed status */
+.storefront-orders-status-confirmed {
+    background-color: #e8f3ec;
+    color: #408562;
+}
+
+
+/* Preparing status */
+.storefront-orders-status-preparing {
+    background-color: #f7e4d8;
+    color: var(--storefront-primary);
+}
+
+
+/* Ready status */
+.storefront-orders-status-ready {
+    background-color: #e8f3ec;
+    color: #408562;
+}
+
+
+/* Completed status */
+.storefront-orders-status-completed {
+    background-color: #e8f3ec;
+    color: #408562;
+}
+
+
+/* Cancelled status */
+.storefront-orders-status-cancelled {
+    background-color: #f2e7e4;
+    color: #9b5548;
+}
+
+
+/* Product preview */
+.storefront-orders-product {
+    min-height: 64px;
+}
+
+
+/* Product image */
+.storefront-orders-product-image {
+    width: 62px;
+    height: 62px;
+    flex-shrink: 0;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+
+/* Product image fallback */
+.storefront-orders-product-placeholder {
+    background-color: var(--storefront-secondary);
+    color: var(--storefront-primary);
+}
+
+
+/* Product name */
+.storefront-orders-product strong {
+    font-size: 11px;
+}
+
+
+/* Product details */
+.storefront-orders-product small {
+    color: #8c7568;
+    font-size: 10px;
+}
+
+
+/* More products text */
+.storefront-orders-more-items {
+    margin-top: 3px;
+    color: var(--storefront-primary) !important;
+    font-weight: 600;
+}
+
+
+/* Detail label */
+.storefront-orders-detail-label {
+    color: #967e70;
+    font-size: 9px;
+}
+
+
+/* Detail value */
+.storefront-orders-detail-value {
+    margin-top: 3px;
+    font-size: 11px;
+}
+
+
+/* Pickup time */
+.storefront-orders-detail-time {
+    color: #8c7568;
+    font-size: 10px;
+}
+
+
+/* Track Order button */
+.storefront-orders-button {
+    display: block;
+    width: 100%;
+    padding: 9px 8px;
+    border: 1px solid var(--storefront-primary);
+    border-radius: 8px;
+    color: var(--storefront-primary);
+    text-align: center;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+
+/* Track Order hover */
+.storefront-orders-button:hover {
+    background-color: var(--storefront-primary);
+    color: #ffffff;
+}
+
+
+/* Empty Orders box */
+.storefront-orders-empty {
+    max-width: 520px;
+    margin: 50px auto;
+    padding: 45px 25px;
+    border: 1px solid #e3d5ca;
+    border-radius: 12px;
+    background-color: #ffffff;
+}
+
+
+/* Empty icon */
+.storefront-orders-empty svg {
+    margin-bottom: 15px;
+    color: var(--storefront-primary);
+}
+
+
+/* Empty heading */
+.storefront-orders-empty h2 {
+    margin-bottom: 7px;
+    font-size: 17px;
+    font-weight: 700;
+}
+
+
+/* Empty text */
+.storefront-orders-empty p {
+    margin-bottom: 20px;
+    color: #8c7568;
+    font-size: 11px;
+}
+
+
+/* Browse Bakery button */
+.storefront-orders-shop-button {
+    display: inline-block;
+    padding: 10px 18px;
+    border-radius: 8px;
+    background-color: var(--storefront-primary);
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+
+/* Browse Bakery hover */
+.storefront-orders-shop-button:hover {
+    color: #ffffff;
+    opacity: 0.92;
+}
+
+
+/* Tablet */
+@media (max-width: 767.98px) {
+
+    .storefront-orders-card {
+        padding: 17px;
+    }
+
+
+    .storefront-orders-button {
+        margin-top: 3px;
+    }
+}
+
+
+/* Mobile */
+@media (max-width: 575.98px) {
+
+    .storefront-orders-heading h1 {
+        font-size: 23px;
+    }
+
+
+    .storefront-orders-tabs {
+        gap: 15px;
+    }
+
+
+    .storefront-orders-card {
+        padding: 15px;
+    }
+
+
+    .storefront-orders-product-image {
+        width: 56px;
+        height: 56px;
+    }
+
+
+    .storefront-orders-status {
+        padding: 5px 9px;
+    }
+}

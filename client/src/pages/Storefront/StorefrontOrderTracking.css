@@ -1,0 +1,361 @@
+/* Order Tracking page */
+.storefront-tracking-page {
+    background-color: #fffaf6;
+    color: var(--storefront-dark);
+}
+
+
+/* Loading page */
+.storefront-tracking-loading {
+    min-height: 100vh;
+    background-color: #fffaf6;
+}
+
+
+/* Main content */
+.storefront-tracking-main {
+    min-height: 700px;
+}
+
+
+/* Back link */
+.storefront-tracking-back {
+    color: #766158;
+    font-size: 11px;
+}
+
+
+/* Back hover */
+.storefront-tracking-back:hover {
+    color: var(--storefront-primary);
+}
+
+
+/* Order heading */
+.storefront-tracking-heading {
+    margin: 20px 0 25px;
+}
+
+
+/* Small heading */
+.storefront-tracking-heading span {
+    color: #a08371;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+
+/* Order number */
+.storefront-tracking-heading h1 {
+    margin: 3px 0 0;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+
+/* Order status */
+.storefront-tracking-status {
+    padding: 6px 14px;
+    border-radius: 20px;
+    background-color: #eee8e3;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+
+/* Preparing status */
+.storefront-tracking-status-preparing {
+    background-color: #f5e5db;
+    color: var(--storefront-primary);
+}
+
+
+/* Ready status */
+.storefront-tracking-status-ready {
+    background-color: #e8f3ec;
+    color: #408562;
+}
+
+
+/* Completed status */
+.storefront-tracking-status-completed {
+    background-color: #e8f3ec;
+    color: #408562;
+}
+
+
+/* Card */
+.storefront-tracking-card {
+    padding: 20px;
+    border: 1px solid #e3d5ca;
+    border-radius: 12px;
+    background-color: #ffffff;
+}
+
+
+/* Card title */
+.storefront-tracking-card-title {
+    margin-bottom: 18px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+
+/* Product */
+.storefront-tracking-product {
+    font-size: 11px;
+}
+
+
+/* Product icon */
+.storefront-tracking-product-image {
+    width: 64px;
+    height: 64px;
+    flex-shrink: 0;
+    border-radius: 9px;
+    background-color: var(--storefront-secondary);
+    color: var(--storefront-primary);
+}
+
+
+/* Product secondary information */
+.storefront-tracking-product small {
+    color: #846f64;
+    font-size: 10px;
+}
+
+
+/* Current status */
+.storefront-tracking-current {
+    padding: 17px;
+    border: 1px solid #ecc6b2;
+    border-radius: 12px;
+    background-color: #f8e3d7;
+    color: #6a4737;
+    font-size: 11px;
+}
+
+
+/* Current status heading */
+.storefront-tracking-current strong {
+    color: var(--storefront-primary);
+}
+
+
+/* Timeline */
+.storefront-tracking-timeline {
+    margin-top: 5px;
+}
+
+
+/* One Timeline stage */
+.storefront-tracking-stage {
+    display: flex;
+    min-height: 72px;
+}
+
+
+/* Circle and line area */
+.storefront-tracking-stage-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 36px;
+    margin-right: 12px;
+}
+
+
+/* Timeline circle */
+.storefront-tracking-circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    border: 2px solid #e2d6cd;
+    border-radius: 50%;
+    background-color: #ffffff;
+    color: #cab7a9;
+    font-size: 10px;
+}
+
+
+/* Complete stage */
+.storefront-tracking-circle-complete {
+    border-color: #408562;
+    background-color: #408562;
+    color: #ffffff;
+}
+
+
+/* Timeline line */
+.storefront-tracking-line {
+    width: 1px;
+    flex-grow: 1;
+    background-color: #dfd1c7;
+}
+
+
+/* Complete timeline line */
+.storefront-tracking-line-complete {
+    background-color: #408562;
+}
+
+
+/* Timeline text */
+.storefront-tracking-stage-text {
+    padding-top: 5px;
+    color: #c7b39f;
+}
+
+
+/* Timeline title */
+.storefront-tracking-stage-text strong {
+    font-size: 12px;
+}
+
+
+/* Timeline description */
+.storefront-tracking-stage-text p {
+    margin-top: 4px;
+    font-size: 10px;
+}
+
+
+/* Current Timeline stage */
+.storefront-tracking-stage-current {
+    color: var(--storefront-primary);
+}
+
+
+/* Customization label */
+.storefront-tracking-custom-label {
+    color: #a08371;
+    font-size: 9px;
+    text-transform: uppercase;
+}
+
+
+/* Customization value */
+.storefront-tracking-custom-value {
+    font-size: 11px;
+}
+
+
+/* Right side card text */
+.storefront-tracking-card span {
+    font-size: 11px;
+}
+
+
+/* Right side helper text */
+.storefront-tracking-card small {
+    color: #8b776c;
+    font-size: 10px;
+}
+
+
+/* Pending Payment */
+.storefront-tracking-payment-pending {
+    color: var(--storefront-primary);
+}
+
+
+/* Received Payment */
+.storefront-tracking-payment-received {
+    color: #408562;
+}
+
+
+/* Review box */
+.storefront-tracking-review {
+    padding: 14px;
+    border: 1px dashed #dbcbbc;
+    border-radius: 11px;
+    color: #a68e7e;
+    font-size: 10px;
+}
+
+/* One Product in Order */
+.storefront-tracking-product {
+    padding: 16px 0;
+    border-bottom: 1px solid #eee4dd;
+}
+
+
+/* Remove border from last Product */
+.storefront-tracking-product:last-child {
+    border-bottom: none;
+}
+
+
+/* Product image */
+.storefront-tracking-product-image {
+    width: 72px;
+    height: 72px;
+    flex-shrink: 0;
+    border-radius: 9px;
+    object-fit: cover;
+}
+
+
+/* Product image fallback */
+.storefront-tracking-product-placeholder {
+    background-color: var(--storefront-secondary);
+    color: var(--storefront-primary);
+}
+
+
+/* Product Customizations */
+.storefront-tracking-product-customizations {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px 16px;
+}
+
+
+/* One Customization */
+.storefront-tracking-product-option {
+    font-size: 10px;
+}
+
+
+/* Customization label */
+.storefront-tracking-product-option span {
+    margin-right: 4px;
+    color: #9a806f;
+}
+
+
+/* Customization value */
+.storefront-tracking-product-option strong {
+    color: var(--storefront-dark);
+    font-weight: 600;
+}
+
+
+/* Product note */
+.storefront-tracking-product-note {
+    color: #846f64;
+}
+
+/* Mobile */
+@media (max-width: 575.98px) {
+
+    .storefront-tracking-card {
+        padding: 16px;
+    }
+
+
+    .storefront-tracking-heading h1 {
+        font-size: 20px;
+    }
+
+
+    .storefront-tracking-product-image {
+        width: 52px;
+        height: 52px;
+    }
+}

@@ -1,0 +1,362 @@
+/* Storefront Payment page */
+.storefront-payment-page {
+    background-color: #fffaf6;
+    color: var(--storefront-dark);
+}
+
+
+/* Loading screen */
+.storefront-payment-loading {
+    min-height: 100vh;
+    background-color: #fffaf6;
+}
+
+
+/* Main Checkout area */
+.storefront-payment-main {
+    min-height: 650px;
+}
+
+
+/* Checkout steps */
+.storefront-payment-steps {
+    color: #8a776d;
+    font-size: 12px;
+}
+
+
+/* Back link */
+.storefront-payment-back {
+    color: #78685f;
+}
+
+
+/* Back hover */
+.storefront-payment-back:hover {
+    color: var(--storefront-primary);
+}
+
+
+/* Checkout card */
+.storefront-payment-card {
+    padding: 22px;
+    border: 1px solid #e8dcd4;
+    border-radius: 12px;
+    background-color: #ffffff;
+}
+
+
+/* Section heading */
+.storefront-payment-section-title {
+    margin-bottom: 6px;
+    color: var(--storefront-dark);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+
+/* Help text */
+.storefront-payment-help {
+    margin-bottom: 18px;
+    color: #8b7a71;
+    font-size: 11px;
+}
+
+
+/* Payment options */
+.storefront-payment-options {
+    display: grid;
+    gap: 10px;
+}
+
+
+/* Deposit / Full option */
+.storefront-payment-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #e4d7cf;
+    border-radius: 9px;
+    background-color: #ffffff;
+    color: var(--storefront-dark);
+    text-align: left;
+}
+
+
+/* Selected option */
+.storefront-payment-option-selected {
+    border-color: var(--storefront-primary);
+    background-color: color-mix(in srgb, var(--storefront-secondary) 30%, white);
+}
+
+
+/* Payment option text */
+.storefront-payment-option small {
+    display: block;
+    margin-top: 3px;
+    color: #8b7a71;
+    font-size: 10px;
+}
+
+
+/* Radio indicator */
+.storefront-payment-radio {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 19px;
+    height: 19px;
+    border: 1px solid var(--storefront-primary);
+    border-radius: 50%;
+    color: #ffffff;
+    background-color: var(--storefront-primary);
+}
+
+
+/* Full payment box */
+.storefront-payment-full-amount {
+    padding: 15px;
+    border-radius: 9px;
+    background-color: color-mix(in srgb, var(--storefront-secondary) 45%, white);
+}
+
+
+/* Full payment description */
+.storefront-payment-full-amount small {
+    color: #8b7a71;
+    font-size: 10px;
+}
+
+
+/* Main amount */
+.storefront-payment-big-price {
+    color: var(--storefront-primary);
+    font-size: 17px;
+}
+
+
+/* Payment method */
+.storefront-payment-method {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 15px;
+    border: 1px solid #e4d7cf;
+    border-radius: 9px;
+    background-color: #ffffff;
+    color: var(--storefront-dark);
+}
+
+
+/* Selected Payment method */
+.storefront-payment-method-selected {
+    border-color: var(--storefront-primary);
+}
+
+
+/* Payment method icon */
+.storefront-payment-method-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    background-color: var(--storefront-secondary);
+    color: var(--storefront-primary);
+}
+
+
+/* Payment method description */
+.storefront-payment-method small {
+    color: #8b7a71;
+    font-size: 10px;
+}
+
+
+/* Manual payment information */
+.storefront-payment-manual-info {
+    padding: 14px;
+    border-radius: 9px;
+    background-color: #faf5f1;
+    color: #68564c;
+    font-size: 11px;
+}
+
+
+/* Manual payment helper */
+.storefront-payment-manual-info small {
+    color: #8b7a71;
+}
+
+
+/* Main Place Order button */
+.storefront-payment-primary-button {
+    min-height: 47px;
+    border: 1px solid var(--storefront-primary);
+    border-radius: 8px;
+    background-color: var(--storefront-primary);
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+
+/* Place Order hover */
+.storefront-payment-primary-button:hover:not(:disabled) {
+    opacity: 0.92;
+}
+
+
+/* Disabled Place Order */
+.storefront-payment-primary-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+
+/* Order Summary */
+.storefront-payment-summary {
+    position: sticky;
+    top: 24px;
+    padding: 20px;
+    border: 1px solid #e8dcd4;
+    border-radius: 12px;
+    background-color: #ffffff;
+}
+
+
+/* Summary heading */
+.storefront-payment-summary-title {
+    margin-bottom: 18px;
+    color: var(--storefront-dark);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+
+/* Product */
+.storefront-payment-product {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: 11px;
+}
+
+
+/* Product image */
+.storefront-payment-product-image,
+.storefront-payment-product-placeholder {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+}
+
+
+/* Product image */
+.storefront-payment-product-image {
+    object-fit: cover;
+}
+
+
+/* Product placeholder */
+.storefront-payment-product-placeholder {
+    background-color: var(--storefront-secondary);
+    color: var(--storefront-primary);
+}
+
+
+/* Product name */
+.storefront-payment-product-name {
+    font-size: 12px;
+}
+
+
+/* Product information */
+.storefront-payment-product-info {
+    color: #8b7a71;
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+
+/* Pickup information */
+.storefront-payment-info-box {
+    padding: 13px;
+    border-radius: 9px;
+    background-color: color-mix(in srgb, var(--storefront-secondary) 55%, #f7f2ee);
+    color: #594940;
+    font-size: 11px;
+}
+
+
+/* Pickup icon */
+.storefront-payment-info-box svg {
+    color: var(--storefront-primary);
+}
+
+
+/* Pickup address */
+.storefront-payment-info-box small {
+    color: #85736a;
+}
+
+
+/* Contact information */
+.storefront-payment-contact {
+    color: #594940;
+    font-size: 11px;
+}
+
+
+/* Contact secondary text */
+.storefront-payment-contact small {
+    color: #85736a;
+}
+
+
+/* Highlighted amount */
+.storefront-payment-highlight {
+    color: var(--storefront-primary);
+}
+
+
+/* Secondary pricing */
+.storefront-payment-muted {
+    color: #8b7a71;
+    font-size: 11px;
+}
+
+
+/* Tablet and Mobile */
+@media (max-width: 991.98px) {
+
+    .storefront-payment-summary {
+        position: static;
+    }
+}
+
+
+/* Mobile */
+@media (max-width: 575.98px) {
+
+    .storefront-payment-card {
+        padding: 16px;
+    }
+
+
+    .storefront-payment-option {
+        align-items: flex-start;
+        padding: 13px;
+    }
+
+
+    .storefront-payment-steps {
+        gap: 10px !important;
+    }
+}

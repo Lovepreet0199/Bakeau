@@ -1,0 +1,252 @@
+/* Order Confirmation page */
+.storefront-confirmation-page {
+    background-color: #fffaf6;
+    color: var(--storefront-dark);
+}
+
+
+/* Loading page */
+.storefront-confirmation-loading {
+    min-height: 100vh;
+    background-color: #fffaf6;
+}
+
+
+/* Main area */
+.storefront-confirmation-main {
+    min-height: 650px;
+}
+
+
+/* Confirmation heading */
+.storefront-confirmation-heading {
+    max-width: 600px;
+    margin: 0 auto 30px;
+}
+
+
+/* Success circle */
+.storefront-confirmation-check {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    margin-bottom: 26px;
+    border-radius: 50%;
+    background-color: #e7f2ec;
+    color: #408562;
+}
+
+
+/* Main heading */
+.storefront-confirmation-heading h1 {
+    margin-bottom: 10px;
+    font-size: 30px;
+    font-weight: 700;
+}
+
+
+/* Confirmation message */
+.storefront-confirmation-heading p {
+    margin: 0;
+    color: #725f54;
+    font-size: 14px;
+}
+
+
+/* Main Order card */
+.storefront-confirmation-card {
+    max-width: 515px;
+    padding: 24px;
+    border: 1px solid #e2d3c7;
+    border-radius: 14px;
+    background-color: #ffffff;
+}
+
+
+/* Order label */
+.storefront-confirmation-order-header span {
+    color: #977964;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+
+/* Order number */
+.storefront-confirmation-order-header h2 {
+    margin: 3px 0 0;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+
+/* Status badge */
+.storefront-confirmation-status {
+    padding: 6px 13px;
+    border-radius: 20px;
+    background-color: #e7f2ec;
+    color: #408562;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+
+/* Product section */
+.storefront-confirmation-products {
+    margin-bottom: 16px;
+}
+
+
+/* Product */
+.storefront-confirmation-product {
+    padding: 4px 0 12px;
+}
+
+
+/* Product placeholder */
+.storefront-confirmation-product-image {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    border-radius: 8px;
+    background-color: var(--storefront-secondary);
+    color: var(--storefront-primary);
+}
+
+
+/* Product text */
+.storefront-confirmation-product strong {
+    font-size: 12px;
+}
+
+
+/* Product details */
+.storefront-confirmation-product small {
+    color: #8b7568;
+    font-size: 10px;
+}
+
+
+/* Payment box */
+.storefront-confirmation-payment {
+    margin-bottom: 16px;
+    padding: 14px 16px;
+    border-radius: 11px;
+    background-color: #e8f3ec;
+    color: #4a5f50;
+    font-size: 11px;
+}
+
+
+/* Payment heading */
+.storefront-confirmation-payment strong {
+    color: #365f48;
+}
+
+
+/* Pickup box */
+.storefront-confirmation-pickup {
+    padding: 14px 16px;
+    border-radius: 11px;
+    background-color: #f2ebe3;
+    color: #5e4a3e;
+    font-size: 11px;
+}
+
+
+/* Pickup small text */
+.storefront-confirmation-pickup small {
+    color: #927d6e;
+}
+
+
+/* Buttons area */
+.storefront-confirmation-actions {
+    display: grid;
+    max-width: 515px;
+    gap: 11px;
+    margin-top: 23px;
+}
+
+
+/* Track Order button */
+.storefront-confirmation-track {
+    padding: 14px;
+    border: 1px solid var(--storefront-primary);
+    border-radius: 10px;
+    background-color: var(--storefront-primary);
+    color: #ffffff;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+
+/* Track Order hover */
+.storefront-confirmation-track:hover {
+    color: #ffffff;
+    opacity: 0.92;
+}
+
+
+/* View Orders button */
+.storefront-confirmation-orders {
+    padding: 14px;
+    border: 2px solid var(--storefront-dark);
+    border-radius: 10px;
+    background-color: #ffffff;
+    color: var(--storefront-dark);
+    text-align: center;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+
+/* View Orders hover */
+.storefront-confirmation-orders:hover {
+    color: var(--storefront-primary);
+    border-color: var(--storefront-primary);
+}
+
+/* Product image */
+.storefront-confirmation-product-image {
+    width: 58px;
+    height: 58px;
+    flex-shrink: 0;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+
+/* Product image fallback */
+.storefront-confirmation-product-placeholder {
+    background-color: var(--storefront-secondary);
+    color: var(--storefront-primary);
+}
+
+
+/* Product customization text */
+.storefront-confirmation-product-customizations small {
+    color: #8b7568;
+    font-size: 10px;
+}
+
+/* Mobile */
+@media (max-width: 575.98px) {
+
+    .storefront-confirmation-heading h1 {
+        font-size: 25px;
+    }
+
+
+    .storefront-confirmation-check {
+        width: 68px;
+        height: 68px;
+    }
+
+
+    .storefront-confirmation-card {
+        padding: 18px;
+    }
+}

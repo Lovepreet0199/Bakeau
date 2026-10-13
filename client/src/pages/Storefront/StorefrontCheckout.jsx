@@ -375,7 +375,7 @@ export default function StorefrontCheckout() {
 
         loadCheckout();
 
-    }, [slug]);
+    }, [slug, bakeryCartItems, navigate]);
 
 
     //Load Pickup availability when Bakery or Calendar month changes
@@ -634,8 +634,8 @@ export default function StorefrontCheckout() {
                                                 disabled={!available}
                                                 onClick={() => selectDate(calendarDay.date)}
                                                 className={`storefront-checkout-calendar-day ${available
-                                                        ? "storefront-checkout-calendar-day-available"
-                                                        : "storefront-checkout-calendar-day-blocked"
+                                                    ? "storefront-checkout-calendar-day-available"
+                                                    : "storefront-checkout-calendar-day-blocked"
                                                     } ${selected
                                                         ? "storefront-checkout-calendar-day-selected"
                                                         : ""

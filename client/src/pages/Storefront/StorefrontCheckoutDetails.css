@@ -1,0 +1,250 @@
+/* Contact Details Checkout page */
+.storefront-details-page {
+    background-color: #fffaf6;
+    color: var(--storefront-dark);
+}
+
+
+/* Loading page */
+.storefront-details-loading {
+    min-height: 100vh;
+    background-color: #fffaf6;
+}
+
+
+/* Main content */
+.storefront-details-main {
+    min-height: 650px;
+}
+
+
+/* Checkout steps */
+.storefront-details-steps {
+    color: var(--storefront-dark);
+    font-size: 12px;
+}
+
+
+/* Back link */
+.storefront-details-back {
+    color: #78685f;
+}
+
+
+/* Back hover */
+.storefront-details-back:hover {
+    color: var(--storefront-primary);
+}
+
+
+/* Next Checkout step */
+.storefront-details-next-step {
+    color: #95857c;
+}
+
+
+/* Main Card */
+.storefront-details-card {
+    padding: 22px;
+    border: 1px solid #e8dcd4;
+    border-radius: 12px;
+    background-color: #ffffff;
+}
+
+
+/* Card heading */
+.storefront-details-section-title {
+    margin-bottom: 6px;
+    color: var(--storefront-dark);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+
+/* Optional text */
+.storefront-details-section-title span {
+    font-size: 11px;
+    font-weight: 500;
+}
+
+
+/* Form help */
+.storefront-details-help {
+    margin-bottom: 20px;
+    color: #8b7a71;
+    font-size: 11px;
+}
+
+
+/* Labels */
+.storefront-details-label {
+    display: block;
+    margin-bottom: 7px;
+    color: var(--storefront-dark);
+    font-size: 11px;
+    font-weight: 600;
+}
+
+
+/* Inputs */
+.storefront-details-input {
+    min-height: 42px;
+    border-color: #e4d7cf;
+    border-radius: 8px;
+    color: var(--storefront-dark);
+    font-size: 12px;
+}
+
+
+/* Input focus */
+.storefront-details-input:focus,
+.storefront-details-textarea:focus {
+    border-color: var(--storefront-primary);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--storefront-primary) 15%, transparent);
+}
+
+
+/* Order note */
+.storefront-details-textarea {
+    margin-top: 12px;
+    border-color: #e4d7cf;
+    border-radius: 8px;
+    resize: vertical;
+    color: var(--storefront-dark);
+    font-size: 12px;
+}
+
+
+/* Continue button */
+.storefront-details-primary-button {
+    min-height: 46px;
+    border: 1px solid var(--storefront-primary);
+    border-radius: 8px;
+    background-color: var(--storefront-primary);
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+
+/* Continue hover */
+.storefront-details-primary-button:hover {
+    opacity: 0.92;
+}
+
+
+/* Order Summary */
+.storefront-details-summary {
+    position: sticky;
+    top: 24px;
+    padding: 20px;
+    border: 1px solid #e8dcd4;
+    border-radius: 12px;
+    background-color: #ffffff;
+}
+
+
+/* Summary heading */
+.storefront-details-summary-title {
+    margin-bottom: 18px;
+    color: var(--storefront-dark);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+
+/* Product */
+.storefront-details-product {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: 11px;
+}
+
+
+/* Product image */
+.storefront-details-product-image,
+.storefront-details-product-placeholder {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+}
+
+
+/* Product image */
+.storefront-details-product-image {
+    object-fit: cover;
+}
+
+
+/* Product placeholder */
+.storefront-details-product-placeholder {
+    background-color: var(--storefront-secondary);
+    color: var(--storefront-primary);
+}
+
+
+/* Product name */
+.storefront-details-product-name {
+    font-size: 12px;
+}
+
+
+/* Product info */
+.storefront-details-product-info {
+    color: #8b7a71;
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+
+/* Pickup box */
+.storefront-details-pickup {
+    padding: 13px;
+    border-radius: 9px;
+    background-color: color-mix(in srgb, var(--storefront-secondary) 55%, #f7f2ee);
+    color: #594940;
+    font-size: 11px;
+}
+
+
+/* Pickup icon */
+.storefront-details-pickup svg {
+    color: var(--storefront-primary);
+}
+
+
+/* Pickup address */
+.storefront-details-pickup small {
+    display: block;
+    margin-top: 3px;
+    color: #85736a;
+}
+
+
+/* Deposit */
+.storefront-details-deposit {
+    color: var(--storefront-primary);
+}
+
+
+/* Tablet and Mobile */
+@media (max-width: 991.98px) {
+
+    .storefront-details-summary {
+        position: static;
+    }
+}
+
+
+/* Mobile */
+@media (max-width: 575.98px) {
+
+    .storefront-details-card {
+        padding: 16px;
+    }
+
+    .storefront-details-steps {
+        gap: 10px !important;
+    }
+}

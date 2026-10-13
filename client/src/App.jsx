@@ -71,6 +71,21 @@ import CustomerAccount from "./pages/Storefront/CustomerAccount";
 //Import Storefront Checkout
 import StorefrontCheckout from "./pages/Storefront/StorefrontCheckout";
 
+//Import Checkout Contact Details
+import StorefrontCheckoutDetails from "./pages/Storefront/StorefrontCheckoutDetails";
+
+//Import Storefront Payment page
+import StorefrontCheckoutPayment from "./pages/Storefront/StorefrontCheckoutPayment";
+
+//Import Storefront Order Confirmation page
+import StorefrontOrderConfirmation from "./pages/Storefront/StorefrontOrderConfirmation";
+
+//Import Storefront Order Tracking page
+import StorefrontOrderTracking from "./pages/Storefront/StorefrontOrderTracking";
+
+//Import Customer My Orders page
+import StorefrontMyOrders from "./pages/Storefront/StorefrontMyOrders";
+
 //Displays the Bakeau application routes
 export default function App() {
 
@@ -155,6 +170,35 @@ export default function App() {
         <Route
           path="/store/:slug/checkout"
           element={<StorefrontCheckout />}
+        />
+
+        {/* Checkout details route for storefront */}
+        <Route
+          path="/store/:slug/checkout/details"
+          element={<StorefrontCheckoutDetails />}
+        />
+
+        {/* Payment Route for Customer storefront */}
+        <Route
+          path="/store/:slug/checkout/payment"
+          element={<StorefrontCheckoutPayment />}
+        />
+
+        {/* Order confirmation for Customer storefront */}
+        <Route
+          path="/store/:slug/order/:orderId/confirmed"
+          element={<StorefrontOrderConfirmation />}
+        />
+
+        {/* Order tracking for Customer storefront */}
+        <Route
+          path="/store/:slug/orders/:orderId"
+          element={<StorefrontOrderTracking />}
+        />
+        {/* Customer orders route */}
+        <Route
+          path="/store/:slug/orders"
+          element={<StorefrontMyOrders />}
         />
 
         {/* Shared layout for all Bakery Owner dashboard pages */}
