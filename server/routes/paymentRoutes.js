@@ -1,0 +1,79 @@
+//Import Express to create Payment routes
+import express from "express";
+
+//Import Payment controller functions
+import {
+    createManualPayment
+} from "../controllers/paymentController.js";
+
+//Import authentication middleware
+import { authenticateUser } from "../middleware/authMiddleware.js";
+
+//Import role middleware
+import { authorizeRoles } from "../middleware/roleMiddleware.js";
+
+//Import express-validator
+import { body, validationResult } from "express-validator";
+
+
+//Create Payment router
+const router = express.Router();
+
+
+//Validate Manual Payment information
+const manualPaymentValidation = [
+
+    body("order_id")
+        .notEmpty()
+        .withMessage("Order is required")
+        .isMongoId()
+        .withMessage("Order ID must be valid"),
+
+    body("payment_choice")
+        .notEmpty()
+        .withMessage("Payment choice is required")
+        .isIn([
+            "deposit",
+            "full"
+        ])
+        .withMessage("Payment choice must be deposit or full")
+];
+
+
+//Check validation results
+const validateRequest = (
+    request,
+    response,
+    next
+) => {
+
+    //Get validation errors
+    const errors = validationResult(request);
+
+
+    //Return validation errors
+    if (!errors.isEmpty()) {
+        return response.status(400).json({
+            errors: errors.array()
+        });
+    }
+
+
+    //Continue to Controller
+    next();
+};
+
+
+//Create Manual Payment for Customer Order
+router.post(
+    "/manual",
+    authenticateUser,
+    authorizeRoles("customer"),
+    manualPaymentValidation,
+    validateRequest,
+    createManualPayment
+);
+
+
+//Export Payment router
+export default router;
