@@ -3,7 +3,9 @@ import express from "express";
 
 //Import Payment controller functions
 import {
-    createManualPayment
+    createManualPayment,
+    receiveManualPayment,
+    revertManualPayment
 } from "../controllers/paymentController.js";
 
 //Import authentication middleware
@@ -13,7 +15,11 @@ import { authenticateUser } from "../middleware/authMiddleware.js";
 import { authorizeRoles } from "../middleware/roleMiddleware.js";
 
 //Import express-validator
-import { body, validationResult } from "express-validator";
+import {
+    body,
+    param,
+    validationResult
+} from "express-validator";
 
 
 //Create Payment router
@@ -37,6 +43,15 @@ const manualPaymentValidation = [
             "full"
         ])
         .withMessage("Payment choice must be deposit or full")
+];
+
+
+//Validate Payment ID
+const paymentIdValidation = [
+
+    param("id")
+        .isMongoId()
+        .withMessage("Payment ID must be valid")
 ];
 
 
@@ -74,6 +89,26 @@ router.post(
     createManualPayment
 );
 
+
+//Mark Manual Payment as received
+router.patch(
+    "/:id/receive",
+    authenticateUser,
+    authorizeRoles("bakeryOwner"),
+    paymentIdValidation,
+    validateRequest,
+    receiveManualPayment
+);
+
+//Changes a received Manual Payment back to Pending
+router.patch(
+    "/:id/revert",
+    authenticateUser,
+    authorizeRoles("bakeryOwner"),
+    paymentIdValidation,
+    validateRequest,
+    revertManualPayment
+);
 
 //Export Payment router
 export default router;

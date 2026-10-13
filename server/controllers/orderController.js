@@ -25,6 +25,9 @@ import CustomizationOption from "../models/CustomizationOption.js";
 //Import Order Activity model
 import OrderActivity from "../models/OrderActivity.js";
 
+//Import Payment model to load Order payment information
+import Payment from "../models/Payment.js";
+
 //Rounds money values to two decimal places
 const roundMoney = (amount) => {
     return Math.round((amount + Number.EPSILON) * 100) / 100;
@@ -116,9 +119,13 @@ const isPickupTimeValid = (pickupWindow, selectedTime) => {
 const getCompleteOrderDetails = async (order) => {
 
     //Find all items belonging to this Order
+    //Find all items and load the Product image
     const orderItems = await OrderItem.find({
         order_id: order._id
-    });
+    }).populate(
+        "product_id",
+        "image_url"
+    );
 
     //Get all Order Item IDs
     const orderItemIds = orderItems.map(
@@ -154,11 +161,17 @@ const getCompleteOrderDetails = async (order) => {
         created_at: 1
     });
 
+    //Find Payments belonging to this Order
+    const payments = await Payment.find({
+        order_id: order._id
+    });
+
     //Return the Order with its complete item information
     return {
         ...order.toObject(),
         items: itemsWithCustomizations,
-        activities: activities
+        activities: activities,
+        payments: payments
     };
 };
 
@@ -387,10 +400,33 @@ const getMyOrders = async (request, response) => {
             created_at: -1
         });
 
+
+        //Add Product items to each Order
+        const ordersWithItems = await Promise.all(
+
+            orders.map(async (order) => {
+
+                const orderItems = await OrderItem.find({
+                    order_id: order._id
+                }).populate(
+                    "product_id",
+                    "image_url"
+                );
+
+
+                return {
+                    ...order.toObject(),
+                    items: orderItems
+                };
+            })
+        );
+
+
         //Return the Customer's Orders
         return response.status(200).json({
-            orders: orders
+            orders: ordersWithItems
         });
+
 
     } catch (error) {
 
@@ -398,6 +434,7 @@ const getMyOrders = async (request, response) => {
             "Get customer orders error:",
             error.message
         );
+
 
         return response.status(500).json({
             message: "Unable to get orders"
@@ -687,6 +724,7 @@ const saveOrderItems = async (
             order_id: order._id,
             product_id: product._id,
             product_name: product.name,
+            product_image_url: product.image_url || "",
             quantity: preparedItem.quantity,
             base_price: product.base_price,
             payment_rule: product.payment_rule,

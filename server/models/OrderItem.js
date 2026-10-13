@@ -25,6 +25,13 @@ const orderItemSchema = new mongoose.Schema({
         trim: true
     },
 
+    //Product image saved when the Order was placed
+    product_image_url: {
+        type: String,
+        trim: true,
+        default: ""
+    },
+
     //Number of this product included in the order
     quantity: {
         type: Number,

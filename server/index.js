@@ -33,6 +33,9 @@ import ingredientRoutes from "./routes/ingredientRoutes.js";
 //Import Payment routes
 import paymentRoutes from "./routes/paymentRoutes.js";
 
+//Import Customer routes
+import customerRoutes from "./routes/customerRoutes.js";
+
 // Create an Express app and store it in the app variable
 const app = express();
 
@@ -69,6 +72,9 @@ app.use("/api/ingredients", ingredientRoutes);
 
 //Use Payment routes for Bakery payment requests
 app.use("/api/payments", paymentRoutes);
+
+//Customers routes 
+app.use("/api/customers", customerRoutes);
 
 //Connect to MongoDB
 connectDB();
