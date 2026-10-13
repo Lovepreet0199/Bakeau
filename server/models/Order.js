@@ -53,6 +53,14 @@ const orderSchema = new mongoose.Schema({
         min: 0
     },
 
+    //Optional note from the Customer for the Bakery
+    bakery_note: {
+        type: String,
+        trim: true,
+        length: 300,
+        default: ""
+    },
+
     //Current status of the order
     status: {
         type: String,

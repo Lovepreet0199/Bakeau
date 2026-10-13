@@ -727,17 +727,19 @@ const getPublicBakeryProductQuote = async (request, response) => {
             itemTotal;
 
 
-        //Use the Bakery payment settings
+        //Use the Product payment rule
         const paymentRule =
-            bakery.payment_rule;
+            product.payment_rule;
 
 
-        //Get the Bakery deposit percentage
+        //Get the Product deposit percentage
         const depositPercentage =
-            Number(bakery.deposit_percentage || 0);
+            Number(
+                product.deposit_percentage || 0
+            );
 
 
-        //Calculate deposit when the Bakery requires one
+        //Calculate deposit when this Product requires one
         if (
             paymentRule === "deposit" &&
             depositPercentage > 0
@@ -810,6 +812,499 @@ const getPublicBakeryProductQuote = async (request, response) => {
         return response.status(500).json({
             message:
                 "Unable to calculate product price"
+        });
+    }
+};
+
+//Calculates a trusted price quote for all Products inside a public Cart
+const getPublicBakeryCartQuote = async (request, response) => {
+
+    try {
+
+        //Get the Bakery slug from the URL
+        const slug =
+            request.params.slug;
+
+
+        //Get the Cart items sent by the Customer
+        const {
+            items
+        } = request.body;
+
+
+        //Make sure the Cart contains at least one Product
+        if (
+            !Array.isArray(items) ||
+            items.length === 0
+        ) {
+
+            return response.status(400).json({
+                message:
+                    "Cart must contain at least one product"
+            });
+        }
+
+
+        //Find the approved Bakery
+        const bakery =
+            await Bakery.findOne({
+                slug: slug,
+                account_status: "Approved"
+            });
+
+
+        //Stop if the Bakery cannot be found
+        if (!bakery) {
+
+            return response.status(404).json({
+                message:
+                    "Bakery not found"
+            });
+        }
+
+
+        //Stores trusted Cart item quotes
+        const quotedItems = [];
+
+
+        //Tracks the full Cart price
+        let cartSubtotal = 0;
+
+
+        //Tracks how much the Customer must pay now
+        let cartAmountDueNow = 0;
+
+
+        //Validate and calculate every Cart Product
+        for (const requestedItem of items) {
+
+            //Convert quantity into a number
+            const quantity =
+                Number(
+                    requestedItem.quantity
+                );
+
+
+            //Make sure quantity is valid
+            if (
+                !Number.isInteger(quantity) ||
+                quantity < 1
+            ) {
+
+                return response.status(400).json({
+                    message:
+                        "Product quantity must be at least 1"
+                });
+            }
+
+
+            //Get selected customization Option IDs
+            const selectedOptionIds =
+                requestedItem.customization_option_ids ||
+                [];
+
+
+            //Make sure customization Options are an array
+            if (
+                !Array.isArray(
+                    selectedOptionIds
+                )
+            ) {
+
+                return response.status(400).json({
+                    message:
+                        "Customization options must be an array"
+                });
+            }
+
+
+            //Find the public Product inside this Bakery
+            const product =
+                await Product.findOne({
+                    _id:
+                        requestedItem.product_id,
+
+                    bakery_id:
+                        bakery._id,
+
+                    is_visible:
+                        true,
+
+                    is_available:
+                        true
+                });
+
+
+            //Stop if the Product cannot be ordered
+            if (!product) {
+
+                return response.status(404).json({
+                    message:
+                        "One or more Cart products could not be found"
+                });
+            }
+
+
+            //Check inventory when this Product tracks stock
+            if (
+                product.stock_type ===
+                "track_inventory" &&
+                Number(
+                    product.inventory_quantity
+                ) < quantity
+            ) {
+
+                return response.status(400).json({
+                    message:
+                        `Only ${product.inventory_quantity} ${product.name} available`
+                });
+            }
+
+
+            //Find customization Groups for this Product
+            const customizationGroups =
+                await CustomizationGroup.find({
+                    product_id:
+                        product._id
+                });
+
+
+            //Stores selected Options from MongoDB
+            let selectedOptions = [];
+
+
+            //Load selected Options when some were submitted
+            if (
+                selectedOptionIds.length >
+                0
+            ) {
+
+                //Get Group IDs belonging to this Product
+                const groupIds =
+                    customizationGroups.map(
+                        (group) =>
+                            group._id
+                    );
+
+
+                //Find only Options belonging to this Product
+                selectedOptions =
+                    await CustomizationOption.find({
+                        _id: {
+                            $in:
+                                selectedOptionIds
+                        },
+
+                        group_id: {
+                            $in:
+                                groupIds
+                        }
+                    });
+
+
+                //Make sure every selected Option was valid
+                if (
+                    selectedOptions.length !==
+                    selectedOptionIds.length
+                ) {
+
+                    return response.status(400).json({
+                        message:
+                            `Invalid customization selected for ${product.name}`
+                    });
+                }
+            }
+
+
+            //Tracks which Groups already have a selection
+            const selectedGroupIds =
+                new Set();
+
+
+            //Stores trusted customization details
+            const customizationBreakdown =
+                [];
+
+
+            //Tracks customization pricing
+            let customizationTotal =
+                0;
+
+
+            //Validate each selected Option
+            for (
+                const option
+                of selectedOptions
+            ) {
+
+                //Find the Group this Option belongs to
+                const group =
+                    customizationGroups.find(
+                        (currentGroup) =>
+                            currentGroup._id.toString() ===
+                            option.group_id.toString()
+                    );
+
+
+                //Stop if the Group cannot be found
+                if (!group) {
+
+                    return response.status(400).json({
+                        message:
+                            "Invalid customization group"
+                    });
+                }
+
+
+                //Only allow one Option from each Group
+                if (
+                    selectedGroupIds.has(
+                        group._id.toString()
+                    )
+                ) {
+
+                    return response.status(400).json({
+                        message:
+                            `Only one option can be selected from ${group.name}`
+                    });
+                }
+
+
+                //Remember this Group already has a selection
+                selectedGroupIds.add(
+                    group._id.toString()
+                );
+
+
+                //Get trusted Option price
+                const optionPrice =
+                    roundMoney(
+                        option.additional_price
+                    );
+
+
+                //Add Option price to customization total
+                customizationTotal +=
+                    optionPrice;
+
+
+                //Save trusted customization information
+                customizationBreakdown.push({
+
+                    group_id:
+                        group._id,
+
+                    group_name:
+                        group.name,
+
+                    option_id:
+                        option._id,
+
+                    option_name:
+                        option.name,
+
+                    additional_price:
+                        optionPrice
+                });
+            }
+
+
+            //Make sure required Groups have a selected Option
+            for (
+                const group
+                of customizationGroups
+            ) {
+
+                if (
+                    group.is_required &&
+                    !selectedGroupIds.has(
+                        group._id.toString()
+                    )
+                ) {
+
+                    return response.status(400).json({
+                        message:
+                            `${group.name} is required for ${product.name}`
+                    });
+                }
+            }
+
+
+            //Get the trusted Product base price
+            const basePrice =
+                roundMoney(
+                    product.base_price
+                );
+
+
+            //Round customization pricing
+            customizationTotal =
+                roundMoney(
+                    customizationTotal
+                );
+
+
+            //Calculate one configured Product price
+            const unitPrice =
+                roundMoney(
+                    basePrice +
+                    customizationTotal
+                );
+
+
+            //Calculate this Cart item's total
+            const itemTotal =
+                roundMoney(
+                    unitPrice *
+                    quantity
+                );
+
+
+            //Full amount is due by default
+            let itemAmountDueNow =
+                itemTotal;
+
+
+            //Get this Product's payment settings
+            const paymentRule =
+                product.payment_rule;
+
+
+            const depositPercentage =
+                Number(
+                    product.deposit_percentage ||
+                    0
+                );
+
+
+            //Calculate deposit when this Product requires one
+            if (
+                paymentRule ===
+                "deposit" &&
+                depositPercentage > 0
+            ) {
+
+                itemAmountDueNow =
+                    roundMoney(
+                        itemTotal *
+                        (
+                            depositPercentage /
+                            100
+                        )
+                    );
+            }
+
+
+            //Add this Product to the Cart subtotal
+            cartSubtotal +=
+                itemTotal;
+
+
+            //Add the amount due now
+            cartAmountDueNow +=
+                itemAmountDueNow;
+
+
+            //Save the trusted Product quote
+            quotedItems.push({
+
+                product_id:
+                    product._id,
+
+                product_name:
+                    product.name,
+
+                base_price:
+                    basePrice,
+
+                customizations:
+                    customizationBreakdown,
+
+                customization_total:
+                    customizationTotal,
+
+                unit_price:
+                    unitPrice,
+
+                quantity:
+                    quantity,
+
+                item_total:
+                    itemTotal,
+
+                payment_rule:
+                    paymentRule,
+
+                deposit_percentage:
+                    paymentRule ===
+                        "deposit"
+                        ? depositPercentage
+                        : null,
+
+                amount_due_now:
+                    itemAmountDueNow
+            });
+        }
+
+
+        //Round final Cart totals
+        cartSubtotal =
+            roundMoney(
+                cartSubtotal
+            );
+
+
+        cartAmountDueNow =
+            roundMoney(
+                cartAmountDueNow
+            );
+
+
+        //Check if any part of the Order uses a deposit
+        const depositRequired =
+            cartAmountDueNow <
+            cartSubtotal;
+
+
+        //Return the trusted Cart quote
+        return response.status(200).json({
+
+            quote: {
+
+                items:
+                    quotedItems,
+
+                subtotal:
+                    cartSubtotal,
+
+                total:
+                    cartSubtotal,
+
+                deposit_required:
+                    depositRequired,
+
+                amount_due_now:
+                    cartAmountDueNow,
+
+                currency:
+                    bakery.currency
+            }
+        });
+
+
+    } catch (error) {
+
+        //Log Cart quote errors
+        console.error(
+            "Public Cart quote error:",
+            error.message
+        );
+
+
+        //Return server error
+        return response.status(500).json({
+            message:
+                "Unable to calculate Cart price"
         });
     }
 };
@@ -939,5 +1434,6 @@ export {
     getPublicBakery,
     getPublicBakeryProducts,
     getPublicBakeryProduct,
-    getPublicBakeryProductQuote
+    getPublicBakeryProductQuote,
+    getPublicBakeryCartQuote
 };

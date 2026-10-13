@@ -25,7 +25,8 @@ import {
     getPublicBakery,
     getPublicBakeryProducts,
     getPublicBakeryProduct,
-    getPublicBakeryProductQuote
+    getPublicBakeryProductQuote,
+    getPublicBakeryCartQuote
 } from "../controllers/bakeryController.js";
 
 //Import authentication middleware to protect bakery routes
@@ -185,6 +186,41 @@ const productQuoteValidation = [
         .withMessage("Invalid customization option")
 ];
 
+//Validate public Cart quote information
+const cartQuoteValidation = [
+
+    //Make sure Cart items are sent as an array
+    body("items")
+        .isArray({ min: 1 })
+        .withMessage("Cart must contain at least one Product"),
+
+
+    //Make sure every Cart Product has a valid MongoDB ID
+    body("items.*.product_id")
+        .isMongoId()
+        .withMessage("Invalid Product ID"),
+
+
+    //Make sure every Cart Product has a valid quantity
+    body("items.*.quantity")
+        .isInt({ min: 1 })
+        .withMessage("Product quantity must be at least 1"),
+
+
+    //Make sure customization Option IDs are sent as arrays
+    body("items.*.customization_option_ids")
+        .optional()
+        .isArray()
+        .withMessage("Customization options must be an array"),
+
+
+    //Make sure every customization Option ID is valid
+    body("items.*.customization_option_ids.*")
+        .optional()
+        .isMongoId()
+        .withMessage("Invalid customization option")
+];
+
 //Check the bakery validation results
 const validateRequest = (request, response, next) => {
 
@@ -306,6 +342,14 @@ router.post(
     productQuoteValidation,
     validateRequest,
     getPublicBakeryProductQuote
+);
+
+//Calculate a trusted backend price quote for the Customer Cart
+router.post(
+    "/public/:slug/cart/quote",
+    cartQuoteValidation,
+    validateRequest,
+    getPublicBakeryCartQuote
 );
 
 //Export the bakery router so it can be connected to the main Express application
