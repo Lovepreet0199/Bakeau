@@ -45,10 +45,17 @@ import adminRoutes from "./routes/adminRoutes.js";
 // Create an Express app and store it in the app variable
 const app = express();
 
-// Allows requests from the Bakeau React frontend during development
+//Allowed frontend URLs that can communicate with the Bakeau API
+const allowedOrigins = [
+    "http://localhost:5173",
+    "https://bakeau.pages.dev",
+    process.env.CLIENT_URL
+].filter(Boolean);
+
+//Allows requests from approved Bakeau frontend URLs
 app.use(
     cors({
-        origin: "http://localhost:5173"
+        origin: allowedOrigins
     })
 );
 

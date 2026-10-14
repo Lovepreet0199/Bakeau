@@ -77,7 +77,7 @@ const registerUser = async (request, response) => {
 
         //Create the link the user will click to verify their email address
         const verificationUrl =
-            `http://localhost:5173/verify-email?token=${emailVerificationToken}`;
+            `${process.env.CLIENT_URL}/verify-email?token=${emailVerificationToken}`;
 
         try {
             //Send the verification email to the newly registered user
@@ -231,7 +231,7 @@ const resendVerificationEmail = async (request, response) => {
 
         //Create a new verification link using the new verification token
         const verificationUrl =
-            `http://localhost:5173/verify-email?token=${emailVerificationToken}`;
+            `${process.env.CLIENT_URL}/verify-email?token=${emailVerificationToken}`;
 
         //Send the new verification email to the user
         await sendVerificationEmail(
@@ -344,10 +344,10 @@ const forgotPassword = async (
         //Create Customer or Bakery Owner reset URL
         const resetUrl =
             bakery_slug
-                ? `http://localhost:5173/store/${encodeURIComponent(
+                ? `${process.env.CLIENT_URL}/store/${encodeURIComponent(
                     bakery_slug
                 )}/reset-password?token=${passwordResetToken}`
-                : `http://localhost:5173/reset-password?token=${passwordResetToken}`;
+                : `${process.env.CLIENT_URL}/reset-password?token=${passwordResetToken}`;
 
 
         try {
@@ -740,7 +740,7 @@ const updateMyAccount = async (request, response) => {
 
             //Create the verification link
             const verificationUrl =
-                `http://localhost:5173/verify-email?token=${emailVerificationToken}`;
+                `${process.env.CLIENT_URL}/verify-email?token=${emailVerificationToken}`;
 
 
             try {
