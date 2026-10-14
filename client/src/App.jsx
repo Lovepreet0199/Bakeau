@@ -171,7 +171,7 @@ export default function App() {
 
         {/* Bakery Customer registration page */}
         <Route
-          path="/store/:slug/register"
+          path="/:slug/register"
           element={<CustomerRegister />}
         />
 
@@ -207,25 +207,25 @@ export default function App() {
 
         {/* Customer login page */}
         <Route
-          path="/store/:slug/login"
+          path="/:slug/login"
           element={<CustomerLogin />}
         />
 
         {/* Customer Forgot Password page */}
         <Route
-          path="/store/:slug/forgot-password"
+          path="/:slug/forgot-password"
           element={<StorefrontForgotPassword />}
         />
 
         {/* Customer Reset Password page */}
         <Route
-          path="/store/:slug/reset-password"
+          path="/:slug/reset-password"
           element={<StorefrontResetPassword />}
         />
 
         {/* Customer Account Page */}
         <Route
-          path="/store/:slug/account"
+          path="/:slug/account"
           element={<CustomerAccount />}
         />
 
@@ -237,73 +237,73 @@ export default function App() {
 
         {/* Public customer Bakery Storefront */}
         <Route
-          path="/store/:slug"
+          path="/:slug"
           element={<BakeryStorefront />}
         />
 
         {/* Public Storefront Product */}
         <Route
-          path="/store/:slug/product/:productId"
+          path="/:slug/product/:productId"
           element={<StorefrontProduct />}
         />
 
         {/* Public Storefront Cart */}
         <Route
-          path="/store/:slug/cart"
+          path="/:slug/cart"
           element={<StorefrontCart />}
         />
 
         {/* Checkout page for storefront */}
         <Route
-          path="/store/:slug/checkout"
+          path="/:slug/checkout"
           element={<StorefrontCheckout />}
         />
 
         {/* Checkout details route for storefront */}
         <Route
-          path="/store/:slug/checkout/details"
+          path="/:slug/checkout/details"
           element={<StorefrontCheckoutDetails />}
         />
 
         {/* Payment Route for Customer storefront */}
         <Route
-          path="/store/:slug/checkout/payment"
+          path="/:slug/checkout/payment"
           element={<StorefrontCheckoutPayment />}
         />
 
         {/* Order confirmation for Customer storefront */}
         <Route
-          path="/store/:slug/order/:orderId/confirmed"
+          path="/:slug/order/:orderId/confirmed"
           element={<StorefrontOrderConfirmation />}
         />
 
         {/* Order tracking for Customer storefront */}
         <Route
-          path="/store/:slug/orders/:orderId"
+          path="/:slug/orders/:orderId"
           element={<StorefrontOrderTracking />}
         />
 
         {/* Edit pending Order */}
         <Route
-          path="/store/:slug/orders/:orderId/edit"
+          path="/:slug/orders/:orderId/edit"
           element={<StorefrontEditOrder />}
         />
 
         {/* Customer orders route */}
         <Route
-          path="/store/:slug/orders"
+          path="/:slug/orders"
           element={<StorefrontMyOrders />}
         />
 
         {/* Customer create Review route */}
         <Route
-          path="/store/:slug/orders/:orderId/review"
+          path="/:slug/orders/:orderId/review"
           element={<StorefrontLeaveReview />}
         />
 
         {/* View all reviews page */}
         <Route
-          path="/store/:slug/reviews"
+          path="/:slug/reviews"
           element={<StorefrontReviews />}
         />
 
