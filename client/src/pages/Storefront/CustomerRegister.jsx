@@ -93,7 +93,7 @@ export default function CustomerRegister() {
     //Get where the Customer should return after authentication
     const redirectTo =
         searchParams.get("redirect") ||
-        `/store/${slug}`;
+        `/${slug}`;
 
 
     //Loads public Bakery information
@@ -508,7 +508,7 @@ export default function CustomerRegister() {
 
                         {/* Return to Bakery */}
                         <Link
-                            to={`/store/${slug}`}
+                            to={`/${slug}`}
                             className="customer-register-back-link"
                         >
 
@@ -947,7 +947,7 @@ export default function CustomerRegister() {
                                 Already have an account?{" "}
 
                                 <Link
-                                    to={`/store/${slug}/login?redirect=${encodeURIComponent(
+                                    to={`/${slug}/login?redirect=${encodeURIComponent(
                                         redirectTo
                                     )}`}
                                 >

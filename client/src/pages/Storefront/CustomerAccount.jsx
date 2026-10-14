@@ -246,11 +246,11 @@ export default function CustomerAccount() {
             ) {
 
                 const redirectTo =
-                    `/store/${slug}/account`;
+                    `/${slug}/account`;
 
 
                 navigate(
-                    `/store/${slug}/login?redirect=${encodeURIComponent(
+                    `/${slug}/login?redirect=${encodeURIComponent(
                         redirectTo
                     )}`,
                     {
@@ -332,11 +332,11 @@ export default function CustomerAccount() {
 
 
                         const redirectTo =
-                            `/store/${slug}/account`;
+                            `/${slug}/account`;
 
 
                         navigate(
-                            `/store/${slug}/login?redirect=${encodeURIComponent(
+                            `/${slug}/login?redirect=${encodeURIComponent(
                                 redirectTo
                             )}`,
                             {
@@ -362,7 +362,7 @@ export default function CustomerAccount() {
                 ) {
 
                     navigate(
-                        `/store/${slug}`,
+                        `/${slug}`,
                         {
                             replace: true
                         }
@@ -878,7 +878,7 @@ export default function CustomerAccount() {
 
                     {/* Back to Store */}
                     <Link
-                        to={`/store/${slug}`}
+                        to={`/${slug}`}
                         className="customer-account-back d-inline-flex align-items-center gap-2 text-decoration-none mb-4"
                     >
 

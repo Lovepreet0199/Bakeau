@@ -29,7 +29,7 @@ export default function CheckEmail() {
     //Creates the correct Login path
     const signInPath =
         bakerySlug
-            ? `/store/${bakerySlug}/login${returnTo
+            ? `/${bakerySlug}/login${returnTo
                 ? `?redirect=${encodeURIComponent(
                     returnTo
                 )}`

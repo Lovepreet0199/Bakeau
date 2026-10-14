@@ -348,7 +348,7 @@ export default function StorefrontForgotPassword() {
                                 <div className="text-center mt-4">
 
                                     <Link
-                                        to={`/store/${slug}/login`}
+                                        to={`/${slug}/login`}
                                         className="storefront-forgot-password-back text-decoration-none"
                                     >
                                         ← Back to Sign In

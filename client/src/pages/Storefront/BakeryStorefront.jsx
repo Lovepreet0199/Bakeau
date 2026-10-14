@@ -834,7 +834,7 @@ export default function BakeryStorefront() {
 
                                         {/* Open Product page */}
                                         <Link
-                                            to={`/store/${slug}/product/${featuredProduct._id}`}
+                                            to={`/${slug}/product/${featuredProduct._id}`}
                                             className="storefront-primary-button d-inline-flex align-items-center justify-content-center gap-2 text-decoration-none"
                                         >
 
@@ -1087,7 +1087,7 @@ export default function BakeryStorefront() {
 
                                                 {/* Product action */}
                                                 <Link
-                                                    to={`/store/${slug}/product/${product._id}`}
+                                                    to={`/${slug}/product/${product._id}`}
                                                     className="storefront-product-action d-flex align-items-center justify-content-center text-decoration-none mt-auto"
                                                 >
 
@@ -1270,7 +1270,7 @@ export default function BakeryStorefront() {
                             {reviews.length > 0 && (
 
                                 <Link
-                                    to={`/store/${slug}/reviews`}
+                                    to={`/${slug}/reviews`}
                                     className="storefront-view-all d-none d-sm-inline-flex align-items-center gap-1 text-decoration-none"
                                 >
 
@@ -1520,7 +1520,7 @@ export default function BakeryStorefront() {
                                 <div className="d-sm-none mt-4">
 
                                     <Link
-                                        to={`/store/${slug}/reviews`}
+                                        to={`/${slug}/reviews`}
                                         className="storefront-primary-button d-flex align-items-center justify-content-center gap-2 text-decoration-none"
                                     >
 
@@ -1554,7 +1554,7 @@ export default function BakeryStorefront() {
                                 </p>
 
                                 <Link
-                                    to={`/store/${slug}/orders`}
+                                    to={`/${slug}/orders`}
                                     className="storefront-primary-button d-inline-flex align-items-center justify-content-center text-decoration-none"
                                 >
                                     Write a review

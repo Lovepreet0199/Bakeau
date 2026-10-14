@@ -125,7 +125,7 @@ export default function CustomerLogin() {
     const returnTo =
         redirectFromUrl ||
         savedRedirect ||
-        `/store/${slug}`;
+        `/${slug}`;
 
 
     //Loads Bakery information
@@ -546,7 +546,7 @@ export default function CustomerLogin() {
 
                         {/* Back to Bakery */}
                         <Link
-                            to={`/store/${slug}`}
+                            to={`/${slug}`}
                             className="customer-login-back-link"
                         >
 
@@ -628,7 +628,7 @@ export default function CustomerLogin() {
 
 
                                     <Link
-                                        to={`/store/${slug}/forgot-password`}
+                                        to={`/${slug}/forgot-password`}
                                         className="customer-login-forgot-link"
                                     >
                                         Forgot password?
@@ -770,7 +770,7 @@ export default function CustomerLogin() {
                                 Don't have an account?{" "}
 
                                 <Link
-                                    to={`/store/${slug}/register?redirect=${encodeURIComponent(
+                                    to={`/${slug}/register?redirect=${encodeURIComponent(
                                         returnTo
                                     )}`}
                                 >

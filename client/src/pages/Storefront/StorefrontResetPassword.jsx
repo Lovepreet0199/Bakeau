@@ -551,7 +551,7 @@ export default function StorefrontResetPassword() {
                                 <div className="text-center mt-4">
 
                                     <Link
-                                        to={`/store/${slug}/login`}
+                                        to={`/${slug}/login`}
                                         className="storefront-reset-password-back text-decoration-none"
                                     >
                                         ← Back to Sign In

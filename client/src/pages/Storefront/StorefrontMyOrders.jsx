@@ -110,7 +110,7 @@ export default function StorefrontMyOrders() {
             //Customer must be logged in
             if (!token) {
 
-                navigate(`/store/${slug}/login`, {
+                navigate(`/${slug}/login`, {
                     replace: true
                 });
 
@@ -346,7 +346,7 @@ export default function StorefrontMyOrders() {
                     <div className="col-12 col-md-2">
 
                         <Link
-                            to={`/store/${slug}/orders/${order._id}`}
+                            to={`/${slug}/orders/${order._id}`}
                             className="storefront-orders-button text-decoration-none"
                         >
                             {order.status === "completed" || order.status === "cancelled"
@@ -398,7 +398,7 @@ export default function StorefrontMyOrders() {
                 </p>
 
                 <Link
-                    to={`/store/${slug}`}
+                    to={`/${slug}`}
                     className="btn btn-dark"
                 >
                     Back to Bakery
@@ -514,7 +514,7 @@ export default function StorefrontMyOrders() {
                                     </p>
 
                                     <Link
-                                        to={`/store/${slug}`}
+                                        to={`/${slug}`}
                                         className="storefront-orders-shop-button text-decoration-none"
                                     >
                                         Browse bakery

@@ -26,7 +26,7 @@ export default function VerifyEmail() {
     //Creates the correct Sign In link
     const signInPath =
         bakerySlug
-            ? `/store/${bakerySlug}/login${returnTo
+            ? `/${bakerySlug}/login${returnTo
                 ? `?redirect=${encodeURIComponent(
                     returnTo
                 )}`

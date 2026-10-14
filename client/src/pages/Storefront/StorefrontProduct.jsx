@@ -623,7 +623,7 @@ export default function StorefrontProduct() {
                 </p>
 
                 <Link
-                    to={`/store/${slug}`}
+                    to={`/${slug}`}
                     className="storefront-product-primary-button text-decoration-none"
                 >
                     Back to Store
@@ -667,7 +667,7 @@ export default function StorefrontProduct() {
                 <div className="d-flex flex-wrap align-items-center gap-2 mb-4 storefront-product-breadcrumb">
 
                     <Link
-                        to={`/store/${slug}`}
+                        to={`/${slug}`}
                         className="text-decoration-none"
                     >
                         Home
@@ -676,7 +676,7 @@ export default function StorefrontProduct() {
                     <span>/</span>
 
                     <Link
-                        to={`/store/${slug}#menu`}
+                        to={`/${slug}#menu`}
                         className="text-decoration-none"
                     >
                         {product.category}

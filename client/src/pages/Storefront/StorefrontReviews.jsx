@@ -206,7 +206,7 @@ export default function StorefrontReviews() {
                 </p>
 
                 <Link
-                    to={`/store/${slug}`}
+                    to={`/${slug}`}
                     className="text-decoration-none"
                 >
                     Back to bakery
@@ -236,7 +236,7 @@ export default function StorefrontReviews() {
                     <div className="d-flex align-items-center gap-2 mb-4 storefront-reviews-breadcrumb">
 
                         <Link
-                            to={`/store/${slug}`}
+                            to={`/${slug}`}
                             className="text-decoration-none"
                         >
                             Home
@@ -277,7 +277,7 @@ export default function StorefrontReviews() {
                         <div className="col-12 col-md-auto">
 
                             <Link
-                                to={`/store/${slug}/orders`}
+                                to={`/${slug}/orders`}
                                 className="storefront-reviews-write text-decoration-none w-100"
                             >
                                 Write a review
@@ -353,7 +353,7 @@ export default function StorefrontReviews() {
                             </p>
 
                             <Link
-                                to={`/store/${slug}/orders`}
+                                to={`/${slug}/orders`}
                                 className="storefront-reviews-write text-decoration-none"
                             >
                                 Write a review

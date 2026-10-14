@@ -261,7 +261,7 @@ export default function StorefrontOrderTracking() {
             if (!token) {
 
                 navigate(
-                    `/store/${slug}/login`,
+                    `/${slug}/login`,
                     {
                         replace:
                             true
@@ -535,7 +535,7 @@ export default function StorefrontOrderTracking() {
                 </p>
 
                 <Link
-                    to={`/store/${slug}`}
+                    to={`/${slug}`}
                     className="btn btn-dark"
                 >
                     Back to Bakery
@@ -682,7 +682,7 @@ export default function StorefrontOrderTracking() {
 
                     {/* Back to Orders */}
                     <Link
-                        to={`/store/${slug}/orders`}
+                        to={`/${slug}/orders`}
                         className="storefront-tracking-back text-decoration-none"
                     >
                         ‹ My orders
@@ -1326,7 +1326,7 @@ export default function StorefrontOrderTracking() {
 
                                         {/* Edit Order */}
                                         <Link
-                                            to={`/store/${slug}/orders/${orderId}/edit`}
+                                            to={`/${slug}/orders/${orderId}/edit`}
                                             className="storefront-tracking-edit-button d-flex align-items-center justify-content-center text-decoration-none w-100 mb-2"
                                         >
                                             Edit Order
@@ -1360,7 +1360,7 @@ export default function StorefrontOrderTracking() {
                                 "completed" && (
 
                                     <Link
-                                        to={`/store/${slug}/orders/${orderId}/review`}
+                                        to={`/${slug}/orders/${orderId}/review`}
                                         className="storefront-tracking-review-button text-decoration-none"
                                     >
 

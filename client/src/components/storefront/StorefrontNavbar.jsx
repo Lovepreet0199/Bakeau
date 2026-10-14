@@ -410,7 +410,7 @@ export default function StorefrontNavbar({
 
                         {/* Bakery logo and name */}
                         <Link
-                            to={`/store/${slug}`}
+                            to={`/${slug}`}
                             onClick={() => {
 
                                 closeMobileMenu();
@@ -457,7 +457,7 @@ export default function StorefrontNavbar({
                         <nav className="d-none d-lg-flex align-items-center gap-4">
 
                             <Link
-                                to={`/store/${slug}#menu`}
+                                to={`/${slug}#menu`}
                                 className="storefront-nav-link"
                             >
                                 Menu
@@ -465,7 +465,7 @@ export default function StorefrontNavbar({
 
 
                             <Link
-                                to={`/store/${slug}#how-it-works`}
+                                to={`/${slug}#how-it-works`}
                                 className="storefront-nav-link"
                             >
                                 How It Works
@@ -473,7 +473,7 @@ export default function StorefrontNavbar({
 
 
                             <Link
-                                to={`/store/${slug}/reviews`}
+                                to={`/${slug}/reviews`}
                                 className="storefront-nav-link"
                             >
                                 Reviews
@@ -481,7 +481,7 @@ export default function StorefrontNavbar({
 
 
                             <Link
-                                to={`/store/${slug}#about`}
+                                to={`/${slug}#about`}
                                 className="storefront-nav-link"
                             >
                                 About
@@ -495,7 +495,7 @@ export default function StorefrontNavbar({
 
                             {/* Customer Cart */}
                             <Link
-                                to={`/store/${slug}/cart`}
+                                to={`/${slug}/cart`}
                                 className="storefront-cart-action d-flex align-items-center gap-2 text-decoration-none"
                             >
 
@@ -621,7 +621,7 @@ export default function StorefrontNavbar({
 
                                             {/* Customer Orders */}
                                             <Link
-                                                to={`/store/${slug}/orders`}
+                                                to={`/${slug}/orders`}
                                                 onClick={
                                                     closeAccountMenu
                                                 }
@@ -641,7 +641,7 @@ export default function StorefrontNavbar({
 
                                             {/* Account Settings */}
                                             <Link
-                                                to={`/store/${slug}/account`}
+                                                to={`/${slug}/account`}
                                                 onClick={
                                                     closeAccountMenu
                                                 }
@@ -694,7 +694,7 @@ export default function StorefrontNavbar({
                                 <>
                                     {/* Customer Sign In */}
                                     <Link
-                                        to={`/store/${slug}/login`}
+                                        to={`/${slug}/login`}
                                         className="storefront-text-action text-decoration-none"
                                     >
                                         Sign In
@@ -703,7 +703,7 @@ export default function StorefrontNavbar({
 
                                     {/* Customer registration */}
                                     <Link
-                                        to={`/store/${slug}/register`}
+                                        to={`/${slug}/register`}
                                         className="storefront-create-account text-decoration-none"
                                     >
                                         Create Account
@@ -719,7 +719,7 @@ export default function StorefrontNavbar({
 
                             {/* Customer Cart */}
                             <Link
-                                to={`/store/${slug}/cart`}
+                                to={`/${slug}/cart`}
                                 aria-label="Open cart"
                                 className="storefront-mobile-cart d-flex align-items-center gap-1 text-decoration-none"
                             >
@@ -790,7 +790,7 @@ export default function StorefrontNavbar({
                                 <nav className="d-grid gap-1">
 
                                     <Link
-                                        to={`/store/${slug}#menu`}
+                                        to={`/${slug}#menu`}
                                         onClick={
                                             closeMobileMenu
                                         }
@@ -801,7 +801,7 @@ export default function StorefrontNavbar({
 
 
                                     <Link
-                                        to={`/store/${slug}#how-it-works`}
+                                        to={`/${slug}#how-it-works`}
                                         onClick={
                                             closeMobileMenu
                                         }
@@ -812,7 +812,7 @@ export default function StorefrontNavbar({
 
 
                                     <Link
-                                        to={`/store/${slug}/reviews`}
+                                        to={`/${slug}/reviews`}
                                         onClick={
                                             closeMobileMenu
                                         }
@@ -823,7 +823,7 @@ export default function StorefrontNavbar({
 
 
                                     <Link
-                                        to={`/store/${slug}#about`}
+                                        to={`/${slug}#about`}
                                         onClick={
                                             closeMobileMenu
                                         }
@@ -893,7 +893,7 @@ export default function StorefrontNavbar({
 
                                             {/* Customer Orders */}
                                             <Link
-                                                to={`/store/${slug}/orders`}
+                                                to={`/${slug}/orders`}
                                                 onClick={
                                                     closeMobileMenu
                                                 }
@@ -912,7 +912,7 @@ export default function StorefrontNavbar({
 
                                             {/* Account Settings */}
                                             <Link
-                                                to={`/store/${slug}/account`}
+                                                to={`/${slug}/account`}
                                                 onClick={
                                                     closeMobileMenu
                                                 }
@@ -960,7 +960,7 @@ export default function StorefrontNavbar({
 
                                         {/* Customer Sign In */}
                                         <Link
-                                            to={`/store/${slug}/login`}
+                                            to={`/${slug}/login`}
                                             onClick={
                                                 closeMobileMenu
                                             }
@@ -972,7 +972,7 @@ export default function StorefrontNavbar({
 
                                         {/* Customer registration */}
                                         <Link
-                                            to={`/store/${slug}/register`}
+                                            to={`/${slug}/register`}
                                             onClick={
                                                 closeMobileMenu
                                             }

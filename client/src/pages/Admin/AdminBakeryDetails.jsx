@@ -526,7 +526,7 @@ export default function AdminBakeryDetails() {
                                                 </h1>
 
                                                 <p className="admin-details-slug mb-0">
-                                                    bakeau.com/store/{bakery.slug}
+                                                    bakeau.com/{bakery.slug}
                                                 </p>
 
                                             </div>

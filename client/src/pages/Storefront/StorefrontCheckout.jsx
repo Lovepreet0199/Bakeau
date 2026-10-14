@@ -287,12 +287,12 @@ export default function StorefrontCheckout() {
             //Customer needs to Login first
             if (!customer || !token) {
 
-                const returnTo = `/store/${slug}/checkout`;
+                const returnTo = `/${slug}/checkout`;
 
                 localStorage.setItem("authBakerySlug", slug);
                 localStorage.setItem("authReturnTo", returnTo);
 
-                navigate(`/store/${slug}/login?redirect=${encodeURIComponent(returnTo)}`, {
+                navigate(`/${slug}/login?redirect=${encodeURIComponent(returnTo)}`, {
                     replace: true
                 });
 
@@ -302,7 +302,7 @@ export default function StorefrontCheckout() {
 
             //Cart should not be empty
             if (bakeryCartItems.length === 0) {
-                navigate(`/store/${slug}/cart`, { replace: true });
+                navigate(`/${slug}/cart`, { replace: true });
                 return;
             }
 
@@ -495,7 +495,7 @@ export default function StorefrontCheckout() {
         //Save Cart note
         sessionStorage.setItem(`checkoutNote:${slug}`, cartNote || "");
 
-        navigate(`/store/${slug}/checkout/details`);
+        navigate(`/${slug}/checkout/details`);
     }
 
 
@@ -522,7 +522,7 @@ export default function StorefrontCheckout() {
 
                 <p>{error || "Unable to load Checkout"}</p>
 
-                <Link to={`/store/${slug}/cart`} className="btn btn-dark">
+                <Link to={`/${slug}/cart`} className="btn btn-dark">
                     Back to Cart
                 </Link>
 
@@ -549,7 +549,7 @@ export default function StorefrontCheckout() {
 
                     {/* Back to Cart */}
                     <Link
-                        to={`/store/${slug}/cart`}
+                        to={`/${slug}/cart`}
                         className="storefront-checkout-back d-inline-flex align-items-center gap-2 text-decoration-none mb-4"
                     >
                         <ArrowLeft size={15} />

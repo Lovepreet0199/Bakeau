@@ -103,7 +103,7 @@ export default function StorefrontOrderConfirmation() {
 
             //Customer must be logged in
             if (!token) {
-                navigate(`/store/${slug}/login`, { replace: true });
+                navigate(`/${slug}/login`, { replace: true });
                 return;
             }
 
@@ -211,7 +211,7 @@ export default function StorefrontOrderConfirmation() {
                 <p>{error || "Order not found"}</p>
 
                 <Link
-                    to={`/store/${slug}`}
+                    to={`/${slug}`}
                     className="btn btn-dark"
                 >
                     Back to Bakery
@@ -482,7 +482,7 @@ export default function StorefrontOrderConfirmation() {
                     <div className="storefront-confirmation-actions mx-auto">
 
                         <Link
-                            to={`/store/${slug}/orders/${orderId}`}
+                            to={`/${slug}/orders/${orderId}`}
                             className="storefront-confirmation-track text-decoration-none"
                         >
                             Track my order
@@ -490,7 +490,7 @@ export default function StorefrontOrderConfirmation() {
 
 
                         <Link
-                            to={`/store/${slug}/orders`}
+                            to={`/${slug}/orders`}
                             className="storefront-confirmation-orders text-decoration-none"
                         >
                             View my orders

@@ -129,12 +129,12 @@ export default function StorefrontCheckoutDetails() {
             //Customer needs to be logged in
             if (!token) {
 
-                const returnTo = `/store/${slug}/checkout/details`;
+                const returnTo = `/${slug}/checkout/details`;
 
                 localStorage.setItem("authBakerySlug", slug);
                 localStorage.setItem("authReturnTo", returnTo);
 
-                navigate(`/store/${slug}/login?redirect=${encodeURIComponent(returnTo)}`, {
+                navigate(`/${slug}/login?redirect=${encodeURIComponent(returnTo)}`, {
                     replace: true
                 });
 
@@ -146,14 +146,14 @@ export default function StorefrontCheckoutDetails() {
             const savedPickup = sessionStorage.getItem(`checkoutPickup:${slug}`);
 
             if (!savedPickup) {
-                navigate(`/store/${slug}/checkout`, { replace: true });
+                navigate(`/${slug}/checkout`, { replace: true });
                 return;
             }
 
 
             //Cart should not be empty
             if (bakeryCartItems.length === 0) {
-                navigate(`/store/${slug}/cart`, { replace: true });
+                navigate(`/${slug}/cart`, { replace: true });
                 return;
             }
 
@@ -196,12 +196,12 @@ export default function StorefrontCheckoutDetails() {
                     sessionStorage.removeItem("token");
                     sessionStorage.removeItem("user");
 
-                    const returnTo = `/store/${slug}/checkout/details`;
+                    const returnTo = `/${slug}/checkout/details`;
 
                     localStorage.setItem("authBakerySlug", slug);
                     localStorage.setItem("authReturnTo", returnTo);
 
-                    navigate(`/store/${slug}/login?redirect=${encodeURIComponent(returnTo)}`, {
+                    navigate(`/${slug}/login?redirect=${encodeURIComponent(returnTo)}`, {
                         replace: true
                     });
 
@@ -336,7 +336,7 @@ export default function StorefrontCheckoutDetails() {
 
 
         //Continue to Payment
-        navigate(`/store/${slug}/checkout/payment`);
+        navigate(`/${slug}/checkout/payment`);
     }
 
 
@@ -365,7 +365,7 @@ export default function StorefrontCheckoutDetails() {
 
                 <p>{error || "Unable to load Checkout"}</p>
 
-                <Link to={`/store/${slug}/checkout`} className="btn btn-dark">
+                <Link to={`/${slug}/checkout`} className="btn btn-dark">
                     Back to Pickup
                 </Link>
 
@@ -395,7 +395,7 @@ export default function StorefrontCheckoutDetails() {
                     <div className="storefront-details-steps d-flex align-items-center gap-3 mb-4">
 
                         <Link
-                            to={`/store/${slug}/checkout`}
+                            to={`/${slug}/checkout`}
                             className="storefront-details-back d-flex align-items-center gap-2 text-decoration-none"
                         >
                             <ArrowLeft size={15} />

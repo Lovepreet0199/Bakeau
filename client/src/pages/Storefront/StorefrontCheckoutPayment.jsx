@@ -151,12 +151,12 @@ export default function StorefrontCheckoutPayment() {
             //Customer needs to be logged in
             if (!token) {
 
-                const returnTo = `/store/${slug}/checkout/payment`;
+                const returnTo = `/${slug}/checkout/payment`;
 
                 localStorage.setItem("authBakerySlug", slug);
                 localStorage.setItem("authReturnTo", returnTo);
 
-                navigate(`/store/${slug}/login?redirect=${encodeURIComponent(returnTo)}`, {
+                navigate(`/${slug}/login?redirect=${encodeURIComponent(returnTo)}`, {
                     replace: true
                 });
 
@@ -172,21 +172,21 @@ export default function StorefrontCheckoutPayment() {
 
             //Pickup must be completed first
             if (!savedPickup) {
-                navigate(`/store/${slug}/checkout`, { replace: true });
+                navigate(`/${slug}/checkout`, { replace: true });
                 return;
             }
 
 
             //Contact Details must be completed first
             if (!savedContact) {
-                navigate(`/store/${slug}/checkout/details`, { replace: true });
+                navigate(`/${slug}/checkout/details`, { replace: true });
                 return;
             }
 
 
             //Cart cannot be empty
             if (bakeryCartItems.length === 0) {
-                navigate(`/store/${slug}/cart`, { replace: true });
+                navigate(`/${slug}/cart`, { replace: true });
                 return;
             }
 
@@ -238,12 +238,12 @@ export default function StorefrontCheckoutPayment() {
                     sessionStorage.removeItem("token");
                     sessionStorage.removeItem("user");
 
-                    const returnTo = `/store/${slug}/checkout/payment`;
+                    const returnTo = `/${slug}/checkout/payment`;
 
                     localStorage.setItem("authBakerySlug", slug);
                     localStorage.setItem("authReturnTo", returnTo);
 
-                    navigate(`/store/${slug}/login?redirect=${encodeURIComponent(returnTo)}`, {
+                    navigate(`/${slug}/login?redirect=${encodeURIComponent(returnTo)}`, {
                         replace: true
                     });
 
@@ -526,7 +526,7 @@ export default function StorefrontCheckoutPayment() {
 
             //Go to Order Confirmation
             navigate(
-                `/store/${slug}/order/${orderId}/confirmed`
+                `/${slug}/order/${orderId}/confirmed`
             );
 
 
@@ -571,7 +571,7 @@ export default function StorefrontCheckoutPayment() {
                 <p>{error}</p>
 
                 <Link
-                    to={`/store/${slug}/checkout/details`}
+                    to={`/${slug}/checkout/details`}
                     className="btn btn-dark"
                 >
                     Back to Contact Details
@@ -602,7 +602,7 @@ export default function StorefrontCheckoutPayment() {
                     <div className="storefront-payment-steps d-flex align-items-center gap-3 mb-4">
 
                         <Link
-                            to={`/store/${slug}/checkout/details`}
+                            to={`/${slug}/checkout/details`}
                             className="storefront-payment-back d-flex align-items-center gap-2 text-decoration-none"
                         >
                             <ArrowLeft size={15} />

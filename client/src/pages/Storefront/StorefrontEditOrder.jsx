@@ -671,7 +671,7 @@ export default function StorefrontEditOrder() {
             if (!token) {
 
                 navigate(
-                    `/store/${slug}/login`,
+                    `/${slug}/login`,
                     {
                         replace:
                             true
@@ -1159,7 +1159,7 @@ export default function StorefrontEditOrder() {
 
             //Return to Order Tracking
             navigate(
-                `/store/${slug}/orders/${orderId}`,
+                `/${slug}/orders/${orderId}`,
                 {
                     replace:
                         true,
@@ -1229,7 +1229,7 @@ export default function StorefrontEditOrder() {
                 </p>
 
                 <Link
-                    to={`/store/${slug}/orders/${orderId}`}
+                    to={`/${slug}/orders/${orderId}`}
                     className="btn btn-dark"
                 >
                     Back to Order
@@ -1266,7 +1266,7 @@ export default function StorefrontEditOrder() {
 
                     {/* Back */}
                     <Link
-                        to={`/store/${slug}/orders/${orderId}`}
+                        to={`/${slug}/orders/${orderId}`}
                         className="storefront-edit-order-back text-decoration-none"
                     >
                         ‹ Back to Order
@@ -1744,7 +1744,7 @@ export default function StorefrontEditOrder() {
                                 <div className="d-flex flex-column flex-sm-row gap-2 justify-content-end">
 
                                     <Link
-                                        to={`/store/${slug}/orders/${orderId}`}
+                                        to={`/${slug}/orders/${orderId}`}
                                         className="storefront-edit-order-secondary-button text-decoration-none text-center"
                                     >
                                         Cancel

@@ -86,7 +86,7 @@ export default function ResetPassword() {
         //Return Customer to Storefront Login
         if (bakerySlug) {
 
-            return `/store/${bakerySlug}/login`;
+            return `/${bakerySlug}/login`;
         }
 
 

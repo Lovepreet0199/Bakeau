@@ -539,7 +539,7 @@ export default function StorefrontCart() {
 
         //Checkout page Customer should return to
         const checkoutPath =
-            `/store/${slug}/checkout`;
+            `/${slug}/checkout`;
 
         //Customer is not logged in
         if (
@@ -562,7 +562,7 @@ export default function StorefrontCart() {
 
             //Send Customer to Bakery login
             navigate(
-                `/store/${slug}/login?redirect=${encodeURIComponent(
+                `/${slug}/login?redirect=${encodeURIComponent(
                     checkoutPath
                 )}`
             );
@@ -625,7 +625,7 @@ export default function StorefrontCart() {
                 </p>
 
                 <Link
-                    to={`/store/${slug}`}
+                    to={`/${slug}`}
                     className="btn btn-dark"
                 >
                     Back to Store
@@ -704,7 +704,7 @@ export default function StorefrontCart() {
                         </p>
 
                         <Link
-                            to={`/store/${slug}#menu`}
+                            to={`/${slug}#menu`}
                             className="storefront-cart-primary-button d-inline-flex align-items-center justify-content-center text-decoration-none"
                         >
                             Browse Menu
@@ -1432,7 +1432,7 @@ export default function StorefrontCart() {
                             <div className="text-center mt-4">
 
                                 <Link
-                                    to={`/store/${slug}#menu`}
+                                    to={`/${slug}#menu`}
                                     className="storefront-cart-shopping-link text-decoration-none"
                                 >
                                     ← Continue shopping

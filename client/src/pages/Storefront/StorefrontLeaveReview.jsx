@@ -70,7 +70,7 @@ export default function StorefrontLeaveReview() {
 
             //Customer must be logged in
             if (!token) {
-                navigate(`/store/${slug}/login`, { replace: true });
+                navigate(`/${slug}/login`, { replace: true });
                 return;
             }
 
@@ -262,7 +262,7 @@ export default function StorefrontLeaveReview() {
 
             //Return Customer to Order with confirmation
             navigate(
-                `/store/${slug}/orders/${orderId}`,
+                `/${slug}/orders/${orderId}`,
                 {
                     state: {
                         reviewSubmitted: true
@@ -456,7 +456,7 @@ export default function StorefrontLeaveReview() {
                     {error || "Order not found"}
                 </p>
 
-                <Link to={`/store/${slug}/orders`}>
+                <Link to={`/${slug}/orders`}>
                     Back to orders
                 </Link>
 
@@ -485,7 +485,7 @@ export default function StorefrontLeaveReview() {
 
                         {/* Back to Order */}
                         <Link
-                            to={`/store/${slug}/orders/${orderId}`}
+                            to={`/${slug}/orders/${orderId}`}
                             className="storefront-review-back text-decoration-none"
                         >
                             ‹ Back to order
@@ -875,7 +875,7 @@ export default function StorefrontLeaveReview() {
                             </p>
 
                             <Link
-                                to={`/store/${slug}/orders/${orderId}`}
+                                to={`/${slug}/orders/${orderId}`}
                                 className="storefront-review-back text-decoration-none"
                             >
                                 Back to order
@@ -912,7 +912,7 @@ export default function StorefrontLeaveReview() {
 
                     {/* Back to Order */}
                     <Link
-                        to={`/store/${slug}/orders/${orderId}`}
+                        to={`/${slug}/orders/${orderId}`}
                         className="storefront-review-back text-decoration-none"
                     >
                         ‹ Back to order
