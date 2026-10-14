@@ -989,6 +989,7 @@ const cancelMyOrder = async (request, response) => {
                     customerId
             });
 
+
         //Stop if the Order does not exist
         if (!order) {
 
@@ -998,6 +999,7 @@ const cancelMyOrder = async (request, response) => {
                     "Order not found"
             });
         }
+
 
         //Only pending Orders can be cancelled by the Customer
         if (
@@ -1011,6 +1013,7 @@ const cancelMyOrder = async (request, response) => {
                     "Only pending orders can be cancelled"
             });
         }
+
 
         //Cancel the Order
         order.status =
@@ -1026,7 +1029,7 @@ const cancelMyOrder = async (request, response) => {
                 order._id,
 
             activity_type:
-                "cancelled",
+                "order_cancelled",
 
             description:
                 "Order cancelled by customer"
@@ -1043,6 +1046,7 @@ const cancelMyOrder = async (request, response) => {
                 order
         });
 
+
     } catch (error) {
 
         console.error(
@@ -1053,17 +1057,316 @@ const cancelMyOrder = async (request, response) => {
         return response.status(500).json({
 
             message:
+                error.message ||
                 "Unable to cancel order"
+        });
+    }
+};
+
+//Updates editable information for a pending Customer Order
+const updateMyPendingOrder = async (
+    request,
+    response
+) => {
+
+    try {
+
+        //Get authenticated Customer ID
+        const customerId =
+            request.user.userId;
+
+        //Get Order ID from URL
+        const orderId =
+            request.params.id;
+
+
+        //Get editable Order information
+        const {
+            pickup_slot_id,
+            pickup_time,
+            contact,
+            bakery_note
+        } = request.body;
+
+
+        //Find Order only if it belongs to this Customer
+        const order =
+            await Order.findOne({
+
+                _id:
+                    orderId,
+
+                customer_id:
+                    customerId
+            });
+
+
+        //Stop if Order does not exist
+        if (!order) {
+
+            return response.status(404).json({
+
+                message:
+                    "Order not found"
+            });
+        }
+
+
+        //Customer can only edit pending Orders
+        if (
+            order.status !==
+            "pending"
+        ) {
+
+            return response.status(400).json({
+
+                message:
+                    "Only pending orders can be edited"
+            });
+        }
+
+
+        //Make sure Contact information exists
+        if (
+            !contact ||
+            !contact.first_name?.trim() ||
+            !contact.last_name?.trim() ||
+            !contact.email?.trim() ||
+            !contact.phone_number?.trim()
+        ) {
+
+            return response.status(400).json({
+
+                message:
+                    "Complete contact information is required"
+            });
+        }
+
+
+        //Bakery note cannot be longer than 300 characters
+        if (
+            bakery_note &&
+            bakery_note.length >
+            300
+        ) {
+
+            return response.status(400).json({
+
+                message:
+                    "Bakery note cannot be longer than 300 characters"
+            });
+        }
+
+
+        //Make sure Pickup information exists
+        if (
+            !pickup_slot_id ||
+            !pickup_time
+        ) {
+
+            return response.status(400).json({
+
+                message:
+                    "Pickup date and time are required"
+            });
+        }
+
+
+        //Find selected Pickup Slot inside this Order's Bakery
+        const pickupSlot =
+            await PickupSlot.findOne({
+
+                _id:
+                    pickup_slot_id,
+
+                bakery_id:
+                    order.bakery_id,
+
+                is_available:
+                    true
+            });
+
+
+        //Stop if Pickup Slot is unavailable
+        if (!pickupSlot) {
+
+            return response.status(400).json({
+
+                message:
+                    "Selected pickup slot is unavailable"
+            });
+        }
+
+
+        //Make sure selected time belongs to Pickup window
+        if (
+            !isPickupTimeValid(
+                pickupSlot.pickup_time,
+                pickup_time
+            )
+        ) {
+
+            return response.status(400).json({
+
+                message:
+                    "Selected pickup time is unavailable"
+            });
+        }
+
+
+        //Get the selected Pickup day
+        const pickupDay =
+            new Date(
+                pickupSlot.pickup_date
+            )
+                .toLocaleDateString(
+                    "en-US",
+                    {
+                        weekday:
+                            "long",
+
+                        timeZone:
+                            "UTC"
+                    }
+                )
+                .toLowerCase();
+
+
+        //Get Products already included in this Order
+        const orderItems =
+            await OrderItem.find({
+
+                order_id:
+                    order._id
+            });
+
+
+        //Make sure existing Products are available on new Pickup day
+        for (
+            const orderItem
+            of orderItems
+        ) {
+
+            const product =
+                await Product.findOne({
+
+                    _id:
+                        orderItem.product_id,
+
+                    bakery_id:
+                        order.bakery_id
+                });
+
+
+            //Stop if Product no longer exists
+            if (!product) {
+
+                return response.status(400).json({
+
+                    message:
+                        `${orderItem.product_name} is no longer available`
+                });
+            }
+
+
+            //Check Product Pickup day availability
+            if (
+                product.available_pickup_days.length >
+                0 &&
+                !product.available_pickup_days.includes(
+                    pickupDay
+                )
+            ) {
+
+                return response.status(400).json({
+
+                    message:
+                        `${product.name} is not available for pickup on ${pickupDay}`
+                });
+            }
+        }
+
+
+        //Update Contact information
+        order.contact_first_name =
+            contact.first_name.trim();
+
+        order.contact_last_name =
+            contact.last_name.trim();
+
+        order.contact_email =
+            contact.email
+                .trim()
+                .toLowerCase();
+
+        order.contact_phone =
+            contact.phone_number.trim();
+
+
+        //Update Pickup information
+        order.pickup_slot_id =
+            pickupSlot._id;
+
+        order.pickup_date =
+            pickupSlot.pickup_date;
+
+        order.pickup_time =
+            pickup_time;
+
+
+        //Update optional Bakery note
+        order.bakery_note =
+            bakery_note?.trim() ||
+            "";
+
+
+        //Save updated Order
+        await order.save();
+
+
+        //Load complete updated Order information
+        const completeOrder =
+            await getCompleteOrderDetails(
+                order
+            );
+
+
+        //Return updated Order
+        return response.status(200).json({
+
+            message:
+                "Order updated successfully",
+
+            order:
+                completeOrder
+        });
+
+
+    } catch (error) {
+
+        console.error(
+            "Update customer order error:",
+            error.message
+        );
+
+
+        return response.status(500).json({
+
+            message:
+                error.message ||
+                "Unable to update order"
         });
     }
 };
 
 //Export Order controller functions
 export {
+    createOrder,
     getBakeryOrders,
     getBakeryOrderById,
     updateBakeryOrderStatus,
     getMyOrders,
     getMyOrderById,
-    cancelMyOrder
+    cancelMyOrder,
+    updateMyPendingOrder
 };

@@ -7,6 +7,8 @@ import {
     loginUser,
     verifyEmail,
     resendVerificationEmail,
+    forgotPassword,
+    resetPassword,
     getMyAccount,
     updateMyAccount,
     changeMyPassword
@@ -49,6 +51,44 @@ const registerValidation = [
         .withMessage("Password must contain a lowercase letter")
         .matches(/[0-9]/)
         .withMessage("Password must contain a number")
+];
+
+//Validation rules for Forgot Password
+const forgotPasswordValidation = [
+
+    body("email")
+        .trim()
+        .notEmpty()
+        .withMessage(
+            "Email is required"
+        )
+        .isEmail()
+        .withMessage(
+            "Please enter a valid email address"
+        )
+];
+
+//Validation rules for Reset Password
+const resetPasswordValidation = [
+
+    body("token")
+        .trim()
+        .notEmpty()
+        .withMessage(
+            "Password reset token is required"
+        ),
+
+    body("password")
+        .notEmpty()
+        .withMessage(
+            "Password is required"
+        )
+        .matches(
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}$/
+        )
+        .withMessage(
+            "Password must be at least 8 characters and include uppercase, lowercase, and a number"
+        )
 ];
 
 //Validation rules for user login
@@ -180,6 +220,22 @@ router.post(
 router.post(
     "/resend-verification",
     resendVerificationEmail
+);
+
+//Requests a password reset email
+router.post(
+    "/forgot-password",
+    forgotPasswordValidation,
+    validateRequest,
+    forgotPassword
+);
+
+//Resets a User password
+router.post(
+    "/reset-password",
+    resetPasswordValidation,
+    validateRequest,
+    resetPassword
 );
 
 //Login an existing user

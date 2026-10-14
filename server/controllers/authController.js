@@ -10,8 +10,11 @@ import jwt from "jsonwebtoken";
 //Import Node's crypto module to create secure email verification tokens
 import crypto from "crypto";
 
-//Import the email helper to send verification emails
-import { sendVerificationEmail } from "../utils/email.js";
+//Import email helpers
+import {
+    sendVerificationEmail,
+    sendPasswordResetEmail
+} from "../utils/email.js";
 
 //Register a new Customer or Bakery Owner
 const registerUser = async (request, response) => {
@@ -251,6 +254,248 @@ const resendVerificationEmail = async (request, response) => {
             message: "Unable to resend verification email"
         });
 
+    }
+};
+
+//Creates and emails a password reset link
+const forgotPassword = async (
+    request,
+    response
+) => {
+
+    try {
+
+        //Get the email sent by the user
+        const {
+            email
+        } = request.body;
+
+
+        //Normalize the email address
+        const normalizedEmail =
+            email
+                .trim()
+                .toLowerCase();
+
+
+        //Find the User account
+        const user =
+            await User.findOne({
+                email:
+                    normalizedEmail
+            });
+
+
+        /*
+            Always return the same response.
+
+            This prevents someone from using
+            the Forgot Password form to check
+            which email addresses have Bakeau accounts.
+        */
+        if (!user) {
+
+            return response.status(200).json({
+
+                message:
+                    "If an account exists with that email, a password reset link has been sent."
+            });
+        }
+
+
+        //Create a secure random password reset token
+        const passwordResetToken =
+            crypto
+                .randomBytes(32)
+                .toString("hex");
+
+
+        //Hash the token before storing it in MongoDB
+        const passwordResetTokenHash =
+            crypto
+                .createHash("sha256")
+                .update(
+                    passwordResetToken
+                )
+                .digest("hex");
+
+
+        //Password reset link expires after 1 hour
+        const passwordResetExpiresAt =
+            new Date(
+                Date.now() +
+                60 * 60 * 1000
+            );
+
+
+        //Store the hashed reset token
+        user.password_reset_token_hash =
+            passwordResetTokenHash;
+
+        user.password_reset_expires_at =
+            passwordResetExpiresAt;
+
+
+        //Save reset information
+        await user.save();
+
+
+        //Create frontend password reset link
+        const resetUrl =
+            `http://localhost:5173/reset-password?token=${passwordResetToken}`;
+
+
+        try {
+
+            //Email the reset link
+            await sendPasswordResetEmail(
+                user.email,
+                resetUrl
+            );
+
+        } catch (emailError) {
+
+            //Remove reset token if the email failed
+            user.password_reset_token_hash =
+                null;
+
+            user.password_reset_expires_at =
+                null;
+
+            await user.save();
+
+
+            console.error(
+                "Password reset email error:",
+                emailError.message
+            );
+
+
+            return response.status(500).json({
+
+                message:
+                    "Unable to send password reset email"
+            });
+        }
+
+
+        //Return generic success message
+        return response.status(200).json({
+
+            message:
+                "If an account exists with that email, a password reset link has been sent."
+        });
+
+
+    } catch (error) {
+
+        console.error(
+            "Forgot password error:",
+            error.message
+        );
+
+
+        return response.status(500).json({
+
+            message:
+                "Unable to process password reset request"
+        });
+    }
+};
+
+//Resets a User password using a valid reset token
+const resetPassword = async (
+    request,
+    response
+) => {
+
+    try {
+
+        //Get reset token and new password
+        const {
+            token,
+            password
+        } = request.body;
+
+
+        //Hash the token received from the reset link
+        const passwordResetTokenHash =
+            crypto
+                .createHash("sha256")
+                .update(token)
+                .digest("hex");
+
+
+        //Find User with matching token that has not expired
+        const user =
+            await User.findOne({
+
+                password_reset_token_hash:
+                    passwordResetTokenHash,
+
+                password_reset_expires_at: {
+                    $gt:
+                        new Date()
+                }
+            });
+
+
+        //Stop if token is invalid or expired
+        if (!user) {
+
+            return response.status(400).json({
+
+                message:
+                    "Password reset link is invalid or has expired"
+            });
+        }
+
+
+        //Hash the new password
+        const passwordHash =
+            await bcrypt.hash(
+                password,
+                10
+            );
+
+
+        //Save the new password
+        user.password_hash =
+            passwordHash;
+
+
+        //Remove reset token so it cannot be reused
+        user.password_reset_token_hash =
+            null;
+
+        user.password_reset_expires_at =
+            null;
+
+
+        //Save updated User
+        await user.save();
+
+
+        return response.status(200).json({
+
+            message:
+                "Password reset successfully"
+        });
+
+
+    } catch (error) {
+
+        console.error(
+            "Reset password error:",
+            error.message
+        );
+
+
+        return response.status(500).json({
+
+            message:
+                "Unable to reset password"
+        });
     }
 };
 
@@ -666,6 +911,8 @@ export {
     loginUser,
     verifyEmail,
     resendVerificationEmail,
+    forgotPassword,
+    resetPassword,
     getMyAccount,
     updateMyAccount,
     changeMyPassword

@@ -40,7 +40,7 @@ const reviewSchema = new mongoose.Schema(
             type: String,
             required: true,
             trim: true,
-            maxlength: 1000
+            maxLength: 1000
         },
 
         //Optional Customer Review image
@@ -60,7 +60,7 @@ const reviewSchema = new mongoose.Schema(
             type: String,
             trim: true,
             default: null,
-            maxlength: 1000
+            maxLength: 1000
         },
 
         //Date Bakery Owner replied

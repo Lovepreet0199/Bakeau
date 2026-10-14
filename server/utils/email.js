@@ -27,5 +27,59 @@ const sendVerificationEmail = async (email, verificationUrl) => {
     }
 };
 
+//Sends a password reset link to a Bakeau user
+const sendPasswordResetEmail = async (
+    email,
+    resetUrl
+) => {
+
+    //Send the password reset email using Resend
+    const { error } =
+        await resend.emails.send({
+
+            from:
+                "Bakeau <npreply@mail.lovesandhu.com>",
+
+            to:
+                email,
+
+            subject:
+                "Reset your Bakeau password",
+
+            html: `
+                <h1>Reset your Bakeau password</h1>
+
+                <p>
+                    We received a request to reset the password
+                    for your Bakeau account.
+                </p>
+
+                <p>
+                    <a href="${resetUrl}">
+                        Reset password
+                    </a>
+                </p>
+
+                <p>
+                    This password reset link expires in 1 hour.
+                </p>
+
+                <p>
+                    If you did not request a password reset,
+                    you can ignore this email.
+                </p>
+            `
+        });
+
+
+    //Stop if Resend could not send the email
+    if (error) {
+
+        throw new Error(
+            error.message
+        );
+    }
+};
+
 //Export the email function so it can be used in other server files
-export { sendVerificationEmail };
+export { sendVerificationEmail, sendPasswordResetEmail };
