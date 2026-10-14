@@ -1,0 +1,518 @@
+/* Platform Admin Bakery Details Page */
+
+.admin-bakery-details-page {
+    background: #f7f4ef;
+    color: #352a24;
+}
+
+
+/* Admin Header */
+
+.admin-details-topbar {
+    background: #fffdfb;
+    border-bottom: 1px solid #e8e1da;
+    position: relative;
+    z-index: 10;
+}
+
+.admin-details-brand {
+    color: #3f2f27;
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.admin-details-brand-label {
+    color: #8d8179;
+    font-size: 12px;
+    margin-top: 1px;
+}
+
+.admin-details-admin-badge {
+    background: #f3eee9;
+    border: 1px solid #e5ddd6;
+    border-radius: 50px;
+    color: #67574e;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 7px 12px;
+}
+
+.admin-details-admin-dot {
+    background: #8d6956;
+    border-radius: 50%;
+    height: 7px;
+    width: 7px;
+}
+
+
+/* Back Navigation */
+
+.admin-details-back-link {
+    color: #69584e;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.admin-details-back-link:hover {
+    color: #3f2f27;
+}
+
+
+/* Success Message */
+
+.admin-details-success-message {
+    background: #f0f8f2;
+    border: 1px solid #cde5d4;
+    border-radius: 12px;
+    padding: 14px 16px;
+    width: 100%;
+}
+
+.admin-details-success-icon {
+    align-items: center;
+    background: #4d7d5a;
+    border-radius: 50%;
+    color: #ffffff;
+    display: flex;
+    flex-shrink: 0;
+    font-size: 12px;
+    font-weight: 700;
+    height: 28px;
+    justify-content: center;
+    width: 28px;
+}
+
+.admin-details-success-title {
+    color: #315e3d;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.admin-details-success-text {
+    color: #52715b;
+    font-size: 13px;
+}
+
+/* Bakery Summary */
+
+.admin-details-summary-card {
+    background: #fffdfb;
+    border: 1px solid #e8e1da;
+    border-radius: 18px;
+    padding: 24px;
+}
+
+.admin-details-logo {
+    align-items: center;
+    background: #eee6df;
+    border: 1px solid #e2d9d1;
+    border-radius: 14px;
+    color: #594439;
+    display: flex;
+    flex-shrink: 0;
+    font-size: 25px;
+    font-weight: 700;
+    height: 72px;
+    justify-content: center;
+    overflow: hidden;
+    width: 72px;
+}
+
+.admin-details-logo img {
+    height: 100%;
+    object-fit: cover;
+    width: 100%;
+}
+
+.admin-details-label {
+    color: #a06f55;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.1px;
+}
+
+.admin-details-title {
+    color: #352921;
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.admin-details-slug {
+    color: #9a8e86;
+    font-size: 13px;
+}
+
+
+/* Status Badge */
+
+.admin-details-status {
+    align-items: center;
+    border-radius: 50px;
+    display: inline-flex;
+    font-size: 12px;
+    font-weight: 700;
+    gap: 7px;
+    justify-content: center;
+    min-height: 38px;
+    padding: 8px 14px;
+    white-space: nowrap;
+}
+
+.admin-status-dot {
+    background: currentColor;
+    border-radius: 50%;
+    height: 6px;
+    width: 6px;
+}
+
+.admin-details-status-approved {
+    background: #edf7ef;
+    color: #39724b;
+}
+
+.admin-details-status-pending {
+    background: #fff5de;
+    color: #9a6b16;
+}
+
+.admin-details-status-suspended {
+    background: #fbeaea;
+    color: #a24747;
+}
+
+
+/* Detail Cards */
+
+.admin-details-card {
+    background: #fffdfb;
+    border: 1px solid #e8e1da;
+    border-radius: 18px;
+    padding: 26px;
+}
+
+.admin-details-card-header {
+    border-bottom: 1px solid #eee8e2;
+    padding-bottom: 18px;
+}
+
+.admin-details-card-eyebrow {
+    color: #aa7a61;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.1px;
+}
+
+.admin-details-card-title {
+    color: #3b302a;
+    font-size: 19px;
+    font-weight: 700;
+}
+
+
+/* Information Fields */
+
+.admin-details-field {
+    min-height: 52px;
+}
+
+.admin-details-field-label {
+    color: #958981;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+}
+
+.admin-details-field-value {
+    color: #493f39;
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 0;
+}
+
+.admin-details-description {
+    line-height: 1.7;
+}
+
+.admin-details-description-field {
+    background: #faf7f3;
+    border-radius: 10px;
+    padding: 16px;
+}
+
+.admin-details-break {
+    overflow-wrap: anywhere;
+}
+
+
+/* Bakery Owner */
+
+.admin-owner-avatar {
+    align-items: center;
+    background: #efe6df;
+    border-radius: 50%;
+    color: #6d4f40;
+    display: flex;
+    flex-shrink: 0;
+    font-size: 15px;
+    font-weight: 700;
+    height: 48px;
+    justify-content: center;
+    width: 48px;
+}
+
+.admin-owner-name {
+    color: #3d312b;
+    font-size: 15px;
+    font-weight: 700;
+    text-transform: capitalize;
+}
+
+.admin-owner-role {
+    color: #978a82;
+    font-size: 12px;
+}
+
+.admin-owner-details {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+
+/* Bakery Settings */
+
+.admin-setting-item {
+    background: #faf7f3;
+    border: 1px solid #eee7e0;
+    border-radius: 12px;
+    height: 100%;
+    padding: 15px;
+}
+
+.admin-setting-value {
+    color: #453832;
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 0;
+}
+
+
+/* Account Information */
+
+.admin-account-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-account-row {
+    align-items: center;
+    border-bottom: 1px solid #eee8e2;
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 0;
+}
+
+.admin-account-row:first-child {
+    padding-top: 0;
+}
+
+.admin-account-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.admin-account-row span {
+    color: #948980;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.admin-account-row strong {
+    color: #493d36;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+
+/* Status Action Buttons */
+
+.admin-approve-button {
+    background: #49372d;
+    border: 1px solid #49372d;
+    border-radius: 9px;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 600;
+    min-height: 38px;
+    padding: 8px 15px;
+}
+
+.admin-approve-button:hover,
+.admin-approve-button:focus {
+    background: #382a23;
+    border-color: #382a23;
+    color: #ffffff;
+}
+
+.admin-suspend-button {
+    background: #ffffff;
+    border: 1px solid #d9a39e;
+    border-radius: 9px;
+    color: #a24747;
+    font-size: 13px;
+    font-weight: 600;
+    min-height: 38px;
+    padding: 8px 15px;
+}
+
+.admin-suspend-button:hover,
+.admin-suspend-button:focus {
+    background: #fdf1f0;
+    border-color: #c87972;
+    color: #8e3939;
+}
+
+
+/* Loading State */
+
+.admin-details-state-card {
+    background: #fffdfb;
+    border: 1px solid #e8e1da;
+    border-radius: 16px;
+    color: #776e68;
+    padding: 38px;
+    text-align: center;
+}
+
+
+/* Confirmation Modal Backdrop */
+
+.admin-modal-backdrop {
+    background: rgba(40, 31, 26, 0.58);
+    inset: 0;
+    position: fixed;
+    z-index: 1050;
+}
+
+
+/* Confirmation Modal */
+
+.admin-status-modal {
+    background: #fffdfb;
+    border: 1px solid #e7ded7;
+    border-radius: 18px;
+    box-shadow: 0 20px 60px rgba(52, 39, 32, 0.18);
+    max-width: 470px;
+    padding: 30px;
+    width: 100%;
+}
+
+.admin-modal-icon {
+    align-items: center;
+    border-radius: 50%;
+    display: flex;
+    font-size: 18px;
+    font-weight: 700;
+    height: 46px;
+    justify-content: center;
+    width: 46px;
+}
+
+.admin-modal-icon-approve {
+    background: #e9f5ec;
+    color: #3f7550;
+}
+
+.admin-modal-icon-suspend {
+    background: #fbeaea;
+    color: #a24747;
+}
+
+.admin-status-modal-title {
+    color: #352a24;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.admin-status-modal-description {
+    color: #786d66;
+    font-size: 14px;
+    line-height: 1.65;
+}
+
+
+/* Modal Cancel Button */
+
+.admin-modal-cancel-button {
+    background: #ffffff;
+    border: 1px solid #ddd5cf;
+    border-radius: 9px;
+    color: #554b45;
+    font-size: 14px;
+    font-weight: 600;
+    min-height: 42px;
+    padding: 9px 17px;
+}
+
+.admin-modal-cancel-button:hover {
+    background: #f6f2ee;
+    border-color: #cfc5bd;
+}
+
+
+/* Modal Approve Button */
+
+.admin-modal-approve-button {
+    background: #49372d;
+    border: 1px solid #49372d;
+    border-radius: 9px;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+    min-height: 42px;
+    padding: 9px 17px;
+}
+
+.admin-modal-approve-button:hover,
+.admin-modal-approve-button:focus {
+    background: #382a23;
+    border-color: #382a23;
+    color: #ffffff;
+}
+
+
+/* Modal Suspend Button */
+
+.admin-modal-suspend-button {
+    background: #a24747;
+    border: 1px solid #a24747;
+    border-radius: 9px;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+    min-height: 42px;
+    padding: 9px 17px;
+}
+
+.admin-modal-suspend-button:hover,
+.admin-modal-suspend-button:focus {
+    background: #8f3c3c;
+    border-color: #8f3c3c;
+    color: #ffffff;
+}
+
+
+/* Disabled Modal Buttons */
+
+.admin-modal-cancel-button:disabled,
+.admin-modal-approve-button:disabled,
+.admin-modal-suspend-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+}

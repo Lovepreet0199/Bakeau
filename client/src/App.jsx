@@ -113,6 +113,15 @@ import StorefrontForgotPassword from "./pages/Storefront/StorefrontForgotPasswor
 //Import Customer Reset Password page
 import StorefrontResetPassword from "./pages/Storefront/StorefrontResetPassword";
 
+//Import Platform Admin Bakery Accounts page
+import AdminBakeries from "./pages/Admin/AdminBakeries.jsx";
+
+//Import Platform Admin Login page
+import AdminLogin from "./pages/Admin/AdminLogin.jsx";
+
+//Import Platform Admin Bakery Details page
+import AdminBakeryDetails from "./pages/Admin/AdminBakeryDetails.jsx";
+
 //Displays the Bakeau application routes
 export default function App() {
 
@@ -120,6 +129,24 @@ export default function App() {
     //Make the Customer Cart available throughout Bakeau
     <CartProvider>
       <Routes>
+
+        {/* Platform Administrator Bakery Accounts */}
+        <Route
+          path="/admin/bakeries"
+          element={<AdminBakeries />}
+        />
+
+        {/* Platform Administrator Login */}
+        <Route
+          path="/admin/login"
+          element={<AdminLogin />}
+        />
+
+        {/* Platform Administrator Bakery Details */}
+        <Route
+          path="/admin/bakeries/:id"
+          element={<AdminBakeryDetails />}
+        />
 
         {/* Public Bakeau landing page */}
         <Route

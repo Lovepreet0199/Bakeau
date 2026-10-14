@@ -1,0 +1,174 @@
+/* Admin Bakery Accounts Page */
+
+.admin-bakeries-page {
+    background: #f8f6f2;
+    color: #2f2925;
+}
+
+
+/* Top Bar */
+
+.admin-topbar {
+    background: #ffffff;
+    border-bottom: 1px solid #e8e3dc;
+}
+
+.admin-brand {
+    color: #49372d;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.admin-brand-label {
+    color: #8a817a;
+    font-size: 13px;
+}
+
+
+/* Page Heading */
+
+.admin-page-label {
+    color: #9a7661;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+}
+
+.admin-page-title {
+    color: #352a24;
+    font-size: 32px;
+    font-weight: 700;
+}
+
+.admin-page-description {
+    color: #776e68;
+    font-size: 15px;
+}
+
+
+/* Table Card */
+
+.admin-table-card {
+    background: #ffffff;
+    border: 1px solid #e9e4de;
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.admin-table-card table {
+    min-width: 850px;
+}
+
+.admin-table-card thead th {
+    background: #fbfaf8;
+    border-bottom: 1px solid #e9e4de;
+    color: #766b64;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    padding: 16px 20px;
+    text-transform: uppercase;
+}
+
+.admin-table-card tbody td {
+    border-bottom: 1px solid #eeeae5;
+    color: #4d4540;
+    font-size: 14px;
+    padding: 18px 20px;
+}
+
+.admin-table-card tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+/* Bakery Information */
+
+.admin-bakery-logo {
+    align-items: center;
+    background: #eee7df;
+    border-radius: 10px;
+    color: #594439;
+    display: flex;
+    flex-shrink: 0;
+    font-size: 18px;
+    font-weight: 700;
+    height: 44px;
+    justify-content: center;
+    overflow: hidden;
+    width: 44px;
+}
+
+.admin-bakery-logo img {
+    height: 100%;
+    object-fit: cover;
+    width: 100%;
+}
+
+.admin-bakery-name {
+    color: #372e29;
+    font-weight: 600;
+}
+
+.admin-bakery-slug {
+    color: #99908a;
+    font-size: 12px;
+}
+
+
+/* Account Status */
+
+.admin-status {
+    border-radius: 50px;
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 6px 11px;
+}
+
+.admin-status-approved {
+    background: #e8f5ec;
+    color: #39724b;
+}
+
+.admin-status-pending {
+    background: #fff4d9;
+    color: #946c14;
+}
+
+.admin-status-suspended {
+    background: #fbe7e7;
+    color: #a24747;
+}
+
+
+/* Loading And Empty States */
+
+.admin-state-card {
+    background: #ffffff;
+    border: 1px solid #e9e4de;
+    border-radius: 14px;
+    color: #776e68;
+    padding: 30px;
+    text-align: center;
+}
+
+/* View Bakery Button */
+
+.admin-view-button {
+    background: #49372d;
+    border: 1px solid #49372d;
+    border-radius: 8px;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 7px 14px;
+    white-space: nowrap;
+}
+
+.admin-view-button:hover,
+.admin-view-button:focus {
+    background: #382a23;
+    border-color: #382a23;
+    color: #ffffff;
+}

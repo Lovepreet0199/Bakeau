@@ -1,0 +1,252 @@
+/* Platform Admin Login Page */
+
+.login-page {
+    background: #f8f5f0;
+    color: #332822;
+}
+
+
+/* Left Bakery Image Panel */
+
+.login-image-panel {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    min-height: 100vh;
+    overflow: hidden;
+    position: relative;
+}
+
+
+/*
+Use the SAME background-image line that you currently
+use in your Bakery Owner Login.css.
+
+Example:
+
+background-image: url("../../assets/images/login-bakery.jpg");
+
+Add that line inside .login-image-panel above.
+*/
+
+
+/* Dark overlay over Bakery image */
+
+.login-image-overlay {
+    background: linear-gradient(to top,
+            rgba(35, 24, 18, 0.82),
+            rgba(35, 24, 18, 0.08));
+    inset: 0;
+    position: absolute;
+}
+
+
+/* Content displayed over Bakery image */
+
+.login-image-content {
+    color: #ffffff;
+    padding: 52px;
+    position: relative;
+    z-index: 1;
+}
+
+
+/* Bakeau Brand */
+
+.login-brand {
+    color: #ffffff;
+    font-size: 20px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.login-brand:hover {
+    color: #ffffff;
+}
+
+
+/* Bakeau Icon */
+
+.login-brand-icon {
+    background: #b96f4f;
+    border-radius: 9px;
+    font-size: 18px;
+    height: 38px;
+    width: 38px;
+}
+
+
+/* Image Heading */
+
+.login-image-title {
+    color: #ffffff;
+    font-size: 38px;
+    font-weight: 600;
+    line-height: 1.15;
+}
+
+
+/* Image Description */
+
+.login-image-description {
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 15px;
+    line-height: 1.7;
+    max-width: 420px;
+}
+
+
+/* Right Login Panel */
+
+.login-form-panel {
+    background: #faf8f4;
+    min-height: 100vh;
+}
+
+
+/* Limits Login form width */
+
+.login-form-content {
+    max-width: 480px;
+}
+
+
+/* Top Navigation */
+
+.login-top-navigation {
+    min-height: 40px;
+}
+
+
+/* Back Button */
+
+.login-back-button {
+    background: transparent;
+    border: none;
+    color: #756b65;
+    font-size: 14px;
+    padding: 0;
+}
+
+.login-back-button:hover {
+    color: #49372d;
+}
+
+
+/* Mobile Bakeau Brand */
+
+.login-mobile-brand {
+    color: #49372d;
+    font-size: 18px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.login-mobile-brand:hover {
+    color: #49372d;
+}
+
+
+/* Mobile Brand Icon */
+
+.login-mobile-brand-icon {
+    background: #b96f4f;
+    border-radius: 8px;
+    color: #ffffff;
+    height: 34px;
+    width: 34px;
+}
+
+
+/* Login Heading */
+
+.login-title {
+    color: #332822;
+    font-size: 34px;
+    font-weight: 700;
+}
+
+
+/* Login Subtitle */
+
+.login-subtitle {
+    color: #7e746e;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+
+/* Form Labels */
+
+.login-form-label {
+    color: #453a34;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+
+/* Login Inputs */
+
+.login-input {
+    background: #ffffff;
+    border: 1px solid #ddd6d0;
+    border-radius: 10px;
+    color: #332822;
+    font-size: 15px;
+    min-height: 50px;
+    padding: 12px 14px;
+}
+
+.login-input::placeholder {
+    color: #aaa19b;
+}
+
+
+/* Input Focus */
+
+.login-input:focus {
+    background: #ffffff;
+    border-color: #9a735f;
+    box-shadow: 0 0 0 3px rgba(154, 115, 95, 0.12);
+    color: #332822;
+}
+
+
+/* Admin Sign In Button */
+
+.login-submit-button {
+    background: #49372d;
+    border: 1px solid #49372d;
+    border-radius: 10px;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 600;
+    min-height: 50px;
+}
+
+.login-submit-button:hover,
+.login-submit-button:focus {
+    background: #382a23;
+    border-color: #382a23;
+    color: #ffffff;
+}
+
+
+/* Disabled Button */
+
+.login-submit-button:disabled {
+    background: #948a84;
+    border-color: #948a84;
+    color: #ffffff;
+}
+
+
+/* Error Message */
+
+.login-form-content .alert-danger {
+    background: #fff0ee;
+    border: 1px solid #efc7c1;
+    border-radius: 9px;
+    color: #9c4035;
+    font-size: 14px;
+}
