@@ -31,6 +31,11 @@
     font-weight: 500;
 }
 
+.storefront-view-all:hover {
+    color: var(--storefront-primary);
+    opacity: 0.8;
+}
+
 
 /* Featured Product showcase */
 .storefront-feature-card {
@@ -313,6 +318,160 @@
 }
 
 
+/* Featured Customer Review */
+.storefront-feature-review {
+    overflow: hidden;
+    border: 1px solid #eee3da;
+    border-radius: 18px;
+    background-color: #ffffff;
+}
+
+
+/* Featured Review name */
+.storefront-feature-review-name {
+    color: #33251f;
+    font-family: "Fraunces", serif;
+    font-size: clamp(20px, 3vw, 24px);
+    font-weight: 600;
+}
+
+
+/* Featured Review date */
+.storefront-feature-review-date {
+    color: #948c86;
+    font-size: 11px;
+}
+
+
+/* Featured Review stars */
+.storefront-feature-review-stars {
+    flex-shrink: 0;
+    color: #c98516;
+}
+
+
+/* Featured Review comment */
+.storefront-feature-review-comment {
+    max-width: 650px;
+    margin-bottom: 24px;
+    color: #493d36;
+    font-family: "Fraunces", serif;
+    font-size: clamp(19px, 3vw, 27px);
+    line-height: 1.55;
+}
+
+
+/* Featured Review image area */
+.storefront-feature-review .ratio {
+    background-color: #f0ebe6;
+}
+
+
+/* Featured Review image */
+.storefront-feature-review-image {
+    display: block;
+    object-fit: cover;
+}
+
+
+/* Bakery reply inside featured Review */
+.storefront-feature-review-reply {
+    max-width: 600px;
+    margin-bottom: 22px;
+    padding: 13px 15px;
+    border-left: 3px solid var(--storefront-primary);
+    border-radius: 7px;
+    background-color: #f7f2ed;
+}
+
+
+/* Bakery reply heading */
+.storefront-feature-review-reply strong {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--storefront-primary);
+    font-size: 11px;
+    font-weight: 700;
+}
+
+
+/* Bakery reply text */
+.storefront-feature-review-reply p {
+    color: #5b534e;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+
+/* Verified Customer Review */
+.storefront-feature-review-verified {
+    color: #33805b;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+
+/* Review carousel arrow */
+.storefront-review-carousel-arrow {
+    width: 36px;
+    height: 36px;
+    border: 1px solid #ddd2ca;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.95);
+    color: #5a4a41;
+    box-shadow: 0 2px 8px rgba(65, 45, 35, 0.08);
+    z-index: 2;
+}
+
+
+/* Review carousel dot */
+.storefront-review-carousel-dot {
+    width: 8px;
+    height: 8px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background-color: #cbbdb2;
+    transition:
+        width 0.2s ease,
+        background-color 0.2s ease;
+}
+
+
+/* Active Review carousel dot */
+.storefront-review-carousel-dot.active {
+    width: 21px;
+    border-radius: 8px;
+    background-color: var(--storefront-primary);
+}
+
+
+/* Review changing animation */
+.storefront-review-transition {
+    animation:
+        storefront-review-slide 0.5s cubic-bezier(0.22,
+            0.61,
+            0.36,
+            1);
+}
+
+
+/* Slides and fades the next Review into view */
+@keyframes storefront-review-slide {
+
+    from {
+        opacity: 0;
+        transform: translateX(18px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+
 /* Empty Reviews message */
 .storefront-reviews-empty {
     border: 1px solid #eee3da;
@@ -371,7 +530,10 @@
 /* Smooth transition when the featured Product changes */
 .storefront-feature-transition {
     animation:
-        storefront-feature-slide 0.55s cubic-bezier(0.22, 0.61, 0.36, 1);
+        storefront-feature-slide 0.55s cubic-bezier(0.22,
+            0.61,
+            0.36,
+            1);
 }
 
 
@@ -416,7 +578,8 @@
 @media (prefers-reduced-motion: reduce) {
 
     .storefront-feature-transition,
-    .storefront-feature-transition .storefront-feature-image {
+    .storefront-feature-transition .storefront-feature-image,
+    .storefront-review-transition {
         animation: none;
     }
 }

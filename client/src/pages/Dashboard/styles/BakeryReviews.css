@@ -1,0 +1,439 @@
+/* Bakery Owner Reviews page */
+.bakery-reviews-page {
+    color: #33251f;
+}
+
+
+/* Reviews loading state */
+.bakery-reviews-loading {
+    min-height: 60vh;
+}
+
+
+/* Small Reviews heading */
+.bakery-reviews-eyebrow {
+    color: #a85d45;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+
+/* Main Reviews title */
+.bakery-reviews-title {
+    color: #2f211b;
+    font-size: clamp(27px, 4vw, 34px);
+    font-weight: 700;
+}
+
+
+/* Reviews description */
+.bakery-reviews-description {
+    max-width: 650px;
+    color: #81736b;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+
+/* Total Review count */
+.bakery-reviews-count {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 5px;
+    padding: 10px 15px;
+    border: 1px solid #e7ded8;
+    border-radius: 9px;
+    background-color: #ffffff;
+    color: #33251f;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+
+/* Review count text */
+.bakery-reviews-count span {
+    color: #81736b;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+
+/* Review Card */
+.bakery-review-card {
+    border: 1px solid #e7ded8;
+    border-radius: 12px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 8px rgba(66, 44, 35, 0.03);
+}
+
+
+/* Customer Avatar */
+.bakery-review-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background-color: #f1e8e2;
+    color: #a85d45;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+
+/* Customer name */
+.bakery-review-customer {
+    color: #33251f;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+
+/* Review information */
+.bakery-review-meta {
+    color: #948b85;
+    font-size: 11px;
+}
+
+
+/* Review stars */
+.bakery-review-stars {
+    flex-shrink: 0;
+    color: #c98516;
+}
+
+
+/* Verified Order label */
+.bakery-review-verified {
+    color: #33805b;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+
+/* Customer Review comment */
+.bakery-review-comment {
+    margin-bottom: 18px;
+    color: #544d48;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+
+/* Customer Review image */
+.bakery-review-image {
+    width: 100%;
+    max-height: 300px;
+    margin-bottom: 18px;
+    border-radius: 9px;
+    object-fit: cover;
+}
+
+
+/* Existing Bakery reply */
+.bakery-review-owner-reply {
+    margin-bottom: 5px;
+    padding: 14px 16px;
+    border-left: 3px solid #a85d45;
+    border-radius: 7px;
+    background-color: #f8f3ef;
+}
+
+
+/* Existing Bakery reply heading */
+.bakery-review-owner-reply strong {
+    color: #a85d45;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+
+/* Bakery Reply date */
+.bakery-review-owner-reply span {
+    color: #9a8f88;
+    font-size: 10px;
+}
+
+
+/* Existing Bakery reply text */
+.bakery-review-owner-reply p {
+    color: #5c524c;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+
+/* Reply Editor */
+.bakery-review-reply-editor {
+    margin-top: 3px;
+    padding: 16px;
+    border: 1px solid #e7ded8;
+    border-radius: 9px;
+    background-color: #fbf9f7;
+}
+
+
+/* Reply Editor heading */
+.bakery-review-reply-editor h3 {
+    color: #33251f;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+
+/* Reply Editor close button */
+.bakery-review-reply-close {
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: 1px solid #ded5cf;
+    border-radius: 6px;
+    background-color: #ffffff;
+    color: #766961;
+}
+
+
+/* Reply label */
+.bakery-review-reply-label {
+    color: #4f453f;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+/* Reply textarea */
+.bakery-review-reply-textarea {
+    min-height: 110px;
+    resize: vertical;
+    border-color: #ded5cf;
+    color: #433934;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+
+/* Reply textarea focus */
+.bakery-review-reply-textarea:focus {
+    border-color: #a85d45;
+    box-shadow: 0 0 0 3px rgba(168, 93, 69, 0.08);
+}
+
+
+/* Reply character count */
+.bakery-review-reply-count {
+    color: #9a8f88;
+    font-size: 10px;
+}
+
+
+/* Reply button */
+.bakery-review-reply-button {
+    min-height: 37px;
+    padding: 8px 14px;
+    border: 1px solid #a85d45;
+    border-radius: 7px;
+    background-color: #ffffff;
+    color: #a85d45;
+    font-size: 12px;
+    font-weight: 600;
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
+}
+
+
+/* Reply button hover */
+.bakery-review-reply-button:hover {
+    background-color: #a85d45;
+    color: #ffffff;
+}
+
+
+/* Cancel Reply button */
+.bakery-review-cancel-button {
+    min-height: 38px;
+    padding: 8px 16px;
+    border: 1px solid #ddd4ce;
+    border-radius: 7px;
+    background-color: #ffffff;
+    color: #625750;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+/* Save Reply button */
+.bakery-review-save-button {
+    min-height: 38px;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 7px;
+    background-color: #a85d45;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+/* Button hover */
+.bakery-review-save-button:hover {
+    opacity: 0.9;
+}
+
+
+/* Disabled Reply buttons */
+.bakery-review-save-button:disabled,
+.bakery-review-cancel-button:disabled,
+.bakery-review-reply-close:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+
+/* Empty Reviews */
+.bakery-reviews-empty {
+    border: 1px dashed #ddd2cb;
+    border-radius: 12px;
+    background-color: #ffffff;
+    color: #a85d45;
+}
+
+
+/* Empty Reviews title */
+.bakery-reviews-empty h2 {
+    color: #33251f;
+    font-size: 19px;
+    font-weight: 700;
+}
+
+
+/* Empty Reviews description */
+.bakery-reviews-empty p {
+    color: #81756e;
+    font-size: 13px;
+}
+
+/* Reply Edit action */
+.bakery-review-reply-edit {
+    padding: 4px 8px;
+    border: none;
+    background-color: transparent;
+    color: #a85d45;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+
+/* Reply Delete action */
+.bakery-review-reply-delete {
+    padding: 4px 8px;
+    border: none;
+    background-color: transparent;
+    color: #b0443c;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+
+/* Reply action hover */
+.bakery-review-reply-edit:hover,
+.bakery-review-reply-delete:hover {
+    text-decoration: underline;
+}
+
+
+/* Reply date */
+.bakery-review-owner-reply-date {
+    color: #9a8f88;
+    font-size: 10px;
+    font-weight: 400;
+}
+
+
+/* Delete Reply modal background */
+.bakery-review-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(32, 25, 22, 0.45);
+    z-index: 1050;
+}
+
+
+/* Delete Reply modal */
+.bakery-review-modal {
+    max-width: 460px;
+    padding: 24px;
+    border-radius: 12px;
+    background-color: #ffffff;
+    box-shadow: 0 18px 50px rgba(38, 27, 22, 0.16);
+}
+
+
+/* Delete Reply modal title */
+.bakery-review-modal h2 {
+    color: #33251f;
+    font-size: 19px;
+    font-weight: 700;
+}
+
+
+/* Delete Reply modal message */
+.bakery-review-modal-text {
+    margin: 0;
+    color: #746861;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+
+/* Delete Reply modal close */
+.bakery-review-modal-close {
+    flex-shrink: 0;
+    width: 31px;
+    height: 31px;
+    padding: 0;
+    border: 1px solid #ddd4ce;
+    border-radius: 7px;
+    background-color: #ffffff;
+    color: #6f625b;
+}
+
+
+/* Delete Reply modal Cancel */
+.bakery-review-modal-cancel {
+    min-height: 39px;
+    padding: 8px 16px;
+    border: 1px solid #ddd4ce;
+    border-radius: 7px;
+    background-color: #ffffff;
+    color: #625750;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+/* Delete Reply modal Delete */
+.bakery-review-modal-delete {
+    min-height: 39px;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 7px;
+    background-color: #b0443c;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+/* Disabled Delete Reply controls */
+.bakery-review-modal-close:disabled,
+.bakery-review-modal-cancel:disabled,
+.bakery-review-modal-delete:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}

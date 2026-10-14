@@ -27,6 +27,7 @@ import StorefrontFooter from "../../components/storefront/StorefrontFooter";
 //Import Storefront theme helper
 import { getStorefrontTheme } from "../../utils/storefrontTheme";
 
+
 //Displays the public customer Storefront for a Bakery
 export default function BakeryStorefront() {
 
@@ -42,8 +43,18 @@ export default function BakeryStorefront() {
     //Stores the public Bakery Products
     const [products, setProducts] = useState([]);
 
+    //Stores public Bakery Reviews
+    const [reviews, setReviews] = useState([]);
+
+    //Stores Bakery Review summary
+    const [averageRating, setAverageRating] = useState(0);
+    const [reviewCount, setReviewCount] = useState(0);
+
     //Tracks the currently displayed featured Product
     const [currentFeatureIndex, setCurrentFeatureIndex] = useState(0);
+
+    //Tracks the currently displayed Review
+    const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
 
     //Tracks whether the Storefront is loading
     const [isLoading, setIsLoading] = useState(true);
@@ -52,7 +63,7 @@ export default function BakeryStorefront() {
     const [error, setError] = useState("");
 
 
-    //Loads the Bakery and its public Products
+    //Loads the Bakery, Products and Reviews
     useEffect(() => {
 
         //Gets all information needed for the Storefront
@@ -63,15 +74,21 @@ export default function BakeryStorefront() {
 
             try {
 
-                //Request the public Bakery and Products together
-                const [bakeryResponse, productsResponse] = await Promise.all([
+                //Request the public Bakery, Products and Reviews together
+                const [
+                    bakeryResponse,
+                    productsResponse,
+                    reviewsResponse
+                ] = await Promise.all([
                     fetch(`http://localhost:3000/api/bakeries/public/${slug}`),
-                    fetch(`http://localhost:3000/api/bakeries/public/${slug}/products`)
+                    fetch(`http://localhost:3000/api/bakeries/public/${slug}/products`),
+                    fetch(`http://localhost:3000/api/reviews/public/${slug}`)
                 ]);
 
-                //Convert both responses into JavaScript data
+                //Convert responses into JavaScript data
                 const bakeryData = await bakeryResponse.json();
                 const productsData = await productsResponse.json();
+                const reviewsData = await reviewsResponse.json();
 
                 //Stop if the Bakery could not be loaded
                 if (!bakeryResponse.ok) {
@@ -89,19 +106,48 @@ export default function BakeryStorefront() {
                     );
                 }
 
+                //Stop if the Reviews could not be loaded
+                if (!reviewsResponse.ok) {
+                    throw new Error(
+                        reviewsData.message ||
+                        "Unable to load reviews"
+                    );
+                }
+
                 //Save the Bakery information
-                setBakery(bakeryData.bakery);
+                setBakery(
+                    bakeryData.bakery
+                );
 
                 //Save the public Products
                 setProducts(
-                    productsData.products ||
-                    []
+                    productsData.products || []
                 );
+
+                //Save the public Reviews
+                setReviews(
+                    reviewsData.reviews || []
+                );
+
+                //Save the Review summary
+                setAverageRating(
+                    reviewsData.average_rating || 0
+                );
+
+                setReviewCount(
+                    reviewsData.review_count || 0
+                );
+
+                //Start carousels from first item
+                setCurrentFeatureIndex(0);
+                setCurrentReviewIndex(0);
 
             } catch (error) {
 
                 //Display the Storefront error
-                setError(error.message);
+                setError(
+                    error.message
+                );
 
             } finally {
 
@@ -161,10 +207,11 @@ export default function BakeryStorefront() {
     useEffect(() => {
 
         //Find Products that can be shown in the featured carousel
-        const featured = products.filter(
-            (product) =>
-                product.is_featured
-        );
+        const featured =
+            products.filter(
+                (product) =>
+                    product.is_featured
+            );
 
         //Use featured Products or regular Products as a fallback
         const rotatingProducts =
@@ -178,23 +225,66 @@ export default function BakeryStorefront() {
         }
 
         //Move to the next Product every 5 seconds
-        const interval = setInterval(() => {
+        const interval =
+            setInterval(() => {
 
-            setCurrentFeatureIndex(
-                (currentIndex) =>
-                    currentIndex ===
-                        rotatingProducts.length - 1
-                        ? 0
-                        : currentIndex + 1
-            );
+                setCurrentFeatureIndex(
+                    (currentIndex) =>
+                        currentIndex ===
+                            rotatingProducts.length - 1
+                            ? 0
+                            : currentIndex + 1
+                );
 
-        }, 5000);
+            }, 5000);
 
         //Clean up the timer
         return () =>
             clearInterval(interval);
 
-    }, [products, currentFeatureIndex]);
+    }, [
+        products,
+        currentFeatureIndex
+    ]);
+
+
+    //Automatically changes the Review every 5 seconds
+    useEffect(() => {
+
+        //Use up to five Reviews in the homepage carousel
+        const rotatingReviewCount =
+            Math.min(
+                reviews.length,
+                5
+            );
+
+        //Do not start carousel when there is only one Review
+        if (rotatingReviewCount <= 1) {
+            return;
+        }
+
+        //Move to the next Review every 5 seconds
+        const interval =
+            setInterval(() => {
+
+                setCurrentReviewIndex(
+                    (currentIndex) =>
+                        currentIndex ===
+                            rotatingReviewCount - 1
+                            ? 0
+                            : currentIndex + 1
+                );
+
+            }, 5000);
+
+        //Clean up the timer
+        return () =>
+            clearInterval(interval);
+
+    }, [
+        reviews.length,
+        currentReviewIndex
+    ]);
 
 
     //Formats Product prices using the Bakery currency
@@ -300,6 +390,84 @@ export default function BakeryStorefront() {
         }
 
         return "View item";
+    }
+
+
+    //Displays Customer name like Olivia C.
+    function getCustomerName(customer) {
+
+        if (!customer) {
+            return "Customer";
+        }
+
+        const firstName =
+            customer.first_name ||
+            "Customer";
+
+        const lastInitial =
+            customer.last_name
+                ? `${customer.last_name.charAt(0)}.`
+                : "";
+
+        return `${firstName} ${lastInitial}`.trim();
+    }
+
+
+    //Formats Review date
+    function formatReviewDate(date) {
+
+        const reviewDate =
+            new Date(date);
+
+        const today =
+            new Date();
+
+        const difference =
+            today.getTime() -
+            reviewDate.getTime();
+
+        const days =
+            Math.floor(
+                difference /
+                (1000 * 60 * 60 * 24)
+            );
+
+        //Review was posted today
+        if (days <= 0) {
+            return "Today";
+        }
+
+        //Review was posted yesterday
+        if (days === 1) {
+            return "Yesterday";
+        }
+
+        //Reviews from this week
+        if (days < 7) {
+            return `${days} days ago`;
+        }
+
+        //Reviews from this month
+        if (days < 30) {
+
+            const weeks =
+                Math.floor(
+                    days / 7
+                );
+
+            return weeks === 1
+                ? "1 week ago"
+                : `${weeks} weeks ago`;
+        }
+
+        //Older Reviews use a normal date
+        return reviewDate.toLocaleDateString(
+            "en-CA",
+            {
+                month: "short",
+                day: "numeric"
+            }
+        );
     }
 
 
@@ -414,6 +582,49 @@ export default function BakeryStorefront() {
         products.slice(0, 4);
 
 
+    //Sort Reviews by highest rating and then newest date
+    const topReviews = [
+        ...reviews
+    ]
+        .sort(
+            (
+                firstReview,
+                secondReview
+            ) => {
+
+                //Show higher rated Reviews first
+                if (
+                    secondReview.rating !==
+                    firstReview.rating
+                ) {
+                    return (
+                        secondReview.rating -
+                        firstReview.rating
+                    );
+                }
+
+                //Show newer Reviews first when ratings are equal
+                return (
+                    new Date(
+                        secondReview.created_at
+                    ) -
+                    new Date(
+                        firstReview.created_at
+                    )
+                );
+            }
+        )
+        .slice(0, 5);
+
+
+    //Get the currently displayed Review
+    const featuredReview =
+        topReviews[
+        currentReviewIndex
+        ] ||
+        topReviews[0];
+
+
     //Create the public pickup address
     const pickupAddress = [
         bakery.address?.street,
@@ -442,6 +653,31 @@ export default function BakeryStorefront() {
             (currentIndex) =>
                 currentIndex ===
                     heroProducts.length - 1
+                    ? 0
+                    : currentIndex + 1
+        );
+    }
+
+
+    //Move to the previous Review
+    function showPreviousReview() {
+
+        setCurrentReviewIndex(
+            (currentIndex) =>
+                currentIndex === 0
+                    ? topReviews.length - 1
+                    : currentIndex - 1
+        );
+    }
+
+
+    //Move to the next Review
+    function showNextReview() {
+
+        setCurrentReviewIndex(
+            (currentIndex) =>
+                currentIndex ===
+                    topReviews.length - 1
                     ? 0
                     : currentIndex + 1
         );
@@ -536,10 +772,9 @@ export default function BakeryStorefront() {
                                     ) : (
 
                                         <div className="storefront-feature-placeholder d-flex align-items-center justify-content-center text-center p-5">
-
                                             Product image coming soon
-
                                         </div>
+
                                     )}
 
                                 </div>
@@ -590,6 +825,7 @@ export default function BakeryStorefront() {
                                                     hours notice
 
                                                 </span>
+
                                             )}
 
                                         </div>
@@ -622,6 +858,7 @@ export default function BakeryStorefront() {
 
                             {/* Carousel controls */}
                             {heroProducts.length > 1 && (
+
                                 <>
 
                                     {/* Previous Product */}
@@ -690,6 +927,7 @@ export default function BakeryStorefront() {
                                     </div>
 
                                 </>
+
                             )}
 
                         </div>
@@ -699,6 +937,7 @@ export default function BakeryStorefront() {
                         <div className="storefront-empty-products text-center p-5">
                             Products coming soon.
                         </div>
+
                     )}
 
                 </section>
@@ -740,12 +979,14 @@ export default function BakeryStorefront() {
                                         </button>
 
                                     </div>
+
                                 )
                             )}
 
                         </div>
 
                     </section>
+
                 )}
 
 
@@ -818,6 +1059,7 @@ export default function BakeryStorefront() {
                                                 <div className="storefront-product-placeholder d-flex align-items-center justify-content-center">
                                                     🍰
                                                 </div>
+
                                             )}
 
 
@@ -847,11 +1089,13 @@ export default function BakeryStorefront() {
                                                     to={`/store/${slug}/product/${product._id}`}
                                                     className="storefront-product-action d-flex align-items-center justify-content-center text-decoration-none mt-auto"
                                                 >
+
                                                     {
                                                         getProductActionLabel(
                                                             product
                                                         )
                                                     }
+
                                                 </Link>
 
                                             </div>
@@ -859,6 +1103,7 @@ export default function BakeryStorefront() {
                                         </article>
 
                                     </div>
+
                                 )
                             )}
 
@@ -877,6 +1122,7 @@ export default function BakeryStorefront() {
                             </p>
 
                         </div>
+
                     )}
 
                 </section>
@@ -1003,6 +1249,7 @@ export default function BakeryStorefront() {
 
                     <div className="container-xxl px-3">
 
+                        {/* Reviews heading */}
                         <div className="d-flex align-items-end justify-content-between gap-3 mb-4">
 
                             <div>
@@ -1018,35 +1265,303 @@ export default function BakeryStorefront() {
                             </div>
 
 
-                            <span className="storefront-view-all d-none d-sm-inline-flex align-items-center gap-1">
+                            {/* Opens full Reviews page */}
+                            {reviews.length > 0 && (
 
-                                All reviews
+                                <Link
+                                    to={`/store/${slug}/reviews`}
+                                    className="storefront-view-all d-none d-sm-inline-flex align-items-center gap-1 text-decoration-none"
+                                >
 
-                                <ArrowRight
-                                    size={14}
+                                    All reviews
+
+                                    <ArrowRight
+                                        size={14}
+                                    />
+
+                                </Link>
+
+                            )}
+
+                        </div>
+
+
+                        {featuredReview ? (
+
+                            <>
+
+                                {/* Featured Review */}
+                                <div className="storefront-feature-review position-relative">
+
+                                    <div
+                                        key={
+                                            featuredReview._id
+                                        }
+                                        className="storefront-review-transition"
+                                    >
+
+                                        <div className="row g-0 align-items-stretch">
+
+                                            {/* Review information */}
+                                            <div
+                                                className={
+                                                    featuredReview.image_url
+                                                        ? "col-12 col-lg-7 d-flex"
+                                                        : "col-12 d-flex"
+                                                }
+                                            >
+
+                                                <div className="d-flex flex-column justify-content-center w-100 p-4 p-md-5">
+
+                                                    {/* Customer and Rating */}
+                                                    <div className="d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between gap-3 mb-4">
+
+                                                        {/* Customer information */}
+                                                        <div>
+
+                                                            <h3 className="storefront-feature-review-name mb-1">
+
+                                                                {
+                                                                    getCustomerName(
+                                                                        featuredReview.customer_id
+                                                                    )
+                                                                }
+
+                                                            </h3>
+
+                                                            <span className="storefront-feature-review-date">
+
+                                                                {
+                                                                    formatReviewDate(
+                                                                        featuredReview.created_at
+                                                                    )
+                                                                }
+
+                                                            </span>
+
+                                                        </div>
+
+
+                                                        {/* Review stars */}
+                                                        <div className="d-flex gap-1 storefront-feature-review-stars">
+
+                                                            {[1, 2, 3, 4, 5].map(
+                                                                (star) => (
+
+                                                                    <Star
+                                                                        key={
+                                                                            star
+                                                                        }
+                                                                        size={18}
+                                                                        fill={
+                                                                            star <= featuredReview.rating
+                                                                                ? "currentColor"
+                                                                                : "none"
+                                                                        }
+                                                                    />
+
+                                                                )
+                                                            )}
+
+                                                        </div>
+
+                                                    </div>
+
+
+                                                    {/* Review Comment */}
+                                                    <p className="storefront-feature-review-comment">
+
+                                                        “{featuredReview.comment}”
+
+                                                    </p>
+
+
+                                                    {/* Bakery Reply */}
+                                                    {featuredReview.owner_reply && (
+
+                                                        <div className="storefront-feature-review-reply">
+
+                                                            <strong>
+                                                                {bakery.name} replied
+                                                            </strong>
+
+                                                            <p className="mb-0">
+                                                                {featuredReview.owner_reply}
+                                                            </p>
+
+                                                        </div>
+
+                                                    )}
+
+
+                                                    {/* Verified Order */}
+                                                    <span className="storefront-feature-review-verified">
+                                                        ✓ VERIFIED ORDER
+                                                    </span>
+
+                                                </div>
+
+                                            </div>
+
+
+                                            {/* Review Image */}
+                                            {featuredReview.image_url && (
+
+                                                <div className="col-12 col-lg-5">
+
+                                                    <div className="ratio ratio-4x3 h-100">
+
+                                                        <img
+                                                            src={
+                                                                featuredReview.image_url
+                                                            }
+                                                            alt="Customer review"
+                                                            className="storefront-feature-review-image w-100 h-100"
+                                                        />
+
+                                                    </div>
+
+                                                </div>
+
+                                            )}
+
+                                        </div>
+
+                                    </div>
+
+
+                                    {/* Review carousel arrows */}
+                                    {topReviews.length > 1 && (
+
+                                        <>
+
+                                            {/* Previous Review */}
+                                            <button
+                                                type="button"
+                                                aria-label="Previous review"
+                                                onClick={
+                                                    showPreviousReview
+                                                }
+                                                className="storefront-review-carousel-arrow position-absolute top-50 start-0 translate-middle-y ms-3 d-none d-md-flex align-items-center justify-content-center"
+                                            >
+
+                                                <ArrowLeft
+                                                    size={18}
+                                                />
+
+                                            </button>
+
+
+                                            {/* Next Review */}
+                                            <button
+                                                type="button"
+                                                aria-label="Next review"
+                                                onClick={
+                                                    showNextReview
+                                                }
+                                                className="storefront-review-carousel-arrow position-absolute top-50 end-0 translate-middle-y me-3 d-none d-md-flex align-items-center justify-content-center"
+                                            >
+
+                                                <ArrowRight
+                                                    size={18}
+                                                />
+
+                                            </button>
+
+                                        </>
+
+                                    )}
+
+                                </div>
+
+
+                                {/* Review carousel dots */}
+                                {topReviews.length > 1 && (
+
+                                    <div className="d-flex align-items-center justify-content-center gap-2 mt-3">
+
+                                        {topReviews.map(
+                                            (
+                                                review,
+                                                index
+                                            ) => (
+
+                                                <button
+                                                    type="button"
+                                                    key={
+                                                        review._id
+                                                    }
+                                                    aria-label={
+                                                        `Show review ${index + 1}`
+                                                    }
+                                                    onClick={() =>
+                                                        setCurrentReviewIndex(
+                                                            index
+                                                        )
+                                                    }
+                                                    className={
+                                                        index ===
+                                                            currentReviewIndex
+                                                            ? "storefront-review-carousel-dot active"
+                                                            : "storefront-review-carousel-dot"
+                                                    }
+                                                />
+
+                                            )
+                                        )}
+
+                                    </div>
+
+                                )}
+
+
+                                {/* Mobile All Reviews button */}
+                                <div className="d-sm-none mt-4">
+
+                                    <Link
+                                        to={`/store/${slug}/reviews`}
+                                        className="storefront-primary-button d-flex align-items-center justify-content-center gap-2 text-decoration-none"
+                                    >
+
+                                        All reviews
+
+                                        <ArrowRight
+                                            size={15}
+                                        />
+
+                                    </Link>
+
+                                </div>
+
+                            </>
+
+                        ) : (
+
+                            /* Empty Reviews */
+                            <div className="storefront-reviews-empty text-center p-4 p-md-5">
+
+                                <Star
+                                    size={25}
                                 />
 
-                            </span>
+                                <h3 className="mt-3 mb-2">
+                                    No reviews yet
+                                </h3>
 
-                        </div>
+                                <p className="text-secondary mb-3">
+                                    Be the first customer to share your experience with {bakery.name}.
+                                </p>
 
+                                <Link
+                                    to={`/store/${slug}/orders`}
+                                    className="storefront-primary-button d-inline-flex align-items-center justify-content-center text-decoration-none"
+                                >
+                                    Write a review
+                                </Link>
 
-                        {/* Real customer Reviews will be added later */}
-                        <div className="storefront-reviews-empty text-center p-4 p-md-5">
+                            </div>
 
-                            <Star
-                                size={25}
-                            />
-
-                            <h3 className="mt-3 mb-2">
-                                Customer reviews coming soon
-                            </h3>
-
-                            <p className="text-secondary mb-0">
-                                Reviews from verified Bakeau orders will appear here.
-                            </p>
-
-                        </div>
+                        )}
 
                     </div>
 
@@ -1104,6 +1619,7 @@ export default function BakeryStorefront() {
                                             </span>
 
                                         </div>
+
                                     )}
 
 
@@ -1123,6 +1639,7 @@ export default function BakeryStorefront() {
                                             </span>
 
                                         </div>
+
                                     )}
 
 
@@ -1135,7 +1652,12 @@ export default function BakeryStorefront() {
                                         />
 
                                         <span>
-                                            Verified customer reviews coming soon
+
+                                            {reviewCount > 0
+                                                ? `${Number(averageRating).toFixed(1)} out of 5 from ${reviewCount} verified ${reviewCount === 1 ? "review" : "reviews"}`
+                                                : "No verified customer reviews yet"
+                                            }
+
                                         </span>
 
                                     </div>
@@ -1161,6 +1683,7 @@ export default function BakeryStorefront() {
                                     />
 
                                 </div>
+
                             )}
 
                         </div>

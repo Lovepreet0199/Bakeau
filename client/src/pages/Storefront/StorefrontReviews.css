@@ -1,0 +1,262 @@
+/* Storefront Reviews page */
+.storefront-reviews-page {
+    background: #FBF9F7;
+    color: var(--storefront-dark);
+}
+
+
+/* Main Reviews area */
+.storefront-reviews-main {
+    padding-top: 10px;
+}
+
+
+/* Loading page */
+.storefront-reviews-loading {
+    min-height: 100vh;
+}
+
+
+/* Breadcrumb */
+.storefront-reviews-breadcrumb {
+    color: #918983;
+    font-size: 12px;
+}
+
+.storefront-reviews-breadcrumb a {
+    color: #625A55;
+}
+
+.storefront-reviews-breadcrumb a:hover {
+    color: var(--storefront-primary);
+}
+
+
+/* Small heading */
+.storefront-reviews-eyebrow {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--storefront-primary);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+}
+
+
+/* Main Reviews heading */
+.storefront-reviews-title {
+    margin-bottom: 8px;
+    color: var(--storefront-dark);
+    font-size: clamp(29px, 4vw, 36px);
+    font-weight: 700;
+}
+
+
+/* Header description */
+.storefront-reviews-description {
+    max-width: 600px;
+    margin: 0;
+    color: #77706B;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+
+/* Write Review button */
+.storefront-reviews-write {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 42px;
+    padding: 9px 20px;
+    border: 0;
+    border-radius: 8px;
+    background: var(--storefront-primary);
+    color: #FFFFFF;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.storefront-reviews-write:hover {
+    color: #FFFFFF;
+    opacity: 0.9;
+}
+
+
+/* Rating Summary */
+.storefront-reviews-summary {
+    padding: 20px 24px;
+    border: 1px solid #E5DDD7;
+    border-radius: 12px;
+    background: #FFFFFF;
+}
+
+
+/* Rating number */
+.storefront-reviews-score {
+    color: var(--storefront-dark);
+    font-size: 38px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+
+/* Rating stars */
+.storefront-reviews-summary-stars {
+    color: #C98516;
+}
+
+
+/* Rating text */
+.storefront-reviews-summary p {
+    color: #514A46;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.storefront-reviews-summary p span {
+    color: #8B837D;
+    font-weight: 400;
+}
+
+
+/* Public Review Card */
+.storefront-review-public-card {
+    padding: 24px;
+    border: 1px solid #E5DDD7;
+    border-radius: 12px;
+    background: #FFFFFF;
+}
+
+
+/* Customer avatar */
+.storefront-review-public-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #F0E7E0;
+    color: var(--storefront-primary);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+
+/* Customer name */
+.storefront-review-public-name {
+    margin: 0 0 2px;
+    color: #433C38;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+
+/* Review date */
+.storefront-review-public-date {
+    color: #948C86;
+    font-size: 11px;
+}
+
+
+/* Review stars */
+.storefront-review-public-stars {
+    flex-shrink: 0;
+    color: #C98516;
+}
+
+
+/* Review comment */
+.storefront-review-public-comment {
+    margin-bottom: 18px;
+    color: #544D48;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+
+/* Review image */
+.storefront-review-public-image {
+    display: block;
+    width: 100%;
+    max-height: 310px;
+    margin-bottom: 18px;
+    border-radius: 9px;
+    object-fit: cover;
+}
+
+
+/* Bakery reply */
+.storefront-review-public-reply {
+    margin-bottom: 18px;
+    padding: 13px 15px;
+    border-left: 3px solid var(--storefront-primary);
+    border-radius: 7px;
+    background: #F7F2ED;
+}
+
+
+/* Bakery reply heading */
+.storefront-review-public-reply span {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--storefront-primary);
+    font-size: 11px;
+    font-weight: 700;
+}
+
+
+/* Bakery reply text */
+.storefront-review-public-reply p {
+    margin: 0;
+    color: #5B534E;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+
+/* Verified Order */
+.storefront-review-public-verified {
+    color: #33805B;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+
+/* Empty Reviews */
+.storefront-reviews-empty {
+    border: 1px solid #E5DDD7;
+    border-radius: 12px;
+    background: #FFFFFF;
+}
+
+
+/* Empty Review stars */
+.storefront-reviews-empty-stars {
+    margin-bottom: 12px;
+    color: #D1CBC7;
+    font-size: 20px;
+    letter-spacing: 3px;
+}
+
+
+/* Empty Review heading */
+.storefront-reviews-empty h2 {
+    margin-bottom: 8px;
+    color: var(--storefront-dark);
+    font-size: 21px;
+}
+
+
+/* Empty Review description */
+.storefront-reviews-empty p {
+    max-width: 450px;
+    margin: 0 auto 20px;
+    color: #817A75;
+    font-size: 13px;
+    line-height: 1.6;
+}

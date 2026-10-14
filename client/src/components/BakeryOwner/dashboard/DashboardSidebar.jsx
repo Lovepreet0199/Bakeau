@@ -182,13 +182,22 @@ export default function DashboardSidebar({
                     </button>
 
                     {/* Reviews page */}
-                    <button
-                        type="button"
-                        className="bakery-dashboard-nav-item"
+                    <NavLink
+                        to="/bakery/reviews"
+                        className={({ isActive }) =>
+                            `bakery-dashboard-nav-item text-decoration-none ${isActive ? "active" : ""}`
+                        }
+                        onClick={closeSidebar}
                     >
-                        <Star size={18} strokeWidth={1.8} />
-                        <span>Reviews</span>
-                    </button>
+                        <Star
+                            size={18}
+                            strokeWidth={1.8}
+                        />
+
+                        <span>
+                            Reviews
+                        </span>
+                    </NavLink>
 
                     {/* Marketing page */}
                     <button

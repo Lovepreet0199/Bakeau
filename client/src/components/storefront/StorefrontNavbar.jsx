@@ -455,7 +455,7 @@ export default function StorefrontNavbar({
 
 
                             <Link
-                                to={`/store/${slug}#reviews`}
+                                to={`/store/${slug}/reviews`}
                                 className="storefront-nav-link"
                             >
                                 Reviews
@@ -775,7 +775,7 @@ export default function StorefrontNavbar({
 
 
                                     <Link
-                                        to={`/store/${slug}#reviews`}
+                                        to={`/store/${slug}/reviews`}
                                         onClick={
                                             closeMobileMenu
                                         }

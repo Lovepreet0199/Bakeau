@@ -92,6 +92,12 @@ import BakeryCustomers from "./pages/Dashboard/BakeryCustomers.jsx";
 //Import Storefront Leave Review page
 import StorefrontLeaveReview from "./pages/Storefront/StorefrontLeaveReview.jsx";
 
+//Import Storefront Reviews page
+import StorefrontReviews from "./pages/Storefront/StorefrontReviews";
+
+//Import Bakery Reviews page
+import BakeryReviews from "./pages/Dashboard/BakeryReviews";
+
 //Displays the Bakeau application routes
 export default function App() {
 
@@ -207,10 +213,16 @@ export default function App() {
           element={<StorefrontMyOrders />}
         />
 
-        {/* Customer Review route */}
+        {/* Customer create Review route */}
         <Route
           path="/store/:slug/orders/:orderId/review"
           element={<StorefrontLeaveReview />}
+        />
+
+        {/* View all reviews page */}
+        <Route
+          path="/store/:slug/reviews"
+          element={<StorefrontReviews />}
         />
 
         {/* Shared layout for all Bakery Owner dashboard pages */}
@@ -276,6 +288,11 @@ export default function App() {
           <Route
             path="customers"
             element={<BakeryCustomers />}
+          />
+
+          <Route
+            path="reviews"
+            element={<BakeryReviews />}
           />
 
         </Route>
