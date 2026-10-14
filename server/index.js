@@ -36,6 +36,9 @@ import paymentRoutes from "./routes/paymentRoutes.js";
 //Import Customer routes
 import customerRoutes from "./routes/customerRoutes.js";
 
+//Import Reviews routes
+import reviewRoutes from "./routes/reviewRoutes.js";
+
 // Create an Express app and store it in the app variable
 const app = express();
 
@@ -75,6 +78,9 @@ app.use("/api/payments", paymentRoutes);
 
 //Customers routes 
 app.use("/api/customers", customerRoutes);
+
+//Review Routes
+app.use("/api/reviews", reviewRoutes);
 
 //Connect to MongoDB
 connectDB();
