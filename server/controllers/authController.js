@@ -265,9 +265,10 @@ const forgotPassword = async (
 
     try {
 
-        //Get the email sent by the user
+        //Get email and optional Bakery slug
         const {
-            email
+            email,
+            bakery_slug
         } = request.body;
 
 
@@ -340,9 +341,13 @@ const forgotPassword = async (
         await user.save();
 
 
-        //Create frontend password reset link
+        //Create Customer or Bakery Owner reset URL
         const resetUrl =
-            `http://localhost:5173/reset-password?token=${passwordResetToken}`;
+            bakery_slug
+                ? `http://localhost:5173/store/${encodeURIComponent(
+                    bakery_slug
+                )}/reset-password?token=${passwordResetToken}`
+                : `http://localhost:5173/reset-password?token=${passwordResetToken}`;
 
 
         try {
