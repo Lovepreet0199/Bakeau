@@ -39,6 +39,9 @@ import customerRoutes from "./routes/customerRoutes.js";
 //Import Reviews routes
 import reviewRoutes from "./routes/reviewRoutes.js";
 
+//Import Platform Administrator routes
+import adminRoutes from "./routes/adminRoutes.js";
+
 // Create an Express app and store it in the app variable
 const app = express();
 
@@ -81,6 +84,9 @@ app.use("/api/customers", customerRoutes);
 
 //Review Routes
 app.use("/api/reviews", reviewRoutes);
+
+//Use Platform Administrator routes
+app.use("/api/admin", adminRoutes);
 
 //Connect to MongoDB
 connectDB();
