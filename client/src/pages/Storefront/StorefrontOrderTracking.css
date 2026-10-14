@@ -341,6 +341,157 @@
     color: #846f64;
 }
 
+/* Customer Review button */
+.storefront-tracking-review-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 46px;
+    padding: 10px 18px;
+    border-radius: 8px;
+    background: var(--storefront-primary);
+    color: #FFFFFF;
+    font-size: 13px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.storefront-tracking-review-button:hover {
+    color: #FFFFFF;
+    opacity: 0.9;
+}
+
+/* Review submitted confirmation */
+.storefront-tracking-review-success {
+    margin-bottom: 20px;
+    padding: 12px 16px;
+    border: 1px solid #B9DEC8;
+    border-radius: 8px;
+    background-color: #F1FAF4;
+    color: #287A49;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* Optional text beside image label */
+.storefront-review-optional {
+    margin-left: 6px;
+    color: #9A928C;
+    font-size: 11px;
+    font-weight: 400;
+}
+
+
+/* Review image upload area */
+.storefront-review-image-upload {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 95px;
+    padding: 16px;
+    border: 1px dashed #CEC5BF;
+    border-radius: 9px;
+    background: #FCFAF8;
+    color: #716A65;
+    cursor: pointer;
+}
+
+
+/* Selected Review image */
+.storefront-review-image-preview {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    max-width: 360px;
+    border-radius: 10px;
+}
+
+.storefront-review-image-preview img {
+    display: block;
+    width: 100%;
+    max-height: 280px;
+    object-fit: cover;
+}
+
+
+/* Remove selected image */
+.storefront-review-image-preview button {
+    position: absolute;
+    top: 9px;
+    right: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border: 0;
+    border-radius: 50%;
+    background: #FFFFFF;
+    color: #4A413C;
+}
+
+
+/* Existing Review stars */
+.storefront-review-view-stars {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    margin-bottom: 22px;
+    color: #C98516;
+}
+
+
+/* Existing Review comment */
+.storefront-review-view-comment {
+    margin-bottom: 22px;
+    color: #4F4844;
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+
+/* Existing Review image */
+.storefront-review-view-image {
+    width: 100%;
+    max-height: 360px;
+    margin-bottom: 22px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+
+/* Bakery reply */
+.storefront-review-owner-reply {
+    margin-bottom: 22px;
+    padding: 14px 16px;
+    border-left: 3px solid var(--storefront-primary);
+    border-radius: 7px;
+    background: #F7F2ED;
+}
+
+.storefront-review-owner-reply strong {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--storefront-primary);
+    font-size: 12px;
+}
+
+.storefront-review-owner-reply p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+
+/* Verified Order label */
+.storefront-review-verified {
+    color: #33805B;
+    font-size: 11px;
+    font-weight: 700;
+}
+
 /* Mobile */
 @media (max-width: 575.98px) {
 

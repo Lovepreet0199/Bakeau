@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 
 //Import React Router tools
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
 
 //Import icons
 import { Check, ShoppingBag } from "lucide-react";
@@ -24,6 +24,7 @@ export default function StorefrontOrderTracking() {
     //Get Bakery slug and Order ID
     const { slug, orderId } = useParams();
     const navigate = useNavigate();
+    const location = useLocation();
 
     //Page data
     const [bakery, setBakery] = useState(null);
@@ -33,6 +34,8 @@ export default function StorefrontOrderTracking() {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState("");
 
+    //Stores Review for this Order
+    const [review, setReview] = useState(null);
 
     //Gets Customer token
     function getToken() {
@@ -173,6 +176,21 @@ export default function StorefrontOrderTracking() {
 
                 setOrder(orderData.order);
 
+                //Check if Customer already reviewed this Order
+                const reviewResponse = await fetch(
+                    `http://localhost:3000/api/reviews/order/${orderId}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+                );
+
+                const reviewData = await reviewResponse.json();
+
+                if (reviewResponse.ok) {
+                    setReview(reviewData.review);
+                }
 
             } catch (error) {
 
@@ -321,6 +339,16 @@ export default function StorefrontOrderTracking() {
                         ‹ My orders
                     </Link>
 
+                    {/* Review success message */}
+                    {location.state?.reviewSubmitted && (
+
+                        <div className="storefront-tracking-review-success">
+
+                            ✓ Review posted successfully. Thank you for sharing your experience!
+
+                        </div>
+
+                    )}
 
                     {/* Order heading */}
                     <div className="storefront-tracking-heading d-flex justify-content-between align-items-end gap-3 flex-wrap">
@@ -734,10 +762,20 @@ export default function StorefrontOrderTracking() {
                             </section>
 
 
-                            {/* Review placeholder */}
-                            <div className="storefront-tracking-review text-center">
-                                Leave a review after pickup →
-                            </div>
+                            {/* Customer Review action */}
+                            {order.status === "completed" && (
+
+                                <Link
+                                    to={`/store/${slug}/orders/${orderId}/review`}
+                                    className="storefront-tracking-review-button text-decoration-none"
+                                >
+                                    {review
+                                        ? "View your review"
+                                        : "Leave a review"
+                                    }
+                                </Link>
+
+                            )}
 
                         </div>
 

@@ -1,0 +1,573 @@
+.storefront-review-page {
+    background: #FBF9F7;
+    color: var(--storefront-dark);
+}
+
+
+/* Main Review area */
+.storefront-review-main {
+    padding-top: 20px;
+}
+
+
+/* Loading screen */
+.storefront-review-loading {
+    min-height: 100vh;
+}
+
+
+/* Back link */
+.storefront-review-back {
+    display: inline-block;
+    margin-bottom: 20px;
+    color: var(--storefront-dark);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+/* Main Review card */
+.storefront-review-card {
+    max-width: 620px;
+    padding: 36px;
+    border: 1px solid #E5DDD7;
+    border-radius: 14px;
+    background: #FFFFFF;
+}
+
+
+/* Review heading */
+.storefront-review-heading {
+    margin-bottom: 30px;
+}
+
+.storefront-review-heading span {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--storefront-primary);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.storefront-review-heading h1 {
+    margin-bottom: 8px;
+    font-size: 30px;
+}
+
+.storefront-review-heading p {
+    margin: 0;
+    color: #77706B;
+    font-size: 14px;
+}
+
+
+/* Review form fields */
+.storefront-review-field {
+    margin-bottom: 24px;
+}
+
+.storefront-review-field label {
+    display: block;
+    margin-bottom: 9px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.storefront-review-field textarea {
+    min-height: 130px;
+    resize: vertical;
+    border-color: #D9D2CD;
+    font-size: 14px;
+}
+
+.storefront-review-field textarea:focus {
+    border-color: var(--storefront-primary);
+    box-shadow: none;
+}
+
+.storefront-review-field small {
+    display: block;
+    margin-top: 6px;
+    text-align: right;
+    color: #8B8580;
+    font-size: 11px;
+}
+
+
+/* Review stars */
+.storefront-review-stars {
+    display: flex;
+    gap: 5px;
+}
+
+.storefront-review-stars button {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #D5CFCB;
+    cursor: pointer;
+}
+
+.storefront-review-stars button.active {
+    color: #C98516;
+}
+
+
+/* Error message */
+.storefront-review-error {
+    margin-bottom: 16px;
+    padding: 10px 12px;
+    border-radius: 7px;
+    background: #FFF0EE;
+    color: #A53D31;
+    font-size: 13px;
+}
+
+
+/* Submit Review button */
+.storefront-review-submit {
+    width: 100%;
+    min-height: 44px;
+    border: 0;
+    border-radius: 8px;
+    background: var(--storefront-primary);
+    color: #FFFFFF;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.storefront-review-submit:disabled {
+    opacity: 0.6;
+}
+
+
+/* Optional image text */
+.storefront-review-optional {
+    margin-left: 6px;
+    color: #9A928C;
+    font-size: 11px;
+    font-weight: 400;
+}
+
+
+/* Review image upload area */
+.storefront-review-image-upload {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 95px;
+    margin-bottom: 0 !important;
+    padding: 16px;
+    border: 1px dashed #CEC5BF;
+    border-radius: 9px;
+    background: #FCFAF8;
+    color: #716A65;
+    font-weight: 500 !important;
+    cursor: pointer;
+}
+
+
+/* Selected Review image preview */
+.storefront-review-image-preview {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    max-width: 360px;
+    border-radius: 10px;
+}
+
+.storefront-review-image-preview img {
+    display: block;
+    width: 100%;
+    max-height: 280px;
+    object-fit: cover;
+}
+
+
+/* Remove selected image */
+.storefront-review-image-preview button {
+    position: absolute;
+    top: 9px;
+    right: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: #FFFFFF;
+    color: #4A413C;
+    cursor: pointer;
+}
+
+
+/* Existing Review stars */
+.storefront-review-view-stars {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    margin-bottom: 20px;
+    color: #C98516;
+}
+
+
+/* Existing Review comment */
+.storefront-review-view-comment {
+    margin-bottom: 24px;
+    color: #4F4844;
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+
+/* Existing Review image */
+.storefront-review-view-image {
+    display: block;
+    width: 100%;
+    max-height: 360px;
+    margin-bottom: 22px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+
+/* Bakery Owner reply */
+.storefront-review-owner-reply {
+    margin-bottom: 22px;
+    padding: 14px 16px;
+    border-left: 3px solid var(--storefront-primary);
+    border-radius: 7px;
+    background-color: #F7F2ED;
+}
+
+.storefront-review-owner-reply strong {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--storefront-primary);
+    font-size: 12px;
+}
+
+.storefront-review-owner-reply p {
+    margin: 0;
+    color: #4F4844;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+
+/* Verified Order text */
+.storefront-review-verified {
+    color: #33805B;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+
+/* Customer Review actions */
+.storefront-review-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 24px;
+}
+
+
+/* Edit Review button */
+.storefront-review-edit {
+    flex: 1;
+    min-height: 42px;
+    border: 1px solid var(--storefront-primary);
+    border-radius: 8px;
+    background: #FFFFFF;
+    color: var(--storefront-primary);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.storefront-review-edit:hover {
+    background: #FBF7F4;
+}
+
+
+/* Delete Review button */
+.storefront-review-delete {
+    flex: 1;
+    min-height: 42px;
+    border: 1px solid #D8B3AE;
+    border-radius: 8px;
+    background: #FFFFFF;
+    color: #A5453A;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.storefront-review-delete:hover {
+    background: #FFF5F3;
+}
+
+
+/* Review action success */
+.storefront-review-success {
+    margin-top: 18px;
+    margin-bottom: 20px;
+    padding: 11px 14px;
+    border: 1px solid #B9DEC8;
+    border-radius: 8px;
+    background: #F1FAF4;
+    color: #287A49;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+/* Edit Review buttons */
+.storefront-review-edit-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+
+/* Edit buttons */
+.storefront-review-edit-actions button {
+    min-height: 40px;
+    padding: 8px 16px;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+/* Cancel edit */
+.storefront-review-edit-actions button:first-child {
+    border: 1px solid #D7D0CB;
+    background: #FFFFFF;
+    color: #5E5651;
+}
+
+
+/* Save edit */
+.storefront-review-edit-actions button:last-child {
+    border: 0;
+    background: var(--storefront-primary);
+    color: #FFFFFF;
+}
+
+
+/* Disabled edit buttons */
+.storefront-review-edit-actions button:disabled {
+    opacity: 0.6;
+}
+
+
+/* Existing image shown while editing */
+.storefront-review-edit-image {
+    margin-bottom: 22px;
+}
+
+
+/* Existing image label */
+.storefront-review-edit-image span {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+
+/* Existing image */
+.storefront-review-edit-image img {
+    display: block;
+    width: 100%;
+    max-width: 360px;
+    max-height: 280px;
+    margin-bottom: 6px;
+    border-radius: 9px;
+    object-fit: cover;
+}
+
+
+/* Existing image helper text */
+.storefront-review-edit-image small {
+    color: #8B8580;
+    font-size: 11px;
+}
+
+
+/* Delete Review Modal backdrop */
+.storefront-review-modal-backdrop {
+    position: fixed;
+    z-index: 2000;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(31, 27, 24, 0.45);
+}
+
+
+/* Delete Review Modal */
+.storefront-review-modal {
+    position: relative;
+    width: 100%;
+    max-width: 430px;
+    padding: 30px;
+    border: 1px solid #E6DDD7;
+    border-radius: 14px;
+    background: #FFFFFF;
+    box-shadow: 0 18px 55px rgba(42, 34, 29, 0.18);
+}
+
+
+/* Modal close button */
+.storefront-review-modal-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: #F7F4F2;
+    color: #665E59;
+    cursor: pointer;
+}
+
+.storefront-review-modal-close:hover {
+    background: #EFEAE7;
+}
+
+
+/* Delete Modal heading */
+.storefront-review-modal-heading {
+    padding: 4px 15px 0;
+    text-align: center;
+}
+
+
+/* Delete warning icon */
+.storefront-review-modal-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 16px;
+    border-radius: 50%;
+    background: #FFF0EE;
+    color: #A5453A;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+
+/* Delete Modal title */
+.storefront-review-modal-heading h2 {
+    margin-bottom: 9px;
+    color: #3F3935;
+    font-size: 21px;
+    font-weight: 700;
+}
+
+
+/* Delete Modal description */
+.storefront-review-modal-heading p {
+    margin-bottom: 24px;
+    color: #77706B;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+
+/* Delete Modal buttons */
+.storefront-review-modal-actions {
+    display: flex;
+    gap: 10px;
+}
+
+
+/* Cancel Delete */
+.storefront-review-modal-cancel {
+    flex: 1;
+    min-height: 42px;
+    border: 1px solid #D8D1CC;
+    border-radius: 8px;
+    background: #FFFFFF;
+    color: #5E5651;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.storefront-review-modal-cancel:hover {
+    background: #F8F6F4;
+}
+
+
+/* Confirm Delete */
+.storefront-review-modal-delete {
+    flex: 1;
+    min-height: 42px;
+    border: 1px solid #A5453A;
+    border-radius: 8px;
+    background: #A5453A;
+    color: #FFFFFF;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.storefront-review-modal-delete:hover {
+    background: #913B32;
+}
+
+
+/* Disabled Modal buttons */
+.storefront-review-modal-actions button:disabled,
+.storefront-review-modal-close:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+
+/* Mobile */
+@media (max-width: 576px) {
+
+    .storefront-review-card {
+        padding: 24px 18px;
+    }
+
+    .storefront-review-heading h1 {
+        font-size: 25px;
+    }
+
+    .storefront-review-actions {
+        flex-direction: column;
+    }
+
+    .storefront-review-edit-actions {
+        flex-direction: column-reverse;
+    }
+
+    .storefront-review-edit-actions button {
+        width: 100%;
+    }
+
+    .storefront-review-modal {
+        padding: 26px 20px 20px;
+    }
+
+    .storefront-review-modal-actions {
+        flex-direction: column-reverse;
+    }
+
+    .storefront-review-modal-actions button {
+        width: 100%;
+    }
+}

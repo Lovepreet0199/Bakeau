@@ -278,6 +278,36 @@
     animation: bakery-orders-loading-spin 0.8s linear infinite;
 }
 
+/* Order date filter label */
+.bakery-orders-date-label {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    color: #8A827D;
+}
+
+
+/* Clear Order filters button */
+.bakery-orders-clear-filter {
+    min-height: 38px;
+    padding: 7px 12px;
+    border: 1px solid #D8D2CE;
+    border-radius: 7px;
+    background-color: #FFFFFF;
+    color: #5E5651;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+/* Clear filters hover */
+.bakery-orders-clear-filter:hover {
+    border-color: #C65F3A;
+    background-color: #FFF9F6;
+    color: #A34F32;
+}
+
 /* Spinner animation */
 @keyframes bakery-orders-loading-spin {
     from {

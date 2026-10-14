@@ -8,10 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { getAuthToken } from "../../utils/authStorage.js";
 
 //Import Orders page icons
-import {
-    Search,
-    LoaderCircle
-} from "lucide-react";
+import { Search, LoaderCircle } from "lucide-react";
 
 //Import Orders page styles
 import "./styles/Orders.css";
@@ -32,17 +29,23 @@ export default function BakeryOrders() {
     //Stores any Orders loading error
     const [error, setError] = useState("");
 
-    //Stores the Order search text
+    //Stores Order search text
     const [searchTerm, setSearchTerm] = useState("");
 
-    //Stores the selected Order status filter
+    //Stores selected Order status
     const [statusFilter, setStatusFilter] = useState("all");
 
-    //Stores the selected payment status filter
+    //Stores selected Payment status
     const [paymentFilter, setPaymentFilter] = useState("all");
 
+    //Stores starting Order date
+    const [fromDate, setFromDate] = useState("");
 
-    //Load Bakery Orders when the page first opens
+    //Stores ending Order date
+    const [toDate, setToDate] = useState("");
+
+
+    //Loads Bakery Orders when page opens
     useEffect(() => {
 
         async function fetchOrders() {
@@ -52,8 +55,10 @@ export default function BakeryOrders() {
 
             try {
 
+                //Get Bakery Owner token
                 const token = getAuthToken();
 
+                //Get Bakery Orders
                 const response = await fetch(
                     "http://localhost:3000/api/orders/bakery",
                     {
@@ -65,12 +70,12 @@ export default function BakeryOrders() {
 
                 const data = await response.json();
 
+                //Stop if Orders could not load
                 if (!response.ok) {
-                    throw new Error(
-                        data.message || "Unable to load orders"
-                    );
+                    throw new Error(data.message || "Unable to load orders");
                 }
 
+                //Store Orders
                 setOrders(data.orders || []);
 
             } catch (error) {
@@ -88,45 +93,92 @@ export default function BakeryOrders() {
     }, []);
 
 
-    //Filters Orders using search, Order status, and payment status
+    //Formats an Order date as YYYY-MM-DD
+    function getOrderDate(date) {
+
+        const orderDate = new Date(date);
+
+        const year = orderDate.getFullYear();
+        const month = String(orderDate.getMonth() + 1).padStart(2, "0");
+        const day = String(orderDate.getDate()).padStart(2, "0");
+
+        return `${year}-${month}-${day}`;
+    }
+
+
+    //Formats Pickup date
+    function formatPickupDate(date) {
+
+        if (!date) return "-";
+
+        return new Date(date).toLocaleDateString("en-CA", {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+            timeZone: "UTC"
+        });
+    }
+
+
+    //Filters Orders using Search, dates, Order status and Payment status
     const filteredOrders = orders.filter((order) => {
 
+        //Customer name used for Search
         const customerName =
             `${order.customer_id?.first_name || ""} ${order.customer_id?.last_name || ""}`
                 .toLowerCase();
 
-        const productNames =
-            order.items
-                ?.map((item) => item.product_name)
-                .join(" ")
-                .toLowerCase() || "";
+        //Product names used for Search
+        const productNames = order.items
+            ?.map((item) => item.product_name || "")
+            .join(" ")
+            .toLowerCase() || "";
 
-        const searchValue = searchTerm.toLowerCase();
+        //Clean Search value
+        const searchValue = searchTerm.trim().toLowerCase();
 
+        //Search by Order number, Customer or Product
         const matchesSearch =
-            order.order_number
-                .toLowerCase()
-                .includes(searchValue) ||
+            String(order.order_number || "").toLowerCase().includes(searchValue) ||
             customerName.includes(searchValue) ||
             productNames.includes(searchValue);
 
+        //Filter by Order status
         const matchesStatus =
             statusFilter === "all" ||
             order.status === statusFilter;
 
+        //Filter by Payment status
         const matchesPayment =
             paymentFilter === "all" ||
             order.payment_status === paymentFilter;
 
+        //Get date Order was placed
+        const orderDate = getOrderDate(order.created_at);
+
+        //Check starting date
+        const matchesFromDate =
+            !fromDate ||
+            orderDate >= fromDate;
+
+        //Check ending date
+        const matchesToDate =
+            !toDate ||
+            orderDate <= toDate;
+
+        //Order must match all active filters
         return (
             matchesSearch &&
             matchesStatus &&
-            matchesPayment
+            matchesPayment &&
+            matchesFromDate &&
+            matchesToDate
         );
     });
 
 
     return (
+
         <div className="bakery-orders-page">
 
             {/* Orders page heading */}
@@ -144,10 +196,10 @@ export default function BakeryOrders() {
 
 
             {/* Orders filters */}
-            <div className="row g-2 align-items-center mb-3">
+            <div className="row g-2 align-items-end mb-3">
 
-                {/* Orders search */}
-                <div className="col-12 col-md-5">
+                {/* Orders Search */}
+                <div className="col-12 col-md-4">
 
                     <div className="bakery-orders-search">
 
@@ -162,9 +214,7 @@ export default function BakeryOrders() {
                             className="form-control"
                             placeholder="Search orders, customers..."
                             value={searchTerm}
-                            onChange={(event) =>
-                                setSearchTerm(event.target.value)
-                            }
+                            onChange={(event) => setSearchTerm(event.target.value)}
                         />
 
                     </div>
@@ -178,37 +228,15 @@ export default function BakeryOrders() {
                     <select
                         className="form-select bakery-orders-filter"
                         value={statusFilter}
-                        onChange={(event) =>
-                            setStatusFilter(event.target.value)
-                        }
+                        onChange={(event) => setStatusFilter(event.target.value)}
                     >
-                        <option value="all">
-                            All statuses
-                        </option>
-
-                        <option value="pending">
-                            Pending
-                        </option>
-
-                        <option value="confirmed">
-                            Confirmed
-                        </option>
-
-                        <option value="preparing">
-                            Preparing
-                        </option>
-
-                        <option value="ready">
-                            Ready
-                        </option>
-
-                        <option value="completed">
-                            Completed
-                        </option>
-
-                        <option value="cancelled">
-                            Cancelled
-                        </option>
+                        <option value="all">All statuses</option>
+                        <option value="pending">Pending</option>
+                        <option value="confirmed">Confirmed</option>
+                        <option value="preparing">Preparing</option>
+                        <option value="ready">Ready</option>
+                        <option value="completed">Completed</option>
+                        <option value="cancelled">Cancelled</option>
                     </select>
 
                 </div>
@@ -220,44 +248,85 @@ export default function BakeryOrders() {
                     <select
                         className="form-select bakery-orders-filter"
                         value={paymentFilter}
-                        onChange={(event) =>
-                            setPaymentFilter(event.target.value)
-                        }
+                        onChange={(event) => setPaymentFilter(event.target.value)}
                     >
-                        <option value="all">
-                            All payments
-                        </option>
-
-                        <option value="unpaid">
-                            Unpaid
-                        </option>
-
-                        <option value="partially_paid">
-                            Partially paid
-                        </option>
-
-                        <option value="paid">
-                            Paid
-                        </option>
-
-                        <option value="refunded">
-                            Refunded
-                        </option>
+                        <option value="all">All payments</option>
+                        <option value="unpaid">Unpaid</option>
+                        <option value="partially_paid">Partially paid</option>
+                        <option value="paid">Paid</option>
+                        <option value="refunded">Refunded</option>
                     </select>
+
+                </div>
+
+
+                {/* Starting Order date */}
+                <div className="col-6 col-md-auto">
+
+                    <label className="bakery-orders-date-label">
+                        From
+                    </label>
+
+                    <input
+                        type="date"
+                        className="form-control bakery-orders-filter"
+                        value={fromDate}
+                        onChange={(event) => setFromDate(event.target.value)}
+                    />
+
+                </div>
+
+
+                {/* Ending Order date */}
+                <div className="col-6 col-md-auto">
+
+                    <label className="bakery-orders-date-label">
+                        To
+                    </label>
+
+                    <input
+                        type="date"
+                        className="form-control bakery-orders-filter"
+                        value={toDate}
+                        min={fromDate || undefined}
+                        onChange={(event) => setToDate(event.target.value)}
+                    />
+
+                </div>
+
+
+                {/* Clears all Order filters */}
+                <div className="col-12 col-md-auto">
+
+                    <button
+                        type="button"
+                        className="btn bakery-orders-clear-filter"
+                        onClick={() => {
+                            setSearchTerm("");
+                            setStatusFilter("all");
+                            setPaymentFilter("all");
+                            setFromDate("");
+                            setToDate("");
+                        }}
+                    >
+                        Clear filters
+                    </button>
 
                 </div>
 
             </div>
 
 
-            {/* Displays the number of matching Orders */}
+            {/* Displays number of matching Orders */}
             {!isLoading && !error && (
+
                 <p className="bakery-orders-count">
+
                     {filteredOrders.length}{" "}
-                    {filteredOrders.length === 1
-                        ? "order"
-                        : "orders"}
+                    {filteredOrders.length === 1 ? "order" : "orders"}
+
                 </p>
+
             )}
 
 
@@ -291,16 +360,19 @@ export default function BakeryOrders() {
 
             {/* Orders error state */}
             {!isLoading && error && (
+
                 <p className="bakery-orders-error">
                     {error}
                 </p>
+
             )}
 
 
-            {/* Orders empty state */}
+            {/* No Orders yet */}
             {!isLoading &&
                 !error &&
                 orders.length === 0 && (
+
                     <div className="bakery-orders-empty-state">
 
                         <h2>
@@ -312,15 +384,16 @@ export default function BakeryOrders() {
                         </p>
 
                     </div>
-                )
-            }
+
+                )}
 
 
-            {/* No Orders match the selected filters */}
+            {/* No Orders match selected filters */}
             {!isLoading &&
                 !error &&
                 orders.length > 0 &&
                 filteredOrders.length === 0 && (
+
                     <div className="bakery-orders-empty-state">
 
                         <h2>
@@ -332,8 +405,8 @@ export default function BakeryOrders() {
                         </p>
 
                     </div>
-                )
-            }
+
+                )}
 
 
             {/* Orders table */}
@@ -348,6 +421,7 @@ export default function BakeryOrders() {
                             <table className="table mb-0 bakery-dashboard-table bakery-orders-table">
 
                                 <thead>
+
                                     <tr>
                                         <th>Order</th>
                                         <th>Customer</th>
@@ -358,7 +432,9 @@ export default function BakeryOrders() {
                                         <th>Total</th>
                                         <th></th>
                                     </tr>
+
                                 </thead>
+
 
                                 <tbody>
 
@@ -368,9 +444,11 @@ export default function BakeryOrders() {
 
                                             {/* Order number */}
                                             <td>
+
                                                 <strong>
                                                     {order.order_number}
                                                 </strong>
+
                                             </td>
 
 
@@ -390,9 +468,7 @@ export default function BakeryOrders() {
 
                                                 {order.items?.length > 0
                                                     ? order.items
-                                                        .map((item) =>
-                                                            item.product_name
-                                                        )
+                                                        .map((item) => item.product_name)
                                                         .join(", ")
                                                     : "-"
                                                 }
@@ -403,17 +479,7 @@ export default function BakeryOrders() {
                                             {/* Pickup information */}
                                             <td>
 
-                                                {new Date(
-                                                    order.pickup_date
-                                                ).toLocaleDateString(
-                                                    "en-CA",
-                                                    {
-                                                        month: "short",
-                                                        day: "numeric",
-                                                        year: "numeric",
-                                                        timeZone: "UTC"
-                                                    }
-                                                )}
+                                                {formatPickupDate(order.pickup_date)}
 
                                                 <div className="bakery-orders-pickup-time">
                                                     {order.pickup_time}
@@ -428,10 +494,7 @@ export default function BakeryOrders() {
                                                 <span
                                                     className={`bakery-orders-payment bakery-orders-payment-${order.payment_status}`}
                                                 >
-                                                    {order.payment_status.replace(
-                                                        "_",
-                                                        " "
-                                                    )}
+                                                    {order.payment_status?.replace("_", " ")}
                                                 </span>
 
                                             </td>
@@ -453,24 +516,19 @@ export default function BakeryOrders() {
                                             <td>
 
                                                 <strong>
-                                                    ${order.total_price.toFixed(2)}
+                                                    ${Number(order.total_price || 0).toFixed(2)}
                                                 </strong>
 
                                             </td>
 
 
-                                            {/* Order details action */}
+                                            {/* Order details button */}
                                             <td className="text-end">
 
-                                                {/* Opens the selected Order details page */}
                                                 <button
                                                     type="button"
                                                     className="bakery-dashboard-table-action"
-                                                    onClick={() =>
-                                                        navigate(
-                                                            `/bakery/orders/${order._id}`
-                                                        )
-                                                    }
+                                                    onClick={() => navigate(`/bakery/orders/${order._id}`)}
                                                 >
                                                     View
                                                 </button>
@@ -488,8 +546,8 @@ export default function BakeryOrders() {
                         </div>
 
                     </div>
-                )
-            }
+
+                )}
 
         </div>
     );
