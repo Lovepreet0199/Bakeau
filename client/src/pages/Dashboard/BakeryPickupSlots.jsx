@@ -13,6 +13,7 @@ import {
     LoaderCircle,
     CircleCheck,
     CircleOff,
+    Pencil,
     Trash2,
     X
 } from "lucide-react";
@@ -76,6 +77,65 @@ function formatPickupWindow(
 ) {
 
     return `${formatPickupTime(startTime)} - ${formatPickupTime(endTime)}`;
+}
+
+//Converts a stored 12-hour Pickup time into a time input value
+function convertPickupTimeTo24Hour(time) {
+
+    if (!time) {
+        return "";
+    }
+
+    //Clean AM and PM formatting
+    const cleanTime = time
+        .replace(/a\.m\./gi, "AM")
+        .replace(/p\.m\./gi, "PM")
+        .trim();
+
+    const match = cleanTime.match(
+        /^(\d{1,2}):(\d{2})\s*(AM|PM)$/i
+    );
+
+    //Return the original value if it is already in 24-hour format
+    if (!match) {
+        return cleanTime;
+    }
+
+    let hours = Number(match[1]);
+    const minutes = match[2];
+    const period = match[3].toUpperCase();
+
+    if (period === "AM" && hours === 12) {
+        hours = 0;
+    }
+
+    if (period === "PM" && hours !== 12) {
+        hours += 12;
+    }
+
+    return `${String(hours).padStart(2, "0")}:${minutes}`;
+}
+
+
+//Splits a stored Pickup window into start and end times
+function parsePickupWindow(pickupWindow) {
+
+    if (!pickupWindow) {
+        return {
+            startTime: "",
+            endTime: ""
+        };
+    }
+
+    const [startTime, endTime] =
+        pickupWindow.split(" - ");
+
+    return {
+        startTime:
+            convertPickupTimeTo24Hour(startTime),
+        endTime:
+            convertPickupTimeTo24Hour(endTime)
+    };
 }
 
 
@@ -187,6 +247,21 @@ export default function BakeryPickupSlots() {
 
     //Tracks the Pickup Slot currently being updated
     const [updatingSlotId, setUpdatingSlotId] = useState(null);
+
+    //Stores the Pickup Slot currently being edited
+    const [editingSlot, setEditingSlot] = useState(null);
+
+    //Stores the edited Pickup Slot date
+    const [editPickupDate, setEditPickupDate] = useState("");
+
+    //Stores the edited Pickup window start time
+    const [editPickupStartTime, setEditPickupStartTime] = useState("");
+
+    //Stores the edited Pickup window end time
+    const [editPickupEndTime, setEditPickupEndTime] = useState("");
+
+    //Tracks whether an edited Pickup Slot is being saved
+    const [isSavingEdit, setIsSavingEdit] = useState(false);
 
     //Tracks the Pickup Slot currently being deleted
     const [deletingSlotId, setDeletingSlotId] = useState(null);
@@ -362,6 +437,126 @@ export default function BakeryPickupSlots() {
         }
     }
 
+    //Opens the Edit Pickup Slot form
+    function openEditPickupSlot(slot) {
+
+        //Get the existing Pickup window times
+        const {
+            startTime,
+            endTime
+        } = parsePickupWindow(
+            slot.pickup_time
+        );
+
+        //Store the Pickup Slot being edited
+        setEditingSlot(slot);
+
+        //Load the existing Pickup Slot values into the form
+        setEditPickupDate(
+            String(slot.pickup_date).split("T")[0]
+        );
+
+        setEditPickupStartTime(startTime);
+        setEditPickupEndTime(endTime);
+
+        //Close the Add form if it is open
+        setIsAddSlotOpen(false);
+
+        setError("");
+    }
+
+
+    //Closes and resets the Edit Pickup Slot form
+    function closeEditPickupSlot() {
+
+        setEditingSlot(null);
+
+        setEditPickupDate("");
+        setEditPickupStartTime("");
+        setEditPickupEndTime("");
+
+        setError("");
+    }
+
+
+    //Updates an existing Pickup Slot
+    async function updatePickupSlot(event) {
+
+        event.preventDefault();
+
+        setError("");
+
+        //Validate Pickup window
+        if (
+            editPickupEndTime <= editPickupStartTime
+        ) {
+
+            setError(
+                "Pickup end time must be later than the start time."
+            );
+
+            return;
+        }
+
+        setIsSavingEdit(true);
+
+        try {
+
+            const token = getAuthToken();
+
+            //Create the updated Pickup window
+            const pickupWindow =
+                formatPickupWindow(
+                    editPickupStartTime,
+                    editPickupEndTime
+                );
+
+            const response = await fetch(
+                `${API_URL}/api/pickup-slots/${editingSlot._id}`,
+                {
+                    method: "PATCH",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        pickup_date: editPickupDate,
+                        pickup_time: pickupWindow
+                    })
+                }
+            );
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(
+                    data.message ||
+                    "Unable to update pickup slot"
+                );
+            }
+
+            //Replace the edited Pickup Slot on the page
+            setPickupSlots((currentSlots) =>
+                currentSlots.map((slot) =>
+                    slot._id === editingSlot._id
+                        ? data.pickupSlot
+                        : slot
+                )
+            );
+
+            //Close the Edit form
+            closeEditPickupSlot();
+
+        } catch (error) {
+
+            setError(error.message);
+
+        } finally {
+
+            setIsSavingEdit(false);
+        }
+    }
+
     //Updates Pickup Slot availability
     async function updatePickupSlotAvailability(slot) {
 
@@ -494,9 +689,11 @@ export default function BakeryPickupSlots() {
                 <button
                     type="button"
                     className="bakery-pickup-add-button"
-                    onClick={() =>
-                        setIsAddSlotOpen(true)
-                    }
+                    onClick={() => {
+
+                        closeEditPickupSlot();
+                        setIsAddSlotOpen(true);
+                    }}
                 >
                     <Plus
                         size={17}
@@ -775,6 +972,206 @@ export default function BakeryPickupSlots() {
 
             )}
 
+            {/* Edit Pickup Slot form */}
+            {editingSlot && (
+
+                <div className="bakery-pickup-form-card">
+
+                    <div className="bakery-pickup-form-heading">
+
+                        <div>
+
+                            <h2>
+                                Edit pickup availability
+                            </h2>
+
+                            <p>
+                                Update the pickup date or time window
+                                offered to your customers.
+                            </p>
+
+                        </div>
+
+                        <button
+                            type="button"
+                            className="bakery-pickup-form-close"
+                            disabled={isSavingEdit}
+                            onClick={closeEditPickupSlot}
+                        >
+                            Cancel
+                        </button>
+
+                    </div>
+
+
+                    <form onSubmit={updatePickupSlot}>
+
+                        <div className="row g-3">
+
+                            {/* Pickup date */}
+                            <div className="col-12 col-lg-4">
+
+                                <label
+                                    htmlFor="editPickupDate"
+                                    className="form-label"
+                                >
+                                    Pickup date
+                                </label>
+
+                                <input
+                                    type="date"
+                                    id="editPickupDate"
+                                    className="form-control"
+                                    value={editPickupDate}
+                                    min={getTodayDate()}
+                                    onChange={(event) =>
+                                        setEditPickupDate(
+                                            event.target.value
+                                        )
+                                    }
+                                    required
+                                />
+
+                            </div>
+
+
+                            {/* Pickup start time */}
+                            <div className="col-12 col-md-6 col-lg-4">
+
+                                <label
+                                    htmlFor="editPickupStartTime"
+                                    className="form-label"
+                                >
+                                    From
+                                </label>
+
+                                <input
+                                    type="time"
+                                    id="editPickupStartTime"
+                                    className="form-control"
+                                    value={editPickupStartTime}
+                                    onChange={(event) =>
+                                        setEditPickupStartTime(
+                                            event.target.value
+                                        )
+                                    }
+                                    required
+                                />
+
+                            </div>
+
+
+                            {/* Pickup end time */}
+                            <div className="col-12 col-md-6 col-lg-4">
+
+                                <label
+                                    htmlFor="editPickupEndTime"
+                                    className="form-label"
+                                >
+                                    To
+                                </label>
+
+                                <input
+                                    type="time"
+                                    id="editPickupEndTime"
+                                    className="form-control"
+                                    value={editPickupEndTime}
+                                    onChange={(event) =>
+                                        setEditPickupEndTime(
+                                            event.target.value
+                                        )
+                                    }
+                                    required
+                                />
+
+                            </div>
+
+                        </div>
+
+
+                        {/* Updated Pickup window preview */}
+                        {editPickupStartTime &&
+                            editPickupEndTime &&
+                            editPickupEndTime > editPickupStartTime && (
+
+                                <div className="bakery-pickup-window-preview">
+
+                                    <Clock3
+                                        size={16}
+                                        strokeWidth={1.8}
+                                    />
+
+                                    <div>
+
+                                        <span>
+                                            Updated pickup window
+                                        </span>
+
+                                        <strong>
+                                            {formatPickupWindow(
+                                                editPickupStartTime,
+                                                editPickupEndTime
+                                            )}
+                                        </strong>
+
+                                    </div>
+
+                                </div>
+
+                            )
+                        }
+
+
+                        {/* Edit form actions */}
+                        <div className="bakery-pickup-form-actions">
+
+                            <button
+                                type="button"
+                                className="bakery-pickup-cancel-button"
+                                disabled={isSavingEdit}
+                                onClick={closeEditPickupSlot}
+                            >
+                                Cancel
+                            </button>
+
+
+                            <button
+                                type="submit"
+                                className="bakery-pickup-add-button"
+                                disabled={isSavingEdit}
+                            >
+
+                                {isSavingEdit ? (
+
+                                    <LoaderCircle
+                                        size={16}
+                                        strokeWidth={1.8}
+                                        className="bakery-pickup-action-spinner"
+                                    />
+
+                                ) : (
+
+                                    <Pencil
+                                        size={16}
+                                        strokeWidth={1.8}
+                                    />
+
+                                )}
+
+                                {isSavingEdit
+                                    ? "Saving..."
+                                    : "Save changes"
+                                }
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            )}
 
             {/* Loading state */}
             {isLoading && (
@@ -973,6 +1370,26 @@ export default function BakeryPickupSlots() {
                                             <td>
 
                                                 <div className="bakery-pickup-actions">
+                                                    {/* Edit Pickup Slot */}
+                                                    <button
+                                                        type="button"
+                                                        className="bakery-pickup-action-button"
+                                                        disabled={
+                                                            updatingSlotId === slot._id ||
+                                                            deletingSlotId === slot._id ||
+                                                            isSavingEdit
+                                                        }
+                                                        onClick={() =>
+                                                            openEditPickupSlot(slot)
+                                                        }
+                                                    >
+                                                        <Pencil
+                                                            size={14}
+                                                            strokeWidth={1.8}
+                                                        />
+
+                                                        Edit
+                                                    </button>
 
                                                     {/* Availability action */}
                                                     <button
