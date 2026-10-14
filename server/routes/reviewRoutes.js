@@ -4,6 +4,8 @@ import express from "express";
 //Import Review controller functions
 import {
     createReview,
+    uploadReviewImage,
+    getOrderReview,
     getPublicReviews,
     getBakeryReviews,
     replyToReview
@@ -15,6 +17,8 @@ import { authenticateUser } from "../middleware/authMiddleware.js";
 //Import role middleware
 import { authorizeRoles } from "../middleware/roleMiddleware.js";
 
+//Import upload middleware for Review images
+import upload from "../middleware/upload.js";
 
 const router = express.Router();
 
@@ -50,6 +54,23 @@ router.patch(
     authenticateUser,
     authorizeRoles("bakeryOwner"),
     replyToReview
+);
+
+//Gets Customer Review for one Order
+router.get(
+    "/order/:orderId",
+    authenticateUser,
+    authorizeRoles("customer"),
+    getOrderReview
+);
+
+//Customer uploads optional Review image
+router.post(
+    "/uploads/image",
+    authenticateUser,
+    authorizeRoles("customer"),
+    upload.single("review_image"),
+    uploadReviewImage
 );
 
 

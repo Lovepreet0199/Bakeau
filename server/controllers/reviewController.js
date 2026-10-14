@@ -7,6 +7,8 @@ import Order from "../models/Order.js";
 //Import Bakery model
 import Bakery from "../models/Bakery.js";
 
+//Import Cloudinary for Review image uploads
+import cloudinary from "../config/cloudinary.js";
 
 //Creates a Review for a completed Order
 const createReview = async (request, response) => {
@@ -264,9 +266,98 @@ const replyToReview = async (request, response) => {
     }
 };
 
+//Gets the Customer's Review for one Order
+const getOrderReview = async (request, response) => {
+
+    try {
+
+        //Get logged-in Customer ID
+        const customerId = request.user.userId;
+
+        //Find Customer Order
+        const order = await Order.findOne({
+            _id: request.params.orderId,
+            customer_id: customerId
+        });
+
+        if (!order) {
+            return response.status(404).json({
+                message: "Order not found"
+            });
+        }
+
+        //Find Review for this Order
+        const review = await Review.findOne({
+            order_id: order._id
+        });
+
+        return response.status(200).json({
+            review: review
+        });
+
+    } catch (error) {
+
+        console.error("Get Order Review error:", error.message);
+
+        return response.status(500).json({
+            message: "Unable to get Review"
+        });
+    }
+};
+
+//Uploads an optional Customer Review image
+const uploadReviewImage = async (request, response) => {
+
+    try {
+
+        //Check if Customer selected an image
+        if (!request.file) {
+            return response.status(400).json({
+                message: "Please select a review image"
+            });
+        }
+
+        //Upload Review image to Cloudinary
+        const uploadResult = await new Promise((resolve, reject) => {
+
+            const uploadStream = cloudinary.uploader.upload_stream(
+                {
+                    folder: "bakeau/review-images"
+                },
+                (error, result) => {
+
+                    if (error) {
+                        reject(error);
+                    } else {
+                        resolve(result);
+                    }
+                }
+            );
+
+            uploadStream.end(request.file.buffer);
+        });
+
+        //Return uploaded Review image information
+        return response.status(200).json({
+            message: "Review image uploaded successfully",
+            image_url: uploadResult.secure_url,
+            image_public_id: uploadResult.public_id
+        });
+
+    } catch (error) {
+
+        console.error("Review image upload error:", error.message);
+
+        return response.status(500).json({
+            message: "Unable to upload review image"
+        });
+    }
+};
 
 export {
     createReview,
+    uploadReviewImage,
+    getOrderReview,
     getPublicReviews,
     getBakeryReviews,
     replyToReview
