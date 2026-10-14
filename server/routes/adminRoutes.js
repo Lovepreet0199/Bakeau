@@ -4,7 +4,10 @@ import express from "express";
 //Import Admin controller
 import {
     getAdminBakeries,
-    updateBakeryStatus
+    getAdminBakeryById,
+    updateBakeryStatus,
+    getAdminReviews,
+    removeAdminReview
 } from "../controllers/adminController.js";
 
 //Import authentication middleware
@@ -43,6 +46,35 @@ router.patch(
     updateBakeryStatus
 );
 
+//Get one Bakery account
+router.get(
+    "/bakeries/:id",
+    authenticateUser,
+    authorizeRoles(
+        "platformAdmin"
+    ),
+    getAdminBakeryById
+);
+
+//Get all Customer Reviews
+router.get(
+    "/reviews",
+    authenticateUser,
+    authorizeRoles(
+        "platformAdmin"
+    ),
+    getAdminReviews
+);
+
+//Remove an inappropriate Customer Review
+router.patch(
+    "/reviews/:id/remove",
+    authenticateUser,
+    authorizeRoles(
+        "platformAdmin"
+    ),
+    removeAdminReview
+);
 
 //Export Admin routes
 export default router;

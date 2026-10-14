@@ -177,21 +177,26 @@ const getBakeryReviews = async (request, response) => {
         }
 
 
-        //Get Bakery Reviews
-        const reviews = await Review.find({
-            bakery_id: bakery._id
-        })
-            .populate(
-                "customer_id",
-                "first_name last_name email"
-            )
-            .populate(
-                "order_id",
-                "order_number"
-            )
-            .sort({
-                created_at: -1
-            });
+        //Only return Reviews that were not removed by the Platform Admin
+        const reviews =
+            await Review.find({
+                bakery_id:
+                    bakery._id,
+
+                is_removed:
+                    false
+            })
+                .populate(
+                    "customer_id",
+                    "first_name last_name email"
+                )
+                .populate(
+                    "order_id",
+                    "order_number"
+                )
+                .sort({
+                    created_at: -1
+                });
 
 
         return response.status(200).json({
