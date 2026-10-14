@@ -1,3 +1,4 @@
+import API_URL from "../../config/api.js";
 //Import React state
 import { useState } from "react";
 
@@ -159,7 +160,7 @@ export default function ResetPassword() {
             //Send new password and reset token
             const response =
                 await fetch(
-                    "http://localhost:3000/api/auth/reset-password",
+                    `${API_URL}/api/auth/reset-password`,
                     {
                         method:
                             "POST",

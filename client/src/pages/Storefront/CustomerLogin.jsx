@@ -1,3 +1,4 @@
+import API_URL from "../../config/api.js";
 //Import React hooks
 import {
     useEffect,
@@ -137,7 +138,7 @@ export default function CustomerLogin() {
                 //Request public Bakery
                 const response =
                     await fetch(
-                        `http://localhost:3000/api/bakeries/public/${slug}`
+                        `${API_URL}/api/bakeries/public/${slug}`
                     );
 
                 //Convert response into JavaScript data
@@ -218,7 +219,7 @@ export default function CustomerLogin() {
             //Send Login information to shared Login API
             const response =
                 await fetch(
-                    "http://localhost:3000/api/auth/login",
+                    `${API_URL}/api/auth/login`,
                     {
                         method:
                             "POST",

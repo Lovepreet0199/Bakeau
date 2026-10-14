@@ -1,3 +1,4 @@
+import API_URL from "../../config/api.js";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -77,7 +78,7 @@ export default function Register() {
         try {
             // Sends the bakery owner registration data to the backend
             const response = await fetch(
-                "http://localhost:3000/api/auth/register/bakery-owner",
+                `${API_URL}/api/auth/register/bakery-owner`,
                 {
                     method: "POST",
                     headers: {

@@ -1,3 +1,4 @@
+import API_URL from "../../../config/api.js";
 //Import React hooks
 import {
     useEffect,
@@ -97,7 +98,7 @@ export default function PaymentSettings({
 
                 //Get the Bakery Owner's Stripe status
                 const response = await fetch(
-                    "http://localhost:3000/api/bakeries/stripe/status",
+                    `${API_URL}/api/bakeries/stripe/status`,
                     {
                         headers: {
                             Authorization: `Bearer ${token}`
@@ -248,7 +249,7 @@ export default function PaymentSettings({
 
             //Create or continue Stripe onboarding
             const response = await fetch(
-                "http://localhost:3000/api/bakeries/stripe/connect",
+                `${API_URL}/api/bakeries/stripe/connect`,
                 {
                     method: "POST",
                     headers: {
@@ -367,7 +368,7 @@ export default function PaymentSettings({
 
             //Update the Bakery Payment Settings
             const response = await fetch(
-                "http://localhost:3000/api/bakeries/mine/payment-settings",
+                `${API_URL}/api/bakeries/mine/payment-settings`,
                 {
                     method: "PATCH",
                     headers: {

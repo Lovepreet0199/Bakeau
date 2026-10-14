@@ -1,3 +1,4 @@
+import API_URL from "../../config/api.js";
 //Import React hooks
 import {
     useEffect,
@@ -131,7 +132,7 @@ async function getBakeryPickupSlots() {
     const token = getAuthToken();
 
     const response = await fetch(
-        "http://localhost:3000/api/pickup-slots/bakery",
+        `${API_URL}/api/pickup-slots/bakery`,
         {
             headers: {
                 Authorization: `Bearer ${token}`
@@ -307,7 +308,7 @@ export default function BakeryPickupSlots() {
                     );
 
                 const response = await fetch(
-                    "http://localhost:3000/api/pickup-slots",
+                    `${API_URL}/api/pickup-slots`,
                     {
                         method: "POST",
                         headers: {
@@ -372,7 +373,7 @@ export default function BakeryPickupSlots() {
             const token = getAuthToken();
 
             const response = await fetch(
-                `http://localhost:3000/api/pickup-slots/${slot._id}`,
+                `${API_URL}/api/pickup-slots/${slot._id}`,
                 {
                     method: "PATCH",
                     headers: {
@@ -428,7 +429,7 @@ export default function BakeryPickupSlots() {
             const token = getAuthToken();
 
             const response = await fetch(
-                `http://localhost:3000/api/pickup-slots/${slot._id}`,
+                `${API_URL}/api/pickup-slots/${slot._id}`,
                 {
                     method: "DELETE",
                     headers: {

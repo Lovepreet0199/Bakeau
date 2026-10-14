@@ -1,3 +1,4 @@
+import API_URL from "../../config/api.js";
 //Import React hooks
 import {
     useEffect,
@@ -117,7 +118,7 @@ export default function AdminBakeryDetails() {
                 //Request Bakery account information
                 const response =
                     await fetch(
-                        `http://localhost:3000/api/admin/bakeries/${id}`,
+                        `${API_URL}/api/admin/bakeries/${id}`,
                         {
                             headers: {
                                 Authorization:
@@ -232,7 +233,7 @@ export default function AdminBakeryDetails() {
             //Send Bakery status update
             const response =
                 await fetch(
-                    `http://localhost:3000/api/admin/bakeries/${id}/status`,
+                    `${API_URL}/api/admin/bakeries/${id}/status`,
                     {
                         method: "PATCH",
 

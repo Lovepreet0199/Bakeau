@@ -1,3 +1,4 @@
+import API_URL from "../../config/api.js";
 //Import React hooks used to store products and load them from the API
 import { useState, useEffect } from "react";
 
@@ -68,7 +69,7 @@ export default function BakeryProducts() {
 
                 //Request the Bakery Owner's products
                 const response = await fetch(
-                    "http://localhost:3000/api/products",
+                    `${API_URL}/api/products`,
                     {
                         headers: {
                             Authorization: `Bearer ${token}`
@@ -156,7 +157,7 @@ export default function BakeryProducts() {
 
             //Delete the selected Product
             const response = await fetch(
-                `http://localhost:3000/api/products/${productToDelete._id}`,
+                `${API_URL}/api/products/${productToDelete._id}`,
                 {
                     method: "DELETE",
                     headers: {
@@ -215,7 +216,7 @@ export default function BakeryProducts() {
 
             //Update only the Product's featured state
             const response = await fetch(
-                `http://localhost:3000/api/products/${product._id}/featured`,
+                `${API_URL}/api/products/${product._id}/featured`,
                 {
                     method: "PATCH",
                     headers: {
@@ -278,7 +279,7 @@ export default function BakeryProducts() {
             const token = getAuthToken();
 
             const response = await fetch(
-                `http://localhost:3000/api/products/${product._id}/availability`,
+                `${API_URL}/api/products/${product._id}/availability`,
                 {
                     method: "PATCH",
                     headers: {
@@ -339,7 +340,7 @@ export default function BakeryProducts() {
             const token = getAuthToken();
 
             const response = await fetch(
-                `http://localhost:3000/api/products/${product._id}/status`,
+                `${API_URL}/api/products/${product._id}/status`,
                 {
                     method: "PATCH",
                     headers: {

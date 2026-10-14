@@ -1,3 +1,4 @@
+import API_URL from "../../config/api.js";
 //Import React hooks
 import {
     useEffect,
@@ -689,7 +690,7 @@ export default function StorefrontEditOrder() {
                 //Load Bakery
                 const bakeryResponse =
                     await fetch(
-                        `http://localhost:3000/api/bakeries/public/${slug}`
+                        `${API_URL}/api/bakeries/public/${slug}`
                     );
 
                 const bakeryData =
@@ -713,7 +714,7 @@ export default function StorefrontEditOrder() {
                 //Load Customer Order
                 const orderResponse =
                     await fetch(
-                        `http://localhost:3000/api/orders/mine/${orderId}`,
+                        `${API_URL}/api/orders/mine/${orderId}`,
                         {
                             headers: {
 
@@ -883,7 +884,7 @@ export default function StorefrontEditOrder() {
 
                 const response =
                     await fetch(
-                        `http://localhost:3000/api/pickup-slots/public/${slug}/availability?month=${year}-${month}`
+                        `${API_URL}/api/pickup-slots/public/${slug}/availability?month=${year}-${month}`
                     );
 
 
@@ -1093,7 +1094,7 @@ export default function StorefrontEditOrder() {
             //Update pending Order
             const response =
                 await fetch(
-                    `http://localhost:3000/api/orders/mine/${orderId}`,
+                    `${API_URL}/api/orders/mine/${orderId}`,
                     {
                         method:
                             "PATCH",

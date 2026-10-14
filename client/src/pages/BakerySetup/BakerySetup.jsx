@@ -1,3 +1,4 @@
+import API_URL from "../../config/api.js";
 //Allows the bakery setup process to manage its steps and form information
 import { useState } from "react";
 
@@ -105,7 +106,7 @@ export default function BakerySetup() {
 
         //Check whether this Bakery Owner already has a bakery
         const existingBakeryResponse = await fetch(
-            "http://localhost:3000/api/bakeries/mine",
+            `${API_URL}/api/bakeries/mine`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -125,7 +126,7 @@ export default function BakerySetup() {
 
         //Create the bakery using the information collected during setup
         const createBakeryResponse = await fetch(
-            "http://localhost:3000/api/bakeries",
+            `${API_URL}/api/bakeries`,
             {
                 method: "POST",
                 headers: {
@@ -260,7 +261,7 @@ export default function BakerySetup() {
 
             //Save the latest payment settings
             const response = await fetch(
-                "http://localhost:3000/api/bakeries/mine/payment-settings",
+                `${API_URL}/api/bakeries/mine/payment-settings`,
                 {
                     method: "PATCH",
                     headers: {
@@ -311,7 +312,7 @@ export default function BakerySetup() {
 
             //Mark the bakery setup process as completed
             const response = await fetch(
-                "http://localhost:3000/api/bakeries/mine/complete-setup",
+                `${API_URL}/api/bakeries/mine/complete-setup`,
                 {
                     method: "PATCH",
                     headers: {

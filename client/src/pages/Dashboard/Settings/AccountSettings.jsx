@@ -1,3 +1,4 @@
+import API_URL from "../../../config/api.js";
 //Import React hooks
 import {
     useEffect,
@@ -122,7 +123,7 @@ export default function AccountSettings() {
 
                 //Get the authenticated user's account
                 const response = await fetch(
-                    "http://localhost:3000/api/auth/me",
+                    `${API_URL}/api/auth/me`,
                     {
                         headers: {
                             Authorization: `Bearer ${token}`
@@ -306,7 +307,7 @@ export default function AccountSettings() {
 
             //Update the authenticated user's account
             const response = await fetch(
-                "http://localhost:3000/api/auth/me",
+                `${API_URL}/api/auth/me`,
                 {
                     method: "PUT",
                     headers: {
@@ -454,7 +455,7 @@ export default function AccountSettings() {
 
             //Change the authenticated user's password
             const response = await fetch(
-                "http://localhost:3000/api/auth/me/password",
+                `${API_URL}/api/auth/me/password`,
                 {
                     method: "PATCH",
                     headers: {

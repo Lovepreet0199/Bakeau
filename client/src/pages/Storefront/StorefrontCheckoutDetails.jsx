@@ -1,3 +1,4 @@
+import API_URL from "../../config/api.js";
 //Import React hooks
 import { useEffect, useMemo, useState } from "react";
 
@@ -167,7 +168,7 @@ export default function StorefrontCheckoutDetails() {
 
 
                 //Load Bakery
-                const bakeryResponse = await fetch(`http://localhost:3000/api/bakeries/public/${slug}`);
+                const bakeryResponse = await fetch(`${API_URL}/api/bakeries/public/${slug}`);
                 const bakeryData = await bakeryResponse.json();
 
                 if (!bakeryResponse.ok) {
@@ -178,7 +179,7 @@ export default function StorefrontCheckoutDetails() {
 
 
                 //Load logged-in Customer
-                const customerResponse = await fetch("http://localhost:3000/api/auth/me", {
+                const customerResponse = await fetch(`${API_URL}/api/auth/me`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
@@ -259,7 +260,7 @@ export default function StorefrontCheckoutDetails() {
 
                 //Get trusted Cart price
                 const quoteResponse = await fetch(
-                    `http://localhost:3000/api/bakeries/public/${slug}/cart/quote`,
+                    `${API_URL}/api/bakeries/public/${slug}/cart/quote`,
                     {
                         method: "POST",
                         headers: {

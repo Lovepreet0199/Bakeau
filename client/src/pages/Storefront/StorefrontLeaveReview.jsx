@@ -1,3 +1,4 @@
+import API_URL from "../../config/api.js";
 //Import React hooks
 import { useEffect, useState } from "react";
 
@@ -79,7 +80,7 @@ export default function StorefrontLeaveReview() {
 
                 //Load Bakery
                 const bakeryResponse = await fetch(
-                    `http://localhost:3000/api/bakeries/public/${slug}`
+                    `${API_URL}/api/bakeries/public/${slug}`
                 );
 
                 const bakeryData = await bakeryResponse.json();
@@ -92,7 +93,7 @@ export default function StorefrontLeaveReview() {
 
                 //Load Customer Order
                 const orderResponse = await fetch(
-                    `http://localhost:3000/api/orders/mine/${orderId}`,
+                    `${API_URL}/api/orders/mine/${orderId}`,
                     {
                         headers: {
                             Authorization: `Bearer ${token}`
@@ -110,7 +111,7 @@ export default function StorefrontLeaveReview() {
 
                 //Check if Customer already reviewed this Order
                 const reviewResponse = await fetch(
-                    `http://localhost:3000/api/reviews/order/${orderId}`,
+                    `${API_URL}/api/reviews/order/${orderId}`,
                     {
                         headers: {
                             Authorization: `Bearer ${token}`
@@ -180,7 +181,7 @@ export default function StorefrontLeaveReview() {
 
         //Upload Review image
         const response = await fetch(
-            "http://localhost:3000/api/reviews/uploads/image",
+            `${API_URL}/api/reviews/uploads/image`,
             {
                 method: "POST",
                 headers: {
@@ -234,7 +235,7 @@ export default function StorefrontLeaveReview() {
 
             //Create Review
             const response = await fetch(
-                "http://localhost:3000/api/reviews",
+                `${API_URL}/api/reviews`,
                 {
                     method: "POST",
                     headers: {
@@ -320,7 +321,7 @@ export default function StorefrontLeaveReview() {
 
             //Update Review
             const response = await fetch(
-                `http://localhost:3000/api/reviews/${existingReview._id}`,
+                `${API_URL}/api/reviews/${existingReview._id}`,
                 {
                     method: "PATCH",
                     headers: {
@@ -377,7 +378,7 @@ export default function StorefrontLeaveReview() {
 
             //Delete Review
             const response = await fetch(
-                `http://localhost:3000/api/reviews/${existingReview._id}`,
+                `${API_URL}/api/reviews/${existingReview._id}`,
                 {
                     method: "DELETE",
                     headers: {

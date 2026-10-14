@@ -1,3 +1,4 @@
+import API_URL from "../../config/api.js";
 //Import React hooks
 import {
     useEffect,
@@ -228,7 +229,7 @@ export default function BakeryInventory() {
                 ] = await Promise.all([
 
                     fetch(
-                        "http://localhost:3000/api/products",
+                        `${API_URL}/api/products`,
                         {
                             headers: {
                                 Authorization:
@@ -238,7 +239,7 @@ export default function BakeryInventory() {
                     ),
 
                     fetch(
-                        "http://localhost:3000/api/ingredients",
+                        `${API_URL}/api/ingredients`,
                         {
                             headers: {
                                 Authorization:
@@ -403,7 +404,7 @@ export default function BakeryInventory() {
 
             //Update only the Product inventory values
             const response = await fetch(
-                `http://localhost:3000/api/products/${adjustingProduct._id}/inventory`,
+                `${API_URL}/api/products/${adjustingProduct._id}/inventory`,
                 {
                     method: "PATCH",
 
@@ -573,8 +574,8 @@ export default function BakeryInventory() {
 
             //Determine whether this is create or update
             const url = editingIngredient
-                ? `http://localhost:3000/api/ingredients/${editingIngredient._id}`
-                : "http://localhost:3000/api/ingredients";
+                ? `${API_URL}/api/ingredients/${editingIngredient._id}`
+                : `${API_URL}/api/ingredients`;
 
 
             const method = editingIngredient
@@ -708,7 +709,7 @@ export default function BakeryInventory() {
 
             //Delete the Ingredient
             const response = await fetch(
-                `http://localhost:3000/api/ingredients/${ingredient._id}`,
+                `${API_URL}/api/ingredients/${ingredient._id}`,
                 {
                     method: "DELETE",
 

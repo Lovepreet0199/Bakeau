@@ -1,3 +1,4 @@
+import API_URL from "../../config/api.js";
 import { useNavigate, useParams } from "react-router-dom";
 
 //Import React hooks used for the Add Product form
@@ -124,7 +125,7 @@ export default function BakeryAddProduct() {
 
             //Request the Bakery Owner's bakery
             const response = await fetch(
-                "http://localhost:3000/api/bakeries/mine",
+                `${API_URL}/api/bakeries/mine`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`
@@ -171,7 +172,7 @@ export default function BakeryAddProduct() {
 
             //Send the image to the backend
             const response = await fetch(
-                "http://localhost:3000/api/products/uploads/image",
+                `${API_URL}/api/products/uploads/image`,
                 {
                     method: "POST",
                     headers: {
@@ -329,7 +330,7 @@ export default function BakeryAddProduct() {
             //Create the Product only if it does not exist yet
             if (!productId) {
                 response = await fetch(
-                    "http://localhost:3000/api/products",
+                    `${API_URL}/api/products`,
                     {
                         method: "POST",
                         headers: {
@@ -344,7 +345,7 @@ export default function BakeryAddProduct() {
 
                 //Update the existing draft id the Product was already created
                 response = await fetch(
-                    `http://localhost:3000/api/products/${productId}`,
+                    `${API_URL}/api/products/${productId}`,
                     {
                         method: "PUT",
                         headers: {
@@ -403,7 +404,7 @@ export default function BakeryAddProduct() {
 
             //Create the customization group using the saved Product ID
             const response = await fetch(
-                `http://localhost:3000/api/customizations/products/${productId}/groups`,
+                `${API_URL}/api/customizations/products/${productId}/groups`,
                 {
                     method: "POST",
                     headers: {
@@ -453,7 +454,7 @@ export default function BakeryAddProduct() {
 
             //Request all customization groups for this Product
             const response = await fetch(
-                `http://localhost:3000/api/customizations/products/${productId}/groups`,
+                `${API_URL}/api/customizations/products/${productId}/groups`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`
@@ -483,7 +484,7 @@ export default function BakeryAddProduct() {
                 sortedGroups.map(async (group) => {
 
                     const optionResponse = await fetch(
-                        `http://localhost:3000/api/customizations/groups/${group._id}/options`,
+                        `${API_URL}/api/customizations/groups/${group._id}/options`,
                         {
                             headers: {
                                 Authorization: `Bearer ${token}`
@@ -550,7 +551,7 @@ export default function BakeryAddProduct() {
 
             //Create the option using the real customization group ID
             const response = await fetch(
-                `http://localhost:3000/api/customizations/groups/${groupId}/options`,
+                `${API_URL}/api/customizations/groups/${groupId}/options`,
                 {
                     method: "POST",
                     headers: {
@@ -599,7 +600,7 @@ export default function BakeryAddProduct() {
 
             //Delete the selected customization option
             const response = await fetch(
-                `http://localhost:3000/api/customizations/options/${optionId}`,
+                `${API_URL}/api/customizations/options/${optionId}`,
                 {
                     method: "DELETE",
                     headers: {
@@ -652,7 +653,7 @@ export default function BakeryAddProduct() {
 
             //Delete the selected customization group
             const response = await fetch(
-                `http://localhost:3000/api/customizations/groups/${groupToDelete._id}`,
+                `${API_URL}/api/customizations/groups/${groupToDelete._id}`,
                 {
                     method: "DELETE",
                     headers: {
@@ -734,7 +735,7 @@ export default function BakeryAddProduct() {
 
             //Update the saved Product
             const response = await fetch(
-                `http://localhost:3000/api/products/${productId}`,
+                `${API_URL}/api/products/${productId}`,
                 {
                     method: "PUT",
                     headers: {
@@ -792,7 +793,7 @@ export default function BakeryAddProduct() {
 
                 //Request the Product being edited
                 const response = await fetch(
-                    `http://localhost:3000/api/products/${editProductId}`,
+                    `${API_URL}/api/products/${editProductId}`,
                     {
                         headers: {
                             Authorization: `Bearer ${token}`

@@ -1,3 +1,4 @@
+import API_URL from "../../config/api.js";
 //Import React hooks
 import {
     useEffect,
@@ -279,7 +280,7 @@ export default function StorefrontOrderTracking() {
                 //Load Bakery
                 const bakeryResponse =
                     await fetch(
-                        `http://localhost:3000/api/bakeries/public/${slug}`
+                        `${API_URL}/api/bakeries/public/${slug}`
                     );
 
                 const bakeryData =
@@ -305,7 +306,7 @@ export default function StorefrontOrderTracking() {
                 //Load Customer Order
                 const orderResponse =
                     await fetch(
-                        `http://localhost:3000/api/orders/mine/${orderId}`,
+                        `${API_URL}/api/orders/mine/${orderId}`,
                         {
                             headers: {
                                 Authorization:
@@ -337,7 +338,7 @@ export default function StorefrontOrderTracking() {
                 //Check if Customer already reviewed this Order
                 const reviewResponse =
                     await fetch(
-                        `http://localhost:3000/api/reviews/order/${orderId}`,
+                        `${API_URL}/api/reviews/order/${orderId}`,
                         {
                             headers: {
                                 Authorization:
@@ -416,7 +417,7 @@ export default function StorefrontOrderTracking() {
             //Request Order cancellation
             const response =
                 await fetch(
-                    `http://localhost:3000/api/orders/mine/${orderId}/cancel`,
+                    `${API_URL}/api/orders/mine/${orderId}/cancel`,
                     {
                         method:
                             "PATCH",

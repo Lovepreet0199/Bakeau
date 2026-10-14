@@ -1,3 +1,4 @@
+import API_URL from "../../config/api.js";
 //Import useState to manage the resend email status
 import { useState } from "react";
 
@@ -66,7 +67,7 @@ export default function CheckEmail() {
 
             //Send the email address to the resend verification API
             const response = await fetch(
-                "http://localhost:3000/api/auth/resend-verification",
+                `${API_URL}/api/auth/resend-verification`,
                 {
                     method: "POST",
 

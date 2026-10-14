@@ -1,3 +1,4 @@
+import API_URL from "../../config/api.js";
 //Import React state
 import { useState } from "react";
 
@@ -77,7 +78,7 @@ export default function ForgotPassword() {
             //Send email to Forgot Password API
             const response =
                 await fetch(
-                    "http://localhost:3000/api/auth/forgot-password",
+                    `${API_URL}/api/auth/forgot-password`,
                     {
                         method:
                             "POST",

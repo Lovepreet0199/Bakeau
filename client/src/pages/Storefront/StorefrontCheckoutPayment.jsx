@@ -1,3 +1,4 @@
+import API_URL from "../../config/api.js";
 //Import React hooks
 import { useEffect, useMemo, useState } from "react";
 
@@ -202,7 +203,7 @@ export default function StorefrontCheckoutPayment() {
 
                 //Load Bakery
                 const bakeryResponse = await fetch(
-                    `http://localhost:3000/api/bakeries/public/${slug}`
+                    `${API_URL}/api/bakeries/public/${slug}`
                 );
 
                 const bakeryData = await bakeryResponse.json();
@@ -220,7 +221,7 @@ export default function StorefrontCheckoutPayment() {
 
                 //Make sure Customer login is still valid
                 const customerResponse = await fetch(
-                    "http://localhost:3000/api/auth/me",
+                    `${API_URL}/api/auth/me`,
                     {
                         headers: {
                             Authorization: `Bearer ${token}`
@@ -280,7 +281,7 @@ export default function StorefrontCheckoutPayment() {
 
                 //Load trusted Backend Cart pricing
                 const quoteResponse = await fetch(
-                    `http://localhost:3000/api/bakeries/public/${slug}/cart/quote`,
+                    `${API_URL}/api/bakeries/public/${slug}/cart/quote`,
                     {
                         method: "POST",
                         headers: {
@@ -397,7 +398,7 @@ export default function StorefrontCheckoutPayment() {
 
                 //Create Order
                 const orderResponse = await fetch(
-                    "http://localhost:3000/api/orders",
+                    `${API_URL}/api/orders`,
                     {
                         method: "POST",
                         headers: {
@@ -468,7 +469,7 @@ export default function StorefrontCheckoutPayment() {
 
             //Create Manual Payment
             const paymentResponse = await fetch(
-                "http://localhost:3000/api/payments/manual",
+                `${API_URL}/api/payments/manual`,
                 {
                     method: "POST",
                     headers: {

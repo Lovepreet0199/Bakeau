@@ -1,3 +1,4 @@
+import API_URL from "../../../config/api.js";
 //Import React hooks
 import {
     useEffect,
@@ -36,7 +37,7 @@ async function getMyBakery() {
     const token = getAuthToken();
 
     const response = await fetch(
-        "http://localhost:3000/api/bakeries/mine",
+        `${API_URL}/api/bakeries/mine`,
         {
             headers: {
                 Authorization: `Bearer ${token}`

@@ -1,3 +1,4 @@
+import API_URL from "../../config/api.js";
 //Import React hooks
 import {
     useEffect,
@@ -146,7 +147,7 @@ export default function StorefrontCart() {
                 //Request Bakery using the Storefront slug
                 const response =
                     await fetch(
-                        `http://localhost:3000/api/bakeries/public/${slug}`
+                        `${API_URL}/api/bakeries/public/${slug}`
                     );
 
                 //Convert response into JavaScript data
@@ -256,7 +257,7 @@ export default function StorefrontCart() {
                         //Request trusted Cart quote
                         const response =
                             await fetch(
-                                `http://localhost:3000/api/bakeries/public/${slug}/cart/quote`,
+                                `${API_URL}/api/bakeries/public/${slug}/cart/quote`,
                                 {
                                     method:
                                         "POST",
@@ -396,7 +397,7 @@ export default function StorefrontCart() {
             //Request a trusted Product quote
             const response =
                 await fetch(
-                    `http://localhost:3000/api/bakeries/public/${item.bakery_slug}/products/${item.product_id}/quote`,
+                    `${API_URL}/api/bakeries/public/${item.bakery_slug}/products/${item.product_id}/quote`,
                     {
                         method:
                             "POST",

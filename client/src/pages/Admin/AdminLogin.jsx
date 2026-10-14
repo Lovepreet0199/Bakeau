@@ -1,3 +1,4 @@
+import API_URL from "../../config/api.js";
 //Allow the Login form to manage its input values and messages
 import {
     useState
@@ -84,7 +85,7 @@ export default function AdminLogin() {
             //Send Login request
             const response =
                 await fetch(
-                    "http://localhost:3000/api/auth/login",
+                    `${API_URL}/api/auth/login`,
                     {
                         method: "POST",
 

@@ -1,3 +1,4 @@
+import API_URL from "../../../config/api.js";
 //Import useState to manage temporary upload states
 import { useState } from "react";
 
@@ -70,7 +71,7 @@ export default function BrandingStep({
 
         //Send the selected logo to the Bakeau backend
         const response = await fetch(
-            "http://localhost:3000/api/bakeries/uploads/logo",
+            `${API_URL}/api/bakeries/uploads/logo`,
             {
                 method: "POST",
                 headers: {
@@ -126,7 +127,7 @@ export default function BrandingStep({
 
         //Send the selected bakery image to the Bakeau backend
         const response = await fetch(
-            "http://localhost:3000/api/bakeries/uploads/bakery-image",
+            `${API_URL}/api/bakeries/uploads/bakery-image`,
             {
                 method: "POST",
                 headers: {

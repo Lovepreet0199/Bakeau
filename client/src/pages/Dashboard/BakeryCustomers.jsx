@@ -1,3 +1,4 @@
+import API_URL from "../../config/api.js";
 //Import React hooks
 import { useEffect, useState } from "react";
 
@@ -49,7 +50,7 @@ export default function BakeryCustomers() {
 
                 //Request Customers belonging to this Bakery
                 const response = await fetch(
-                    "http://localhost:3000/api/customers/bakery",
+                    `${API_URL}/api/customers/bakery`,
                     {
                         headers: {
                             Authorization: `Bearer ${token}`

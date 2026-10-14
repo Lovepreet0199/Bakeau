@@ -1,3 +1,4 @@
+import API_URL from "../../config/api.js";
 //Import React hooks
 import {
     useEffect,
@@ -105,7 +106,7 @@ export default function CustomerRegister() {
                 //Request Bakery using public slug
                 const response =
                     await fetch(
-                        `http://localhost:3000/api/bakeries/public/${slug}`
+                        `${API_URL}/api/bakeries/public/${slug}`
                     );
 
                 //Convert response into JavaScript data
@@ -249,7 +250,7 @@ export default function CustomerRegister() {
             //Send Customer registration data to backend
             const response =
                 await fetch(
-                    "http://localhost:3000/api/auth/register/customer",
+                    `${API_URL}/api/auth/register/customer`,
                     {
                         method:
                             "POST",

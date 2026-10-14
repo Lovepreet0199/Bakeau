@@ -1,3 +1,4 @@
+import API_URL from "../../config/api.js";
 //Import React hooks
 import {
     useEffect,
@@ -90,7 +91,7 @@ export default function AdminBakeries() {
                 //Request Bakery accounts from Admin API
                 const response =
                     await fetch(
-                        "http://localhost:3000/api/admin/bakeries",
+                        `${API_URL}/api/admin/bakeries`,
                         {
                             headers: {
                                 Authorization:

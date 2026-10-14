@@ -1,3 +1,4 @@
+import API_URL from "../../config/api.js";
 //Import React hooks
 import { useEffect, useState } from "react";
 
@@ -48,8 +49,8 @@ export default function StorefrontReviews() {
 
                 //Load Bakery and Reviews together
                 const [bakeryResponse, reviewsResponse] = await Promise.all([
-                    fetch(`http://localhost:3000/api/bakeries/public/${slug}`),
-                    fetch(`http://localhost:3000/api/reviews/public/${slug}`)
+                    fetch(`${API_URL}/api/bakeries/public/${slug}`),
+                    fetch(`${API_URL}/api/reviews/public/${slug}`)
                 ]);
 
                 const bakeryData = await bakeryResponse.json();

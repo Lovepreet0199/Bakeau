@@ -1,3 +1,4 @@
+import API_URL from "../../config/api.js";
 //Allows the page to read URL parameters and navigate using internal links
 import { Link, useSearchParams } from "react-router-dom";
 
@@ -76,7 +77,7 @@ export default function VerifyEmail() {
 
                 //Send the verification token to the backend
                 const response = await fetch(
-                    "http://localhost:3000/api/auth/verify-email",
+                    `${API_URL}/api/auth/verify-email`,
                     {
                         method: "POST",
 

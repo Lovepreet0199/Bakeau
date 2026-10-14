@@ -1,3 +1,4 @@
+import API_URL from "../../config/api.js";
 //Import React hooks
 import { useEffect, useState } from "react";
 
@@ -124,7 +125,7 @@ export default function StorefrontMyOrders() {
 
                 //Load Bakery
                 const bakeryResponse = await fetch(
-                    `http://localhost:3000/api/bakeries/public/${slug}`
+                    `${API_URL}/api/bakeries/public/${slug}`
                 );
 
                 const bakeryData = await bakeryResponse.json();
@@ -144,7 +145,7 @@ export default function StorefrontMyOrders() {
 
                 //Load Customer Orders
                 const orderResponse = await fetch(
-                    "http://localhost:3000/api/orders/mine",
+                    `${API_URL}/api/orders/mine`,
                     {
                         headers: {
                             Authorization: `Bearer ${token}`

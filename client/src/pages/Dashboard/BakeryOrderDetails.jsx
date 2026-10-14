@@ -1,3 +1,4 @@
+import API_URL from "../../config/api.js";
 //Import React hooks
 import { useEffect, useState } from "react";
 
@@ -32,7 +33,7 @@ async function getBakeryOrder(orderId) {
     const token = getAuthToken();
 
     const response = await fetch(
-        `http://localhost:3000/api/orders/bakery/${orderId}`,
+        `${API_URL}/api/orders/bakery/${orderId}`,
         {
             headers: {
                 Authorization: `Bearer ${token}`
@@ -140,7 +141,7 @@ export default function BakeryOrderDetails() {
             const token = getAuthToken();
 
             const response = await fetch(
-                `http://localhost:3000/api/orders/${id}/status`,
+                `${API_URL}/api/orders/${id}/status`,
                 {
                     method: "PATCH",
                     headers: {
@@ -193,8 +194,8 @@ export default function BakeryOrderDetails() {
             //Choose receive or revert endpoint
             const endpoint =
                 action === "receive"
-                    ? `http://localhost:3000/api/payments/${paymentId}/receive`
-                    : `http://localhost:3000/api/payments/${paymentId}/revert`;
+                    ? `${API_URL}/api/payments/${paymentId}/receive`
+                    : `${API_URL}/api/payments/${paymentId}/revert`;
 
 
             //Update Manual Payment

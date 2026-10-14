@@ -1,3 +1,4 @@
+import API_URL from "../../config/api.js";
 //Import React hooks
 import {
     useEffect,
@@ -120,7 +121,7 @@ export default function AdminReviews() {
                 //Request all Reviews
                 const response =
                     await fetch(
-                        "http://localhost:3000/api/admin/reviews",
+                        `${API_URL}/api/admin/reviews`,
                         {
                             headers: {
                                 Authorization:
@@ -270,7 +271,7 @@ export default function AdminReviews() {
             //Send Review removal request
             const response =
                 await fetch(
-                    `http://localhost:3000/api/admin/reviews/${selectedReview._id}/remove`,
+                    `${API_URL}/api/admin/reviews/${selectedReview._id}/remove`,
                     {
                         method:
                             "PATCH",

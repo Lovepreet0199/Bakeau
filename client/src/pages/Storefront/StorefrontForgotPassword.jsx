@@ -1,3 +1,4 @@
+import API_URL from "../../config/api.js";
 //Import React hooks
 import {
     useEffect,
@@ -76,7 +77,7 @@ export default function StorefrontForgotPassword() {
 
                 const response =
                     await fetch(
-                        `http://localhost:3000/api/bakeries/public/${slug}`
+                        `${API_URL}/api/bakeries/public/${slug}`
                     );
 
                 const data =
@@ -135,7 +136,7 @@ export default function StorefrontForgotPassword() {
 
             const response =
                 await fetch(
-                    "http://localhost:3000/api/auth/forgot-password",
+                    `${API_URL}/api/auth/forgot-password`,
                     {
                         method:
                             "POST",

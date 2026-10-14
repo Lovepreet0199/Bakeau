@@ -1,3 +1,4 @@
+import API_URL from "../../config/api.js";
 //Allow the login form to manage its input values and messages
 import { useState } from "react";
 
@@ -65,7 +66,7 @@ export default function Login() {
         try {
             //Send the user's email and password to the login API
             const response = await fetch(
-                "http://localhost:3000/api/auth/login",
+                `${API_URL}/api/auth/login`,
                 {
                     method: "POST",
 
@@ -151,7 +152,7 @@ export default function Login() {
 
             //Check whether the logged-in bakery owner already has a bakery
             const bakeryResponse = await fetch(
-                "http://localhost:3000/api/bakeries/mine",
+                `${API_URL}/api/bakeries/mine`,
                 {
                     method: "GET",
 

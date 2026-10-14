@@ -1,3 +1,4 @@
+import API_URL from "../../config/api.js";
 //Import React hooks
 import { useEffect, useState } from "react";
 
@@ -89,8 +90,8 @@ export default function StorefrontProduct() {
 
                 //Load Bakery and Product information together
                 const [bakeryResponse, productResponse] = await Promise.all([
-                    fetch(`http://localhost:3000/api/bakeries/public/${slug}`),
-                    fetch(`http://localhost:3000/api/bakeries/public/${slug}/products/${productId}`)
+                    fetch(`${API_URL}/api/bakeries/public/${slug}`),
+                    fetch(`${API_URL}/api/bakeries/public/${slug}/products/${productId}`)
                 ]);
 
                 //Convert responses into JavaScript data
@@ -237,7 +238,7 @@ export default function StorefrontProduct() {
                         //Request trusted pricing from the backend
                         const quoteResponse =
                             await fetch(
-                                `http://localhost:3000/api/bakeries/public/${slug}/products/${productId}/quote`,
+                                `${API_URL}/api/bakeries/public/${slug}/products/${productId}/quote`,
                                 {
                                     method: "POST",
 

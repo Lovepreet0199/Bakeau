@@ -1,3 +1,4 @@
+import API_URL from "../../config/api.js";
 //Import React hooks
 import {
     useEffect,
@@ -62,7 +63,7 @@ export default function BakeryReviews() {
 
                 //Request Bakery Reviews
                 const response = await fetch(
-                    "http://localhost:3000/api/reviews/bakery",
+                    `${API_URL}/api/reviews/bakery`,
                     {
                         headers: {
                             Authorization: `Bearer ${token}`
@@ -207,7 +208,7 @@ export default function BakeryReviews() {
 
             //Send Bakery reply
             const response = await fetch(
-                `http://localhost:3000/api/reviews/${reviewId}/reply`,
+                `${API_URL}/api/reviews/${reviewId}/reply`,
                 {
                     method: "PATCH",
 
@@ -344,7 +345,7 @@ export default function BakeryReviews() {
             //Remove Owner reply using existing Reply endpoint
             const response =
                 await fetch(
-                    `http://localhost:3000/api/reviews/${deleteReplyReview._id}/reply`,
+                    `${API_URL}/api/reviews/${deleteReplyReview._id}/reply`,
                     {
                         method: "PATCH",
 

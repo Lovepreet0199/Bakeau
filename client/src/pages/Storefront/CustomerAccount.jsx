@@ -1,3 +1,4 @@
+import API_URL from "../../config/api.js";
 //Import React hooks
 import {
     useEffect,
@@ -271,11 +272,11 @@ export default function CustomerAccount() {
                     await Promise.all([
 
                         fetch(
-                            `http://localhost:3000/api/bakeries/public/${slug}`
+                            `${API_URL}/api/bakeries/public/${slug}`
                         ),
 
                         fetch(
-                            "http://localhost:3000/api/auth/me",
+                            `${API_URL}/api/auth/me`,
                             {
                                 headers: {
                                     Authorization:
@@ -529,7 +530,7 @@ export default function CustomerAccount() {
             //Update authenticated Customer
             const response =
                 await fetch(
-                    "http://localhost:3000/api/auth/me",
+                    `${API_URL}/api/auth/me`,
                     {
                         method: "PUT",
 
@@ -682,7 +683,7 @@ export default function CustomerAccount() {
             //Change authenticated Customer password
             const response =
                 await fetch(
-                    "http://localhost:3000/api/auth/me/password",
+                    `${API_URL}/api/auth/me/password`,
                     {
                         method: "PATCH",
 

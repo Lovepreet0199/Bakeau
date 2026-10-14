@@ -1,3 +1,4 @@
+import API_URL from "../../../config/api.js";
 //Allows the Payments step to track Stripe state and load connection status
 import { useEffect, useState } from "react";
 
@@ -37,7 +38,7 @@ export default function PaymentStep({
 
                 //Ask the backend for the current Stripe connection status
                 const response = await fetch(
-                    "http://localhost:3000/api/bakeries/stripe/status",
+                    `${API_URL}/api/bakeries/stripe/status`,
                     {
                         headers: {
                             Authorization: `Bearer ${token}`
@@ -125,7 +126,7 @@ export default function PaymentStep({
 
             //Send a request to the backend to create or continue Stripe onboarding
             const response = await fetch(
-                "http://localhost:3000/api/bakeries/stripe/connect",
+                `${API_URL}/api/bakeries/stripe/connect`,
                 {
                     method: "POST",
                     headers: {
