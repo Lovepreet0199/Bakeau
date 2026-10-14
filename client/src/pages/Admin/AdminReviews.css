@@ -1,0 +1,454 @@
+/* Platform Admin Reviews Page */
+
+.admin-reviews-page {
+    background: #f7f4ef;
+    color: #352a24;
+}
+
+
+/* Admin Header */
+
+.admin-reviews-topbar {
+    background: #fffdfb;
+    border-bottom: 1px solid #e8e1da;
+}
+
+.admin-reviews-brand {
+    color: #3f2f27;
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.admin-reviews-brand-label {
+    color: #8d8179;
+    font-size: 12px;
+}
+
+.admin-reviews-admin-badge {
+    background: #f3eee9;
+    border: 1px solid #e5ddd6;
+    border-radius: 50px;
+    color: #67574e;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 7px 12px;
+}
+
+.admin-reviews-admin-dot {
+    background: #8d6956;
+    border-radius: 50%;
+    height: 7px;
+    width: 7px;
+}
+
+
+/* Admin Navigation */
+
+.admin-reviews-nav-link {
+    background: #fffdfb;
+    border: 1px solid #e4ddd6;
+    border-radius: 8px;
+    color: #74675f;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 8px 13px;
+    text-decoration: none;
+}
+
+.admin-reviews-nav-link:hover {
+    color: #49372d;
+}
+
+.admin-reviews-nav-link-active {
+    background: #49372d;
+    border-color: #49372d;
+    color: #ffffff;
+}
+
+
+/* Page Heading */
+
+.admin-reviews-page-label {
+    color: #a06f55;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.1px;
+}
+
+.admin-reviews-title {
+    color: #352921;
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.admin-reviews-description {
+    color: #887c74;
+    font-size: 14px;
+}
+
+
+/* Review Summary */
+
+.admin-review-summary-card {
+    background: #fffdfb;
+    border: 1px solid #e8e1da;
+    border-radius: 14px;
+    padding: 18px;
+}
+
+.admin-review-summary-number {
+    color: #3f322b;
+    font-size: 23px;
+    font-weight: 700;
+}
+
+.admin-review-summary-label {
+    color: #91857d;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+/* Success Message */
+
+.admin-review-success {
+    background: #f0f8f2;
+    border: 1px solid #cde5d4;
+    border-radius: 12px;
+    padding: 14px 16px;
+    width: 100%;
+}
+
+.admin-review-success-icon {
+    align-items: center;
+    background: #4d7d5a;
+    border-radius: 50%;
+    color: #ffffff;
+    display: flex;
+    flex-shrink: 0;
+    font-size: 12px;
+    font-weight: 700;
+    height: 28px;
+    justify-content: center;
+    width: 28px;
+}
+
+.admin-review-success-title {
+    color: #315e3d;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.admin-review-success-text {
+    color: #52715b;
+    font-size: 13px;
+}
+
+
+/* Review Cards */
+
+.admin-review-card {
+    background: #fffdfb;
+    border: 1px solid #e8e1da;
+    border-radius: 18px;
+    padding: 24px;
+}
+
+.admin-review-card-removed {
+    background: #fbf9f7;
+    opacity: 0.78;
+}
+
+.admin-review-customer {
+    color: #3e322b;
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.admin-review-email {
+    color: #978b83;
+    font-size: 12px;
+}
+
+
+/* Review Status */
+
+.admin-review-status {
+    align-items: center;
+    border-radius: 50px;
+    display: inline-flex;
+    font-size: 10px;
+    font-weight: 700;
+    gap: 6px;
+    padding: 5px 9px;
+}
+
+.admin-review-status-dot {
+    background: currentColor;
+    border-radius: 50%;
+    height: 5px;
+    width: 5px;
+}
+
+.admin-review-status-active {
+    background: #edf7ef;
+    color: #39724b;
+}
+
+.admin-review-status-removed {
+    background: #fbeaea;
+    color: #a24747;
+}
+
+
+/* Rating */
+
+.admin-review-stars,
+.admin-review-modal-stars {
+    color: #b78745;
+    display: flex;
+    gap: 2px;
+}
+
+
+/* Review Content */
+
+.admin-review-comment {
+    color: #554841;
+    font-size: 14px;
+    line-height: 1.7;
+    margin-bottom: 0;
+}
+
+.admin-review-image {
+    border-radius: 12px;
+    margin-top: 16px;
+    max-height: 280px;
+    max-width: 380px;
+    object-fit: cover;
+    width: 100%;
+}
+
+
+/* Bakery Reply */
+
+.admin-review-owner-reply {
+    background: #f7f1eb;
+    border-left: 3px solid #9c7661;
+    border-radius: 8px;
+    padding: 13px 15px;
+}
+
+.admin-review-owner-reply-label {
+    color: #806556;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.admin-review-owner-reply-text {
+    color: #605149;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+
+/* Review Information */
+
+.admin-review-details {
+    background: #faf7f3;
+    border: 1px solid #ece5df;
+    border-radius: 13px;
+    display: flex;
+    flex-direction: column;
+    padding: 18px;
+}
+
+.admin-review-detail-row {
+    border-bottom: 1px solid #eae3dd;
+    display: flex;
+    gap: 15px;
+    justify-content: space-between;
+    padding: 11px 0;
+}
+
+.admin-review-detail-row:first-child {
+    padding-top: 0;
+}
+
+.admin-review-detail-row span {
+    color: #988c84;
+    font-size: 11px;
+}
+
+.admin-review-detail-row strong {
+    color: #4b4039;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: right;
+}
+
+
+/* Remove Review */
+
+.admin-remove-review-button {
+    background: transparent;
+    border: 1px solid #c87070;
+    border-radius: 9px;
+    color: #a94949;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 9px 14px;
+}
+
+.admin-remove-review-button:hover,
+.admin-remove-review-button:focus {
+    background: #a94949;
+    border-color: #a94949;
+    color: #ffffff;
+}
+
+.admin-review-removed-message {
+    background: #f4eeee;
+    border-radius: 8px;
+    color: #987070;
+    font-size: 11px;
+    padding: 9px;
+}
+
+
+/* Loading And Empty States */
+
+.admin-review-state-card {
+    background: #fffdfb;
+    border: 1px solid #e8e1da;
+    border-radius: 16px;
+    color: #81756d;
+    padding: 40px;
+    text-align: center;
+}
+
+.admin-review-empty-title {
+    color: #493c35;
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.admin-review-empty-text {
+    color: #91857d;
+    font-size: 13px;
+}
+
+
+/* Confirmation Modal */
+
+.admin-review-modal-backdrop {
+    align-items: center;
+    background: rgba(42, 33, 28, 0.55);
+    display: flex;
+    inset: 0;
+    justify-content: center;
+    padding: 20px;
+    position: fixed;
+    z-index: 1050;
+}
+
+.admin-review-modal {
+    background: #fffdfb;
+    border: 1px solid #e7dfd8;
+    border-radius: 18px;
+    box-shadow: 0 18px 50px rgba(48, 37, 30, 0.18);
+    max-width: 480px;
+    padding: 28px;
+    width: 100%;
+}
+
+.admin-review-modal-icon {
+    align-items: center;
+    background: #fbeaea;
+    border-radius: 50%;
+    color: #aa4c4c;
+    display: flex;
+    font-size: 17px;
+    font-weight: 700;
+    height: 42px;
+    justify-content: center;
+    margin-bottom: 18px;
+    width: 42px;
+}
+
+.admin-review-modal-title {
+    color: #3e322c;
+    font-size: 21px;
+    font-weight: 700;
+}
+
+.admin-review-modal-text {
+    color: #7b7069;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.admin-review-modal-preview {
+    background: #f8f4ef;
+    border: 1px solid #ebe3dc;
+    border-radius: 10px;
+    color: #5c5049;
+    font-size: 13px;
+    line-height: 1.6;
+    margin-top: 18px;
+    padding: 14px;
+}
+
+.admin-review-modal-stars {
+    margin-bottom: 8px;
+}
+
+.admin-review-modal-cancel {
+    background: #ffffff;
+    border: 1px solid #ddd4cd;
+    border-radius: 8px;
+    color: #655950;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 9px 16px;
+}
+
+.admin-review-modal-remove {
+    background: #a94949;
+    border: 1px solid #a94949;
+    border-radius: 8px;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 9px 16px;
+}
+
+.admin-review-modal-remove:hover,
+.admin-review-modal-remove:focus {
+    background: #913d3d;
+    border-color: #913d3d;
+    color: #ffffff;
+}
+
+/* Platform Admin Logout */
+
+.admin-reviews-logout-button {
+    background: transparent;
+    border: 1px solid #ded5ce;
+    border-radius: 8px;
+    color: #6f625a;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 7px 13px;
+}
+
+.admin-reviews-logout-button:hover,
+.admin-reviews-logout-button:focus {
+    background: #49372d;
+    border-color: #49372d;
+    color: #ffffff;
+}

@@ -1,102 +1,221 @@
-/* Admin Bakery Accounts Page */
+/* Platform Admin Bakery Accounts Page */
 
 .admin-bakeries-page {
-    background: #f8f6f2;
-    color: #2f2925;
+    background: #f7f4ef;
+    color: #352a24;
 }
 
 
-/* Top Bar */
+/* Admin Header */
 
-.admin-topbar {
-    background: #ffffff;
-    border-bottom: 1px solid #e8e3dc;
+.admin-bakeries-topbar {
+    background: #fffdfb;
+    border-bottom: 1px solid #e8e1da;
 }
 
-.admin-brand {
-    color: #49372d;
-    font-size: 24px;
+.admin-bakeries-brand {
+    color: #3f2f27;
+    font-size: 26px;
     font-weight: 700;
+    letter-spacing: -0.5px;
 }
 
-.admin-brand-label {
-    color: #8a817a;
-    font-size: 13px;
+.admin-bakeries-brand-label {
+    color: #8d8179;
+    font-size: 12px;
+    margin-top: 1px;
+}
+
+.admin-bakeries-admin-badge {
+    background: #f3eee9;
+    border: 1px solid #e5ddd6;
+    border-radius: 50px;
+    color: #67574e;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 7px 12px;
+}
+
+.admin-bakeries-admin-dot {
+    background: #8d6956;
+    border-radius: 50%;
+    height: 7px;
+    width: 7px;
 }
 
 
 /* Page Heading */
 
-.admin-page-label {
-    color: #9a7661;
-    font-size: 12px;
+.admin-bakeries-page-label {
+    color: #a06f55;
+    font-size: 11px;
     font-weight: 700;
-    letter-spacing: 1.2px;
+    letter-spacing: 1.1px;
 }
 
-.admin-page-title {
-    color: #352a24;
+.admin-bakeries-title {
+    color: #352921;
     font-size: 32px;
     font-weight: 700;
+    letter-spacing: -0.5px;
 }
 
-.admin-page-description {
-    color: #776e68;
-    font-size: 15px;
+.admin-bakeries-description {
+    color: #887c74;
+    font-size: 14px;
 }
 
 
-/* Table Card */
+/* Total Bakery Count */
 
-.admin-table-card {
-    background: #ffffff;
-    border: 1px solid #e9e4de;
-    border-radius: 14px;
-    overflow: hidden;
+.admin-bakeries-total {
+    align-items: flex-end;
+    display: flex;
+    flex-direction: column;
 }
 
-.admin-table-card table {
-    min-width: 850px;
-}
-
-.admin-table-card thead th {
-    background: #fbfaf8;
-    border-bottom: 1px solid #e9e4de;
-    color: #766b64;
-    font-size: 12px;
+.admin-bakeries-total-number {
+    color: #3f3028;
+    font-size: 26px;
     font-weight: 700;
-    letter-spacing: 0.4px;
-    padding: 16px 20px;
+    line-height: 1;
+}
+
+.admin-bakeries-total-label {
+    color: #93877f;
+    font-size: 11px;
+    font-weight: 600;
+    margin-top: 5px;
     text-transform: uppercase;
 }
 
-.admin-table-card tbody td {
-    border-bottom: 1px solid #eeeae5;
-    color: #4d4540;
-    font-size: 14px;
-    padding: 18px 20px;
+
+/* Status Summary Cards */
+
+.admin-summary-card {
+    align-items: center;
+    background: #fffdfb;
+    border: 1px solid #e8e1da;
+    border-radius: 14px;
+    display: flex;
+    gap: 14px;
+    padding: 16px 18px;
 }
 
-.admin-table-card tbody tr:last-child td {
+.admin-summary-status {
+    border-radius: 50%;
+    flex-shrink: 0;
+    height: 10px;
+    width: 10px;
+}
+
+.admin-summary-approved {
+    background: #4d7d5a;
+}
+
+.admin-summary-pending {
+    background: #c28a27;
+}
+
+.admin-summary-suspended {
+    background: #b65353;
+}
+
+.admin-summary-number {
+    color: #3f322b;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.admin-summary-label {
+    color: #91857d;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+/* Bakery Table Card */
+
+.admin-bakeries-table-card {
+    background: #fffdfb;
+    border: 1px solid #e8e1da;
+    border-radius: 18px;
+    overflow: hidden;
+}
+
+.admin-bakeries-table-heading {
+    border-bottom: 1px solid #eee8e2;
+    padding: 22px 24px;
+}
+
+.admin-bakeries-card-eyebrow {
+    color: #aa7a61;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.1px;
+}
+
+.admin-bakeries-card-title {
+    color: #3b302a;
+    font-size: 19px;
+    font-weight: 700;
+}
+
+
+/* Bakery Table */
+
+.admin-bakeries-table {
+    min-width: 900px;
+}
+
+.admin-bakeries-table thead th {
+    background: #faf7f3;
+    border-bottom: 1px solid #e9e2dc;
+    color: #958980;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    padding: 14px 22px;
+    text-transform: uppercase;
+}
+
+.admin-bakeries-table tbody td {
+    border-bottom: 1px solid #eee8e2;
+    color: #4d423c;
+    font-size: 13px;
+    padding: 18px 22px;
+    vertical-align: middle;
+}
+
+.admin-bakeries-table tbody tr:last-child td {
     border-bottom: none;
 }
 
+.admin-bakeries-table tbody tr {
+    transition: background 0.2s ease;
+}
 
-/* Bakery Information */
+.admin-bakeries-table tbody tr:hover {
+    background: #fcfaf7;
+}
+
+
+/* Bakery Logo */
 
 .admin-bakery-logo {
     align-items: center;
-    background: #eee7df;
-    border-radius: 10px;
-    color: #594439;
+    background: #eee6df;
+    border: 1px solid #e3dad2;
+    border-radius: 11px;
+    color: #654c3f;
     display: flex;
     flex-shrink: 0;
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 700;
-    height: 44px;
+    height: 46px;
     justify-content: center;
     overflow: hidden;
-    width: 44px;
+    width: 46px;
 }
 
 .admin-bakery-logo img {
@@ -105,64 +224,78 @@
     width: 100%;
 }
 
+
+/* Bakery Information */
+
 .admin-bakery-name {
-    color: #372e29;
-    font-weight: 600;
+    color: #3f332c;
+    font-size: 14px;
+    font-weight: 700;
 }
 
 .admin-bakery-slug {
-    color: #99908a;
-    font-size: 12px;
+    color: #9b9088;
+    font-size: 11px;
+}
+
+.admin-table-primary {
+    color: #4a3d36;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.admin-table-secondary {
+    color: #9a8e86;
+    font-size: 11px;
 }
 
 
-/* Account Status */
+/* Bakery Status */
 
-.admin-status {
+.admin-bakery-status {
+    align-items: center;
     border-radius: 50px;
-    display: inline-block;
-    font-size: 12px;
+    display: inline-flex;
+    font-size: 11px;
     font-weight: 700;
-    padding: 6px 11px;
+    gap: 6px;
+    padding: 7px 11px;
+    white-space: nowrap;
 }
 
-.admin-status-approved {
-    background: #e8f5ec;
+.admin-bakery-status-dot {
+    background: currentColor;
+    border-radius: 50%;
+    height: 6px;
+    width: 6px;
+}
+
+.admin-bakery-status-approved {
+    background: #edf7ef;
     color: #39724b;
 }
 
-.admin-status-pending {
-    background: #fff4d9;
-    color: #946c14;
+.admin-bakery-status-pending {
+    background: #fff5de;
+    color: #9a6b16;
 }
 
-.admin-status-suspended {
-    background: #fbe7e7;
+.admin-bakery-status-suspended {
+    background: #fbeaea;
     color: #a24747;
 }
 
-
-/* Loading And Empty States */
-
-.admin-state-card {
-    background: #ffffff;
-    border: 1px solid #e9e4de;
-    border-radius: 14px;
-    color: #776e68;
-    padding: 30px;
-    text-align: center;
-}
 
 /* View Bakery Button */
 
 .admin-view-button {
     background: #49372d;
     border: 1px solid #49372d;
-    border-radius: 8px;
+    border-radius: 9px;
     color: #ffffff;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 600;
-    padding: 7px 14px;
+    padding: 8px 14px;
     white-space: nowrap;
 }
 
@@ -171,4 +304,85 @@
     background: #382a23;
     border-color: #382a23;
     color: #ffffff;
+}
+
+
+/* Loading And Empty States */
+
+.admin-bakeries-state-card {
+    background: #fffdfb;
+    border: 1px solid #e8e1da;
+    border-radius: 16px;
+    color: #776e68;
+    padding: 38px;
+    text-align: center;
+}
+
+.admin-empty-title {
+    color: #493b34;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.admin-empty-text {
+    color: #91857d;
+    font-size: 13px;
+}
+
+/* Platform Admin Logout */
+
+.admin-bakeries-logout-button {
+    background: transparent;
+    border: 1px solid #ded5ce;
+    border-radius: 8px;
+    color: #6f625a;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 7px 13px;
+}
+
+.admin-bakeries-logout-button:hover,
+.admin-bakeries-logout-button:focus {
+    background: #49372d;
+    border-color: #49372d;
+    color: #ffffff;
+}
+
+/* Platform Admin Navigation */
+
+.admin-bakeries-nav-link {
+    background: #fffdfb;
+    border: 1px solid #e4ddd6;
+    border-radius: 8px;
+    color: #74675f;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 8px 13px;
+    text-decoration: none;
+}
+
+.admin-bakeries-nav-link:hover {
+    color: #49372d;
+}
+
+.admin-bakeries-nav-link-active {
+    background: #49372d;
+    border-color: #49372d;
+    color: #ffffff;
+}
+
+.admin-bakeries-nav-link-active:hover {
+    color: #ffffff;
+}
+
+/* Mobile alignment for total bakeries */
+@media (max-width: 991.98px) {
+
+    .admin-bakeries-total {
+        width: 100%;
+        align-items: center;
+        text-align: center;
+        margin-top: 6px;
+    }
+
 }

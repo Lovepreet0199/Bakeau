@@ -516,3 +516,49 @@
     cursor: not-allowed;
     opacity: 0.65;
 }
+
+/* Platform Admin Logout */
+
+.admin-details-logout-button {
+    background: transparent;
+    border: 1px solid #ded5ce;
+    border-radius: 8px;
+    color: #6f625a;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 7px 13px;
+}
+
+.admin-details-logout-button:hover,
+.admin-details-logout-button:focus {
+    background: #49372d;
+    border-color: #49372d;
+    color: #ffffff;
+}
+
+/* Platform Admin Navigation */
+
+.admin-details-nav-link {
+    background: #fffdfb;
+    border: 1px solid #e4ddd6;
+    border-radius: 8px;
+    color: #74675f;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 8px 13px;
+    text-decoration: none;
+}
+
+.admin-details-nav-link:hover {
+    color: #49372d;
+}
+
+.admin-details-nav-link-active {
+    background: #49372d;
+    border-color: #49372d;
+    color: #ffffff;
+}
+
+.admin-details-nav-link-active:hover {
+    color: #ffffff;
+}

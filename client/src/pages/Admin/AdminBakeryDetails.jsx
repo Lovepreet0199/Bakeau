@@ -7,6 +7,7 @@ import {
 //Import React Router tools
 import {
     Link,
+    useNavigate,
     useParams
 } from "react-router-dom";
 
@@ -22,12 +23,41 @@ import "./AdminBakeryDetails.css";
 //Displays one Bakery account for the Platform Administrator
 export default function AdminBakeryDetails() {
 
+    //Used to navigate between pages
+    const navigate =
+        useNavigate();
+
     //Get Bakery ID from the URL
     const {
         id
     } = useParams();
 
+    //Logs the Platform Administrator out
+    function handleAdminLogout() {
 
+        //Remove any saved authentication information
+        localStorage.removeItem(
+            "token"
+        );
+
+        localStorage.removeItem(
+            "user"
+        );
+
+        sessionStorage.removeItem(
+            "token"
+        );
+
+        sessionStorage.removeItem(
+            "user"
+        );
+
+
+        //Return Admin to Login page
+        navigate(
+            "/admin/login"
+        );
+    }
     //Stores Bakery information
     const [bakery, setBakery] =
         useState(null);
@@ -315,13 +345,29 @@ export default function AdminBakeryDetails() {
                         </div>
 
 
-                        {/* Admin Label */}
-                        <div className="admin-details-admin-badge d-none d-sm-flex align-items-center gap-2">
+                        <div className="d-flex align-items-center gap-2">
 
-                            <span className="admin-details-admin-dot">
-                            </span>
+                            {/* Platform Admin Label */}
+                            <div className="admin-bakeries-admin-badge d-none d-sm-flex align-items-center gap-2">
 
-                            Platform Admin
+                                <span className="admin-bakeries-admin-dot">
+                                </span>
+
+                                Platform Admin
+
+                            </div>
+
+
+                            {/* Admin Logout */}
+                            <button
+                                type="button"
+                                className="btn admin-bakeries-logout-button"
+                                onClick={
+                                    handleAdminLogout
+                                }
+                            >
+                                Logout
+                            </button>
 
                         </div>
 
@@ -334,6 +380,26 @@ export default function AdminBakeryDetails() {
 
             {/* Main Page Content */}
             <section className="container-xxl py-4 py-lg-5">
+
+                {/* Platform Admin Navigation */}
+                <div className="d-flex flex-wrap gap-2 mb-4">
+
+                    <Link
+                        to="/admin/bakeries"
+                        className="admin-details-nav-link admin-details-nav-link-active"
+                    >
+                        Bakery Accounts
+                    </Link>
+
+                    <Link
+                        to="/admin/reviews"
+                        className="admin-details-nav-link"
+                    >
+                        Reviews
+                    </Link>
+
+                </div>
+
 
 
                 {/* Back Navigation */}

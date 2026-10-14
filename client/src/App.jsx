@@ -122,6 +122,9 @@ import AdminLogin from "./pages/Admin/AdminLogin.jsx";
 //Import Platform Admin Bakery Details page
 import AdminBakeryDetails from "./pages/Admin/AdminBakeryDetails.jsx";
 
+//Import Platform Admin Reviews page
+import AdminReviews from "./pages/Admin/AdminReviews";
+
 //Displays the Bakeau application routes
 export default function App() {
 
@@ -146,6 +149,12 @@ export default function App() {
         <Route
           path="/admin/bakeries/:id"
           element={<AdminBakeryDetails />}
+        />
+
+        {/* Platform Administrator Reviews */}
+        <Route
+          path="/admin/reviews"
+          element={<AdminReviews />}
         />
 
         {/* Public Bakeau landing page */}
