@@ -98,6 +98,21 @@ import StorefrontReviews from "./pages/Storefront/StorefrontReviews";
 //Import Bakery Reviews page
 import BakeryReviews from "./pages/Dashboard/BakeryReviews";
 
+//Import Customer Edit Order page
+import StorefrontEditOrder from "./pages/Storefront/StorefrontEditOrder";
+
+//Import Forgot Password page
+import ForgotPassword from "./pages/ForgotPassword/ForgotPassword.jsx";
+
+//Import Reset Password page
+import ResetPassword from "./pages/ResetPassword/ResetPassword.jsx";
+
+//Import Customer Forgot Password page
+import StorefrontForgotPassword from "./pages/Storefront/StorefrontForgotPassword";
+
+//Import Customer Reset Password page
+import StorefrontResetPassword from "./pages/Storefront/StorefrontResetPassword";
+
 //Displays the Bakeau application routes
 export default function App() {
 
@@ -142,10 +157,34 @@ export default function App() {
           element={<Login />}
         />
 
+        {/* Forgot Password page */}
+        <Route
+          path="/forgot-password"
+          element={<ForgotPassword />}
+        />
+
+        {/* Reset Password page */}
+        <Route
+          path="/reset-password"
+          element={<ResetPassword />}
+        />
+
         {/* Customer login page */}
         <Route
           path="/store/:slug/login"
           element={<CustomerLogin />}
+        />
+
+        {/* Customer Forgot Password page */}
+        <Route
+          path="/store/:slug/forgot-password"
+          element={<StorefrontForgotPassword />}
+        />
+
+        {/* Customer Reset Password page */}
+        <Route
+          path="/store/:slug/reset-password"
+          element={<StorefrontResetPassword />}
         />
 
         {/* Customer Account Page */}
@@ -207,6 +246,13 @@ export default function App() {
           path="/store/:slug/orders/:orderId"
           element={<StorefrontOrderTracking />}
         />
+
+        {/* Edit pending Order */}
+        <Route
+          path="/store/:slug/orders/:orderId/edit"
+          element={<StorefrontEditOrder />}
+        />
+
         {/* Customer orders route */}
         <Route
           path="/store/:slug/orders"

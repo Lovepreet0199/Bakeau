@@ -492,6 +492,169 @@
     font-weight: 700;
 }
 
+/* Order Action text */
+.storefront-tracking-action-text {
+    color: #756a64;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+
+/* Cancel Order button */
+.storefront-tracking-cancel-button {
+    min-height: 42px;
+    padding: 9px 16px;
+    border: 1px solid #b0443c;
+    border-radius: 8px;
+    background-color: transparent;
+    color: #b0443c;
+    font-size: 13px;
+    font-weight: 600;
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
+}
+
+
+/* Cancel Order button hover */
+.storefront-tracking-cancel-button:hover {
+    background-color: #b0443c;
+    color: #ffffff;
+}
+
+
+/* Cancelled Order message */
+.storefront-tracking-cancelled {
+    padding: 20px;
+    border: 1px solid #ead2cf;
+    border-radius: 10px;
+    background-color: #fff7f6;
+    color: #6d312d;
+}
+
+
+/* Cancelled Order message text */
+.storefront-tracking-cancelled span {
+    color: #89605c;
+    font-size: 13px;
+}
+
+
+/* Cancelled Order status */
+.storefront-tracking-status-cancelled {
+    background-color: #f8e6e4;
+    color: #a33f37;
+}
+
+
+/* Cancel Order modal background */
+.storefront-cancel-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1060;
+    background-color: rgba(30, 24, 21, 0.48);
+}
+
+
+/* Cancel Order modal */
+.storefront-cancel-modal {
+    max-width: 460px;
+    padding: 24px;
+    border-radius: 12px;
+    background-color: #ffffff;
+    box-shadow: 0 20px 60px rgba(31, 22, 18, 0.18);
+}
+
+
+/* Cancel Order modal heading */
+.storefront-cancel-modal h2 {
+    color: #33251f;
+    font-size: 19px;
+    font-weight: 700;
+}
+
+
+/* Cancel Order modal text */
+.storefront-cancel-modal-text {
+    color: #625750;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+
+/* Cancel Order warning text */
+.storefront-cancel-modal-note {
+    color: #9b5b55;
+    font-size: 12px;
+}
+
+
+/* Modal close button */
+.storefront-cancel-modal-close {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 1px solid #ded5d0;
+    border-radius: 7px;
+    background-color: #ffffff;
+    color: #655a54;
+}
+
+
+/* Keep Order button */
+.storefront-cancel-modal-secondary {
+    min-height: 40px;
+    padding: 8px 17px;
+    border: 1px solid #ded5d0;
+    border-radius: 7px;
+    background-color: #ffffff;
+    color: #5f554f;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+/* Confirm Cancel Order button */
+.storefront-cancel-modal-danger {
+    min-height: 40px;
+    padding: 8px 17px;
+    border: none;
+    border-radius: 7px;
+    background-color: #b0443c;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+/* Disabled modal buttons */
+.storefront-cancel-modal-close:disabled,
+.storefront-cancel-modal-secondary:disabled,
+.storefront-cancel-modal-danger:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* Edit Pending Order button */
+.storefront-tracking-edit-button {
+    min-height: 42px;
+    padding: 9px 16px;
+    border: 1px solid var(--storefront-primary);
+    border-radius: 8px;
+    background-color: var(--storefront-primary);
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+/* Edit Pending Order hover */
+.storefront-tracking-edit-button:hover {
+    opacity: 0.9;
+    color: #ffffff;
+}
+
 /* Mobile */
 @media (max-width: 575.98px) {
 

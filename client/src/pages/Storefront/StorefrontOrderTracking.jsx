@@ -1,11 +1,23 @@
 //Import React hooks
-import { useEffect, useState } from "react";
+import {
+    useEffect,
+    useState
+} from "react";
 
 //Import React Router tools
-import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
+import {
+    Link,
+    useLocation,
+    useNavigate,
+    useParams
+} from "react-router-dom";
 
 //Import icons
-import { Check, ShoppingBag } from "lucide-react";
+import {
+    Check,
+    ShoppingBag,
+    X
+} from "lucide-react";
 
 //Import shared Storefront components
 import StorefrontNavbar from "../../components/storefront/StorefrontNavbar";
@@ -22,75 +34,188 @@ import "./StorefrontOrderTracking.css";
 export default function StorefrontOrderTracking() {
 
     //Get Bakery slug and Order ID
-    const { slug, orderId } = useParams();
-    const navigate = useNavigate();
-    const location = useLocation();
+    const {
+        slug,
+        orderId
+    } = useParams();
 
-    //Page data
-    const [bakery, setBakery] = useState(null);
-    const [order, setOrder] = useState(null);
+    //Used to navigate Customer
+    const navigate =
+        useNavigate();
 
-    //Page states
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState("");
+    //Used to get page navigation state
+    const location =
+        useLocation();
+
+
+    //Stores Bakery information
+    const [
+        bakery,
+        setBakery
+    ] = useState(null);
+
+    //Stores Customer Order
+    const [
+        order,
+        setOrder
+    ] = useState(null);
+
+
+    //Tracks page loading
+    const [
+        isLoading,
+        setIsLoading
+    ] = useState(true);
+
+    //Stores page loading errors
+    const [
+        error,
+        setError
+    ] = useState("");
+
+
+    //Tracks Cancel Order modal
+    const [
+        isCancelModalOpen,
+        setIsCancelModalOpen
+    ] = useState(false);
+
+
+    //Tracks Order cancellation request
+    const [
+        isCancelling,
+        setIsCancelling
+    ] = useState(false);
+
+
+    //Stores Order action errors
+    const [
+        actionError,
+        setActionError
+    ] = useState("");
+
+
+    //Stores successful Order action message
+    const [
+        actionMessage,
+        setActionMessage
+    ] = useState("");
+
 
     //Stores Review for this Order
-    const [review, setReview] = useState(null);
+    const [
+        review,
+        setReview
+    ] = useState(null);
+
 
     //Gets Customer token
     function getToken() {
-        return localStorage.getItem("token") || sessionStorage.getItem("token");
+
+        return (
+            localStorage.getItem("token") ||
+            sessionStorage.getItem("token")
+        );
     }
 
 
     //Formats money
     function formatPrice(amount) {
 
-        return new Intl.NumberFormat("en-CA", {
-            style: "currency",
-            currency: bakery?.currency || "CAD"
-        }).format(Number(amount) || 0);
+        return new Intl.NumberFormat(
+            "en-CA",
+            {
+                style:
+                    "currency",
+
+                currency:
+                    bakery?.currency ||
+                    "CAD"
+            }
+        ).format(
+            Number(amount) ||
+            0
+        );
     }
 
 
     //Formats Pickup date
     function formatPickupDate(date) {
 
-        if (!date) return "";
+        if (!date) {
+            return "";
+        }
 
-        return new Date(date).toLocaleDateString("en-CA", {
-            weekday: "short",
-            month: "short",
-            day: "numeric",
-            timeZone: "UTC"
-        });
+        return new Date(
+            date
+        ).toLocaleDateString(
+            "en-CA",
+            {
+                weekday:
+                    "short",
+
+                month:
+                    "short",
+
+                day:
+                    "numeric",
+
+                timeZone:
+                    "UTC"
+            }
+        );
     }
 
 
     //Formats Pickup time
     function formatPickupTime(time) {
 
-        if (!time) return "";
+        if (!time) {
+            return "";
+        }
 
-        const [hour, minute] = time.split(":");
-        const date = new Date();
+        const [
+            hour,
+            minute
+        ] = time.split(":");
 
-        date.setHours(Number(hour), Number(minute), 0, 0);
+        const date =
+            new Date();
 
-        return date.toLocaleTimeString("en-US", {
-            hour: "numeric",
-            minute: "2-digit",
-            hour12: true
-        });
+        date.setHours(
+            Number(hour),
+            Number(minute),
+            0,
+            0
+        );
+
+        return date.toLocaleTimeString(
+            "en-US",
+            {
+                hour:
+                    "numeric",
+
+                minute:
+                    "2-digit",
+
+                hour12:
+                    true
+            }
+        );
     }
 
 
     //Capitalizes Order status
     function formatStatus(status) {
 
-        if (!status) return "";
+        if (!status) {
+            return "";
+        }
 
-        return status.charAt(0).toUpperCase() + status.slice(1);
+        return (
+            status.charAt(0).toUpperCase() +
+            status.slice(1)
+        );
     }
 
 
@@ -105,27 +230,42 @@ export default function StorefrontOrderTracking() {
             "completed"
         ];
 
-        const currentIndex = statusOrder.indexOf(order.status);
-        const stageIndex = statusOrder.indexOf(status);
+        const currentIndex =
+            statusOrder.indexOf(
+                order.status
+            );
 
-        return currentIndex >= stageIndex;
+        const stageIndex =
+            statusOrder.indexOf(
+                status
+            );
+
+        return (
+            currentIndex >=
+            stageIndex
+        );
     }
 
 
-    //Loads Bakery and Order
+    //Loads Bakery, Order and Review
     useEffect(() => {
 
         async function loadOrder() {
 
-            const token = getToken();
+            const token =
+                getToken();
 
 
             //Customer must be logged in
             if (!token) {
 
-                navigate(`/store/${slug}/login`, {
-                    replace: true
-                });
+                navigate(
+                    `/store/${slug}/login`,
+                    {
+                        replace:
+                            true
+                    }
+                );
 
                 return;
             }
@@ -137,84 +277,228 @@ export default function StorefrontOrderTracking() {
 
 
                 //Load Bakery
-                const bakeryResponse = await fetch(
-                    `http://localhost:3000/api/bakeries/public/${slug}`
-                );
+                const bakeryResponse =
+                    await fetch(
+                        `http://localhost:3000/api/bakeries/public/${slug}`
+                    );
 
-                const bakeryData = await bakeryResponse.json();
+                const bakeryData =
+                    await bakeryResponse.json();
 
 
+                //Stop if Bakery could not be loaded
                 if (!bakeryResponse.ok) {
+
                     throw new Error(
-                        bakeryData.message || "Unable to load Bakery"
+                        bakeryData.message ||
+                        "Unable to load Bakery"
                     );
                 }
 
 
-                setBakery(bakeryData.bakery);
+                //Save Bakery information
+                setBakery(
+                    bakeryData.bakery
+                );
 
 
                 //Load Customer Order
-                const orderResponse = await fetch(
-                    `http://localhost:3000/api/orders/mine/${orderId}`,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`
+                const orderResponse =
+                    await fetch(
+                        `http://localhost:3000/api/orders/mine/${orderId}`,
+                        {
+                            headers: {
+                                Authorization:
+                                    `Bearer ${token}`
+                            }
                         }
-                    }
-                );
+                    );
 
-                const orderData = await orderResponse.json();
+                const orderData =
+                    await orderResponse.json();
 
 
+                //Stop if Order could not be loaded
                 if (!orderResponse.ok) {
+
                     throw new Error(
-                        orderData.message || "Unable to load Order"
+                        orderData.message ||
+                        "Unable to load Order"
                     );
                 }
 
 
-                setOrder(orderData.order);
-
-                //Check if Customer already reviewed this Order
-                const reviewResponse = await fetch(
-                    `http://localhost:3000/api/reviews/order/${orderId}`,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        }
-                    }
+                //Save Customer Order
+                setOrder(
+                    orderData.order
                 );
 
-                const reviewData = await reviewResponse.json();
 
+                //Check if Customer already reviewed this Order
+                const reviewResponse =
+                    await fetch(
+                        `http://localhost:3000/api/reviews/order/${orderId}`,
+                        {
+                            headers: {
+                                Authorization:
+                                    `Bearer ${token}`
+                            }
+                        }
+                    );
+
+                const reviewData =
+                    await reviewResponse.json();
+
+
+                //Save Review when one exists
                 if (reviewResponse.ok) {
-                    setReview(reviewData.review);
+
+                    setReview(
+                        reviewData.review
+                    );
                 }
+
 
             } catch (error) {
 
-                setError(error.message);
+                setError(
+                    error.message
+                );
 
             } finally {
 
-                setIsLoading(false);
+                setIsLoading(
+                    false
+                );
             }
         }
 
 
         loadOrder();
 
-    }, [slug, orderId, navigate]);
+    }, [
+        slug,
+        orderId,
+        navigate
+    ]);
 
 
-    //Loading
+    //Cancels a pending Customer Order
+    async function handleCancelOrder() {
+
+        //Only pending Orders can be cancelled
+        if (
+            !order ||
+            order.status !==
+            "pending"
+        ) {
+
+            return;
+        }
+
+
+        setIsCancelling(
+            true
+        );
+
+        setActionError("");
+
+        setActionMessage("");
+
+
+        try {
+
+            //Get Customer authentication token
+            const token =
+                getToken();
+
+
+            //Request Order cancellation
+            const response =
+                await fetch(
+                    `http://localhost:3000/api/orders/mine/${orderId}/cancel`,
+                    {
+                        method:
+                            "PATCH",
+
+                        headers: {
+                            Authorization:
+                                `Bearer ${token}`
+                        }
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            //Stop if Order could not be cancelled
+            if (!response.ok) {
+
+                throw new Error(
+                    data.message ||
+                    "Unable to cancel Order"
+                );
+            }
+
+
+            //Update Order immediately on the page
+            setOrder(
+                (currentOrder) => ({
+                    ...currentOrder,
+
+                    status:
+                        data.order?.status ||
+                        "cancelled",
+
+                    updated_at:
+                        data.order?.updated_at ||
+                        new Date().toISOString()
+                })
+            );
+
+
+            //Close confirmation modal
+            setIsCancelModalOpen(
+                false
+            );
+
+
+            //Show success message
+            setActionMessage(
+                "Your Order has been cancelled."
+            );
+
+
+        } catch (error) {
+
+            //Display cancellation error
+            setActionError(
+                error.message
+            );
+
+        } finally {
+
+            //Stop cancellation loading
+            setIsCancelling(
+                false
+            );
+        }
+    }
+
+
+    //Display loading state
     if (isLoading) {
 
         return (
+
             <div className="storefront-tracking-loading d-flex align-items-center justify-content-center">
 
-                <div className="spinner-border" role="status">
+                <div
+                    className="spinner-border"
+                    role="status"
+                >
 
                     <span className="visually-hidden">
                         Loading Order...
@@ -227,10 +511,15 @@ export default function StorefrontOrderTracking() {
     }
 
 
-    //Error
-    if (error || !bakery || !order) {
+    //Display loading error
+    if (
+        error ||
+        !bakery ||
+        !order
+    ) {
 
         return (
+
             <div className="storefront-tracking-loading d-flex flex-column align-items-center justify-content-center gap-3 text-center">
 
                 <h1 className="h4">
@@ -238,7 +527,10 @@ export default function StorefrontOrderTracking() {
                 </h1>
 
                 <p>
-                    {error || "Order not found"}
+                    {
+                        error ||
+                        "Order not found"
+                    }
                 </p>
 
                 <Link
@@ -254,90 +546,147 @@ export default function StorefrontOrderTracking() {
 
 
     //Use the first Payment for this Order
-    const payment = order.payments?.[0];
+    const payment =
+        order.payments?.[0];
 
 
     //Payment has actually been received
     const paymentReceived =
-        payment?.payment_status === "Received";
+        payment?.payment_status ===
+        "Received";
 
 
     //Payment waiting for Bakery verification
     const paymentPending =
-        payment?.payment_status === "Pending";
+        payment?.payment_status ===
+        "Pending";
 
 
     //Amount connected to the Payment
     const paymentAmount =
-        Number(payment?.amount || 0);
+        Number(
+            payment?.amount ||
+            0
+        );
 
 
     //Remaining balance after a received payment
-    const remainingBalance = paymentReceived
-        ? Math.max(0, Number(order.total_price) - paymentAmount)
-        : Number(order.total_price);
+    const remainingBalance =
+        paymentReceived
+            ? Math.max(
+                0,
+                Number(
+                    order.total_price
+                ) -
+                paymentAmount
+            )
+            : Number(
+                order.total_price
+            );
 
 
     //Pickup address
     const pickupLocation = [
         bakery.address?.city,
         bakery.address?.province
-    ].filter(Boolean).join(", ");
+    ]
+        .filter(Boolean)
+        .join(", ");
 
 
     //Order stages displayed in the timeline
     const stages = [
+
         {
-            status: "pending",
-            title: "Order placed",
-            description: `Your order has been received by ${bakery.name}.`
+            status:
+                "pending",
+
+            title:
+                "Order placed",
+
+            description:
+                `Your order has been received by ${bakery.name}.`
         },
+
         {
-            status: "confirmed",
-            title: "Order confirmed",
-            description: "The bakery has accepted your order."
+            status:
+                "confirmed",
+
+            title:
+                "Order confirmed",
+
+            description:
+                "The bakery has accepted your order."
         },
+
         {
-            status: "preparing",
-            title: "Preparing",
-            description: "Your order is being made with care."
+            status:
+                "preparing",
+
+            title:
+                "Preparing",
+
+            description:
+                "Your order is being made with care."
         },
+
         {
-            status: "ready",
-            title: "Ready for pickup",
-            description: "Your order is ready for pickup."
+            status:
+                "ready",
+
+            title:
+                "Ready for pickup",
+
+            description:
+                "Your order is ready for pickup."
         },
+
         {
-            status: "completed",
-            title: "Completed",
-            description: "Your order has been completed."
+            status:
+                "completed",
+
+            title:
+                "Completed",
+
+            description:
+                "Your order has been completed."
         }
+
     ];
 
 
     return (
 
+        //Apply Bakery theme to Order Tracking page
         <div
             className="storefront-tracking-page min-vh-100 d-flex flex-column"
-            style={getStorefrontTheme(bakery)}
+            style={
+                getStorefrontTheme(
+                    bakery
+                )
+            }
         >
 
             {/* Storefront Navbar */}
-            <StorefrontNavbar bakery={bakery} />
+            <StorefrontNavbar
+                bakery={bakery}
+            />
 
 
+            {/* Order Tracking Content */}
             <main className="storefront-tracking-main flex-grow-1">
 
                 <div className="container-xl px-3 py-4 py-lg-5">
 
 
-                    {/* Back */}
+                    {/* Back to Orders */}
                     <Link
                         to={`/store/${slug}/orders`}
                         className="storefront-tracking-back text-decoration-none"
                     >
                         ‹ My orders
                     </Link>
+
 
                     {/* Review success message */}
                     {location.state?.reviewSubmitted && (
@@ -350,6 +699,7 @@ export default function StorefrontOrderTracking() {
 
                     )}
 
+
                     {/* Order heading */}
                     <div className="storefront-tracking-heading d-flex justify-content-between align-items-end gap-3 flex-wrap">
 
@@ -360,17 +710,59 @@ export default function StorefrontOrderTracking() {
                             </span>
 
                             <h1>
-                                {order.order_number}
+                                {
+                                    order.order_number
+                                }
                             </h1>
 
                         </div>
 
 
-                        <div className={`storefront-tracking-status storefront-tracking-status-${order.status}`}>
-                            {formatStatus(order.status)}
+                        {/* Order status */}
+                        <div
+                            className={
+                                `storefront-tracking-status storefront-tracking-status-${order.status}`
+                            }
+                        >
+                            {
+                                formatStatus(
+                                    order.status
+                                )
+                            }
                         </div>
 
                     </div>
+
+
+                    {/* Order action success */}
+                    {actionMessage && (
+
+                        <div
+                            className="alert alert-success mb-4"
+                            role="alert"
+                        >
+                            {
+                                actionMessage
+                            }
+                        </div>
+
+                    )}
+
+
+                    {/* Order action error */}
+                    {actionError &&
+                        !isCancelModalOpen && (
+
+                            <div
+                                className="alert alert-danger mb-4"
+                                role="alert"
+                            >
+                                {
+                                    actionError
+                                }
+                            </div>
+
+                        )}
 
 
                     <div className="row g-4">
@@ -380,226 +772,311 @@ export default function StorefrontOrderTracking() {
                         <div className="col-12 col-lg-8">
 
 
-                            {/* Products */}
+                            {/* Ordered Products */}
                             <section className="storefront-tracking-card mb-3">
 
-                                {order.items?.map((item) => (
+                                {order.items?.map(
+                                    (item) => (
 
-                                    <div
-                                        key={item._id}
-                                        className="storefront-tracking-product"
-                                    >
+                                        <div
+                                            key={
+                                                item._id
+                                            }
+                                            className="storefront-tracking-product"
+                                        >
 
-                                        <div className="d-flex gap-3">
+                                            <div className="d-flex gap-3">
 
-                                            {/* Product image */}
-                                            {item.product_id?.image_url ? (
+                                                {/* Product image */}
+                                                {item.product_id?.image_url ? (
 
-                                                <img
-                                                    src={item.product_id.image_url}
-                                                    alt={item.product_name}
-                                                    className="storefront-tracking-product-image"
-                                                />
+                                                    <img
+                                                        src={
+                                                            item.product_id.image_url
+                                                        }
+                                                        alt={
+                                                            item.product_name
+                                                        }
+                                                        className="storefront-tracking-product-image"
+                                                    />
 
-                                            ) : (
+                                                ) : (
 
-                                                <div className="storefront-tracking-product-image storefront-tracking-product-placeholder d-flex align-items-center justify-content-center">
+                                                    <div className="storefront-tracking-product-image storefront-tracking-product-placeholder d-flex align-items-center justify-content-center">
 
-                                                    <ShoppingBag size={19} />
+                                                        <ShoppingBag
+                                                            size={19}
+                                                        />
 
-                                                </div>
+                                                    </div>
 
-                                            )}
-
-                                            {/* Product information */}
-                                            <div className="flex-grow-1">
-
-                                                <strong className="d-block">
-                                                    {item.product_name}
-                                                </strong>
-
-                                                <small className="d-block">
-                                                    Qty {item.quantity}
-                                                </small>
+                                                )}
 
 
-                                                {/* Customizations for THIS Product */}
-                                                {item.customizations?.length > 0 && (
+                                                {/* Product information */}
+                                                <div className="flex-grow-1">
 
-                                                    <div className="storefront-tracking-product-customizations mt-2">
+                                                    <strong className="d-block">
+                                                        {
+                                                            item.product_name
+                                                        }
+                                                    </strong>
 
-                                                        {item.customizations.map((customization) => (
+                                                    <small className="d-block">
+                                                        Qty{" "}
+                                                        {
+                                                            item.quantity
+                                                        }
+                                                    </small>
 
-                                                            <div
-                                                                key={customization._id}
-                                                                className="storefront-tracking-product-option"
-                                                            >
 
-                                                                <span>
-                                                                    {customization.group_name}:
-                                                                </span>
+                                                    {/* Product Customizations */}
+                                                    {item.customizations?.length >
+                                                        0 && (
 
-                                                                <strong>
-                                                                    {customization.option_name}
-                                                                </strong>
+                                                            <div className="storefront-tracking-product-customizations mt-2">
+
+                                                                {item.customizations.map(
+                                                                    (
+                                                                        customization
+                                                                    ) => (
+
+                                                                        <div
+                                                                            key={
+                                                                                customization._id
+                                                                            }
+                                                                            className="storefront-tracking-product-option"
+                                                                        >
+
+                                                                            <span>
+                                                                                {
+                                                                                    customization.group_name
+                                                                                }
+                                                                                :
+                                                                            </span>
+
+                                                                            <strong>
+                                                                                {
+                                                                                    customization.option_name
+                                                                                }
+                                                                            </strong>
+
+                                                                        </div>
+
+                                                                    )
+                                                                )}
 
                                                             </div>
 
-                                                        ))}
-
-                                                    </div>
-
-                                                )}
-
-
-                                                {/* Notes for THIS Product */}
-                                                {item.special_notes && (
-
-                                                    <small className="storefront-tracking-product-note d-block mt-2">
-                                                        Note: "{item.special_notes}"
-                                                    </small>
-
-                                                )}
-
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
-                                ))}
-
-                            </section>
-
-
-                            {/* Current Order status message */}
-                            {order.status === "preparing" && (
-
-                                <section className="storefront-tracking-current mb-3">
-
-                                    <strong className="d-block">
-                                        Preparing
-                                    </strong>
-
-                                    <span>
-                                        Your order is being made with care.
-                                    </span>
-
-                                </section>
-
-                            )}
-
-
-                            {order.status === "ready" && (
-
-                                <section className="storefront-tracking-current mb-3">
-
-                                    <strong className="d-block">
-                                        Ready for pickup
-                                    </strong>
-
-                                    <span>
-                                        Your order is ready for pickup.
-                                    </span>
-
-                                </section>
-
-                            )}
-
-
-                            {/* Status Timeline */}
-                            <section className="storefront-tracking-card mb-3">
-
-                                <h2 className="storefront-tracking-card-title">
-                                    Order status
-                                </h2>
-
-
-                                <div className="storefront-tracking-timeline">
-
-
-                                    {/* Order stages */}
-                                    {stages.map((stage, index) => {
-
-                                        const complete =
-                                            isStatusComplete(stage.status);
-
-                                        const current =
-                                            order.status === stage.status;
-
-
-                                        return (
-
-                                            <div
-                                                key={stage.status}
-                                                className="storefront-tracking-stage"
-                                            >
-
-                                                <div className="storefront-tracking-stage-left">
-
-                                                    <div
-                                                        className={
-                                                            complete
-                                                                ? "storefront-tracking-circle storefront-tracking-circle-complete"
-                                                                : "storefront-tracking-circle"
-                                                        }
-                                                    >
-
-                                                        {complete ? (
-                                                            <Check size={15} />
-                                                        ) : (
-                                                            index + 1
                                                         )}
 
-                                                    </div>
 
+                                                    {/* Product special notes */}
+                                                    {item.special_notes && (
 
-                                                    {index < stages.length - 1 && (
+                                                        <small className="storefront-tracking-product-note d-block mt-2">
 
-                                                        <div
-                                                            className={
-                                                                complete
-                                                                    ? "storefront-tracking-line storefront-tracking-line-complete"
-                                                                    : "storefront-tracking-line"
+                                                            Note: "
+                                                            {
+                                                                item.special_notes
                                                             }
-                                                        />
+                                                            "
+
+                                                        </small>
 
                                                     )}
 
                                                 </div>
 
-
-                                                <div
-                                                    className={
-                                                        current
-                                                            ? "storefront-tracking-stage-text storefront-tracking-stage-current"
-                                                            : "storefront-tracking-stage-text"
-                                                    }
-                                                >
-
-                                                    <strong>
-                                                        {stage.title}
-                                                    </strong>
-
-                                                    <p>
-                                                        {stage.description}
-                                                    </p>
-
-                                                </div>
-
                                             </div>
 
-                                        );
-                                    })}
+                                        </div>
 
-                                </div>
+                                    )
+                                )}
 
                             </section>
 
 
-                            {/* Customizations */}
+                            {/* Preparing Order message */}
+                            {order.status ===
+                                "preparing" && (
+
+                                    <section className="storefront-tracking-current mb-3">
+
+                                        <strong className="d-block">
+                                            Preparing
+                                        </strong>
+
+                                        <span>
+                                            Your order is being made with care.
+                                        </span>
+
+                                    </section>
+
+                                )}
+
+
+                            {/* Ready Order message */}
+                            {order.status ===
+                                "ready" && (
+
+                                    <section className="storefront-tracking-current mb-3">
+
+                                        <strong className="d-block">
+                                            Ready for pickup
+                                        </strong>
+
+                                        <span>
+                                            Your order is ready for pickup.
+                                        </span>
+
+                                    </section>
+
+                                )}
+
+
+                            {/* Cancelled Order */}
+                            {order.status ===
+                                "cancelled" ? (
+
+                                <section className="storefront-tracking-cancelled mb-3">
+
+                                    <strong className="d-block mb-1">
+                                        Order cancelled
+                                    </strong>
+
+                                    <span>
+                                        This Order was cancelled and will not move forward.
+                                    </span>
+
+                                </section>
+
+                            ) : (
+
+                                /* Order Status Timeline */
+                                <section className="storefront-tracking-card mb-3">
+
+                                    <h2 className="storefront-tracking-card-title">
+                                        Order status
+                                    </h2>
+
+
+                                    <div className="storefront-tracking-timeline">
+
+                                        {stages.map(
+                                            (
+                                                stage,
+                                                index
+                                            ) => {
+
+                                                //Check completed stage
+                                                const complete =
+                                                    isStatusComplete(
+                                                        stage.status
+                                                    );
+
+                                                //Check current stage
+                                                const current =
+                                                    order.status ===
+                                                    stage.status;
+
+
+                                                return (
+
+                                                    <div
+                                                        key={
+                                                            stage.status
+                                                        }
+                                                        className="storefront-tracking-stage"
+                                                    >
+
+                                                        {/* Timeline indicator */}
+                                                        <div className="storefront-tracking-stage-left">
+
+                                                            <div
+                                                                className={
+                                                                    complete
+                                                                        ? "storefront-tracking-circle storefront-tracking-circle-complete"
+                                                                        : "storefront-tracking-circle"
+                                                                }
+                                                            >
+
+                                                                {complete ? (
+
+                                                                    <Check
+                                                                        size={15}
+                                                                    />
+
+                                                                ) : (
+
+                                                                    index +
+                                                                    1
+
+                                                                )}
+
+                                                            </div>
+
+
+                                                            {/* Timeline connection */}
+                                                            {index <
+                                                                stages.length -
+                                                                1 && (
+
+                                                                    <div
+                                                                        className={
+                                                                            complete
+                                                                                ? "storefront-tracking-line storefront-tracking-line-complete"
+                                                                                : "storefront-tracking-line"
+                                                                        }
+                                                                    />
+
+                                                                )}
+
+                                                        </div>
+
+
+                                                        {/* Timeline text */}
+                                                        <div
+                                                            className={
+                                                                current
+                                                                    ? "storefront-tracking-stage-text storefront-tracking-stage-current"
+                                                                    : "storefront-tracking-stage-text"
+                                                            }
+                                                        >
+
+                                                            <strong>
+                                                                {
+                                                                    stage.title
+                                                                }
+                                                            </strong>
+
+                                                            <p>
+                                                                {
+                                                                    stage.description
+                                                                }
+                                                            </p>
+
+                                                        </div>
+
+                                                    </div>
+
+                                                );
+                                            }
+                                        )}
+
+                                    </div>
+
+                                </section>
+
+                            )}
+
+
+                            {/* Order Customizations */}
                             {order.items?.some(
-                                (item) => item.customizations?.length > 0
+                                (item) =>
+                                    item.customizations?.length >
+                                    0
                             ) && (
 
                                     <section className="storefront-tracking-card">
@@ -612,25 +1089,43 @@ export default function StorefrontOrderTracking() {
                                         <div className="row g-3">
 
                                             {order.items
-                                                .flatMap((item) => item.customizations || [])
-                                                .map((customization) => (
+                                                .flatMap(
+                                                    (item) =>
+                                                        item.customizations ||
+                                                        []
+                                                )
+                                                .map(
+                                                    (
+                                                        customization
+                                                    ) => (
 
-                                                    <div
-                                                        key={customization._id}
-                                                        className="col-12 col-sm-6"
-                                                    >
+                                                        <div
+                                                            key={
+                                                                customization._id
+                                                            }
+                                                            className="col-12 col-sm-6"
+                                                        >
 
-                                                        <span className="storefront-tracking-custom-label">
-                                                            {customization.group_name}
-                                                        </span>
+                                                            <span className="storefront-tracking-custom-label">
 
-                                                        <strong className="d-block storefront-tracking-custom-value">
-                                                            {customization.option_name}
-                                                        </strong>
+                                                                {
+                                                                    customization.group_name
+                                                                }
 
-                                                    </div>
+                                                            </span>
 
-                                                ))}
+                                                            <strong className="d-block storefront-tracking-custom-value">
+
+                                                                {
+                                                                    customization.option_name
+                                                                }
+
+                                                            </strong>
+
+                                                        </div>
+
+                                                    )
+                                                )}
 
                                         </div>
 
@@ -653,17 +1148,36 @@ export default function StorefrontOrderTracking() {
                                 </h2>
 
                                 <strong className="d-block">
-                                    {formatPickupDate(order.pickup_date)} · {formatPickupTime(order.pickup_time)}
+
+                                    {
+                                        formatPickupDate(
+                                            order.pickup_date
+                                        )
+                                    }
+
+                                    {" · "}
+
+                                    {
+                                        formatPickupTime(
+                                            order.pickup_time
+                                        )
+                                    }
+
                                 </strong>
 
                                 <span className="d-block mt-1">
-                                    {bakery.name}
+                                    {
+                                        bakery.name
+                                    }
                                 </span>
+
 
                                 {pickupLocation && (
 
                                     <span className="d-block">
-                                        {pickupLocation}
+                                        {
+                                            pickupLocation
+                                        }
                                     </span>
 
                                 )}
@@ -672,7 +1186,9 @@ export default function StorefrontOrderTracking() {
                                 {bakery.pickup_instructions && (
 
                                     <small className="d-block mt-3">
-                                        {bakery.pickup_instructions}
+                                        {
+                                            bakery.pickup_instructions
+                                        }
                                     </small>
 
                                 )}
@@ -688,6 +1204,7 @@ export default function StorefrontOrderTracking() {
                                 </h2>
 
 
+                                {/* Total */}
                                 <div className="d-flex justify-content-between mb-2">
 
                                     <span>
@@ -695,12 +1212,17 @@ export default function StorefrontOrderTracking() {
                                     </span>
 
                                     <strong>
-                                        {formatPrice(order.total_price)}
+                                        {
+                                            formatPrice(
+                                                order.total_price
+                                            )
+                                        }
                                     </strong>
 
                                 </div>
 
 
+                                {/* Pending Payment */}
                                 {paymentPending && (
 
                                     <div className="d-flex justify-content-between mb-2 storefront-tracking-payment-pending">
@@ -710,7 +1232,11 @@ export default function StorefrontOrderTracking() {
                                         </span>
 
                                         <strong>
-                                            {formatPrice(paymentAmount)}
+                                            {
+                                                formatPrice(
+                                                    paymentAmount
+                                                )
+                                            }
                                         </strong>
 
                                     </div>
@@ -718,6 +1244,7 @@ export default function StorefrontOrderTracking() {
                                 )}
 
 
+                                {/* Received Payment */}
                                 {paymentReceived && (
 
                                     <div className="d-flex justify-content-between mb-2 storefront-tracking-payment-received">
@@ -727,7 +1254,15 @@ export default function StorefrontOrderTracking() {
                                         </span>
 
                                         <strong>
-                                            ✓ {formatPrice(paymentAmount)}
+
+                                            ✓{" "}
+
+                                            {
+                                                formatPrice(
+                                                    paymentAmount
+                                                )
+                                            }
+
                                         </strong>
 
                                     </div>
@@ -735,6 +1270,7 @@ export default function StorefrontOrderTracking() {
                                 )}
 
 
+                                {/* Remaining balance */}
                                 <div className="d-flex justify-content-between">
 
                                     <span>
@@ -742,19 +1278,28 @@ export default function StorefrontOrderTracking() {
                                     </span>
 
                                     <strong>
-                                        {formatPrice(remainingBalance)}
+                                        {
+                                            formatPrice(
+                                                remainingBalance
+                                            )
+                                        }
                                     </strong>
 
                                 </div>
 
 
+                                {/* Payment method */}
                                 {payment && (
 
                                     <small className="d-block mt-3">
-                                        {payment.payment_method === "Manual"
-                                            ? "Manual Interact e-Transfer"
-                                            : "Paid via Stripe"
+
+                                        {
+                                            payment.payment_method ===
+                                                "Manual"
+                                                ? "Manual Interac e-Transfer"
+                                                : "Paid via Stripe"
                                         }
+
                                     </small>
 
                                 )}
@@ -762,20 +1307,71 @@ export default function StorefrontOrderTracking() {
                             </section>
 
 
+                            {/* Pending Order actions */}
+                            {order.status ===
+                                "pending" && (
+
+                                    <section className="storefront-tracking-card mb-3">
+
+                                        <h2 className="storefront-tracking-card-title">
+                                            Order actions
+                                        </h2>
+
+                                        <p className="storefront-tracking-action-text mb-3">
+
+                                            You can edit/cancel this Order while it is still pending.
+
+                                        </p>
+
+                                        {/* Edit Order */}
+                                        <Link
+                                            to={`/store/${slug}/orders/${orderId}/edit`}
+                                            className="storefront-tracking-edit-button d-flex align-items-center justify-content-center text-decoration-none w-100 mb-2"
+                                        >
+                                            Edit Order
+                                        </Link>
+
+                                        <button
+                                            type="button"
+                                            className="storefront-tracking-cancel-button w-100"
+                                            onClick={() => {
+
+                                                //Clear old errors
+                                                setActionError("");
+
+                                                //Open confirmation modal
+                                                setIsCancelModalOpen(
+                                                    true
+                                                );
+
+                                            }}
+                                        >
+                                            Cancel Order
+                                        </button>
+
+                                    </section>
+
+                                )}
+
+
                             {/* Customer Review action */}
-                            {order.status === "completed" && (
+                            {order.status ===
+                                "completed" && (
 
-                                <Link
-                                    to={`/store/${slug}/orders/${orderId}/review`}
-                                    className="storefront-tracking-review-button text-decoration-none"
-                                >
-                                    {review
-                                        ? "View your review"
-                                        : "Leave a review"
-                                    }
-                                </Link>
+                                    <Link
+                                        to={`/store/${slug}/orders/${orderId}/review`}
+                                        className="storefront-tracking-review-button text-decoration-none"
+                                    >
 
-                            )}
+                                        {
+                                            review
+                                                ? "View your review"
+                                                : "Leave a review"
+                                        }
+
+                                    </Link>
+
+                                )}
 
                         </div>
 
@@ -787,7 +1383,143 @@ export default function StorefrontOrderTracking() {
 
 
             {/* Storefront Footer */}
-            <StorefrontFooter bakery={bakery} />
+            <StorefrontFooter
+                bakery={bakery}
+            />
+
+
+            {/* Cancel Order confirmation modal */}
+            {isCancelModalOpen && (
+
+                <div className="storefront-cancel-modal-backdrop d-flex align-items-center justify-content-center p-3">
+
+                    <div className="storefront-cancel-modal w-100">
+
+
+                        {/* Modal Header */}
+                        <div className="d-flex align-items-center justify-content-between gap-3 mb-3">
+
+                            <h2 className="mb-0">
+                                Cancel Order?
+                            </h2>
+
+                            <button
+                                type="button"
+                                className="storefront-cancel-modal-close d-flex align-items-center justify-content-center"
+                                onClick={() => {
+
+                                    setIsCancelModalOpen(
+                                        false
+                                    );
+
+                                    setActionError("");
+
+                                }}
+                                disabled={
+                                    isCancelling
+                                }
+                                aria-label="Close cancel Order confirmation"
+                            >
+
+                                <X
+                                    size={18}
+                                />
+
+                            </button>
+
+                        </div>
+
+
+                        {/* Confirmation message */}
+                        <p className="storefront-cancel-modal-text mb-2">
+
+                            Are you sure you want to cancel Order{" "}
+
+                            <strong>
+                                {
+                                    order.order_number
+                                }
+                            </strong>
+
+                            ?
+
+                        </p>
+
+
+                        {/* Warning */}
+                        <p className="storefront-cancel-modal-note mb-0">
+
+                            This action cannot be undone.
+
+                        </p>
+
+
+                        {/* Cancellation error */}
+                        {actionError && (
+
+                            <div
+                                className="alert alert-danger py-2 mt-3 mb-0"
+                                role="alert"
+                            >
+                                {
+                                    actionError
+                                }
+                            </div>
+
+                        )}
+
+
+                        {/* Modal Actions */}
+                        <div className="d-flex flex-column flex-sm-row justify-content-end gap-2 mt-4">
+
+                            {/* Keep Order */}
+                            <button
+                                type="button"
+                                className="storefront-cancel-modal-secondary"
+                                onClick={() => {
+
+                                    setIsCancelModalOpen(
+                                        false
+                                    );
+
+                                    setActionError("");
+
+                                }}
+                                disabled={
+                                    isCancelling
+                                }
+                            >
+                                Keep Order
+                            </button>
+
+
+                            {/* Confirm Cancel Order */}
+                            <button
+                                type="button"
+                                className="storefront-cancel-modal-danger"
+                                onClick={
+                                    handleCancelOrder
+                                }
+                                disabled={
+                                    isCancelling
+                                }
+                            >
+
+                                {
+                                    isCancelling
+                                        ? "Cancelling..."
+                                        : "Yes, Cancel Order"
+                                }
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            )}
 
         </div>
     );

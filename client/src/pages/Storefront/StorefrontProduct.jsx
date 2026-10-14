@@ -6,6 +6,7 @@ import { Link, useParams } from "react-router-dom";
 
 //Import Product icons
 import {
+    Check,
     Clock3,
     Minus,
     Plus,
@@ -66,6 +67,9 @@ export default function StorefrontProduct() {
 
     //Stores loading errors
     const [error, setError] = useState("");
+
+    //Tracks successful Add to Cart feedback
+    const [isAddedToCart, setIsAddedToCart] = useState(false);
 
     //Get Customer Cart functions
     const {
@@ -558,6 +562,15 @@ export default function StorefrontProduct() {
             quote:
                 quote
         });
+
+        //Show Customer that Product was added
+        setIsAddedToCart(true);
+
+        //Return button to normal after a short delay
+        setTimeout(() => {
+            setIsAddedToCart(false);
+        }, 1800);
+
     }
 
 
@@ -1313,17 +1326,32 @@ export default function StorefrontProduct() {
                                 }
                                 disabled={
                                     isQuoteLoading ||
-                                    !quote
+                                    !quote ||
+                                    isAddedToCart
                                 }
                                 className="storefront-product-primary-button w-100 d-flex align-items-center justify-content-center gap-2 mt-4"
                             >
 
-                                <ShoppingCart
-                                    size={18}
-                                />
+                                {/* Change icon after Product is added */}
+                                {isAddedToCart ? (
 
-                                {
-                                    isQuoteLoading
+                                    <Check
+                                        size={18}
+                                    />
+
+                                ) : (
+
+                                    <ShoppingCart
+                                        size={18}
+                                    />
+
+                                )}
+
+
+                                {/* Change button text after Product is added */}
+                                {isAddedToCart
+                                    ? "Added to Cart"
+                                    : isQuoteLoading
                                         ? "Updating price..."
                                         : quote
                                             ? `Add to Cart · ${formatPrice(
@@ -1333,6 +1361,19 @@ export default function StorefrontProduct() {
                                 }
 
                             </button>
+
+
+                            {/* Add to Cart success message */}
+                            {isAddedToCart && (
+
+                                <div
+                                    className="alert alert-success py-2 mt-3 mb-0"
+                                    role="alert"
+                                >
+                                    ✓ {product.name} was added to your cart.
+                                </div>
+
+                            )}
 
                         </div>
 

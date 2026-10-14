@@ -17,6 +17,7 @@ import {
     LogOut,
     Menu,
     Settings,
+    ShoppingBag,
     ShoppingCart,
     X
 } from "lucide-react";
@@ -40,10 +41,27 @@ export default function StorefrontNavbar({
     //Get the Bakery slug from the URL
     const { slug } = useParams();
 
-    //Get Customer Cart count
+    //Get Customer Cart items
     const {
-        cartCount
+        cartItems
     } = useCart();
+
+
+    //Count Cart Products for the current Bakery only
+    const storefrontCartCount =
+        cartItems
+            .filter(
+                (item) =>
+                    item.bakery_slug === slug
+            )
+            .reduce(
+                (total, item) =>
+                    total +
+                    Number(
+                        item.quantity || 0
+                    ),
+                0
+            );
 
 
     //Tracks whether the mobile navigation is open
@@ -486,7 +504,7 @@ export default function StorefrontNavbar({
                                 />
 
                                 <span>
-                                    Cart ({cartCount})
+                                    Cart ({storefrontCartCount})
                                 </span>
 
                             </Link>
@@ -601,6 +619,25 @@ export default function StorefrontNavbar({
 
                                             <hr className="storefront-account-divider" />
 
+                                            {/* Customer Orders */}
+                                            <Link
+                                                to={`/store/${slug}/orders`}
+                                                onClick={
+                                                    closeAccountMenu
+                                                }
+                                                className="storefront-account-menu-item d-flex align-items-center gap-2 text-decoration-none"
+                                                role="menuitem"
+                                            >
+
+                                                <ShoppingBag
+                                                    size={16}
+                                                />
+
+                                                <span>
+                                                    My Orders
+                                                </span>
+
+                                            </Link>
 
                                             {/* Account Settings */}
                                             <Link
@@ -692,7 +729,7 @@ export default function StorefrontNavbar({
                                 />
 
                                 <span className="small">
-                                    ({cartCount})
+                                    {storefrontCartCount}
                                 </span>
 
                             </Link>
@@ -853,6 +890,25 @@ export default function StorefrontNavbar({
 
                                         {/* Customer Account links */}
                                         <div className="d-grid gap-1 mt-2">
+
+                                            {/* Customer Orders */}
+                                            <Link
+                                                to={`/store/${slug}/orders`}
+                                                onClick={
+                                                    closeMobileMenu
+                                                }
+                                                className="storefront-mobile-account-link d-flex align-items-center gap-2 text-decoration-none px-3 py-2"
+                                            >
+
+                                                <ShoppingBag
+                                                    size={16}
+                                                />
+
+                                                <span>
+                                                    My Orders
+                                                </span>
+
+                                            </Link>
 
                                             {/* Account Settings */}
                                             <Link

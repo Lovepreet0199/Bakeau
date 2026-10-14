@@ -627,7 +627,7 @@ export default function CustomerLogin() {
 
 
                                     <Link
-                                        to="/forgot-password"
+                                        to={`/store/${slug}/forgot-password`}
                                         className="customer-login-forgot-link"
                                     >
                                         Forgot password?

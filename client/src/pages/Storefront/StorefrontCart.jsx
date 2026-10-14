@@ -60,7 +60,6 @@ export default function StorefrontCart() {
     //Get Customer Cart information and functions
     const {
         cartItems,
-        cartCount,
         cartNote,
         setCartNote,
         removeFromCart,
@@ -116,6 +115,18 @@ export default function StorefrontCart() {
         cartItems,
         slug
     ]);
+
+
+    //Counts Cart quantity for the current Bakery
+    const bakeryCartCount =
+        bakeryCartItems.reduce(
+            (total, item) =>
+                total +
+                Number(
+                    item.quantity || 0
+                ),
+            0
+        );
 
 
     //Use loaded Bakery name with Cart fallback
@@ -452,12 +463,14 @@ export default function StorefrontCart() {
         }
     }
 
+
     //Gets the currently logged-in Customer
     function getStoredCustomer() {
 
         //User may be stored in either storage location
         const storedUser =
-            localStorage.getItem("user") || sessionStorage.getItem("user");
+            localStorage.getItem("user") ||
+            sessionStorage.getItem("user");
 
         //No logged-in User
         if (!storedUser) {
@@ -467,10 +480,16 @@ export default function StorefrontCart() {
         try {
 
             //Convert stored User back into JavaScript
-            const user = JSON.parse(storedUser);
+            const user =
+                JSON.parse(
+                    storedUser
+                );
 
             //Only Customer accounts can Checkout
-            if (user.role !== "customer") {
+            if (
+                user.role !==
+                "customer"
+            ) {
                 return null;
             }
 
@@ -478,7 +497,10 @@ export default function StorefrontCart() {
 
         } catch (error) {
 
-            console.error("Unable to read Customer account:", error);
+            console.error(
+                "Unable to read Customer account:",
+                error
+            );
 
             return null;
         }
@@ -488,7 +510,10 @@ export default function StorefrontCart() {
     //Gets Customer authentication token
     function getAuthToken() {
 
-        return (localStorage.getItem("token") || sessionStorage.getItem("token"));
+        return (
+            localStorage.getItem("token") ||
+            sessionStorage.getItem("token")
+        );
     }
 
 
@@ -496,26 +521,42 @@ export default function StorefrontCart() {
     function handleProceedToCheckout() {
 
         //Do not continue without a valid Cart quote
-        if (!cartQuote || isCartQuoteLoading || cartQuoteError) {
+        if (
+            !cartQuote ||
+            isCartQuoteLoading ||
+            cartQuoteError
+        ) {
 
             return;
         }
 
-        const customer = getStoredCustomer();
+        const customer =
+            getStoredCustomer();
 
-        const token = getAuthToken();
+        const token =
+            getAuthToken();
 
         //Checkout page Customer should return to
-        const checkoutPath = `/store/${slug}/checkout`;
+        const checkoutPath =
+            `/store/${slug}/checkout`;
 
         //Customer is not logged in
-        if (!customer || !token) {
+        if (
+            !customer ||
+            !token
+        ) {
 
             //Save Customer authentication context
             //This also helps if email verification is needed
-            localStorage.setItem("authBakerySlug", slug);
+            localStorage.setItem(
+                "authBakerySlug",
+                slug
+            );
 
-            localStorage.setItem("authReturnTo", checkoutPath);
+            localStorage.setItem(
+                "authReturnTo",
+                checkoutPath
+            );
 
 
             //Send Customer to Bakery login
@@ -530,9 +571,11 @@ export default function StorefrontCart() {
 
 
         //Logged-in Customer can continue to Checkout
-        navigate(checkoutPath);
-
+        navigate(
+            checkoutPath
+        );
     }
+
 
     //Display Bakery loading state
     if (isBakeryLoading) {
@@ -618,7 +661,7 @@ export default function StorefrontCart() {
 
                     <h1 className="storefront-cart-title mb-1">
 
-                        Your Cart ({cartCount})
+                        Your Cart ({bakeryCartCount})
 
                     </h1>
 
@@ -1354,7 +1397,9 @@ export default function StorefrontCart() {
                                     disabled={
                                         !cartQuote ||
                                         isCartQuoteLoading ||
-                                        Boolean(cartQuoteError)
+                                        Boolean(
+                                            cartQuoteError
+                                        )
                                     }
                                     className="storefront-cart-primary-button w-100"
                                 >
@@ -1372,6 +1417,7 @@ export default function StorefrontCart() {
                                 <p className="storefront-cart-pickup-note text-center mb-0 mt-3">
 
                                     Pickup order from{" "}
+
                                     {
                                         bakeryName
                                     }
