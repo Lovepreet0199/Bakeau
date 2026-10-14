@@ -48,17 +48,69 @@ import dashboardRoutes from "./routes/dashboardRoutes.js";
 // Create an Express app and store it in the app variable
 const app = express();
 
-//Allowed frontend URLs that can communicate with the Bakeau API
+//Allowed frontend websites
 const allowedOrigins = [
     "http://localhost:5173",
     "https://bakeau.pages.dev",
-    process.env.CLIENT_URL
-].filter(Boolean);
+    "https://bakeau.com",
+    "https://www.bakeau.com"
+];
 
-//Allows requests from approved Bakeau frontend URLs
+
+//Allow requests from approved frontend websites
 app.use(
     cors({
-        origin: allowedOrigins
+        origin: function (
+            origin,
+            callback
+        ) {
+
+            //Allow requests without an Origin header
+            //such as Postman or server requests
+            if (!origin) {
+
+                return callback(
+                    null,
+                    true
+                );
+            }
+
+
+            //Allow approved frontend websites
+            if (
+                allowedOrigins.includes(
+                    origin
+                )
+            ) {
+
+                return callback(
+                    null,
+                    true
+                );
+            }
+
+
+            //Block unknown websites
+            return callback(
+                new Error(
+                    "Not allowed by CORS"
+                )
+            );
+        },
+
+        methods: [
+            "GET",
+            "POST",
+            "PUT",
+            "PATCH",
+            "DELETE",
+            "OPTIONS"
+        ],
+
+        allowedHeaders: [
+            "Content-Type",
+            "Authorization"
+        ]
     })
 );
 
