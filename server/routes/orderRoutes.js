@@ -8,7 +8,8 @@ import {
     getBakeryOrderById,
     updateBakeryOrderStatus,
     getMyOrders,
-    getMyOrderById
+    getMyOrderById,
+    cancelMyOrder
 } from "../controllers/orderController.js";
 
 //Import authentication middleware to protect Order routes
@@ -191,6 +192,13 @@ router.patch(
     updateBakeryOrderStatus
 );
 
+//Customer cancels one pending Order
+router.patch(
+    "/mine/:id/cancel",
+    authenticateUser,
+    authorizeRoles("customer"),
+    cancelMyOrder
+);
 
 //Export the Order router
 export default router;

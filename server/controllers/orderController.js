@@ -965,12 +965,105 @@ const createOrder = async (request, response) => {
     }
 };
 
+//Cancels a pending Order belonging to the authenticated Customer
+const cancelMyOrder = async (request, response) => {
+
+    try {
+
+        //Get the authenticated Customer's user ID
+        const customerId =
+            request.user.userId;
+
+        //Get the Order ID from the URL
+        const orderId =
+            request.params.id;
+
+        //Find the Order only if it belongs to this Customer
+        const order =
+            await Order.findOne({
+
+                _id:
+                    orderId,
+
+                customer_id:
+                    customerId
+            });
+
+        //Stop if the Order does not exist
+        if (!order) {
+
+            return response.status(404).json({
+
+                message:
+                    "Order not found"
+            });
+        }
+
+        //Only pending Orders can be cancelled by the Customer
+        if (
+            order.status !==
+            "pending"
+        ) {
+
+            return response.status(400).json({
+
+                message:
+                    "Only pending orders can be cancelled"
+            });
+        }
+
+        //Cancel the Order
+        order.status =
+            "cancelled";
+
+        await order.save();
+
+
+        //Store cancellation in Order Activity
+        await OrderActivity.create({
+
+            order_id:
+                order._id,
+
+            activity_type:
+                "cancelled",
+
+            description:
+                "Order cancelled by customer"
+        });
+
+
+        //Return the updated Order
+        return response.status(200).json({
+
+            message:
+                "Order cancelled successfully",
+
+            order:
+                order
+        });
+
+    } catch (error) {
+
+        console.error(
+            "Cancel customer order error:",
+            error.message
+        );
+
+        return response.status(500).json({
+
+            message:
+                "Unable to cancel order"
+        });
+    }
+};
+
 //Export Order controller functions
 export {
-    createOrder,
     getBakeryOrders,
     getBakeryOrderById,
     updateBakeryOrderStatus,
     getMyOrders,
-    getMyOrderById
+    getMyOrderById,
+    cancelMyOrder
 };

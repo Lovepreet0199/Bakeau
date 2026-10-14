@@ -354,11 +354,107 @@ const uploadReviewImage = async (request, response) => {
     }
 };
 
+//Updates a Customer's own Review
+const updateReview = async (request, response) => {
+
+    try {
+
+        //Get logged-in Customer ID
+        const customerId = request.user.userId;
+
+        //Get updated Review information
+        const {
+            rating,
+            comment
+        } = request.body;
+
+        //Find Review belonging to this Customer
+        const review = await Review.findOne({
+            _id: request.params.reviewId,
+            customer_id: customerId
+        });
+
+        //Stop if Review was not found
+        if (!review) {
+            return response.status(404).json({
+                message: "Review not found"
+            });
+        }
+
+        //Update Review
+        review.rating = rating;
+        review.comment = comment;
+
+        await review.save();
+
+        return response.status(200).json({
+            message: "Review updated successfully",
+            review: review
+        });
+
+    } catch (error) {
+
+        console.error("Update Review error:", error.message);
+
+        return response.status(500).json({
+            message: "Unable to update Review"
+        });
+    }
+};
+
+//Deletes a Customer's own Review
+const deleteReview = async (request, response) => {
+
+    try {
+
+        //Get logged-in Customer ID
+        const customerId = request.user.userId;
+
+        //Find Review belonging to this Customer
+        const review = await Review.findOne({
+            _id: request.params.reviewId,
+            customer_id: customerId
+        });
+
+        //Stop if Review was not found
+        if (!review) {
+            return response.status(404).json({
+                message: "Review not found"
+            });
+        }
+
+        //Delete Review image from Cloudinary
+        if (review.image_public_id) {
+            await cloudinary.uploader.destroy(
+                review.image_public_id
+            );
+        }
+
+        //Delete Review
+        await review.deleteOne();
+
+        return response.status(200).json({
+            message: "Review deleted successfully"
+        });
+
+    } catch (error) {
+
+        console.error("Delete Review error:", error.message);
+
+        return response.status(500).json({
+            message: "Unable to delete Review"
+        });
+    }
+};
+
+//Export function to use in routes
 export {
     createReview,
     uploadReviewImage,
     getOrderReview,
     getPublicReviews,
     getBakeryReviews,
-    replyToReview
+    replyToReview,
+    updateReview,
+    deleteReview
 };

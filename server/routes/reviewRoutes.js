@@ -8,7 +8,9 @@ import {
     getOrderReview,
     getPublicReviews,
     getBakeryReviews,
-    replyToReview
+    replyToReview,
+    updateReview,
+    deleteReview
 } from "../controllers/reviewController.js";
 
 //Import authentication middleware
@@ -28,7 +30,6 @@ router.get(
     "/public/:slug",
     getPublicReviews
 );
-
 
 //Customer submits Review
 router.post(
@@ -73,5 +74,21 @@ router.post(
     uploadReviewImage
 );
 
+//Customer updates their own Review
+router.patch(
+    "/:reviewId",
+    authenticateUser,
+    authorizeRoles("customer"),
+    updateReview
+);
+
+
+//Customer deletes their own Review
+router.delete(
+    "/:reviewId",
+    authenticateUser,
+    authorizeRoles("customer"),
+    deleteReview
+);
 
 export default router;
