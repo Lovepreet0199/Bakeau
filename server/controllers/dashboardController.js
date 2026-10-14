@@ -1,20 +1,23 @@
 //Import the Bakery model to identify the logged-in Bakery Owner's bakery
 import Bakery from "../models/Bakery.js";
 
-//Import the Order model to calculate dashboard statistics
+//Import the Order model to calculate Dashboard statistics
 import Order from "../models/Order.js";
 
-//Import the Order Item model to count Products in recent Orders
+//Import the Order Item model to count Products in Orders
 import OrderItem from "../models/OrderItem.js";
 
 
 //Rounds money values to two decimal places
 const roundMoney = (amount) => {
-    return Math.round((amount + Number.EPSILON) * 100) / 100;
+
+    return Math.round(
+        (amount + Number.EPSILON) * 100
+    ) / 100;
 };
 
 
-//Gets dashboard summary data for the authenticated Bakery Owner
+//Gets Dashboard summary data for the authenticated Bakery Owner
 const getBakeryDashboard = async (
     request,
     response
@@ -23,7 +26,9 @@ const getBakeryDashboard = async (
     try {
 
         //Get the authenticated Bakery Owner's user ID
-        const ownerId = request.user.userId;
+        const ownerId =
+            request.user.userId;
+
 
         //Get optional date filters from the URL
         const {
@@ -47,7 +52,7 @@ const getBakeryDashboard = async (
         }
 
 
-        //Start the Order filter with the logged-in Bakery
+        //Start the Dashboard Order filter with this Bakery
         const orderFilter = {
             bakery_id: bakery._id
         };
@@ -66,7 +71,11 @@ const getBakeryDashboard = async (
 
 
             //Stop if the start date is invalid
-            if (Number.isNaN(fromDate.getTime())) {
+            if (
+                Number.isNaN(
+                    fromDate.getTime()
+                )
+            ) {
 
                 return response.status(400).json({
                     message: "Invalid from date"
@@ -74,7 +83,8 @@ const getBakeryDashboard = async (
             }
 
 
-            createdAtFilter.$gte = fromDate;
+            createdAtFilter.$gte =
+                fromDate;
         }
 
 
@@ -87,7 +97,11 @@ const getBakeryDashboard = async (
 
 
             //Stop if the end date is invalid
-            if (Number.isNaN(toDate.getTime())) {
+            if (
+                Number.isNaN(
+                    toDate.getTime()
+                )
+            ) {
 
                 return response.status(400).json({
                     message: "Invalid to date"
@@ -95,15 +109,17 @@ const getBakeryDashboard = async (
             }
 
 
-            createdAtFilter.$lte = toDate;
+            createdAtFilter.$lte =
+                toDate;
         }
 
 
-        //Prevent a start date later than the end date
+        //Prevent the start date from being later than the end date
         if (
             createdAtFilter.$gte &&
             createdAtFilter.$lte &&
-            createdAtFilter.$gte > createdAtFilter.$lte
+            createdAtFilter.$gte >
+            createdAtFilter.$lte
         ) {
 
             return response.status(400).json({
@@ -113,7 +129,7 @@ const getBakeryDashboard = async (
         }
 
 
-        //Add the date filter when one was selected
+        //Add the date filter when a date was selected
         if (
             createdAtFilter.$gte ||
             createdAtFilter.$lte
@@ -124,7 +140,7 @@ const getBakeryDashboard = async (
         }
 
 
-        //Get all Orders for the selected Bakery and date range
+        //Get Orders for Dashboard statistics and Recent Orders
         const orders = await Order.find(
             orderFilter
         )
@@ -146,15 +162,18 @@ const getBakeryDashboard = async (
             });
 
 
-        //Count all Orders
-        const totalOrders = orders.length;
+        //Count all Orders in the selected date range
+        const totalOrders =
+            orders.length;
 
 
         //Get Completed Orders
-        const completedOrders = orders.filter(
-            (order) =>
-                order.status === "completed"
-        );
+        const completedOrders =
+            orders.filter(
+                (order) =>
+                    order.status ===
+                    "completed"
+            );
 
 
         //Count Completed Orders
@@ -167,26 +186,33 @@ const getBakeryDashboard = async (
             completedOrders.reduce(
                 (total, order) =>
                     total +
-                    Number(order.total_price || 0),
+                    Number(
+                        order.total_price ||
+                        0
+                    ),
                 0
             );
 
 
-        //Calculate actual money recorded as paid
+        //Calculate money recorded as paid
         const revenue =
             orders.reduce(
                 (total, order) =>
                     total +
-                    Number(order.amount_paid || 0),
+                    Number(
+                        order.amount_paid ||
+                        0
+                    ),
                 0
             );
 
 
-        //Do not include cancelled Orders in average Order value
+        //Do not include Cancelled Orders in average Order value
         const activeOrders =
             orders.filter(
                 (order) =>
-                    order.status !== "cancelled"
+                    order.status !==
+                    "cancelled"
             );
 
 
@@ -195,7 +221,10 @@ const getBakeryDashboard = async (
             activeOrders.reduce(
                 (total, order) =>
                     total +
-                    Number(order.total_price || 0),
+                    Number(
+                        order.total_price ||
+                        0
+                    ),
                 0
             );
 
@@ -211,10 +240,13 @@ const getBakeryDashboard = async (
         //Get unique Customers who placed Orders
         const customerIds = new Set(
 
-            orders.map(
-                (order) =>
-                    order.customer_id.toString()
-            )
+            orders
+                .map(
+                    (order) =>
+                        order.customer_id
+                            ?.toString()
+                )
+                .filter(Boolean)
         );
 
 
@@ -223,7 +255,7 @@ const getBakeryDashboard = async (
             orders.slice(0, 5);
 
 
-        //Add item count to each recent Order
+        //Add item count to each Recent Order
         const recentOrdersWithItems =
             await Promise.all(
 
@@ -233,7 +265,125 @@ const getBakeryDashboard = async (
                         //Count Products in this Order
                         const itemCount =
                             await OrderItem.countDocuments({
-                                order_id: order._id
+                                order_id:
+                                    order._id
+                            });
+
+
+                        return {
+
+                            _id:
+                                order._id,
+
+                            order_number:
+                                order.order_number,
+
+                            customer_name:
+                                `${order.contact_first_name} ${order.contact_last_name}`,
+
+                            item_count:
+                                itemCount,
+
+                            total_price:
+                                order.total_price,
+
+                            amount_paid:
+                                order.amount_paid,
+
+                            payment_status:
+                                order.payment_status,
+
+                            status:
+                                order.status,
+
+                            created_at:
+                                order.created_at
+                        };
+                    }
+                )
+            );
+
+
+        /*
+            NEEDS ATTENTION
+
+            This intentionally checks all active Bakery Orders
+            instead of only Orders in the selected date range.
+
+            An Order needs attention when:
+            - It is still Pending
+            OR
+            - It is not Paid and is still active
+        */
+        const attentionOrders =
+            await Order.find({
+
+                bakery_id:
+                    bakery._id,
+
+                //Do not include finished Orders
+                status: {
+                    $nin: [
+                        "cancelled",
+                        "completed"
+                    ]
+                },
+
+                //Pending Orders or unpaid active Orders need attention
+                $or: [
+
+                    {
+                        status:
+                            "pending"
+                    },
+
+                    {
+                        payment_status: {
+                            $ne: "paid"
+                        }
+                    }
+                ]
+            })
+                .select(
+                    [
+                        "order_number",
+                        "customer_id",
+                        "contact_first_name",
+                        "contact_last_name",
+                        "total_price",
+                        "amount_paid",
+                        "payment_status",
+                        "status",
+                        "created_at"
+                    ].join(" ")
+                )
+                .sort({
+                    created_at: -1
+                });
+
+
+        //Store the total number of Orders needing attention
+        const attentionCount =
+            attentionOrders.length;
+
+
+        //Only display the five newest Attention Orders
+        const attentionOrdersToDisplay =
+            attentionOrders.slice(0, 5);
+
+
+        //Add item count to each Attention Order
+        const attentionOrdersWithItems =
+            await Promise.all(
+
+                attentionOrdersToDisplay.map(
+                    async (order) => {
+
+                        //Count Products in this Order
+                        const itemCount =
+                            await OrderItem.countDocuments({
+                                order_id:
+                                    order._id
                             });
 
 
@@ -286,6 +436,8 @@ const getBakeryDashboard = async (
                     bakery.currency
             },
 
+
+            //Dashboard statistic cards
             summary: {
 
                 total_orders:
@@ -295,10 +447,14 @@ const getBakeryDashboard = async (
                     completedOrderCount,
 
                 total_sales:
-                    roundMoney(totalSales),
+                    roundMoney(
+                        totalSales
+                    ),
 
                 revenue:
-                    roundMoney(revenue),
+                    roundMoney(
+                        revenue
+                    ),
 
                 average_order_value:
                     roundMoney(
@@ -309,9 +465,24 @@ const getBakeryDashboard = async (
                     customerIds.size
             },
 
+
+            //Five newest Orders for the Dashboard table
             recent_orders:
                 recentOrdersWithItems,
 
+
+            //Orders requiring Bakery Owner action
+            attention: {
+
+                count:
+                    attentionCount,
+
+                orders:
+                    attentionOrdersWithItems
+            },
+
+
+            //Current Dashboard date filter
             date_range: {
 
                 from:
