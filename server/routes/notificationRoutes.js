@@ -1,4 +1,4 @@
-//Import Express to create Notification routes
+//Import Express
 import express from "express";
 
 //Import Notification controller functions
@@ -10,46 +10,49 @@ import {
 
 //Import authentication middleware
 import {
-    authenticateUser
-} from "../middleware/authMiddleware.js";
-
-//Import role middleware
-import {
+    authenticateUser,
     authorizeRoles
-} from "../middleware/roleMiddleware.js";
+} from "../middleware/authMiddleware.js";
 
 
 //Create Notification router
-const router =
-    express.Router();
+const router = express.Router();
 
 
-//Get Notifications for Bakery Owner
+//Gets Notifications for the authenticated user
 router.get(
     "/",
     authenticateUser,
-    authorizeRoles("bakeryOwner"),
+    authorizeRoles(
+        "bakeryOwner",
+        "customer"
+    ),
     getMyNotifications
 );
 
 
-//Mark all Notifications as read
+//Marks all Notifications as read
 router.patch(
     "/read-all",
     authenticateUser,
-    authorizeRoles("bakeryOwner"),
+    authorizeRoles(
+        "bakeryOwner",
+        "customer"
+    ),
     markAllNotificationsRead
 );
 
 
-//Mark one Notification as read
+//Marks one Notification as read
 router.patch(
     "/:id/read",
     authenticateUser,
-    authorizeRoles("bakeryOwner"),
+    authorizeRoles(
+        "bakeryOwner",
+        "customer"
+    ),
     markNotificationRead
 );
 
 
-//Export Notification router
 export default router;

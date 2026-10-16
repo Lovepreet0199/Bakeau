@@ -403,7 +403,66 @@ const updateBakeryOrderStatus = async (request, response) => {
                 emailError.message
             );
         }
-        
+
+        //Create an in-app Notification for the Customer
+        try {
+
+            //Readable status names shown to the Customer
+            const customerStatusNames = {
+                confirmed:
+                    "Confirmed",
+
+                preparing:
+                    "In Progress",
+
+                ready:
+                    "Ready for Pickup",
+
+                completed:
+                    "Completed",
+
+                cancelled:
+                    "Cancelled"
+            };
+
+
+            //Get readable status text
+            const customerStatusText =
+                customerStatusNames[
+                order.status
+                ] ||
+                order.status;
+
+
+            //Create Notification for the Customer
+            if (order.customer_id) {
+
+                await Notification.create({
+
+                    order_id:
+                        order._id,
+
+                    user_id:
+                        order.customer_id,
+
+                    message:
+                        `Your order ${order.order_number} is now ${customerStatusText}`
+                });
+            }
+
+
+        } catch (notificationError) {
+
+            /*
+                Do not fail the Order status update
+                if the Notification could not be created.
+            */
+            console.error(
+                "Customer Order notification error:",
+                notificationError.message
+            );
+        }
+
         //Return the updated Order
         return response.status(200).json({
             message: "Order status updated successfully",
