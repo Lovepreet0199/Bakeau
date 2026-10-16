@@ -344,7 +344,7 @@ const forgotPassword = async (
         //Create Customer or Bakery Owner reset URL
         const resetUrl =
             bakery_slug
-                ? `${process.env.CLIENT_URL}/store/${encodeURIComponent(
+                ? `${process.env.CLIENT_URL}/${encodeURIComponent(
                     bakery_slug
                 )}/reset-password?token=${passwordResetToken}`
                 : `${process.env.CLIENT_URL}/reset-password?token=${passwordResetToken}`;
