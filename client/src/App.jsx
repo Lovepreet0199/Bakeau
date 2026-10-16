@@ -137,6 +137,9 @@ import BakeryMarketing from "./pages/Dashboard/BakeryMarketing.jsx";
 //Import Bakery Analytics page
 import BakeryAnalytics from "./pages/Dashboard/BakeryAnalytics.jsx";
 
+//Import Customer Favourites page
+import StorefrontFavourites from "./pages/Storefront/StorefrontFavourites";
+
 //Displays the Bakeau application routes
 export default function App() {
 
@@ -239,6 +242,12 @@ export default function App() {
         <Route
           path="/:slug/account"
           element={<CustomerAccount />}
+        />
+
+        {/* Customer Favourites page */}
+        <Route
+          path="/:slug/favourites"
+          element={<StorefrontFavourites />}
         />
 
         {/* Bakery setup page for new Bakery Owners */}

@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import {
     Link,
     useLocation,
+    useNavigate,
     useParams
 } from "react-router-dom";
 
@@ -14,6 +15,7 @@ import {
     ArrowLeft,
     ArrowRight,
     Clock3,
+    Heart,
     MapPin,
     Star
 } from "lucide-react";
@@ -38,11 +40,24 @@ export default function BakeryStorefront() {
     //Gets the current Storefront URL
     const location = useLocation();
 
+    //Used to navigate Customer
+    const navigate = useNavigate();
+
     //Stores the public Bakery information
     const [bakery, setBakery] = useState(null);
 
     //Stores the public Bakery Products
     const [products, setProducts] = useState([]);
+
+    //Stores Product IDs saved by the logged-in Customer
+    const [favouriteProductIds, setFavouriteProductIds] = useState([]);
+
+
+    //Tracks which Favourite is currently being updated
+    const [updatingFavouriteId, setUpdatingFavouriteId] = useState(null);
+
+    //Stores Favourite request errors
+    const [favouriteError, setFavouriteError] = useState("");
 
     //Stores public Bakery Reviews
     const [reviews, setReviews] = useState([]);
@@ -162,6 +177,130 @@ export default function BakeryStorefront() {
 
     }, [slug]);
 
+    //Loads Favourites for the logged-in Customer
+    useEffect(() => {
+
+        //Loads Customer Favourite Products
+        async function loadFavourites() {
+
+            //Get Customer authentication token
+            const token =
+                localStorage.getItem(
+                    "token"
+                ) ||
+                sessionStorage.getItem(
+                    "token"
+                );
+
+
+            /*
+                Guests can still browse the Storefront.
+                They simply do not have saved Favourites.
+            */
+            if (!token) {
+
+                setFavouriteProductIds(
+                    []
+                );
+
+                return;
+            }
+
+
+            try {
+
+                //Request Customer Favourites
+                const response =
+                    await fetch(
+                        `${API_URL}/api/favourites`,
+                        {
+                            headers: {
+                                Authorization:
+                                    `Bearer ${token}`
+                            }
+                        }
+                    );
+
+
+                /*
+                    A logged-in Bakery Owner or Admin
+                    may also visit a Storefront.
+    
+                    Favourites are only for Customers,
+                    so simply ignore unauthorized roles.
+                */
+                if (
+                    response.status ===
+                    401 ||
+                    response.status ===
+                    403
+                ) {
+
+                    setFavouriteProductIds(
+                        []
+                    );
+
+                    return;
+                }
+
+
+                const data =
+                    await response.json();
+
+
+                //Stop if Favourites could not be loaded
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.message ||
+                        "Unable to load favourites"
+                    );
+                }
+
+
+                /*
+                    Store only Product IDs.
+    
+                    product_id is populated by the backend,
+                    so its _id identifies the Product.
+                */
+                const productIds =
+                    (
+                        data.favourites ||
+                        []
+                    )
+                        .map(
+                            (favourite) =>
+                                favourite.product_id?._id ||
+                                favourite.product_id
+                        )
+                        .filter(
+                            Boolean
+                        );
+
+
+                //Save Favourite Product IDs
+                setFavouriteProductIds(
+                    productIds
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "Load Favourites error:",
+                    error
+                );
+            }
+        }
+
+
+        loadFavourites();
+
+
+    }, [
+        slug
+    ]);
 
     //Scrolls to a Storefront section when the URL contains a hash
     useEffect(() => {
@@ -684,6 +823,147 @@ export default function BakeryStorefront() {
         );
     }
 
+    //Adds or removes a Product from Customer Favourites
+    async function toggleFavourite(productId) {
+
+        //Get Customer authentication token
+        const token =
+            localStorage.getItem(
+                "token"
+            ) ||
+            sessionStorage.getItem(
+                "token"
+            );
+
+
+        //Send guests to Customer login
+        if (!token) {
+
+            navigate(
+                `/${slug}/login`
+            );
+
+            return;
+        }
+
+
+        //Check if Product is already a Favourite
+        const isFavourite =
+            favouriteProductIds.includes(
+                productId
+            );
+
+
+        //Clear previous Favourite errors
+        setFavouriteError("");
+
+
+        //Track Product currently being updated
+        setUpdatingFavouriteId(
+            productId
+        );
+
+
+        try {
+
+            //Add or remove Favourite
+            const response =
+                await fetch(
+                    `${API_URL}/api/favourites/${productId}`,
+                    {
+                        method:
+                            isFavourite
+                                ? "DELETE"
+                                : "POST",
+
+                        headers: {
+                            Authorization:
+                                `Bearer ${token}`
+                        }
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            //Customer session expired
+            if (response.status === 401) {
+
+                navigate(
+                    `/${slug}/login`
+                );
+
+                return;
+            }
+
+
+            //Only Customer accounts can use Favourites
+            if (response.status === 403) {
+
+                setFavouriteError(
+                    "Favourites are available for customer accounts."
+                );
+
+                return;
+            }
+
+
+            //Stop if request failed
+            if (!response.ok) {
+
+                throw new Error(
+                    data.message ||
+                    "Unable to update favourite"
+                );
+            }
+
+
+            //Remove Product ID from local Favourite state
+            if (isFavourite) {
+
+                setFavouriteProductIds(
+                    (currentFavourites) =>
+                        currentFavourites.filter(
+                            (id) =>
+                                id !== productId
+                        )
+                );
+
+            } else {
+
+                //Add Product ID to local Favourite state
+                setFavouriteProductIds(
+                    (currentFavourites) => [
+                        ...currentFavourites,
+                        productId
+                    ]
+                );
+            }
+
+
+        } catch (error) {
+
+            console.error(
+                "Update Favourite error:",
+                error
+            );
+
+
+            setFavouriteError(
+                error.message
+            );
+
+
+        } finally {
+
+            //Allow Favourite button to be used again
+            setUpdatingFavouriteId(
+                null
+            );
+        }
+    }
 
     return (
 
@@ -1025,6 +1305,18 @@ export default function BakeryStorefront() {
 
                     </div>
 
+                    {/* Favourite error */}
+                    {favouriteError && (
+
+                        <div
+                            className="alert alert-danger mb-4"
+                            role="alert"
+                        >
+                            {favouriteError}
+                        </div>
+
+                    )}
+
 
                     {bestSellerProducts.length > 0 ? (
 
@@ -1040,7 +1332,7 @@ export default function BakeryStorefront() {
                                         }
                                     >
 
-                                        <article className="storefront-product-card h-100 d-flex flex-column">
+                                        <article className="storefront-product-card h-100 d-flex flex-column position-relative">
 
                                             {/* Product image */}
                                             {product.image_url ? (
@@ -1062,6 +1354,46 @@ export default function BakeryStorefront() {
                                                 </div>
 
                                             )}
+
+                                            {/* Favourite Product */}
+                                            <button
+                                                type="button"
+                                                className="btn btn-light rounded-circle shadow-sm position-absolute top-0 end-0 m-2 d-flex align-items-center justify-content-center p-2"
+                                                aria-label={
+                                                    favouriteProductIds.includes(
+                                                        product._id
+                                                    )
+                                                        ? "Remove from favourites"
+                                                        : "Add to favourites"
+                                                }
+                                                disabled={
+                                                    updatingFavouriteId ===
+                                                    product._id
+                                                }
+                                                onClick={() =>
+                                                    toggleFavourite(
+                                                        product._id
+                                                    )
+                                                }
+                                            >
+                                                <Heart
+                                                    size={19}
+                                                    className={
+                                                        favouriteProductIds.includes(
+                                                            product._id
+                                                        )
+                                                            ? "text-danger"
+                                                            : "text-dark"
+                                                    }
+                                                    fill={
+                                                        favouriteProductIds.includes(
+                                                            product._id
+                                                        )
+                                                            ? "currentColor"
+                                                            : "none"
+                                                    }
+                                                />
+                                            </button>
 
 
                                             {/* Product information */}

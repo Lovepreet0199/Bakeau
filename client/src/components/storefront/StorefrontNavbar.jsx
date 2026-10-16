@@ -16,6 +16,7 @@ import {
 import {
     Bell,
     ChevronDown,
+    Heart,
     LogOut,
     Menu,
     Settings,
@@ -1402,6 +1403,25 @@ export default function StorefrontNavbar({
 
                                             </Link>
 
+                                            {/* Customer Favourites */}
+                                            <Link
+                                                to={`/${slug}/favourites`}
+                                                onClick={
+                                                    closeAccountMenu
+                                                }
+                                                className="storefront-account-menu-item d-flex align-items-center gap-2 text-decoration-none px-3 py-2"
+                                                role="menuitem"
+                                            >
+
+                                                <Heart
+                                                    size={16}
+                                                />
+
+                                                <span>
+                                                    My Favourites
+                                                </span>
+
+                                            </Link>
 
                                             {/* Account Settings */}
                                             <Link
@@ -1843,6 +1863,24 @@ export default function StorefrontNavbar({
 
                                             </Link>
 
+                                            {/* Customer Favourites */}
+                                            <Link
+                                                to={`/${slug}/favourites`}
+                                                onClick={
+                                                    closeMobileMenu
+                                                }
+                                                className="storefront-mobile-account-link d-flex align-items-center gap-2 text-decoration-none px-3 py-2"
+                                            >
+
+                                                <Heart
+                                                    size={16}
+                                                />
+
+                                                <span>
+                                                    My Favourites
+                                                </span>
+
+                                            </Link>
 
                                             <Link
                                                 to={`/${slug}/account`}
