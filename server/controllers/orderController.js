@@ -28,6 +28,15 @@ import OrderActivity from "../models/OrderActivity.js";
 //Import Payment model to load Order payment information
 import Payment from "../models/Payment.js";
 
+//Import Notification model for Bakery Owner alerts
+import Notification from "../models/Notification.js";
+
+//Import User model to get the Bakery Owner email
+import User from "../models/User.js";
+
+//Import new Order email helper
+import { sendNewOrderEmail } from "../utils/email.js";
+
 //Rounds money values to two decimal places
 const roundMoney = (amount) => {
     return Math.round((amount + Number.EPSILON) * 100) / 100;
@@ -943,6 +952,62 @@ const createOrder = async (request, response) => {
             order,
             preparedItems
         );
+
+        //Create a dashboard Notification for the Bakery Owner
+        try {
+
+            await Notification.create({
+
+                order_id:
+                    order._id,
+
+                user_id:
+                    bakery.owner_id,
+
+                message:
+                    `New order ${order.order_number} from ${order.contact_first_name} ${order.contact_last_name} for $${Number(order.total_price).toFixed(2)}`
+            });
+
+
+        } catch (notificationError) {
+
+            //Do not fail the Customer's Order if Notification creation fails
+            console.error(
+                "New Order notification error:",
+                notificationError.message
+            );
+        }
+
+
+        //Send a new Order email to the Bakery Owner
+        try {
+
+            //Find the Bakery Owner account
+            const bakeryOwner =
+                await User.findById(
+                    bakery.owner_id
+                );
+
+
+            //Send email only when the Owner account exists
+            if (bakeryOwner) {
+
+                await sendNewOrderEmail(
+                    bakeryOwner.email,
+                    bakery.name,
+                    order
+                );
+            }
+
+
+        } catch (emailError) {
+
+            //Do not fail the Customer's Order if email delivery fails
+            console.error(
+                "New Order email error:",
+                emailError.message
+            );
+        }
 
         const completeOrder =
             await getCompleteOrderDetails(order);

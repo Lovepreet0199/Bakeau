@@ -1,0 +1,352 @@
+/* Analytics page */
+.bakery-analytics-page {
+    box-sizing: border-box;
+}
+
+
+/* Analytics title */
+.bakery-analytics-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: #25201E;
+}
+
+
+/* Analytics description */
+.bakery-analytics-description {
+    font-size: 13px;
+    color: #746D68;
+}
+
+
+/* Analytics date filter */
+.bakery-analytics-filter {
+    border: 1px solid #E4E1DE;
+    border-radius: 9px;
+    background-color: #FFFFFF;
+}
+
+
+/* Analytics form labels */
+.bakery-analytics-filter .form-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #4D4541;
+}
+
+
+/* Analytics date fields */
+.bakery-analytics-filter .form-control {
+    border: 1px solid #DDD8D4;
+    border-radius: 7px;
+    font-size: 12px;
+    box-shadow: none;
+}
+
+
+/* Analytics date field focus */
+.bakery-analytics-filter .form-control:focus {
+    border-color: #C65F3A;
+    box-shadow: 0 0 0 3px rgba(198, 95, 58, 0.08);
+}
+
+
+/* Analytics primary button */
+.bakery-analytics-primary-button {
+    border: 0;
+    border-radius: 7px;
+    background-color: #C65F3A;
+    font-size: 12px;
+    font-weight: 600;
+    color: #FFFFFF;
+}
+
+
+/* Analytics primary button hover */
+.bakery-analytics-primary-button:hover:not(:disabled) {
+    background-color: #A95031;
+}
+
+
+/* Analytics secondary button */
+.bakery-analytics-secondary-button {
+    border: 1px solid #DDD8D4;
+    border-radius: 7px;
+    background-color: #FFFFFF;
+    font-size: 12px;
+    font-weight: 600;
+    color: #4D4541;
+}
+
+
+/* Analytics secondary button hover */
+.bakery-analytics-secondary-button:hover:not(:disabled) {
+    border-color: #C65F3A;
+    color: #C65F3A;
+}
+
+
+/* Disabled Analytics buttons */
+.bakery-analytics-primary-button:disabled,
+.bakery-analytics-secondary-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+}
+
+
+/* Analytics statistic card */
+.bakery-analytics-stat-card {
+    border: 1px solid #E4E1DE;
+    border-radius: 9px;
+    background-color: #FFFFFF;
+}
+
+
+/* Analytics statistic label */
+.bakery-analytics-stat-card p {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #746D68;
+}
+
+
+/* Analytics statistic value */
+.bakery-analytics-stat-card h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #25201E;
+}
+
+
+/* Analytics loading text */
+.bakery-analytics-loading {
+    color: #C65F3A;
+}
+
+
+/* Analytics content section */
+.bakery-analytics-section {
+    overflow: hidden;
+    border: 1px solid #E4E1DE;
+    border-radius: 9px;
+    background-color: #FFFFFF;
+}
+
+
+/* Analytics section heading */
+.bakery-analytics-section-heading {
+    border-bottom: 1px solid #E8E4E1;
+}
+
+
+/* Analytics section title */
+.bakery-analytics-section-heading h2 {
+    font-size: 15px;
+    font-weight: 700;
+    color: #25201E;
+}
+
+
+/* Analytics section description */
+.bakery-analytics-section-heading p {
+    font-size: 11px;
+    color: #8A827D;
+}
+
+
+/* Analytics Performance card */
+.bakery-analytics-performance-card {
+    border: 1px solid #E4E1DE;
+    border-radius: 9px;
+    background-color: #FAF9F8;
+}
+
+
+/* Performance card label */
+.bakery-analytics-performance-card p {
+    font-size: 11px;
+    font-weight: 600;
+    color: #746D68;
+}
+
+
+/* Performance card value */
+.bakery-analytics-performance-card h3 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #25201E;
+}
+
+
+/* Performance card description */
+.bakery-analytics-performance-card span {
+    font-size: 11px;
+    color: #8A827D;
+}
+
+
+/* Sales Overview title */
+.bakery-analytics-chart-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #25201E;
+}
+
+
+/* Sales Overview total */
+.bakery-analytics-chart-total {
+    font-size: 28px;
+    font-weight: 700;
+    color: #25201E;
+}
+
+
+/* Sales comparison text */
+.bakery-analytics-chart-comparison {
+    font-size: 11px;
+    color: #8A827D;
+}
+
+
+/* Sales change badge */
+.bakery-analytics-change-badge {
+    padding: 4px 7px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+
+/* Positive Sales change */
+.bakery-analytics-change-badge.positive {
+    background-color: #EDF8F1;
+    color: #28714A;
+}
+
+
+/* Negative Sales change */
+.bakery-analytics-change-badge.negative {
+    background-color: #FCEFED;
+    color: #A84437;
+}
+
+
+/* Graph period buttons */
+.bakery-analytics-period-buttons {
+    border: 1px solid #DDD8D4;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+
+/* Graph period button */
+.bakery-analytics-period-buttons .btn {
+    border: 0;
+    border-radius: 0;
+    background-color: #F3F0ED;
+    font-size: 11px;
+    font-weight: 600;
+    color: #665E59;
+    box-shadow: none;
+}
+
+
+/* Graph period button hover */
+.bakery-analytics-period-buttons .btn:hover {
+    background-color: #ECE7E3;
+    color: #25201E;
+}
+
+
+/* Active Graph period */
+.bakery-analytics-period-buttons .btn.active {
+    background-color: #FFFFFF;
+    color: #25201E;
+    box-shadow: inset 0 0 0 1px #D9D3CF;
+}
+
+
+/* Sales SVG Graph */
+.bakery-analytics-sales-chart {
+    min-width: 700px;
+    height: auto;
+}
+
+
+/* Horizontal Graph guide line */
+.bakery-analytics-chart-grid {
+    stroke: #E8E4E1;
+    stroke-width: 1;
+    stroke-dasharray: 3 4;
+}
+
+
+/* Sales Graph line */
+.bakery-analytics-chart-line {
+    fill: none;
+    stroke: #C65F3A;
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+
+/* Sales Graph point */
+.bakery-analytics-chart-point {
+    fill: #C65F3A;
+    stroke: #FFFFFF;
+    stroke-width: 2;
+    pointer-events: none;
+}
+
+
+/* Selected Graph point */
+.bakery-analytics-chart-point.active {
+    stroke-width: 3;
+}
+
+
+/* Larger invisible area used for hovering */
+.bakery-analytics-chart-hover-target {
+    fill: transparent;
+    cursor: pointer;
+}
+
+
+/* Graph date and Revenue labels */
+.bakery-analytics-chart-axis-text {
+    fill: #918985;
+    font-size: 10px;
+}
+
+
+/* Graph Tooltip box */
+.bakery-analytics-chart-tooltip rect {
+    fill: #FFFFFF;
+    stroke: #DDD8D4;
+    stroke-width: 1;
+}
+
+
+/* Tooltip date */
+.bakery-analytics-tooltip-date {
+    fill: #25201E;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+
+/* Tooltip Revenue value */
+.bakery-analytics-tooltip-value {
+    fill: #C65F3A;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+
+/* Graph explanation text */
+.bakery-analytics-chart-note {
+    font-size: 10px;
+    color: #918985;
+}

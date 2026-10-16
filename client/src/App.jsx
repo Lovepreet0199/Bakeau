@@ -128,6 +128,15 @@ import AdminReviews from "./pages/Admin/AdminReviews";
 //Protects Bakery Owner routes
 import ProtectedBakeryRoute from "./components/Auth/ProtectedBakeryRoute";
 
+//Import Bakery Payments page
+import BakeryPayments from "./pages/Dashboard/BakeryPayments.jsx";
+
+//Import Bakery Marketing page
+import BakeryMarketing from "./pages/Dashboard/BakeryMarketing.jsx";
+
+//Import Bakery Analytics page
+import BakeryAnalytics from "./pages/Dashboard/BakeryAnalytics.jsx";
+
 //Displays the Bakeau application routes
 export default function App() {
 
@@ -357,6 +366,12 @@ export default function App() {
               element={<BakeryPickupSlots />}
             />
 
+            {/* Bakery Owner Payments page */}
+            <Route
+              path="payments"
+              element={<BakeryPayments />}
+            />
+
             <Route
               path="settings"
               element={<BakerySettings />}
@@ -383,9 +398,21 @@ export default function App() {
               element={<BakeryReviews />}
             />
 
+            {/* Bakery Owner Marketing page */}
+            <Route
+              path="marketing"
+              element={<BakeryMarketing />}
+            />
+
+            {/* Bakery Owner Analytics page */}
+            <Route
+              path="analytics"
+              element={<BakeryAnalytics />}
+            />
+
           </Route>
         </Route>
-        
+
       </Routes>
     </CartProvider>
   );

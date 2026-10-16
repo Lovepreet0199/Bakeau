@@ -1,0 +1,226 @@
+/* Marketing page */
+.bakery-marketing-page {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+
+/* Marketing page heading */
+.bakery-marketing-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+
+/* Marketing title */
+.bakery-marketing-heading h1 {
+    margin: 0 0 5px;
+    font-size: 26px;
+    font-weight: 700;
+    color: #25201E;
+}
+
+
+/* Marketing description */
+.bakery-marketing-heading p {
+    margin: 0;
+    font-size: 13px;
+    color: #746D68;
+}
+
+
+/* Marketing content card */
+.bakery-marketing-card {
+    width: 100%;
+    overflow: hidden;
+    border: 1px solid #E4E1DE;
+    border-radius: 9px;
+    background-color: #FFFFFF;
+}
+
+
+/* Marketing card heading */
+.bakery-marketing-card-heading {
+    padding: 18px 20px;
+    border-bottom: 1px solid #E8E4E1;
+}
+
+
+/* Marketing card title */
+.bakery-marketing-card-heading h2 {
+    margin: 0 0 3px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #25201E;
+}
+
+
+/* Marketing card description */
+.bakery-marketing-card-heading p {
+    margin: 0;
+    font-size: 11px;
+    color: #8A827D;
+}
+
+
+/* Product card */
+.bakery-marketing-product-card {
+    overflow: hidden;
+    border: 1px solid #E4E1DE;
+    border-radius: 9px;
+    background-color: #FFFFFF;
+}
+
+
+/* Product image */
+.bakery-marketing-product-image {
+    width: 100%;
+    height: 170px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background-color: #F7F7F6;
+    color: #918985;
+    font-size: 11px;
+}
+
+
+/* Product image file */
+.bakery-marketing-product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+/* Product name */
+.bakery-marketing-product-card h3 {
+    margin: 0 0 4px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #25201E;
+}
+
+
+/* Product category */
+.bakery-marketing-product-card p {
+    font-size: 11px;
+    color: #8A827D;
+}
+
+
+/* Product price */
+.bakery-marketing-product-card strong {
+    font-size: 13px;
+    color: #25201E;
+}
+
+
+/* Featured Product badge */
+.bakery-marketing-featured-badge {
+    padding: 5px 8px;
+    border-radius: 20px;
+    background-color: #EDF8F1;
+    font-size: 10px;
+    font-weight: 600;
+    color: #28714A;
+    white-space: nowrap;
+}
+
+
+/* Marketing loading */
+.bakery-marketing-loading {
+    min-height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: #C65F3A;
+}
+
+
+/* Empty Marketing state */
+.bakery-marketing-empty {
+    padding: 35px 20px;
+    text-align: center;
+}
+
+
+/* Empty Marketing title */
+.bakery-marketing-empty h3 {
+    margin: 0 0 5px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #25201E;
+}
+
+
+/* Empty Marketing description */
+.bakery-marketing-empty p {
+    margin: 0;
+    font-size: 11px;
+    color: #8A827D;
+}
+
+
+/* Marketing primary button */
+.bakery-marketing-primary-button {
+    min-height: 38px;
+    padding: 7px 12px;
+    border: 0;
+    border-radius: 7px;
+    background-color: #C65F3A;
+    font-size: 11px;
+    font-weight: 600;
+    color: #FFFFFF;
+}
+
+
+/* Marketing primary button hover */
+.bakery-marketing-primary-button:hover:not(:disabled) {
+    background-color: #A95031;
+}
+
+
+/* Marketing secondary button */
+.bakery-marketing-secondary-button {
+    min-height: 38px;
+    padding: 7px 12px;
+    border: 1px solid #DDD8D4;
+    border-radius: 7px;
+    background-color: #FFFFFF;
+    font-size: 11px;
+    font-weight: 600;
+    color: #4D4541;
+}
+
+
+/* Marketing secondary button hover */
+.bakery-marketing-secondary-button:hover:not(:disabled) {
+    border-color: #C65F3A;
+    color: #C65F3A;
+}
+
+
+/* Disabled Marketing button */
+.bakery-marketing-primary-button:disabled,
+.bakery-marketing-secondary-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+}
+
+
+/* Marketing mobile layout */
+@media (max-width: 767px) {
+
+    .bakery-marketing-page {
+        padding: 16px;
+    }
+}

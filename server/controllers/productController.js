@@ -55,6 +55,25 @@ const createProduct = async (request, response) => {
         //Set product visibility based on its publishing status
         let isVisible = false;
 
+        //Stop if the Bakery already has four featured Products
+        if (is_featured === true) {
+
+            const featuredProductCount =
+                await Product.countDocuments({
+                    bakery_id: bakery._id,
+                    is_featured: true
+                });
+
+
+            if (featuredProductCount >= 4) {
+
+                return response.status(400).json({
+                    message:
+                        "You can feature up to 4 products."
+                });
+            }
+        }
+
         if (status === "active") {
             isVisible = true;
         }
@@ -312,6 +331,29 @@ const updateMyProduct = async (request, response) => {
             cancellation_cutoff_hours,
         } = request.body;
 
+        //Check the Featured Product limit only when turning Featured on
+        if (
+            is_featured === true &&
+            !product.is_featured
+        ) {
+
+            const featuredProductCount =
+                await Product.countDocuments({
+                    bakery_id: bakery._id,
+                    is_featured: true
+                });
+
+
+            //Stop if four Products are already featured
+            if (featuredProductCount >= 4) {
+
+                return response.status(400).json({
+                    message:
+                        "You can feature up to 4 products."
+                });
+            }
+        }
+
         //Set product visibility based on its publishing status
         let isVisible = false;
 
@@ -520,55 +562,95 @@ const updateProductFeatured = async (request, response) => {
     try {
 
         //Get the authenticated Bakery Owner's user ID
-        const ownerId = request.user.userId;
+        const ownerId =
+            request.user.userId;
 
-        //Get the product ID from the URL
-        const productId = request.params.id;
+        //Get the Product ID from the URL
+        const productId =
+            request.params.id;
 
         //Get the new featured value
-        const { is_featured } = request.body;
+        const {
+            is_featured
+        } = request.body;
 
-        //Find the bakery belonging to the authenticated Bakery Owner
-        const bakery = await Bakery.findOne({
-            owner_id: ownerId
-        });
 
-        //Stop if the Bakery Owner does not have a bakery
+        //Find the Bakery belonging to the authenticated Bakery Owner
+        const bakery =
+            await Bakery.findOne({
+                owner_id: ownerId
+            });
+
+
+        //Stop if the Bakery Owner does not have a Bakery
         if (!bakery) {
+
             return response.status(404).json({
                 message: "Bakery not found"
             });
         }
 
-        //Update only the featured value if the Product belongs to this bakery
-        const product = await Product.findOneAndUpdate(
-            {
+
+        //Find the Product only if it belongs to this Bakery
+        const product =
+            await Product.findOne({
                 _id: productId,
                 bakery_id: bakery._id
-            },
-            {
-                $set: {
-                    is_featured: is_featured
-                }
-            },
-            {
-                returnDocument: "after",
-                runValidators: true
-            }
-        );
+            });
+
 
         //Stop if the Product does not exist
         if (!product) {
+
             return response.status(404).json({
                 message: "Product not found"
             });
         }
 
+
+        //Check the limit only when turning Featured on
+        if (
+            is_featured === true &&
+            !product.is_featured
+        ) {
+
+            //Count currently featured Products
+            const featuredProductCount =
+                await Product.countDocuments({
+                    bakery_id: bakery._id,
+                    is_featured: true
+                });
+
+
+            //Do not allow more than four featured Products
+            if (
+                featuredProductCount >= 4
+            ) {
+
+                return response.status(400).json({
+                    message:
+                        "You can feature up to 4 products."
+                });
+            }
+        }
+
+
+        //Update the Product's featured state
+        product.is_featured =
+            is_featured;
+
+
+        //Save the updated Product
+        await product.save();
+
+
         //Return the updated Product
         return response.status(200).json({
-            message: "Product featured status updated successfully",
+            message:
+                "Product featured status updated successfully",
             product: product
         });
+
 
     } catch (error) {
 
@@ -577,8 +659,10 @@ const updateProductFeatured = async (request, response) => {
             error.message
         );
 
+
         return response.status(500).json({
-            message: "Unable to update product featured status"
+            message:
+                "Unable to update product featured status"
         });
     }
 };

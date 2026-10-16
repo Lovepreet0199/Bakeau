@@ -45,6 +45,12 @@ import adminRoutes from "./routes/adminRoutes.js";
 //Import Dashboard routes
 import dashboardRoutes from "./routes/dashboardRoutes.js";
 
+//Import Notification routes
+import notificationRoutes from "./routes/notificationRoutes.js";
+
+//Import Dashboard Search routes
+import searchRoutes from "./routes/searchRoutes.js";
+
 // Create an Express app and store it in the app variable
 const app = express();
 
@@ -152,6 +158,12 @@ app.use("/api/admin", adminRoutes);
 
 //Use Dashboard routes for Bakery Owner dashboard requests
 app.use("/api/dashboard", dashboardRoutes);
+
+//Use Notification routes for Bakery Owner notifications
+app.use("/api/notifications", notificationRoutes);
+
+//Use Dashboard Search routes
+app.use("/api/search", searchRoutes);
 
 //Connect to MongoDB
 connectDB();
