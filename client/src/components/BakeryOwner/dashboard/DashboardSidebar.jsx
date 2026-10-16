@@ -347,9 +347,12 @@ export default function DashboardSidebar({
 
 
                     {/* Payments page */}
-                    <button
-                        type="button"
-                        className="bakery-dashboard-nav-item"
+                    <NavLink
+                        to="/bakery/payments"
+                        className={({ isActive }) =>
+                            `bakery-dashboard-nav-item text-decoration-none ${isActive ? "active" : ""}`
+                        }
+                        onClick={closeSidebar}
                     >
                         <CreditCard
                             size={18}
@@ -359,7 +362,7 @@ export default function DashboardSidebar({
                         <span>
                             Payments
                         </span>
-                    </button>
+                    </NavLink>
 
 
                     {/* Reviews page */}
@@ -382,9 +385,13 @@ export default function DashboardSidebar({
 
 
                     {/* Marketing page */}
-                    <button
-                        type="button"
-                        className="bakery-dashboard-nav-item"
+                    <NavLink
+                        to="/bakery/marketing"
+                        className={({ isActive }) =>
+                            `bakery-dashboard-nav-item text-decoration-none ${isActive ? "active" : ""
+                            }`
+                        }
+                        onClick={closeSidebar}
                     >
                         <Megaphone
                             size={18}
@@ -394,7 +401,7 @@ export default function DashboardSidebar({
                         <span>
                             Marketing
                         </span>
-                    </button>
+                    </NavLink>
 
 
                     {/* Analytics page */}

@@ -1,0 +1,311 @@
+/* Payments page */
+.bakery-payments-page {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+
+/* Payments page heading */
+.bakery-payments-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+
+/* Payments page title */
+.bakery-payments-heading h1 {
+    margin: 0 0 5px;
+    font-size: 26px;
+    font-weight: 700;
+    color: #25201E;
+}
+
+
+/* Payments page description */
+.bakery-payments-heading p {
+    margin: 0;
+    font-size: 13px;
+    color: #746D68;
+}
+
+
+/* Payment summary */
+.bakery-payments-summary {
+    max-width: none;
+    margin-bottom: 20px;
+}
+
+/* Payment summary card */
+.bakery-payment-summary-card {
+    height: 100%;
+    padding: 18px 20px;
+    border: 1px solid #E4E1DE;
+    border-radius: 9px;
+    background-color: #FFFFFF;
+}
+
+
+/* Payment summary label */
+.bakery-payment-summary-card p {
+    margin: 0 0 6px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #746D68;
+}
+
+
+/* Payment summary value */
+.bakery-payment-summary-card h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+    color: #25201E;
+}
+
+
+/* Payment loading */
+.bakery-payments-loading {
+    width: 100%;
+    max-width: 1050px;
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: #C65F3A;
+}
+
+
+/* Payment error */
+.bakery-payments-error {
+    width: 100%;
+    max-width: 1050px;
+}
+
+/* Payment activity card */
+.bakery-payments-card {
+    width: 100%;
+    overflow: hidden;
+    border: 1px solid #E4E1DE;
+    border-radius: 9px;
+    background-color: #FFFFFF;
+}
+
+
+/* Payment activity heading */
+.bakery-payments-card-heading {
+    padding: 18px 20px;
+    border-bottom: 1px solid #E8E4E1;
+}
+
+
+/* Payment activity title */
+.bakery-payments-card-heading h2 {
+    margin: 0 0 3px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #25201E;
+}
+
+
+/* Payment activity description */
+.bakery-payments-card-heading p {
+    margin: 0;
+    font-size: 11px;
+    color: #8A827D;
+}
+
+
+/* Payments table */
+.bakery-payments-table {
+    width: 100%;
+    margin: 0;
+    vertical-align: middle;
+}
+
+
+/* Payments table headings */
+.bakery-payments-table thead th {
+    padding: 11px 16px;
+    border-bottom: 1px solid #E8E4E1;
+    background-color: #FAF9F8;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #918985;
+    white-space: nowrap;
+}
+
+
+/* Payments table cells */
+.bakery-payments-table tbody td {
+    padding: 13px 16px;
+    border-bottom: 1px solid #F0EDEA;
+    font-size: 12px;
+    color: #4D4541;
+}
+
+
+/* Removes last row border */
+.bakery-payments-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+
+/* Order number */
+.bakery-payments-table tbody strong {
+    font-weight: 600;
+    color: #25201E;
+}
+
+
+/* Payment status */
+.bakery-payment-status {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 8px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+
+/* Unpaid */
+.bakery-payment-status.unpaid {
+    background-color: #FFF0EF;
+    color: #B42318;
+}
+
+
+/* Partially paid */
+.bakery-payment-status.partially_paid {
+    background-color: #FFF5DC;
+    color: #946200;
+}
+
+
+/* Paid */
+.bakery-payment-status.paid {
+    background-color: #EDF8F1;
+    color: #28714A;
+}
+
+
+/* Refunded */
+.bakery-payment-status.refunded {
+    background-color: #F1EEEB;
+    color: #625A56;
+}
+
+
+/* View Order button */
+.bakery-payment-view-button {
+    padding: 6px 10px;
+    border: 1px solid #DDD8D4;
+    border-radius: 6px;
+    background-color: #FFFFFF;
+    font-size: 11px;
+    font-weight: 600;
+    color: #4D4541;
+}
+
+
+/* View Order hover */
+.bakery-payment-view-button:hover {
+    border-color: #C65F3A;
+    color: #C65F3A;
+}
+
+
+/* Empty Payments state */
+.bakery-payments-empty {
+    padding: 35px 20px;
+    text-align: center;
+}
+
+
+/* Empty Payments title */
+.bakery-payments-empty h3 {
+    margin: 0 0 5px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #25201E;
+}
+
+
+/* Empty Payments description */
+.bakery-payments-empty p {
+    margin: 0;
+    font-size: 11px;
+    color: #8A827D;
+}
+
+/* Order status */
+.bakery-order-status {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 8px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+
+/* Pending */
+.bakery-order-status.pending {
+    background-color: #FFF5DC;
+    color: #946200;
+}
+
+
+/* Confirmed */
+.bakery-order-status.confirmed {
+    background-color: #EEF4FF;
+    color: #3453A4;
+}
+
+
+/* In Progress */
+.bakery-order-status.preparing {
+    background-color: #F3EEFF;
+    color: #6B46A8;
+}
+
+
+/* Ready for Pickup */
+.bakery-order-status.ready {
+    background-color: #E9F7F4;
+    color: #287A67;
+}
+
+
+/* Completed */
+.bakery-order-status.completed {
+    background-color: #EDF8F1;
+    color: #28714A;
+}
+
+
+/* Cancelled */
+.bakery-order-status.cancelled {
+    background-color: #FFF0EF;
+    color: #B42318;
+}
+
+/* Payments mobile layout */
+@media (max-width: 767px) {
+
+    .bakery-payments-page {
+        padding: 16px;
+    }
+}
