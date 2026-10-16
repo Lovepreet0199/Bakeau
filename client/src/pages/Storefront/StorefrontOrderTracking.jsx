@@ -1,4 +1,5 @@
 import API_URL from "../../config/api.js";
+
 //Import React hooks
 import {
     useEffect,
@@ -25,7 +26,9 @@ import StorefrontNavbar from "../../components/storefront/StorefrontNavbar";
 import StorefrontFooter from "../../components/storefront/StorefrontFooter";
 
 //Import Storefront theme helper
-import { getStorefrontTheme } from "../../utils/storefrontTheme";
+import {
+    getStorefrontTheme
+} from "../../utils/storefrontTheme";
 
 //Import Order Tracking styles
 import "./StorefrontOrderTracking.css";
@@ -40,9 +43,11 @@ export default function StorefrontOrderTracking() {
         orderId
     } = useParams();
 
+
     //Used to navigate Customer
     const navigate =
         useNavigate();
+
 
     //Used to get page navigation state
     const location =
@@ -54,6 +59,7 @@ export default function StorefrontOrderTracking() {
         bakery,
         setBakery
     ] = useState(null);
+
 
     //Stores Customer Order
     const [
@@ -67,6 +73,7 @@ export default function StorefrontOrderTracking() {
         isLoading,
         setIsLoading
     ] = useState(true);
+
 
     //Stores page loading errors
     const [
@@ -144,8 +151,10 @@ export default function StorefrontOrderTracking() {
     function formatPickupDate(date) {
 
         if (!date) {
+
             return "";
         }
+
 
         return new Date(
             date
@@ -172,16 +181,20 @@ export default function StorefrontOrderTracking() {
     function formatPickupTime(time) {
 
         if (!time) {
+
             return "";
         }
+
 
         const [
             hour,
             minute
         ] = time.split(":");
 
+
         const date =
             new Date();
+
 
         date.setHours(
             Number(hour),
@@ -189,6 +202,7 @@ export default function StorefrontOrderTracking() {
             0,
             0
         );
+
 
         return date.toLocaleTimeString(
             "en-US",
@@ -210,8 +224,10 @@ export default function StorefrontOrderTracking() {
     function formatStatus(status) {
 
         if (!status) {
+
             return "";
         }
+
 
         return (
             status.charAt(0).toUpperCase() +
@@ -231,15 +247,18 @@ export default function StorefrontOrderTracking() {
             "completed"
         ];
 
+
         const currentIndex =
             statusOrder.indexOf(
                 order.status
             );
 
+
         const stageIndex =
             statusOrder.indexOf(
                 status
             );
+
 
         return (
             currentIndex >=
@@ -268,6 +287,7 @@ export default function StorefrontOrderTracking() {
                     }
                 );
 
+
                 return;
             }
 
@@ -282,6 +302,7 @@ export default function StorefrontOrderTracking() {
                     await fetch(
                         `${API_URL}/api/bakeries/public/${slug}`
                     );
+
 
                 const bakeryData =
                     await bakeryResponse.json();
@@ -315,6 +336,7 @@ export default function StorefrontOrderTracking() {
                         }
                     );
 
+
                 const orderData =
                     await orderResponse.json();
 
@@ -347,6 +369,7 @@ export default function StorefrontOrderTracking() {
                         }
                     );
 
+
                 const reviewData =
                     await reviewResponse.json();
 
@@ -366,6 +389,7 @@ export default function StorefrontOrderTracking() {
                     error.message
                 );
 
+
             } finally {
 
                 setIsLoading(
@@ -377,10 +401,159 @@ export default function StorefrontOrderTracking() {
 
         loadOrder();
 
+
     }, [
         slug,
         orderId,
         navigate
+    ]);
+
+
+    /*
+        Store only the current Order status
+        for the automatic refresh Effect.
+
+        This prevents the Effect from depending
+        on the entire Order object.
+    */
+    const currentOrderStatus =
+        order?.status;
+
+
+    //Automatically refreshes Customer Order information
+    useEffect(() => {
+
+        //Wait until initial Order has loaded
+        if (!currentOrderStatus) {
+
+            return;
+        }
+
+
+        //Stop checking after final Order statuses
+        if (
+            currentOrderStatus ===
+            "completed" ||
+            currentOrderStatus ===
+            "cancelled"
+        ) {
+
+            return;
+        }
+
+
+        //Tracks whether Customer has left this page
+        let isCancelled =
+            false;
+
+
+        //Loads latest Order information
+        async function refreshOrder() {
+
+            try {
+
+                /*
+                    Get Customer token directly here
+                    so getToken does not become an
+                    Effect dependency.
+                */
+                const token =
+                    localStorage.getItem(
+                        "token"
+                    ) ||
+                    sessionStorage.getItem(
+                        "token"
+                    );
+
+
+                //Stop if Customer is no longer logged in
+                if (!token) {
+
+                    return;
+                }
+
+
+                //Request latest Customer Order
+                const response =
+                    await fetch(
+                        `${API_URL}/api/orders/mine/${orderId}`,
+                        {
+                            headers: {
+                                Authorization:
+                                    `Bearer ${token}`
+                            }
+                        }
+                    );
+
+
+                //Stop if request failed
+                if (!response.ok) {
+
+                    return;
+                }
+
+
+                //Convert response to JSON
+                const data =
+                    await response.json();
+
+
+                //Stop if Customer already left page
+                if (isCancelled) {
+
+                    return;
+                }
+
+
+                /*
+                    Update Order state only.
+
+                    This updates the page smoothly
+                    without refreshing the browser
+                    or showing the loading spinner.
+                */
+                setOrder(
+                    data.order
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "Order refresh error:",
+                    error
+                );
+            }
+        }
+
+
+        //Check latest Order every 10 seconds
+        const orderRefreshInterval =
+            setInterval(
+                () => {
+
+                    refreshOrder();
+                },
+                10000
+            );
+
+
+        //Stop polling when page closes or status changes
+        return () => {
+
+            isCancelled =
+                true;
+
+
+            clearInterval(
+                orderRefreshInterval
+            );
+        };
+
+
+    }, [
+        orderId,
+        currentOrderStatus
     ]);
 
 
@@ -402,7 +575,9 @@ export default function StorefrontOrderTracking() {
             true
         );
 
+
         setActionError("");
+
 
         setActionMessage("");
 
@@ -447,6 +622,7 @@ export default function StorefrontOrderTracking() {
             //Update Order immediately on the page
             setOrder(
                 (currentOrder) => ({
+
                     ...currentOrder,
 
                     status:
@@ -478,6 +654,7 @@ export default function StorefrontOrderTracking() {
             setActionError(
                 error.message
             );
+
 
         } finally {
 
@@ -824,10 +1001,13 @@ export default function StorefrontOrderTracking() {
                                                     </strong>
 
                                                     <small className="d-block">
+
                                                         Qty{" "}
+
                                                         {
                                                             item.quantity
                                                         }
+
                                                     </small>
 
 
@@ -878,9 +1058,11 @@ export default function StorefrontOrderTracking() {
                                                         <small className="storefront-tracking-product-note d-block mt-2">
 
                                                             Note: "
+
                                                             {
                                                                 item.special_notes
                                                             }
+
                                                             "
 
                                                         </small>
@@ -976,6 +1158,7 @@ export default function StorefrontOrderTracking() {
                                                     isStatusComplete(
                                                         stage.status
                                                     );
+
 
                                                 //Check current stage
                                                 const current =
@@ -1108,19 +1291,15 @@ export default function StorefrontOrderTracking() {
                                                         >
 
                                                             <span className="storefront-tracking-custom-label">
-
                                                                 {
                                                                     customization.group_name
                                                                 }
-
                                                             </span>
 
                                                             <strong className="d-block storefront-tracking-custom-value">
-
                                                                 {
                                                                     customization.option_name
                                                                 }
-
                                                             </strong>
 
                                                         </div>
@@ -1324,6 +1503,7 @@ export default function StorefrontOrderTracking() {
 
                                         </p>
 
+
                                         {/* Edit Order */}
                                         <Link
                                             to={`/${slug}/orders/${orderId}/edit`}
@@ -1332,6 +1512,7 @@ export default function StorefrontOrderTracking() {
                                             Edit Order
                                         </Link>
 
+
                                         <button
                                             type="button"
                                             className="storefront-tracking-cancel-button w-100"
@@ -1339,6 +1520,7 @@ export default function StorefrontOrderTracking() {
 
                                                 //Clear old errors
                                                 setActionError("");
+
 
                                                 //Open confirmation modal
                                                 setIsCancelModalOpen(
@@ -1404,6 +1586,7 @@ export default function StorefrontOrderTracking() {
                                 Cancel Order?
                             </h2>
 
+
                             <button
                                 type="button"
                                 className="storefront-cancel-modal-close d-flex align-items-center justify-content-center"
@@ -1412,6 +1595,7 @@ export default function StorefrontOrderTracking() {
                                     setIsCancelModalOpen(
                                         false
                                     );
+
 
                                     setActionError("");
 
@@ -1473,6 +1657,7 @@ export default function StorefrontOrderTracking() {
                         {/* Modal Actions */}
                         <div className="d-flex flex-column flex-sm-row justify-content-end gap-2 mt-4">
 
+
                             {/* Keep Order */}
                             <button
                                 type="button"
@@ -1482,6 +1667,7 @@ export default function StorefrontOrderTracking() {
                                     setIsCancelModalOpen(
                                         false
                                     );
+
 
                                     setActionError("");
 
