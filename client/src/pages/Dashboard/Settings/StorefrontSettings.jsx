@@ -23,10 +23,16 @@ export default function StorefrontSettings({
     setBakery
 }) {
 
+
     //Stores editable Storefront information
     const [formData, setFormData] = useState({
 
-        //Storefront colours
+        //Selected Storefront theme
+        storefront_theme:
+            bakery.storefront_theme ||
+            "warm",
+
+        //Storefront colors
         primary_color:
             bakery.primary_color || "#C65F3A",
 
@@ -83,7 +89,7 @@ export default function StorefrontSettings({
     ] = useState("");
 
 
-    //Preset primary colours
+    //Preset primary colors
     const primaryColorOptions = [
         "#C65F3A",
         "#8B5E3C",
@@ -93,7 +99,7 @@ export default function StorefrontSettings({
         "#5F7161"
     ];
 
-    //Preset secondary colours
+    //Preset secondary colors
     const secondaryColorOptions = [
         "#F4E8DF",
         "#E8DCCF",
@@ -103,7 +109,7 @@ export default function StorefrontSettings({
         "#F2E1E5"
     ];
 
-    //Preset dark colours
+    //Preset dark colors
     const darkColorOptions = [
         "#432C23",
         "#2F211B",
@@ -113,6 +119,50 @@ export default function StorefrontSettings({
         "#3F3035"
     ];
 
+    //Preset Storefront themes
+    const storefrontThemeOptions = [
+
+        {
+            id: "warm",
+            name: "Warm Bakery",
+            primary_color: "#C65F3A",
+            secondary_color: "#F4E8DF",
+            dark_color: "#432C23"
+        },
+
+        {
+            id: "sage",
+            name: "Sage",
+            primary_color: "#5F7161",
+            secondary_color: "#DCE7E1",
+            dark_color: "#3D4A3E"
+        },
+
+        {
+            id: "blueberry",
+            name: "Blueberry",
+            primary_color: "#4F759B",
+            secondary_color: "#DDE6EF",
+            dark_color: "#2F3E4E"
+        },
+
+        {
+            id: "lavender",
+            name: "Lavender",
+            primary_color: "#6D597A",
+            secondary_color: "#E8DFF0",
+            dark_color: "#41364D"
+        },
+
+        {
+            id: "rose",
+            name: "Rose",
+            primary_color: "#B56576",
+            secondary_color: "#F2E1E5",
+            dark_color: "#3F3035"
+        }
+
+    ];
 
     //Creates Bakery initials when no logo is uploaded
     function getBakeryInitials() {
@@ -165,6 +215,36 @@ export default function StorefrontSettings({
         setSuccessMessage("");
     }
 
+    //Applies a Storefront theme preset
+    function applyStorefrontTheme(theme) {
+
+        setFormData(
+            (currentData) => ({
+
+                ...currentData,
+
+                //Save selected preset
+                storefront_theme:
+                    theme.id,
+
+                //Apply preset colors
+                primary_color:
+                    theme.primary_color,
+
+                secondary_color:
+                    theme.secondary_color,
+
+                dark_color:
+                    theme.dark_color
+            })
+        );
+
+
+        //Clear previous messages after a change
+        setError("");
+
+        setSuccessMessage("");
+    }
 
     //Uploads a new Bakery logo
     async function handleLogoUpload(event) {
@@ -422,7 +502,7 @@ export default function StorefrontSettings({
 
                 //Storefront Settings
                 storefront_theme:
-                    bakery.storefront_theme,
+                    formData.storefront_theme,
 
                 primary_color:
                     formData.primary_color,
@@ -784,22 +864,109 @@ export default function StorefrontSettings({
             <div className="bakery-settings-divider"></div>
 
 
-            {/* Storefront colour heading */}
+            {/* Storefront colors heading */}
             <div className="bakery-settings-section-heading">
 
                 <h2>
-                    Storefront colours
+                    Storefront colors
                 </h2>
 
                 <p>
-                    Choose the colours that represent your
+                    Choose the colors that represent your
                     bakery throughout the storefront.
                 </p>
 
             </div>
 
+            {/* Storefront theme presets */}
+            <div className="mb-4">
 
-            {/* Primary colour */}
+                <strong className="d-block mb-1">
+                    Theme presets
+                </strong>
+
+                <p className="text-secondary mb-3">
+                    Choose a preset or customize the colors below.
+                </p>
+
+
+                <div className="row g-3">
+
+                    {storefrontThemeOptions.map(
+                        (theme) => (
+
+                            <div
+                                className="col-12 col-sm-6 col-lg-4"
+                                key={theme.id}
+                            >
+
+                                <button
+                                    type="button"
+                                    className={
+                                        `w-100 text-start border rounded-3 p-3 bg-white ${formData.storefront_theme ===
+                                            theme.id
+                                            ? "border-dark border-2"
+                                            : ""
+                                        }`
+                                    }
+                                    onClick={() =>
+                                        applyStorefrontTheme(
+                                            theme
+                                        )
+                                    }
+                                >
+
+                                    <span className="fw-semibold d-block mb-3">
+                                        {theme.name}
+                                    </span>
+
+
+                                    {/* Theme colors preview */}
+                                    <span className="d-flex align-items-center gap-2">
+
+                                        <span
+                                            className="rounded-circle d-inline-block"
+                                            style={{
+                                                width: "28px",
+                                                height: "28px",
+                                                backgroundColor:
+                                                    theme.primary_color
+                                            }}
+                                        />
+
+                                        <span
+                                            className="rounded-circle d-inline-block"
+                                            style={{
+                                                width: "28px",
+                                                height: "28px",
+                                                backgroundColor:
+                                                    theme.secondary_color
+                                            }}
+                                        />
+
+                                        <span
+                                            className="rounded-circle d-inline-block"
+                                            style={{
+                                                width: "28px",
+                                                height: "28px",
+                                                backgroundColor:
+                                                    theme.dark_color
+                                            }}
+                                        />
+
+                                    </span>
+
+                                </button>
+
+                            </div>
+                        )
+                    )}
+
+                </div>
+
+            </div>
+
+            {/* Primary colors */}
             <div className="bakery-settings-color-section">
 
                 <div className="bakery-settings-color-heading">
@@ -807,7 +974,7 @@ export default function StorefrontSettings({
                     <div>
 
                         <strong>
-                            Primary colour
+                            Primary colors
                         </strong>
 
                         <span>
@@ -826,7 +993,7 @@ export default function StorefrontSettings({
 
                 <div className="bakery-settings-color-options">
 
-                    {/* Primary colour presets */}
+                    {/* Primary colors presets */}
                     {primaryColorOptions.map((color) => (
 
                         <button
@@ -863,13 +1030,13 @@ export default function StorefrontSettings({
                     ))}
 
 
-                    {/* Custom primary colour */}
+                    {/* Custom primary colors */}
                     <label className="bakery-settings-custom-color">
 
                         <input
                             type="color"
                             value={formData.primary_color}
-                            aria-label="Choose custom primary colour"
+                            aria-label="Choose custom primary colors"
                             onChange={(event) =>
                                 updateField(
                                     "primary_color",
@@ -889,7 +1056,7 @@ export default function StorefrontSettings({
             </div>
 
 
-            {/* Secondary colour */}
+            {/* Secondary colors */}
             <div className="bakery-settings-color-section">
 
                 <div className="bakery-settings-color-heading">
@@ -897,7 +1064,7 @@ export default function StorefrontSettings({
                     <div>
 
                         <strong>
-                            Secondary colour
+                            Secondary colors
                         </strong>
 
                         <span>
@@ -916,7 +1083,7 @@ export default function StorefrontSettings({
 
                 <div className="bakery-settings-color-options">
 
-                    {/* Secondary colour presets */}
+                    {/* Secondary colors presets */}
                     {secondaryColorOptions.map((color) => (
 
                         <button
@@ -953,13 +1120,13 @@ export default function StorefrontSettings({
                     ))}
 
 
-                    {/* Custom secondary colour */}
+                    {/* Custom secondary colors */}
                     <label className="bakery-settings-custom-color">
 
                         <input
                             type="color"
                             value={formData.secondary_color}
-                            aria-label="Choose custom secondary colour"
+                            aria-label="Choose custom secondary colors"
                             onChange={(event) =>
                                 updateField(
                                     "secondary_color",
@@ -979,7 +1146,7 @@ export default function StorefrontSettings({
             </div>
 
 
-            {/* Dark colour */}
+            {/* Dark colors */}
             <div className="bakery-settings-color-section">
 
                 <div className="bakery-settings-color-heading">
@@ -987,7 +1154,7 @@ export default function StorefrontSettings({
                     <div>
 
                         <strong>
-                            Dark colour
+                            Dark colors
                         </strong>
 
                         <span>
@@ -1006,7 +1173,7 @@ export default function StorefrontSettings({
 
                 <div className="bakery-settings-color-options">
 
-                    {/* Dark colour presets */}
+                    {/* Dark colors presets */}
                     {darkColorOptions.map((color) => (
 
                         <button
@@ -1043,13 +1210,13 @@ export default function StorefrontSettings({
                     ))}
 
 
-                    {/* Custom dark colour */}
+                    {/* Custom dark colors */}
                     <label className="bakery-settings-custom-color">
 
                         <input
                             type="color"
                             value={formData.dark_color}
-                            aria-label="Choose custom dark colour"
+                            aria-label="Choose custom dark colors"
                             onChange={(event) =>
                                 updateField(
                                     "dark_color",
