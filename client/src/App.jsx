@@ -125,6 +125,9 @@ import AdminBakeryDetails from "./pages/Admin/AdminBakeryDetails.jsx";
 //Import Platform Admin Reviews page
 import AdminReviews from "./pages/Admin/AdminReviews";
 
+//Protects Bakery Owner routes
+import ProtectedBakeryRoute from "./components/Auth/ProtectedBakeryRoute";
+
 //Displays the Bakeau application routes
 export default function App() {
 
@@ -307,78 +310,82 @@ export default function App() {
           element={<StorefrontReviews />}
         />
 
-        {/* Shared layout for all Bakery Owner dashboard pages */}
-        <Route
-          path="/bakery"
-          element={<BakeryDashboardLayout />}
-        >
+        {/* Protect all Bakery Owner pages */}
+        <Route element={<ProtectedBakeryRoute />}>
 
-          {/* Bakery Owner dashboard overview */}
+          {/* Shared layout for all Bakery Owner dashboard pages */}
           <Route
-            path="dashboard"
-            element={<BakeryDashboard />}
-          />
+            path="/bakery"
+            element={<BakeryDashboardLayout />}
+          >
 
-          {/* Bakery Owner products page */}
-          <Route
-            path="products"
-            element={<BakeryProducts />}
-          />
+            {/* Bakery Owner dashboard overview */}
+            <Route
+              path="dashboard"
+              element={<BakeryDashboard />}
+            />
 
-          {/* Bakery Owner Add Product page */}
-          <Route
-            path="products/new"
-            element={<BakeryAddProduct />}
-          />
+            {/* Bakery Owner products page */}
+            <Route
+              path="products"
+              element={<BakeryProducts />}
+            />
 
-          {/* Bakery Owner Edit Product page */}
-          <Route
-            path="products/:id/edit"
-            element={<BakeryAddProduct />} />
+            {/* Bakery Owner Add Product page */}
+            <Route
+              path="products/new"
+              element={<BakeryAddProduct />}
+            />
 
-          {/* Bakery Owner Orders page */}
-          <Route
-            path="orders"
-            element={<BakeryOrders />} />
+            {/* Bakery Owner Edit Product page */}
+            <Route
+              path="products/:id/edit"
+              element={<BakeryAddProduct />} />
 
-          {/* Bakery Owner Order Details page */}
-          <Route
-            path="orders/:id"
-            element={<BakeryOrderDetails />} />
+            {/* Bakery Owner Orders page */}
+            <Route
+              path="orders"
+              element={<BakeryOrders />} />
 
-          <Route
-            path="pickup-slots"
-            element={<BakeryPickupSlots />}
-          />
+            {/* Bakery Owner Order Details page */}
+            <Route
+              path="orders/:id"
+              element={<BakeryOrderDetails />} />
 
-          <Route
-            path="settings"
-            element={<BakerySettings />}
-          />
+            <Route
+              path="pickup-slots"
+              element={<BakeryPickupSlots />}
+            />
 
-          <Route
-            path="help"
-            element={<BakeryHelpSupport />}
-          />
+            <Route
+              path="settings"
+              element={<BakerySettings />}
+            />
 
-          <Route
-            path="inventory"
-            element={<BakeryInventory />}
-          />
+            <Route
+              path="help"
+              element={<BakeryHelpSupport />}
+            />
 
-          {/* Bakery Owner Customers page */}
-          <Route
-            path="customers"
-            element={<BakeryCustomers />}
-          />
+            <Route
+              path="inventory"
+              element={<BakeryInventory />}
+            />
 
-          <Route
-            path="reviews"
-            element={<BakeryReviews />}
-          />
+            {/* Bakery Owner Customers page */}
+            <Route
+              path="customers"
+              element={<BakeryCustomers />}
+            />
 
+            <Route
+              path="reviews"
+              element={<BakeryReviews />}
+            />
+
+          </Route>
         </Route>
-
+        
       </Routes>
     </CartProvider>
   );
