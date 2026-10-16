@@ -1,9 +1,3 @@
-/* Storefront Navbar wrapper */
-.storefront-navbar-wrapper {
-    width: 100%;
-}
-
-
 /* Storefront announcement bar */
 .storefront-announcement {
     background-color: var(--storefront-dark);
@@ -13,23 +7,20 @@
 }
 
 
-/* Main Storefront header */
+/* Storefront header */
 .storefront-header {
-    position: relative;
-    z-index: 100;
     background-color: #fffdf9;
     border-bottom: 1px solid #eee4dc;
 }
 
 
-/* Bakery brand */
+/* Bakery branding */
 .storefront-brand {
     min-width: 0;
     color: #2f221d;
 }
 
 
-/* Bakery brand hover */
 .storefront-brand:hover {
     color: #2f221d;
 }
@@ -50,22 +41,20 @@
 }
 
 
-/* Uploaded Bakery logo */
 .storefront-logo {
     object-fit: cover;
 }
 
 
-/* Bakery initials fallback */
 .storefront-logo-fallback {
     background-color: var(--storefront-dark);
     color: #ffffff;
     font-size: 12px;
-    font-weight: 700;
+    font-weight: 600;
 }
 
 
-/* Main Storefront navigation links */
+/* Main Storefront navigation */
 .storefront-nav-link {
     color: #554840;
     text-decoration: none;
@@ -74,121 +63,86 @@
 }
 
 
-/* Navigation hover */
 .storefront-nav-link:hover {
     color: var(--storefront-primary);
 }
 
 
-/* General Storefront text action */
+/* Header text action */
 .storefront-text-action {
-    border: none;
-    background-color: transparent;
     color: #554840;
     font-size: 13px;
-    padding: 0;
+    transition: color 0.2s ease;
 }
 
 
-/* General action hover */
 .storefront-text-action:hover {
     color: var(--storefront-primary);
 }
 
 
-/* Customer Cart */
+/* Customer Cart action */
 .storefront-cart-action {
-    color: #44352d;
+    color: #554840;
     font-size: 13px;
-    font-weight: 600;
     transition: color 0.2s ease;
 }
 
 
-/* Customer Cart hover */
 .storefront-cart-action:hover {
     color: var(--storefront-primary);
 }
 
 
-/* Customer Create Account */
+/* Create Customer Account */
 .storefront-create-account {
     border: 1px solid var(--storefront-primary);
     border-radius: 7px;
     background-color: var(--storefront-primary);
     color: #ffffff;
-    padding: 8px 12px;
     font-size: 12px;
     font-weight: 600;
     transition:
         opacity 0.2s ease,
-        transform 0.2s ease;
+        color 0.2s ease;
 }
 
 
-/* Create Account hover */
 .storefront-create-account:hover {
     color: #ffffff;
-    opacity: 0.92;
+    opacity: 0.9;
 }
 
 
-/* Create Account active */
-.storefront-create-account:active {
-    transform: translateY(1px);
-}
-
-
-/* Account dropdown wrapper */
-.storefront-account {
-    position: relative;
-}
-
-
-/* Account dropdown button */
+/* Customer Account button */
 .storefront-account-button {
-    min-height: 36px;
-    padding: 6px 10px 6px 7px;
-    border: 1px solid #e1d5cd;
-    border-radius: 8px;
-    background-color: #ffffff;
-    color: #44352d;
+    padding: 5px 8px;
+    border: 0;
+    border-radius: 7px;
+    background-color: transparent;
+    color: #554840;
     font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
     transition:
-        border-color 0.2s ease,
-        color 0.2s ease,
-        background-color 0.2s ease;
+        background-color 0.2s ease,
+        color 0.2s ease;
 }
 
 
-/* Account button hover */
 .storefront-account-button:hover {
-    border-color: var(--storefront-primary);
-    background-color: color-mix(
-        in srgb,
-        var(--storefront-secondary) 45%,
-        #ffffff
-    );
-    color: var(--storefront-primary);
-}
-
-
-/* Small Customer initials inside Account button */
-.storefront-account-button-avatar {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 23px;
-    height: 23px;
-    flex-shrink: 0;
-    border-radius: 50%;
     background-color: var(--storefront-secondary);
     color: var(--storefront-primary);
+}
+
+
+/* Small Customer avatar */
+.storefront-account-button-avatar {
+    width: 27px;
+    height: 27px;
+    border-radius: 50%;
+    background-color: var(--storefront-primary);
+    color: #ffffff;
     font-size: 9px;
-    font-weight: 800;
-    letter-spacing: 0.2px;
+    font-weight: 700;
 }
 
 
@@ -198,147 +152,280 @@
 }
 
 
-/* Rotate arrow when Account is open */
 .storefront-account-chevron-open {
     transform: rotate(180deg);
 }
 
 
-/* Desktop Account dropdown */
+/* Customer Account dropdown */
 .storefront-account-dropdown {
-    position: absolute;
-    top: calc(100% + 10px);
-    right: 0;
-    z-index: 200;
+    z-index: 1100;
     width: 270px;
     overflow: hidden;
-    border: 1px solid #eadfd7;
-    border-radius: 12px;
+    border: 1px solid #eee4dc;
+    border-radius: 10px;
     background-color: #ffffff;
-    box-shadow: 0 16px 40px rgba(67, 44, 35, 0.12);
-    animation: storefront-account-in 0.18s ease;
+    box-shadow: 0 12px 32px rgba(47, 34, 29, 0.14);
 }
 
 
-/* Customer information section */
+/* Customer Account profile */
 .storefront-account-profile {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
-    align-items: center;
-    gap: 12px;
-    padding: 16px;
-    background-color: color-mix(
-        in srgb,
-        var(--storefront-secondary) 35%,
-        #ffffff
-    );
+    background-color: #fffdf9;
 }
 
 
-/* Customer initials avatar */
+/* Customer Account avatar */
 .storefront-account-avatar {
-    width: 40px;
-    height: 40px;
-    flex-shrink: 0;
-    border: 1px solid color-mix(
-        in srgb,
-        var(--storefront-primary) 22%,
-        transparent
-    );
+    width: 39px;
+    height: 39px;
     border-radius: 50%;
-    background-color: var(--storefront-secondary);
-    color: var(--storefront-primary);
+    background-color: var(--storefront-primary);
+    color: #ffffff;
     font-size: 12px;
-    font-weight: 800;
-    letter-spacing: 0.3px;
+    font-weight: 700;
 }
 
 
-/* Customer full name */
+/* Customer name */
 .storefront-account-name {
-    color: #34251f;
-    font-size: 13px;
-    font-weight: 700;
+    color: #2f221d;
+    font-size: 12px;
+    font-weight: 600;
 }
 
 
 /* Customer email */
 .storefront-account-email {
-    margin-top: 2px;
-    color: #806f66;
-    font-size: 11px;
+    color: #82756e;
+    font-size: 10px;
 }
 
 
 /* Customer account type */
 .storefront-account-type {
-    display: block;
-    margin-top: 3px;
-    color: #a08f86;
-    font-size: 10px;
+    color: var(--storefront-primary);
+    font-size: 9px;
+    font-weight: 600;
 }
 
 
-/* Account dropdown divider */
+/* Account divider */
 .storefront-account-divider {
-    margin: 0;
-    border-color: #eee3dc;
+    border-color: #eee4dc;
     opacity: 1;
 }
 
 
-/* Account dropdown links and buttons */
+/* Customer Account menu item */
 .storefront-account-menu-item {
-    width: 100%;
-    padding: 11px 16px;
     border: 0;
-    background-color: transparent;
-    color: #514039;
-    font-size: 12px;
-    font-weight: 500;
+    background-color: #ffffff;
+    color: #51453f;
+    font-size: 11px;
     text-align: left;
-    cursor: pointer;
     transition:
         background-color 0.2s ease,
         color 0.2s ease;
 }
 
 
-/* Account dropdown item hover */
+/* Customer Account menu hover */
 .storefront-account-menu-item:hover {
-    background-color: color-mix(
-        in srgb,
-        var(--storefront-primary) 6%,
-        #ffffff
-    );
+    background-color: var(--storefront-secondary);
     color: var(--storefront-primary);
 }
 
 
-/* Sign Out item */
+/* Customer logout */
 .storefront-account-logout {
-    color: #875f52;
+    color: #a34e3d;
 }
 
 
-/* Sign Out hover */
+/* Customer logout hover */
 .storefront-account-logout:hover {
-    background-color: color-mix(
-        in srgb,
-        var(--storefront-primary) 6%,
-        #ffffff
-    );
+    background-color: #fff3ef;
+    color: #8c3d2f;
+}
+
+
+/* Notification Bell */
+.storefront-notification-button {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background-color: transparent;
+    color: #554840;
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
+}
+
+
+/* Notification Bell hover */
+.storefront-notification-button:hover {
+    background-color: var(--storefront-secondary);
     color: var(--storefront-primary);
+}
+
+
+/* Notification unread badge */
+.storefront-notification-badge {
+    border: 2px solid #ffffff;
+    background-color: var(--storefront-primary);
+    color: #ffffff;
+    font-size: 8px;
+    font-weight: 700;
+}
+
+
+/* Notification dropdown */
+.storefront-notification-dropdown {
+    z-index: 1200;
+    width: min(360px, calc(100vw - 24px));
+    overflow: hidden;
+    border: 1px solid #eee4dc;
+    border-radius: 10px;
+    background-color: #ffffff;
+    box-shadow: 0 12px 32px rgba(47, 34, 29, 0.14);
+}
+
+
+/* Notification heading */
+.storefront-notification-heading {
+    padding: 14px 16px;
+    border-bottom: 1px solid #eee4dc;
+    background-color: #ffffff;
+}
+
+
+/* Notification heading title */
+.storefront-notification-heading strong {
+    color: #2f221d;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+/* Notification unread count */
+.storefront-notification-heading span {
+    color: #8d817a;
+    font-size: 10px;
+}
+
+
+/* Mark all read button */
+.storefront-notification-heading button {
+    padding: 0;
+    border: 0;
+    background-color: transparent;
+    color: var(--storefront-primary);
+    font-size: 10px;
+    font-weight: 600;
+}
+
+
+/* Mark all read hover */
+.storefront-notification-heading button:hover {
+    color: var(--storefront-dark);
+}
+
+
+/* Notification list */
+.storefront-notification-list {
+    max-height: 360px;
+    overflow-y: auto;
+}
+
+
+/* Notification row */
+.storefront-notification-item {
+    padding: 13px 16px;
+    border: 0;
+    border-bottom: 1px solid #f1ebe7;
+    background-color: #ffffff;
+    color: #40352f;
+    text-align: left;
+    transition: background-color 0.2s ease;
+}
+
+
+/* Unread Notification */
+.storefront-notification-item.unread {
+    background-color: var(--storefront-secondary);
+}
+
+
+/* Notification hover */
+.storefront-notification-item:hover {
+    background-color: #faf7f4;
+}
+
+
+/* Notification message */
+.storefront-notification-item p {
+    color: #40352f;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+
+/* Notification date */
+.storefront-notification-item div>span {
+    color: #958a84;
+    font-size: 9px;
+}
+
+
+/* Notification unread dot */
+.storefront-notification-dot {
+    width: 7px;
+    height: 7px;
+    margin-top: 5px;
+    background-color: var(--storefront-primary);
+}
+
+
+/* Hide dot when read */
+.storefront-notification-dot.read {
+    background-color: transparent;
+}
+
+
+/* Empty Notification state */
+.storefront-notification-empty {
+    color: #998e88;
+}
+
+
+/* Empty Notification icon */
+.storefront-notification-empty svg {
+    color: var(--storefront-primary);
+}
+
+
+/* Empty Notification title */
+.storefront-notification-empty strong {
+    color: #4b403a;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+/* Empty Notification message */
+.storefront-notification-empty span {
+    color: #958a84;
+    font-size: 10px;
 }
 
 
 /* Mobile Cart */
 .storefront-mobile-cart {
-    border: none;
-    background-color: transparent;
-    color: #44352d;
     padding: 5px;
-    font-weight: 600;
+    color: #554840;
 }
 
 
@@ -348,7 +435,7 @@
 }
 
 
-/* Mobile Menu button */
+/* Mobile Burger button */
 .storefront-mobile-menu-button {
     width: 38px;
     height: 38px;
@@ -356,11 +443,10 @@
     border-radius: 8px;
     background-color: #ffffff;
     color: #44352d;
-    cursor: pointer;
 }
 
 
-/* Mobile Menu button hover */
+/* Mobile Burger button hover */
 .storefront-mobile-menu-button:hover {
     border-color: var(--storefront-primary);
     color: var(--storefront-primary);
@@ -373,15 +459,14 @@
     border-radius: 12px;
     background-color: #ffffff;
     box-shadow: 0 12px 30px rgba(66, 44, 35, 0.08);
-    animation: storefront-mobile-menu-in 0.2s ease;
 }
 
 
-/* Mobile Storefront navigation */
+/* Mobile navigation links */
 .storefront-mobile-nav-link {
     border-radius: 7px;
     color: #44352d;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 500;
     transition:
         background-color 0.2s ease,
@@ -391,23 +476,60 @@
 
 /* Mobile navigation hover */
 .storefront-mobile-nav-link:hover {
-    background-color: color-mix(
-        in srgb,
-        var(--storefront-secondary) 65%,
-        #ffffff
-    );
+    background-color: var(--storefront-secondary);
     color: var(--storefront-primary);
 }
 
 
 /* Mobile divider */
 .storefront-mobile-divider {
-    border-color: #eee3dc;
+    border-color: #eee4dc;
     opacity: 1;
 }
 
 
-/* Mobile guest Sign In */
+/* Mobile Customer profile */
+.storefront-mobile-account-profile {
+    border-radius: 9px;
+    background-color: #fffaf6;
+}
+
+
+/* Mobile Customer links */
+.storefront-mobile-account-link {
+    border: 0;
+    border-radius: 7px;
+    background-color: transparent;
+    color: #51453f;
+    font-size: 12px;
+    text-align: left;
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
+}
+
+
+/* Mobile Customer link hover */
+.storefront-mobile-account-link:hover {
+    background-color: var(--storefront-secondary);
+    color: var(--storefront-primary);
+}
+
+
+/* Mobile Customer logout */
+.storefront-mobile-logout {
+    color: #a34e3d;
+}
+
+
+/* Mobile Customer logout hover */
+.storefront-mobile-logout:hover {
+    background-color: #fff3ef;
+    color: #8c3d2f;
+}
+
+
+/* Mobile Sign In */
 .storefront-mobile-signin {
     border: 1px solid #e1d5cd;
     border-radius: 8px;
@@ -425,7 +547,7 @@
 }
 
 
-/* Mobile guest Create Account */
+/* Mobile Create Account */
 .storefront-mobile-create-account {
     border: 1px solid var(--storefront-primary);
     border-radius: 8px;
@@ -440,181 +562,4 @@
 .storefront-mobile-create-account:hover {
     color: #ffffff;
     opacity: 0.92;
-}
-
-
-/* Mobile Customer Account section */
-.storefront-mobile-account {
-    min-width: 0;
-}
-
-
-/* Mobile logged-in Customer profile */
-.storefront-mobile-account-profile {
-    min-width: 0;
-    border: 1px solid color-mix(
-        in srgb,
-        var(--storefront-primary) 10%,
-        #eee4dc
-    );
-    border-radius: 10px;
-    background-color: color-mix(
-        in srgb,
-        var(--storefront-secondary) 55%,
-        #ffffff
-    );
-}
-
-
-/* Mobile Customer Account link */
-.storefront-mobile-account-link {
-    width: 100%;
-    border: 0;
-    border-radius: 7px;
-    background-color: transparent;
-    color: #514039;
-    font-size: 13px;
-    font-weight: 500;
-    text-align: left;
-    cursor: pointer;
-    transition:
-        background-color 0.2s ease,
-        color 0.2s ease;
-}
-
-
-/* Mobile Account link hover */
-.storefront-mobile-account-link:hover {
-    background-color: color-mix(
-        in srgb,
-        var(--storefront-primary) 6%,
-        #ffffff
-    );
-    color: var(--storefront-primary);
-}
-
-
-/* Mobile Sign Out */
-.storefront-mobile-logout {
-    width: 100%;
-    color: #875f52;
-}
-
-
-/* Mobile Sign Out hover */
-.storefront-mobile-logout:hover {
-    color: var(--storefront-primary);
-}
-
-
-/* Desktop Account animation */
-@keyframes storefront-account-in {
-
-    from {
-        opacity: 0;
-        transform: translateY(-5px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-
-/* Mobile Menu animation */
-@keyframes storefront-mobile-menu-in {
-
-    from {
-        opacity: 0;
-        transform: translateY(-6px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-
-/* Tablet and mobile adjustments */
-@media (max-width: 991.98px) {
-
-    /* Keep Bakery name from taking too much space */
-    .storefront-brand-name {
-        max-width: 180px;
-    }
-
-
-    /* Give mobile menu some space below Navbar */
-    .storefront-mobile-menu {
-        margin-top: 2px;
-    }
-}
-
-
-/* Small mobile adjustments */
-@media (max-width: 575.98px) {
-
-    /* Smaller Bakery logo */
-    .storefront-logo,
-    .storefront-logo-fallback {
-        width: 34px;
-        height: 34px;
-    }
-
-
-    /* Limit Bakery name on smaller screens */
-    .storefront-brand-name {
-        max-width: 135px;
-        font-size: 14px;
-    }
-
-
-    /* Slightly smaller mobile Menu button */
-    .storefront-mobile-menu-button {
-        width: 36px;
-        height: 36px;
-    }
-
-
-    /* Keep Customer email from overflowing */
-    .storefront-account-email {
-        max-width: 220px;
-    }
-}
-
-
-/* Very small mobile screens */
-@media (max-width: 390px) {
-
-    /* Give Bakery name less room */
-    .storefront-brand-name {
-        max-width: 105px;
-    }
-
-
-    /* Slightly reduce Navbar spacing */
-    .storefront-mobile-cart {
-        padding-left: 2px;
-        padding-right: 2px;
-    }
-
-
-    /* Smaller mobile menu padding */
-    .storefront-mobile-menu {
-        border-radius: 10px;
-    }
-}
-
-
-/* Reduce animation when requested by User */
-@media (prefers-reduced-motion: reduce) {
-
-    .storefront-account-dropdown,
-    .storefront-mobile-menu,
-    .storefront-account-chevron {
-        animation: none;
-        transition: none;
-    }
 }

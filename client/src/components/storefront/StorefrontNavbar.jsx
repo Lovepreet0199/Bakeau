@@ -8,11 +8,13 @@ import {
 //Import React Router tools
 import {
     Link,
+    useNavigate,
     useParams
 } from "react-router-dom";
 
 //Import Storefront icons
 import {
+    Bell,
     ChevronDown,
     LogOut,
     Menu,
@@ -25,11 +27,46 @@ import {
 //Import Customer Cart hook
 import { useCart } from "../../context/useCart";
 
+//Import API URL
+import API_URL from "../../config/api.js";
+
 //Import Storefront theme helper
-import { getStorefrontTheme } from "../../utils/storefrontTheme";
+import {
+    getStorefrontTheme
+} from "../../utils/storefrontTheme";
 
 //Import Navbar styles
 import "./StorefrontNavbar.css";
+
+
+//Requests Notifications from the backend
+async function requestCustomerNotifications(
+    token
+) {
+
+    //Request Notifications
+    const response =
+        await fetch(
+            `${API_URL}/api/notifications`,
+            {
+                headers: {
+                    Authorization:
+                        `Bearer ${token}`
+                }
+            }
+        );
+
+
+    //Stop if request failed
+    if (!response.ok) {
+
+        return null;
+    }
+
+
+    //Return Notification data
+    return await response.json();
+}
 
 
 //Displays the shared Storefront navigation
@@ -38,8 +75,15 @@ export default function StorefrontNavbar({
     orderNotice = null
 }) {
 
-    //Get the Bakery slug from the URL
-    const { slug } = useParams();
+    //Get Bakery slug from URL
+    const { slug } =
+        useParams();
+
+
+    //Used to navigate between Customer pages
+    const navigate =
+        useNavigate();
+
 
     //Get Customer Cart items
     const {
@@ -47,15 +91,19 @@ export default function StorefrontNavbar({
     } = useCart();
 
 
-    //Count Cart Products for the current Bakery only
+    //Count Cart Products for current Bakery only
     const storefrontCartCount =
         cartItems
             .filter(
                 (item) =>
-                    item.bakery_slug === slug
+                    item.bakery_slug ===
+                    slug
             )
             .reduce(
-                (total, item) =>
+                (
+                    total,
+                    item
+                ) =>
                     total +
                     Number(
                         item.quantity || 0
@@ -64,55 +112,111 @@ export default function StorefrontNavbar({
             );
 
 
-    //Tracks whether the mobile navigation is open
+    //Tracks mobile navigation
     const [
         isMobileMenuOpen,
         setIsMobileMenuOpen
     ] = useState(false);
 
 
-    //Tracks whether the Account dropdown is open
+    //Tracks Customer Account dropdown
     const [
         isAccountOpen,
         setIsAccountOpen
     ] = useState(false);
 
 
-    //Used to detect clicks outside Account dropdown
+    //Tracks Customer Notification dropdown
+    const [
+        isNotificationOpen,
+        setIsNotificationOpen
+    ] = useState(false);
+
+
+    //Stores Customer Notifications
+    const [
+        notifications,
+        setNotifications
+    ] = useState([]);
+
+
+    //Stores unread Notification count
+    const [
+        unreadCount,
+        setUnreadCount
+    ] = useState(0);
+
+
+    //Used to detect outside Account clicks
     const accountDropdownRef =
         useRef(null);
 
 
-    //Gets the currently logged-in Customer
+    //Used to detect outside desktop Notification clicks
+    const desktopNotificationRef =
+        useRef(null);
+
+
+    //Used to detect outside mobile Notification clicks
+    const mobileNotificationRef =
+        useRef(null);
+
+
+    //Gets saved Customer authentication token
+    function getStoredToken() {
+
+        return (
+            localStorage.getItem(
+                "token"
+            ) ||
+            sessionStorage.getItem(
+                "token"
+            )
+        );
+    }
+
+
+    //Gets currently logged-in Customer
     function getStoredCustomer() {
 
         //User may be stored in either storage location
         const storedUser =
-            localStorage.getItem("user") ||
-            sessionStorage.getItem("user");
+            localStorage.getItem(
+                "user"
+            ) ||
+            sessionStorage.getItem(
+                "user"
+            );
+
 
         //No logged-in User
         if (!storedUser) {
+
             return null;
         }
 
+
         try {
 
-            //Convert stored User back into JavaScript
+            //Convert stored User into JavaScript
             const user =
                 JSON.parse(
                     storedUser
                 );
 
-            //Only Customers belong in Storefront Customer UI
+
+            //Only Customers belong in Storefront UI
             if (
                 user.role !==
                 "customer"
             ) {
+
                 return null;
             }
 
+
             return user;
+
 
         } catch (error) {
 
@@ -121,12 +225,13 @@ export default function StorefrontNavbar({
                 error
             );
 
+
             return null;
         }
     }
 
 
-    //Stores logged-in Customer information
+    //Stores logged-in Customer
     const [
         customer,
         setCustomer
@@ -135,31 +240,247 @@ export default function StorefrontNavbar({
     );
 
 
-    //Closes Account dropdown when clicking outside it
+    //Refreshes Customer Notifications
+    async function refreshNotifications() {
+
+        try {
+
+            //Get Customer token
+            const token =
+                getStoredToken();
+
+
+            //Stop for Guest Visitors
+            if (
+                !token ||
+                !customer
+            ) {
+
+                return;
+            }
+
+
+            //Get Notifications
+            const data =
+                await requestCustomerNotifications(
+                    token
+                );
+
+
+            //Stop if request failed
+            if (!data) {
+
+                return;
+            }
+
+
+            //Store Notifications
+            setNotifications(
+                data.notifications ||
+                []
+            );
+
+
+            //Store unread count
+            setUnreadCount(
+                data.unread_count ||
+                0
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Customer Notification loading error:",
+                error
+            );
+        }
+    }
+
+
+    //Loads Customer Notifications while signed in
     useEffect(() => {
 
-        function handleOutsideClick(event) {
+        //Do nothing for Guests
+        if (!customer) {
 
-            if (
-                accountDropdownRef.current &&
+            return;
+        }
+
+
+        //Prevents updating state after component closes
+        let isCancelled =
+            false;
+
+
+        //Loads Notifications
+        async function loadNotifications() {
+
+            try {
+
+                //Get token from storage
+                const token =
+                    localStorage.getItem(
+                        "token"
+                    ) ||
+                    sessionStorage.getItem(
+                        "token"
+                    );
+
+
+                //Stop if Customer is not authenticated
+                if (!token) {
+
+                    return;
+                }
+
+
+                //Request Notifications
+                const data =
+                    await requestCustomerNotifications(
+                        token
+                    );
+
+
+                //Stop if component closed or request failed
+                if (
+                    isCancelled ||
+                    !data
+                ) {
+
+                    return;
+                }
+
+
+                //Store Notifications
+                setNotifications(
+                    data.notifications ||
+                    []
+                );
+
+
+                //Store unread count
+                setUnreadCount(
+                    data.unread_count ||
+                    0
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "Customer Notification loading error:",
+                    error
+                );
+            }
+        }
+
+
+        /*
+            Load after the current render.
+
+            This keeps the Effect clean and
+            avoids synchronous state updates.
+        */
+        const initialNotificationLoad =
+            setTimeout(
+                () => {
+
+                    loadNotifications();
+                },
+                0
+            );
+
+
+        //Check for new Notifications every 30 seconds
+        const notificationInterval =
+            setInterval(
+                () => {
+
+                    loadNotifications();
+                },
+                30000
+            );
+
+
+        //Clean up timers
+        return () => {
+
+            isCancelled =
+                true;
+
+
+            clearTimeout(
+                initialNotificationLoad
+            );
+
+
+            clearInterval(
+                notificationInterval
+            );
+        };
+
+    }, [customer]);
+
+
+    //Closes dropdowns when clicking outside
+    useEffect(() => {
+
+        function handleOutsideClick(
+            event
+        ) {
+
+            //Check Account dropdown
+            const clickedOutsideAccount =
+                !accountDropdownRef.current ||
                 !accountDropdownRef.current.contains(
                     event.target
-                )
+                );
+
+
+            //Check desktop Notification area
+            const clickedOutsideDesktopNotification =
+                !desktopNotificationRef.current ||
+                !desktopNotificationRef.current.contains(
+                    event.target
+                );
+
+
+            //Check mobile Notification area
+            const clickedOutsideMobileNotification =
+                !mobileNotificationRef.current ||
+                !mobileNotificationRef.current.contains(
+                    event.target
+                );
+
+
+            //Close menus when click is outside
+            if (
+                clickedOutsideAccount &&
+                clickedOutsideDesktopNotification &&
+                clickedOutsideMobileNotification
             ) {
 
                 setIsAccountOpen(
                     false
                 );
+
+
+                setIsNotificationOpen(
+                    false
+                );
             }
         }
 
+
+        //Listen for outside clicks
         document.addEventListener(
             "mousedown",
             handleOutsideClick
         );
 
 
-        //Remove event listener when component unmounts
+        //Remove listener
         return () => {
 
             document.removeEventListener(
@@ -171,8 +492,9 @@ export default function StorefrontNavbar({
     }, []);
 
 
-    //Do not display Navbar until Bakery data exists
+    //Do not display Navbar until Bakery exists
     if (!bakery) {
+
         return null;
     }
 
@@ -184,7 +506,7 @@ export default function StorefrontNavbar({
         );
 
 
-    //Use page-specific notice or Bakery default notice
+    //Use page notice or Bakery default notice
     const minimumOrderNotice =
         orderNotice ??
         bakery.minimum_order_notice;
@@ -199,21 +521,26 @@ export default function StorefrontNavbar({
         .join(", ");
 
 
-    //Creates Bakery initials when no logo exists
+    //Creates Bakery initials
     function getBakeryInitials() {
 
-        //Use B when there is no Bakery name
-        if (!bakery?.name?.trim()) {
+        //Fallback when Bakery has no name
+        if (
+            !bakery?.name?.trim()
+        ) {
+
             return "B";
         }
 
-        //Split Bakery name into words
+
+        //Split Bakery name
         const nameParts =
             bakery.name
                 .trim()
                 .split(" ");
 
-        //Use one letter for a one-word Bakery name
+
+        //One-word Bakery name
         if (
             nameParts.length ===
             1
@@ -224,20 +551,25 @@ export default function StorefrontNavbar({
                 .toUpperCase();
         }
 
-        //Use first two Bakery initials
+
+        //Use first two initials
         return (
-            nameParts[0].charAt(0) +
-            nameParts[1].charAt(0)
+            nameParts[0]
+                .charAt(0) +
+            nameParts[1]
+                .charAt(0)
         ).toUpperCase();
     }
 
 
-    //Gets Customer's full name
+    //Gets Customer full name
     function getCustomerName() {
 
         if (!customer) {
+
             return "Customer";
         }
+
 
         const fullName = [
             customer.first_name,
@@ -246,6 +578,7 @@ export default function StorefrontNavbar({
             .filter(Boolean)
             .join(" ");
 
+
         return (
             fullName ||
             "Customer"
@@ -253,32 +586,41 @@ export default function StorefrontNavbar({
     }
 
 
-    //Gets Customer initials for Account avatar
+    //Gets Customer initials
     function getCustomerInitials() {
 
         if (!customer) {
+
             return "C";
         }
 
-        //Get first name initial
+
+        //Get first initial
         const firstInitial =
             customer.first_name
                 ?.trim()
-                .charAt(0) || "";
+                .charAt(0) ||
+            "";
 
-        //Get last name initial
+
+        //Get last initial
         const lastInitial =
             customer.last_name
                 ?.trim()
-                .charAt(0) || "";
+                .charAt(0) ||
+            "";
 
-        //Combine Customer initials
+
+        //Combine initials
         const initials =
             `${firstInitial}${lastInitial}`
                 .toUpperCase();
 
-        //Fallback to C for Customer
-        return initials || "C";
+
+        return (
+            initials ||
+            "C"
+        );
     }
 
 
@@ -286,6 +628,11 @@ export default function StorefrontNavbar({
     function closeMobileMenu() {
 
         setIsMobileMenuOpen(
+            false
+        );
+
+
+        setIsNotificationOpen(
             false
         );
     }
@@ -300,10 +647,230 @@ export default function StorefrontNavbar({
     }
 
 
-    //Signs the Customer out
+    //Closes Notification dropdown
+    function closeNotificationMenu() {
+
+        setIsNotificationOpen(
+            false
+        );
+    }
+
+
+    //Opens or closes Customer Notifications
+    function toggleNotificationMenu() {
+
+        //Close Account dropdown
+        setIsAccountOpen(
+            false
+        );
+
+
+        //Close mobile navigation
+        setIsMobileMenuOpen(
+            false
+        );
+
+
+        //Toggle Notification dropdown
+        setIsNotificationOpen(
+            (
+                currentValue
+            ) =>
+                !currentValue
+        );
+
+
+        //Refresh Notification information
+        if (!isNotificationOpen) {
+
+            refreshNotifications();
+        }
+    }
+
+
+    //Marks one Notification as read
+    async function handleNotificationClick(
+        notification
+    ) {
+
+        try {
+
+            //Get Customer token
+            const token =
+                getStoredToken();
+
+
+            //Stop if Customer is not authenticated
+            if (!token) {
+
+                return;
+            }
+
+
+            //Only update unread Notifications
+            if (
+                !notification.is_read
+            ) {
+
+                //Mark Notification as read
+                const response =
+                    await fetch(
+                        `${API_URL}/api/notifications/${notification._id}/read`,
+                        {
+                            method:
+                                "PATCH",
+
+                            headers: {
+                                Authorization:
+                                    `Bearer ${token}`
+                            }
+                        }
+                    );
+
+
+                //Update local Notification
+                if (response.ok) {
+
+                    setNotifications(
+                        (
+                            currentNotifications
+                        ) =>
+                            currentNotifications.map(
+                                (
+                                    currentNotification
+                                ) =>
+                                    currentNotification._id ===
+                                        notification._id
+                                        ? {
+                                            ...currentNotification,
+
+                                            is_read:
+                                                true
+                                        }
+                                        : currentNotification
+                            )
+                    );
+
+
+                    //Reduce unread count
+                    setUnreadCount(
+                        (
+                            currentCount
+                        ) =>
+                            Math.max(
+                                0,
+                                currentCount - 1
+                            )
+                    );
+                }
+            }
+
+
+            //Close dropdown
+            setIsNotificationOpen(
+                false
+            );
+
+
+            //Open related Customer Order
+            if (
+                notification.order_id
+            ) {
+
+                navigate(
+                    `/${slug}/orders/${notification.order_id}`
+                );
+            }
+
+
+        } catch (error) {
+
+            console.error(
+                "Customer Notification update error:",
+                error
+            );
+        }
+    }
+
+
+    //Marks all Customer Notifications as read
+    async function handleMarkAllNotificationsRead() {
+
+        try {
+
+            //Get Customer token
+            const token =
+                getStoredToken();
+
+
+            //Stop without authentication
+            if (!token) {
+
+                return;
+            }
+
+
+            //Update Notifications in backend
+            const response =
+                await fetch(
+                    `${API_URL}/api/notifications/read-all`,
+                    {
+                        method:
+                            "PATCH",
+
+                        headers: {
+                            Authorization:
+                                `Bearer ${token}`
+                        }
+                    }
+                );
+
+
+            //Stop if request failed
+            if (!response.ok) {
+
+                return;
+            }
+
+
+            //Mark all local Notifications as read
+            setNotifications(
+                (
+                    currentNotifications
+                ) =>
+                    currentNotifications.map(
+                        (
+                            notification
+                        ) => ({
+                            ...notification,
+
+                            is_read:
+                                true
+                        })
+                    )
+            );
+
+
+            //Clear unread count
+            setUnreadCount(
+                0
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Mark Customer Notifications read error:",
+                error
+            );
+        }
+    }
+
+
+    //Signs Customer out
     function handleSignOut() {
 
-        //Remove authentication from local storage
+        //Remove local authentication
         localStorage.removeItem(
             "token"
         );
@@ -313,7 +880,7 @@ export default function StorefrontNavbar({
         );
 
 
-        //Remove authentication from session storage
+        //Remove session authentication
         sessionStorage.removeItem(
             "token"
         );
@@ -323,7 +890,7 @@ export default function StorefrontNavbar({
         );
 
 
-        //Remove temporary Customer authentication information
+        //Remove temporary authentication information
         localStorage.removeItem(
             "authReturnTo"
         );
@@ -337,14 +904,28 @@ export default function StorefrontNavbar({
         );
 
 
-        //Update Navbar immediately
+        //Remove Customer from Navbar
         setCustomer(
             null
         );
 
 
+        //Clear Notifications
+        setNotifications(
+            []
+        );
+
+        setUnreadCount(
+            0
+        );
+
+
         //Close menus
         setIsAccountOpen(
+            false
+        );
+
+        setIsNotificationOpen(
             false
         );
 
@@ -356,7 +937,7 @@ export default function StorefrontNavbar({
 
     return (
 
-        //Apply Bakery theme to entire Navbar
+        //Apply Bakery theme to Navbar
         <div
             className="storefront-navbar-wrapper"
             style={
@@ -364,7 +945,8 @@ export default function StorefrontNavbar({
             }
         >
 
-            {/* Storefront announcement bar */}
+
+            {/* Announcement bar */}
             <div className="storefront-announcement">
 
                 <div className="container-xxl text-center py-2 px-3">
@@ -372,6 +954,7 @@ export default function StorefrontNavbar({
                     <small>
 
                         {minimumOrderNotice && (
+
                             <>
                                 Orders require{" "}
                                 {minimumOrderNotice}{" "}
@@ -382,11 +965,14 @@ export default function StorefrontNavbar({
 
                         {minimumOrderNotice &&
                             pickupAddress && (
+
                                 <> • </>
+
                             )}
 
 
                         {pickupAddress && (
+
                             <>
                                 Pickup from{" "}
                                 {pickupAddress}
@@ -405,8 +991,10 @@ export default function StorefrontNavbar({
 
                 <div className="container-xxl px-3">
 
+
                     {/* Main navigation row */}
                     <div className="d-flex align-items-center justify-content-between gap-2 py-3">
+
 
                         {/* Bakery logo and name */}
                         <Link
@@ -414,8 +1002,10 @@ export default function StorefrontNavbar({
                             onClick={() => {
 
                                 closeMobileMenu();
+
                                 closeAccountMenu();
 
+                                closeNotificationMenu();
                             }}
                             className="storefront-brand d-flex align-items-center gap-2 text-decoration-none flex-shrink-1"
                         >
@@ -493,6 +1083,7 @@ export default function StorefrontNavbar({
                         {/* Desktop actions */}
                         <div className="d-none d-lg-flex align-items-center gap-3 flex-shrink-0">
 
+
                             {/* Customer Cart */}
                             <Link
                                 to={`/${slug}/cart`}
@@ -510,15 +1101,186 @@ export default function StorefrontNavbar({
                             </Link>
 
 
+                            {/* Customer Notifications */}
+                            {customer && (
+
+                                <div
+                                    ref={
+                                        desktopNotificationRef
+                                    }
+                                    className="position-relative"
+                                >
+
+                                    {/* Notification Bell */}
+                                    <button
+                                        type="button"
+                                        className="storefront-notification-button position-relative d-flex align-items-center justify-content-center"
+                                        aria-label="Notifications"
+                                        aria-expanded={
+                                            isNotificationOpen
+                                        }
+                                        onClick={
+                                            toggleNotificationMenu
+                                        }
+                                    >
+
+                                        <Bell
+                                            size={19}
+                                            strokeWidth={1.8}
+                                        />
+
+
+                                        {/* Unread badge */}
+                                        {unreadCount > 0 && (
+
+                                            <span className="storefront-notification-badge position-absolute top-0 start-100 translate-middle badge rounded-pill">
+
+                                                {
+                                                    unreadCount > 9
+                                                        ? "9+"
+                                                        : unreadCount
+                                                }
+
+                                            </span>
+                                        )}
+
+                                    </button>
+
+
+                                    {/* Desktop Notification dropdown */}
+                                    {isNotificationOpen && (
+
+                                        <div className="storefront-notification-dropdown position-absolute top-100 end-0 mt-2">
+
+
+                                            {/* Heading */}
+                                            <div className="storefront-notification-heading d-flex align-items-center justify-content-between gap-3">
+
+                                                <div>
+
+                                                    <strong className="d-block">
+                                                        Notifications
+                                                    </strong>
+
+                                                    <span className="d-block mt-1">
+                                                        {unreadCount} unread
+                                                    </span>
+
+                                                </div>
+
+
+                                                {unreadCount > 0 && (
+
+                                                    <button
+                                                        type="button"
+                                                        onClick={
+                                                            handleMarkAllNotificationsRead
+                                                        }
+                                                    >
+                                                        Mark all read
+                                                    </button>
+                                                )}
+
+                                            </div>
+
+
+                                            {/* Notification list */}
+                                            <div className="storefront-notification-list">
+
+                                                {notifications.length > 0 ? (
+
+                                                    notifications.map(
+                                                        (
+                                                            notification
+                                                        ) => (
+
+                                                            <button
+                                                                key={
+                                                                    notification._id
+                                                                }
+                                                                type="button"
+                                                                className={
+                                                                    `storefront-notification-item d-flex align-items-start gap-2 w-100 ${notification.is_read
+                                                                        ? ""
+                                                                        : "unread"
+                                                                    }`
+                                                                }
+                                                                onClick={() =>
+                                                                    handleNotificationClick(
+                                                                        notification
+                                                                    )
+                                                                }
+                                                            >
+
+                                                                <span
+                                                                    className={
+                                                                        `storefront-notification-dot d-inline-block rounded-circle flex-shrink-0 ${notification.is_read
+                                                                            ? "read"
+                                                                            : ""
+                                                                        }`
+                                                                    }
+                                                                />
+
+
+                                                                <div className="text-start flex-grow-1">
+
+                                                                    <p className="mb-0">
+                                                                        {
+                                                                            notification.message
+                                                                        }
+                                                                    </p>
+
+                                                                    <span className="d-block mt-1">
+                                                                        {
+                                                                            new Date(
+                                                                                notification.created_at
+                                                                            ).toLocaleString()
+                                                                        }
+                                                                    </span>
+
+                                                                </div>
+
+                                                            </button>
+                                                        )
+                                                    )
+
+                                                ) : (
+
+                                                    <div className="storefront-notification-empty text-center px-3 py-4">
+
+                                                        <Bell
+                                                            size={25}
+                                                            strokeWidth={1.6}
+                                                        />
+
+                                                        <strong className="d-block mt-2">
+                                                            No notifications yet
+                                                        </strong>
+
+                                                        <span className="d-block mt-1">
+                                                            Order updates will appear here.
+                                                        </span>
+
+                                                    </div>
+                                                )}
+
+                                            </div>
+
+                                        </div>
+                                    )}
+
+                                </div>
+                            )}
+
+
                             {/* Logged-in Customer */}
                             {customer ? (
 
-                                //Customer Account dropdown
                                 <div
                                     ref={
                                         accountDropdownRef
                                     }
-                                    className="storefront-account position-relative"
+                                    className="position-relative"
                                 >
 
                                     {/* Account button */}
@@ -528,17 +1290,27 @@ export default function StorefrontNavbar({
                                             isAccountOpen
                                         }
                                         aria-haspopup="menu"
-                                        onClick={() =>
+                                        onClick={() => {
+
+                                            //Close Notifications
+                                            setIsNotificationOpen(
+                                                false
+                                            );
+
+
+                                            //Toggle Account menu
                                             setIsAccountOpen(
-                                                (currentValue) =>
+                                                (
+                                                    currentValue
+                                                ) =>
                                                     !currentValue
-                                            )
-                                        }
+                                            );
+                                        }}
                                         className="storefront-account-button d-flex align-items-center gap-2"
                                     >
 
-                                        {/* Small Customer initials */}
-                                        <span className="storefront-account-button-avatar">
+                                        {/* Customer initials */}
+                                        <span className="storefront-account-button-avatar d-flex align-items-center justify-content-center">
 
                                             {
                                                 getCustomerInitials()
@@ -568,15 +1340,14 @@ export default function StorefrontNavbar({
                                     {isAccountOpen && (
 
                                         <div
-                                            className="storefront-account-dropdown"
+                                            className="storefront-account-dropdown position-absolute top-100 end-0 mt-2"
                                             role="menu"
                                         >
 
                                             {/* Customer information */}
-                                            <div className="storefront-account-profile">
+                                            <div className="storefront-account-profile d-flex align-items-center gap-3 p-3">
 
-                                                {/* Customer initials avatar */}
-                                                <div className="storefront-account-avatar d-flex align-items-center justify-content-center">
+                                                <div className="storefront-account-avatar d-flex align-items-center justify-content-center flex-shrink-0">
 
                                                     {
                                                         getCustomerInitials()
@@ -585,31 +1356,22 @@ export default function StorefrontNavbar({
                                                 </div>
 
 
-                                                {/* Customer name and email */}
-                                                <div className="min-w-0">
+                                                <div className="overflow-hidden">
 
                                                     <strong className="storefront-account-name d-block text-truncate">
-
                                                         {
                                                             getCustomerName()
                                                         }
-
                                                     </strong>
 
-
                                                     <span className="storefront-account-email d-block text-truncate">
-
                                                         {
                                                             customer.email
                                                         }
-
                                                     </span>
 
-
-                                                    <small className="storefront-account-type">
-
+                                                    <small className="storefront-account-type d-block mt-1">
                                                         Customer account
-
                                                     </small>
 
                                                 </div>
@@ -617,7 +1379,8 @@ export default function StorefrontNavbar({
                                             </div>
 
 
-                                            <hr className="storefront-account-divider" />
+                                            <hr className="storefront-account-divider my-0" />
+
 
                                             {/* Customer Orders */}
                                             <Link
@@ -625,7 +1388,7 @@ export default function StorefrontNavbar({
                                                 onClick={
                                                     closeAccountMenu
                                                 }
-                                                className="storefront-account-menu-item d-flex align-items-center gap-2 text-decoration-none"
+                                                className="storefront-account-menu-item d-flex align-items-center gap-2 text-decoration-none px-3 py-2"
                                                 role="menuitem"
                                             >
 
@@ -639,13 +1402,14 @@ export default function StorefrontNavbar({
 
                                             </Link>
 
+
                                             {/* Account Settings */}
                                             <Link
                                                 to={`/${slug}/account`}
                                                 onClick={
                                                     closeAccountMenu
                                                 }
-                                                className="storefront-account-menu-item d-flex align-items-center gap-2 text-decoration-none"
+                                                className="storefront-account-menu-item d-flex align-items-center gap-2 text-decoration-none px-3 py-2"
                                                 role="menuitem"
                                             >
 
@@ -660,16 +1424,16 @@ export default function StorefrontNavbar({
                                             </Link>
 
 
-                                            <hr className="storefront-account-divider" />
+                                            <hr className="storefront-account-divider my-0" />
 
 
-                                            {/* Customer Sign Out */}
+                                            {/* Sign Out */}
                                             <button
                                                 type="button"
                                                 onClick={
                                                     handleSignOut
                                                 }
-                                                className="storefront-account-menu-item storefront-account-logout d-flex align-items-center gap-2 w-100"
+                                                className="storefront-account-menu-item storefront-account-logout d-flex align-items-center gap-2 w-100 px-3 py-2"
                                                 role="menuitem"
                                             >
 
@@ -692,7 +1456,7 @@ export default function StorefrontNavbar({
 
                                 //Guest Customer actions
                                 <>
-                                    {/* Customer Sign In */}
+
                                     <Link
                                         to={`/${slug}/login`}
                                         className="storefront-text-action text-decoration-none"
@@ -701,13 +1465,13 @@ export default function StorefrontNavbar({
                                     </Link>
 
 
-                                    {/* Customer registration */}
                                     <Link
                                         to={`/${slug}/register`}
-                                        className="storefront-create-account text-decoration-none"
+                                        className="storefront-create-account text-decoration-none px-3 py-2"
                                     >
                                         Create Account
                                     </Link>
+
                                 </>
                             )}
 
@@ -715,9 +1479,15 @@ export default function StorefrontNavbar({
 
 
                         {/* Mobile actions */}
-                        <div className="d-flex d-lg-none align-items-center gap-2 flex-shrink-0">
+                        <div
+                            ref={
+                                mobileNotificationRef
+                            }
+                            className="d-flex d-lg-none align-items-center gap-2 flex-shrink-0 position-relative"
+                        >
 
-                            {/* Customer Cart */}
+
+                            {/* Mobile Cart */}
                             <Link
                                 to={`/${slug}/cart`}
                                 aria-label="Open cart"
@@ -735,6 +1505,44 @@ export default function StorefrontNavbar({
                             </Link>
 
 
+                            {/* Mobile Notification Bell */}
+                            {customer && (
+
+                                <button
+                                    type="button"
+                                    aria-label="Notifications"
+                                    aria-expanded={
+                                        isNotificationOpen
+                                    }
+                                    className="storefront-notification-button position-relative d-flex align-items-center justify-content-center"
+                                    onClick={
+                                        toggleNotificationMenu
+                                    }
+                                >
+
+                                    <Bell
+                                        size={19}
+                                        strokeWidth={1.8}
+                                    />
+
+
+                                    {unreadCount > 0 && (
+
+                                        <span className="storefront-notification-badge position-absolute top-0 start-100 translate-middle badge rounded-pill">
+
+                                            {
+                                                unreadCount > 9
+                                                    ? "9+"
+                                                    : unreadCount
+                                            }
+
+                                        </span>
+                                    )}
+
+                                </button>
+                            )}
+
+
                             {/* Burger Menu */}
                             <button
                                 type="button"
@@ -747,12 +1555,22 @@ export default function StorefrontNavbar({
                                     isMobileMenuOpen
                                 }
                                 aria-controls="storefront-mobile-menu"
-                                onClick={() =>
+                                onClick={() => {
+
+                                    //Close Notifications
+                                    setIsNotificationOpen(
+                                        false
+                                    );
+
+
+                                    //Toggle navigation
                                     setIsMobileMenuOpen(
-                                        (currentValue) =>
+                                        (
+                                            currentValue
+                                        ) =>
                                             !currentValue
-                                    )
-                                }
+                                    );
+                                }}
                                 className="storefront-mobile-menu-button d-flex align-items-center justify-content-center"
                             >
 
@@ -771,6 +1589,130 @@ export default function StorefrontNavbar({
 
                             </button>
 
+
+                            {/* Mobile Notification dropdown */}
+                            {customer &&
+                                isNotificationOpen && (
+
+                                    <div className="storefront-notification-dropdown position-absolute top-100 end-0 mt-2">
+
+
+                                        {/* Heading */}
+                                        <div className="storefront-notification-heading d-flex align-items-center justify-content-between gap-3">
+
+                                            <div>
+
+                                                <strong className="d-block">
+                                                    Notifications
+                                                </strong>
+
+                                                <span className="d-block mt-1">
+                                                    {unreadCount} unread
+                                                </span>
+
+                                            </div>
+
+
+                                            {unreadCount > 0 && (
+
+                                                <button
+                                                    type="button"
+                                                    onClick={
+                                                        handleMarkAllNotificationsRead
+                                                    }
+                                                >
+                                                    Mark all read
+                                                </button>
+                                            )}
+
+                                        </div>
+
+
+                                        {/* Notification list */}
+                                        <div className="storefront-notification-list">
+
+                                            {notifications.length > 0 ? (
+
+                                                notifications.map(
+                                                    (
+                                                        notification
+                                                    ) => (
+
+                                                        <button
+                                                            key={
+                                                                notification._id
+                                                            }
+                                                            type="button"
+                                                            className={
+                                                                `storefront-notification-item d-flex align-items-start gap-2 w-100 ${notification.is_read
+                                                                    ? ""
+                                                                    : "unread"
+                                                                }`
+                                                            }
+                                                            onClick={() =>
+                                                                handleNotificationClick(
+                                                                    notification
+                                                                )
+                                                            }
+                                                        >
+
+                                                            <span
+                                                                className={
+                                                                    `storefront-notification-dot d-inline-block rounded-circle flex-shrink-0 ${notification.is_read
+                                                                        ? "read"
+                                                                        : ""
+                                                                    }`
+                                                                }
+                                                            />
+
+
+                                                            <div className="text-start flex-grow-1">
+
+                                                                <p className="mb-0">
+                                                                    {
+                                                                        notification.message
+                                                                    }
+                                                                </p>
+
+                                                                <span className="d-block mt-1">
+                                                                    {
+                                                                        new Date(
+                                                                            notification.created_at
+                                                                        ).toLocaleString()
+                                                                    }
+                                                                </span>
+
+                                                            </div>
+
+                                                        </button>
+                                                    )
+                                                )
+
+                                            ) : (
+
+                                                <div className="storefront-notification-empty text-center px-3 py-4">
+
+                                                    <Bell
+                                                        size={25}
+                                                        strokeWidth={1.6}
+                                                    />
+
+                                                    <strong className="d-block mt-2">
+                                                        No notifications yet
+                                                    </strong>
+
+                                                    <span className="d-block mt-1">
+                                                        Order updates will appear here.
+                                                    </span>
+
+                                                </div>
+                                            )}
+
+                                        </div>
+
+                                    </div>
+                                )}
+
                         </div>
 
                     </div>
@@ -785,6 +1727,7 @@ export default function StorefrontNavbar({
                         >
 
                             <div className="storefront-mobile-menu p-3">
+
 
                                 {/* Storefront links */}
                                 <nav className="d-grid gap-1">
@@ -838,15 +1781,15 @@ export default function StorefrontNavbar({
                                 <hr className="storefront-mobile-divider my-3" />
 
 
-                                {/* Logged-in Customer Account */}
+                                {/* Logged-in Customer */}
                                 {customer ? (
 
                                     <div className="storefront-mobile-account">
 
+
                                         {/* Customer information */}
                                         <div className="storefront-mobile-account-profile d-flex align-items-center gap-3 p-3">
 
-                                            {/* Customer initials */}
                                             <div className="storefront-account-avatar d-flex align-items-center justify-content-center flex-shrink-0">
 
                                                 {
@@ -856,31 +1799,22 @@ export default function StorefrontNavbar({
                                             </div>
 
 
-                                            {/* Customer details */}
-                                            <div className="min-w-0 flex-grow-1">
+                                            <div className="overflow-hidden flex-grow-1">
 
                                                 <strong className="storefront-account-name d-block text-truncate">
-
                                                     {
                                                         getCustomerName()
                                                     }
-
                                                 </strong>
 
-
                                                 <span className="storefront-account-email d-block text-truncate">
-
                                                     {
                                                         customer.email
                                                     }
-
                                                 </span>
 
-
-                                                <small className="storefront-account-type">
-
+                                                <small className="storefront-account-type d-block mt-1">
                                                     Customer account
-
                                                 </small>
 
                                             </div>
@@ -888,10 +1822,9 @@ export default function StorefrontNavbar({
                                         </div>
 
 
-                                        {/* Customer Account links */}
+                                        {/* Customer links */}
                                         <div className="d-grid gap-1 mt-2">
 
-                                            {/* Customer Orders */}
                                             <Link
                                                 to={`/${slug}/orders`}
                                                 onClick={
@@ -910,7 +1843,7 @@ export default function StorefrontNavbar({
 
                                             </Link>
 
-                                            {/* Account Settings */}
+
                                             <Link
                                                 to={`/${slug}/account`}
                                                 onClick={
@@ -930,7 +1863,6 @@ export default function StorefrontNavbar({
                                             </Link>
 
 
-                                            {/* Customer Sign Out */}
                                             <button
                                                 type="button"
                                                 onClick={
@@ -955,10 +1887,9 @@ export default function StorefrontNavbar({
 
                                 ) : (
 
-                                    //Guest Customer actions
+                                    //Guest actions
                                     <div className="d-grid gap-2">
 
-                                        {/* Customer Sign In */}
                                         <Link
                                             to={`/${slug}/login`}
                                             onClick={
@@ -970,7 +1901,6 @@ export default function StorefrontNavbar({
                                         </Link>
 
 
-                                        {/* Customer registration */}
                                         <Link
                                             to={`/${slug}/register`}
                                             onClick={
