@@ -341,22 +341,11 @@ const updateBakeryOrderStatus = async (request, response) => {
             });
         }
 
-        //Update the Order only if it belongs to this Bakery
-        const order = await Order.findOneAndUpdate(
-            {
-                _id: orderId,
-                bakery_id: bakery._id
-            },
-            {
-                $set: {
-                    status: status
-                }
-            },
-            {
-                returnDocument: "after",
-                runValidators: true
-            }
-        );
+        //Find the Order only if it belongs to this Bakery
+        const order = await Order.findOne({
+            _id: orderId,
+            bakery_id: bakery._id
+        });
 
         //Stop if the Order does not exist
         if (!order) {
@@ -365,43 +354,59 @@ const updateBakeryOrderStatus = async (request, response) => {
             });
         }
 
-        //Get the Activity information for the new Order status
-        const activity = getOrderStatusActivity(status);
+        //Remember the current status before changing it
+        const previousStatus = order.status;
 
-        //Store the Order status change in its Activity history
-        if (activity) {
 
-            await OrderActivity.create({
-                order_id: order._id,
-                activity_type: activity.activity_type,
-                description: activity.description
-            });
-        }
+        //Update the Order status
+        order.status = status;
 
-        //Send Order status update email to the Customer
-        try {
 
-            //Only send email when the Order has a Customer email
-            if (order.contact_email) {
+        //Save the updated Order
+        await order.save();
 
-                await sendOrderStatusEmail(
-                    order.contact_email,
-                    bakery.name,
-                    bakery.slug,
-                    order
-                );
+        //Only create status activity, email and Notification
+        //when the Order status actually changed
+        if (previousStatus !== status) {
+
+            //Get the Activity information for the new Order status
+            const activity = getOrderStatusActivity(status);
+
+            //Store the Order status change in its Activity history
+            if (activity) {
+
+                await OrderActivity.create({
+                    order_id: order._id,
+                    activity_type: activity.activity_type,
+                    description: activity.description
+                });
             }
 
-        } catch (emailError) {
+            //Send Order status update email to the Customer
+            try {
 
-            /*
-                Do not fail the Order status update
-                if the email could not be sent.
-            */
-            console.error(
-                "Order status email error:",
-                emailError.message
-            );
+                //Only send email when the Order has a Customer email
+                if (order.contact_email) {
+
+                    await sendOrderStatusEmail(
+                        order.contact_email,
+                        bakery.name,
+                        bakery.slug,
+                        order
+                    );
+                }
+
+            } catch (emailError) {
+
+                /*
+                    Do not fail the Order status update
+                    if the email could not be sent.
+                */
+                console.error(
+                    "Order status email error:",
+                    emailError.message
+                );
+            }
         }
 
         //Create an in-app Notification for the Customer
