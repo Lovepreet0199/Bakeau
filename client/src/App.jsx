@@ -134,6 +134,9 @@ import BakeryPayments from "./pages/Dashboard/BakeryPayments.jsx";
 //Import Bakery Marketing page
 import BakeryMarketing from "./pages/Dashboard/BakeryMarketing.jsx";
 
+//Import Bakery Analytics page
+import BakeryAnalytics from "./pages/Dashboard/BakeryAnalytics.jsx";
+
 //Displays the Bakeau application routes
 export default function App() {
 
@@ -399,6 +402,12 @@ export default function App() {
             <Route
               path="marketing"
               element={<BakeryMarketing />}
+            />
+
+            {/* Bakery Owner Analytics page */}
+            <Route
+              path="analytics"
+              element={<BakeryAnalytics />}
             />
 
           </Route>

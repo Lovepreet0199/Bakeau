@@ -27,7 +27,7 @@ import {
     Boxes,
     Star,
     Megaphone,
-    ChartNoAxesCombined,
+    BarChart3,
     X,
     LogOut
 } from "lucide-react";
@@ -405,11 +405,15 @@ export default function DashboardSidebar({
 
 
                     {/* Analytics page */}
-                    <button
-                        type="button"
-                        className="bakery-dashboard-nav-item"
+                    <NavLink
+                        to="/bakery/analytics"
+                        className={({ isActive }) =>
+                            `bakery-dashboard-nav-item text-decoration-none ${isActive ? "active" : ""
+                            }`
+                        }
+                        onClick={closeSidebar}
                     >
-                        <ChartNoAxesCombined
+                        <BarChart3
                             size={18}
                             strokeWidth={1.8}
                         />
@@ -417,7 +421,7 @@ export default function DashboardSidebar({
                         <span>
                             Analytics
                         </span>
-                    </button>
+                    </NavLink>
 
                 </nav>
 
