@@ -293,6 +293,116 @@
     box-shadow: 0 0 0 2px rgba(198, 95, 58, 0.08);
 }
 
+/* Dashboard Search results dropdown */
+.bakery-dashboard-search-results {
+    z-index: 1090;
+    max-height: 430px;
+    overflow-y: auto;
+    border: 1px solid #E4E1DE;
+    border-radius: 9px;
+    background-color: #FFFFFF;
+    box-shadow: 0 12px 32px rgba(37, 32, 30, 0.14);
+}
+
+/* Dashboard Search section heading */
+.bakery-dashboard-search-section-title {
+    background-color: #FAFAF9;
+    font-size: 10px;
+    font-weight: 700;
+    color: #918985;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+/* Dashboard Search result */
+.bakery-dashboard-search-result {
+    border: 0;
+    border-bottom: 1px solid #F0ECE9;
+    background-color: #FFFFFF;
+    color: #3D3734;
+}
+
+/* Dashboard Search result hover */
+.bakery-dashboard-search-result:hover {
+    background-color: #F8F6F4;
+}
+
+/* Dashboard Search result icon */
+.bakery-dashboard-search-result > svg {
+    flex-shrink: 0;
+    color: #8A817C;
+}
+
+/* Dashboard Search result main text */
+.bakery-dashboard-search-result strong {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #25201E;
+}
+
+/* Dashboard Search result secondary text */
+.bakery-dashboard-search-result div span {
+    display: block;
+    margin-top: 2px;
+    font-size: 10px;
+    color: #918985;
+}
+
+/* Dashboard Search amount */
+.bakery-dashboard-search-result > span:last-child {
+    flex-shrink: 0;
+    font-size: 11px;
+    font-weight: 600;
+    color: #5E5651;
+}
+
+/* Dashboard Search product image */
+.bakery-dashboard-search-product-image {
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+    border: 1px solid #E8E4E1;
+    border-radius: 6px;
+    background-color: #F4F1EF;
+    color: #8A817C;
+    object-fit: cover;
+}
+
+/* Dashboard Search loading state */
+.bakery-dashboard-search-loading {
+    font-size: 12px;
+    color: #7D746F;
+}
+
+/* Dashboard Search empty state */
+.bakery-dashboard-search-empty {
+    color: #8A817C;
+}
+
+/* Dashboard Search empty icon */
+.bakery-dashboard-search-empty-icon {
+    display: block;
+    margin: 0 auto 8px;
+    color: #B3AAA5;
+}
+
+/* Dashboard Search empty title */
+.bakery-dashboard-search-empty strong {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #4F4743;
+}
+
+/* Dashboard Search empty description */
+.bakery-dashboard-search-empty span {
+    display: block;
+    margin-top: 4px;
+    font-size: 10px;
+    color: #918985;
+}
+
 /* Notification button */
 .bakery-dashboard-icon-button {
     width: 38px;
@@ -312,6 +422,155 @@
     background-color: #F7F6F5;
 }
 
+/* Unread Notification badge */
+.bakery-dashboard-notification-badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    min-width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+    border: 2px solid #FFFFFF;
+    border-radius: 20px;
+    background-color: #C65F3A;
+    font-size: 9px;
+    font-weight: 700;
+    line-height: 1;
+    color: #FFFFFF;
+}
+
+/* Notification dropdown */
+.bakery-dashboard-notification-menu {
+    z-index: 1100;
+    width: min(360px, calc(100vw - 24px));
+    overflow: hidden;
+    border: 1px solid #E4E1DE;
+    border-radius: 9px;
+    background-color: #FFFFFF;
+    box-shadow: 0 12px 32px rgba(37, 32, 30, 0.14);
+}
+
+/* Notification dropdown heading */
+.bakery-dashboard-notification-heading {
+    border-bottom: 1px solid #EEEAE7;
+    background-color: #FFFFFF;
+}
+
+/* Notification heading title */
+.bakery-dashboard-notification-heading strong {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #25201E;
+}
+
+/* Notification unread text */
+.bakery-dashboard-notification-heading div span {
+    display: block;
+    margin-top: 2px;
+    font-size: 10px;
+    color: #918985;
+}
+
+/* Mark all read button */
+.bakery-dashboard-notification-heading button {
+    padding: 0;
+    border: 0;
+    background-color: transparent;
+    font-size: 10px;
+    font-weight: 600;
+    color: #B65334;
+}
+
+.bakery-dashboard-notification-heading button:hover {
+    color: #913F28;
+}
+
+/* Notification list */
+.bakery-dashboard-notification-list {
+    max-height: 360px;
+    overflow-y: auto;
+}
+
+/* Individual Notification */
+.bakery-dashboard-notification-item {
+    border: 0;
+    border-bottom: 1px solid #F0ECE9;
+    background-color: #FFFFFF;
+    color: #393330;
+}
+
+/* Unread Notification */
+.bakery-dashboard-notification-item.unread {
+    background-color: #FFF8F4;
+}
+
+/* Notification hover */
+.bakery-dashboard-notification-item:hover {
+    background-color: #F8F6F4;
+}
+
+/* Notification message */
+.bakery-dashboard-notification-item p {
+    margin: 0;
+    font-size: 11px;
+    line-height: 1.5;
+    color: #403936;
+}
+
+/* Notification date */
+.bakery-dashboard-notification-item div div span {
+    display: block;
+    margin-top: 4px;
+    font-size: 9px;
+    color: #968D88;
+}
+
+/* Notification unread dot */
+.bakery-dashboard-notification-dot {
+    width: 7px;
+    height: 7px;
+    flex-shrink: 0;
+    margin-top: 5px;
+    border-radius: 50%;
+    background-color: #C65F3A;
+}
+
+/* Read Notification dot */
+.bakery-dashboard-notification-dot.read {
+    background-color: transparent;
+}
+
+/* Empty Notification state */
+.bakery-dashboard-notification-empty {
+    color: #9A918C;
+}
+
+/* Empty Notification icon */
+.bakery-dashboard-notification-empty svg {
+    margin-bottom: 8px;
+    color: #B8B0AB;
+}
+
+/* Empty Notification title */
+.bakery-dashboard-notification-empty strong {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #4F4743;
+}
+
+/* Empty Notification description */
+.bakery-dashboard-notification-empty span {
+    display: block;
+    margin-top: 4px;
+    font-size: 10px;
+    color: #918985;
+}
+
 /* Bakery Owner account button */
 .bakery-dashboard-topbar-user-button {
     padding: 3px 4px;
@@ -321,12 +580,10 @@
     color: #25201E;
 }
 
-
 /* Bakery Owner account hover */
 .bakery-dashboard-topbar-user-button:hover {
     background-color: #F7F6F5;
 }
-
 
 /* Bakery Owner name */
 .bakery-dashboard-topbar-user-button strong {
@@ -335,7 +592,6 @@
     font-weight: 600;
 }
 
-
 /* Bakery Owner role */
 .bakery-dashboard-topbar-user-button div span {
     display: block;
@@ -343,7 +599,6 @@
     font-size: 11px;
     color: #918985;
 }
-
 
 /* Account dropdown */
 .bakery-dashboard-account-menu {
@@ -356,12 +611,10 @@
     box-shadow: 0 10px 30px rgba(37, 32, 30, 0.12);
 }
 
-
 /* Account dropdown heading */
 .bakery-dashboard-account-heading {
     border-bottom: 1px solid #EEEAE7;
 }
-
 
 /* Account full name */
 .bakery-dashboard-account-heading strong {
@@ -370,7 +623,6 @@
     font-weight: 600;
     color: #25201E;
 }
-
 
 /* Account email */
 .bakery-dashboard-account-heading span {
@@ -383,7 +635,6 @@
     white-space: nowrap;
 }
 
-
 /* Account menu item */
 .bakery-dashboard-account-item {
     border: 0;
@@ -393,13 +644,11 @@
     text-align: left;
 }
 
-
 /* Account menu item icon */
 .bakery-dashboard-account-item svg {
     flex-shrink: 0;
     color: #746D68;
 }
-
 
 /* Account menu item hover */
 .bakery-dashboard-account-item:hover {
@@ -407,32 +656,26 @@
     color: #25201E;
 }
 
-
 /* Account dropdown divider */
 .bakery-dashboard-account-divider {
     border-top: 1px solid #EEEAE7;
 }
-
 
 /* Logout action */
 .bakery-dashboard-account-logout {
     color: #A84437;
 }
 
-
 /* Logout icon */
 .bakery-dashboard-account-logout svg {
     color: #A84437;
 }
-
 
 /* Logout hover */
 .bakery-dashboard-account-logout:hover {
     background-color: #FCEFED;
     color: #A84437;
 }
-
-
 
 /* Tablet dashboard layout */
 @media (min-width: 768px) {

@@ -7,6 +7,11 @@ import User from "../models/User.js";
 //Import Review model
 import Review from "../models/Review.js";
 
+//Import Bakery status email helper
+import {
+    sendBakeryStatusEmail
+} from "../utils/email.js";
+
 //Gets all Bakery accounts for the Platform Administrator
 const getAdminBakeries = async (request, response) => {
 
@@ -95,26 +100,46 @@ const getAdminBakeries = async (request, response) => {
 };
 
 //Update a Bakery account status
-const updateBakeryStatus = async (request, response) => {
+const updateBakeryStatus = async (
+    request,
+    response
+) => {
+
     try {
 
         //Get Bakery ID from URL
-        const bakeryId = request.params.id;
+        const bakeryId =
+            request.params.id;
+
 
         //Get new account status
         const {
             account_status
         } = request.body;
 
+
         //Only allow Admin approval or suspension
-        if (account_status !== "Approved" && account_status !== "Suspended") {
-            return response.status(400).json({
-                message: "Account status must be Approved or Suspended"
-            });
+        if (
+            account_status !== "Approved" &&
+            account_status !== "Suspended"
+        ) {
+
+            return response
+                .status(400)
+                .json({
+
+                    message:
+                        "Account status must be Approved or Suspended"
+                });
         }
 
+
         //Find Bakery
-        const bakery = await Bakery.findById(bakeryId);
+        const bakery =
+            await Bakery.findById(
+                bakeryId
+            );
+
 
         //Stop if Bakery does not exist
         if (!bakery) {
@@ -128,26 +153,92 @@ const updateBakeryStatus = async (request, response) => {
                 });
         }
 
+
+        //Remember the previous Bakery status
+        const previousStatus =
+            bakery.account_status;
+
+
         //Update Bakery account status
-        bakery.account_status = account_status;
+        bakery.account_status =
+            account_status;
+
 
         //Save Bakery
         await bakery.save();
 
-        //Return updated bakery
-        return response.status(200).json({
-            message: account_status === "Approved" ? "Bakery account approved successfully" : "Bakery account suspended successfully",
-            bakery: bakery
-        });
+
+        /*
+            Email the Bakery Owner only when
+            the account status actually changed.
+        */
+        if (
+            previousStatus !==
+            account_status
+        ) {
+
+            try {
+
+                //Find the Bakery Owner account
+                const bakeryOwner =
+                    await User.findById(
+                        bakery.owner_id
+                    );
+
+
+                //Send status email when Owner exists
+                if (bakeryOwner) {
+
+                    await sendBakeryStatusEmail(
+                        bakeryOwner.email,
+                        bakery
+                    );
+                }
+
+            } catch (emailError) {
+
+                /*
+                    Do not fail the Admin action
+                    if email delivery fails.
+                */
+                console.error(
+                    "Bakery status email error:",
+                    emailError.message
+                );
+            }
+        }
+
+
+        //Return updated Bakery
+        return response
+            .status(200)
+            .json({
+
+                message:
+                    account_status === "Approved"
+                        ? "Bakery account approved successfully"
+                        : "Bakery account suspended successfully",
+
+                bakery:
+                    bakery
+            });
+
 
     } catch (error) {
 
-        console.error("Admin Bakery status update error: ", error.message);
+        console.error(
+            "Admin Bakery status update error:",
+            error.message
+        );
 
-        return response.status(500).json({
-            message: "Unable to update Bakery account status"
-        });
 
+        return response
+            .status(500)
+            .json({
+
+                message:
+                    "Unable to update Bakery account status"
+            });
     }
 };
 

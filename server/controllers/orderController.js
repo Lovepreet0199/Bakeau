@@ -34,8 +34,11 @@ import Notification from "../models/Notification.js";
 //Import User model to get the Bakery Owner email
 import User from "../models/User.js";
 
-//Import new Order email helper
-import { sendNewOrderEmail } from "../utils/email.js";
+//Import Order email helpers
+import {
+    sendNewOrderEmail,
+    sendOrderStatusEmail
+} from "../utils/email.js";
 
 //Rounds money values to two decimal places
 const roundMoney = (amount) => {
@@ -375,6 +378,32 @@ const updateBakeryOrderStatus = async (request, response) => {
             });
         }
 
+        //Send Order status update email to the Customer
+        try {
+
+            //Only send email when the Order has a Customer email
+            if (order.contact_email) {
+
+                await sendOrderStatusEmail(
+                    order.contact_email,
+                    bakery.name,
+                    bakery.slug,
+                    order
+                );
+            }
+
+        } catch (emailError) {
+
+            /*
+                Do not fail the Order status update
+                if the email could not be sent.
+            */
+            console.error(
+                "Order status email error:",
+                emailError.message
+            );
+        }
+        
         //Return the updated Order
         return response.status(200).json({
             message: "Order status updated successfully",

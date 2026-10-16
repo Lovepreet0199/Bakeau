@@ -13,6 +13,11 @@ import CustomizationOption from "../models/CustomizationOption.js";
 //Import Cloudinary to upload and manage bakery images
 import cloudinary from "../config/cloudinary.js";
 
+//Import Bakery approval request email helper
+import {
+    sendBakeryApprovalRequestEmail
+} from "../utils/email.js";
+
 //Rounds money values to two decimal places
 const roundMoney = (amount) => {
 
@@ -133,43 +138,104 @@ const createBakery = async (request, response) => {
 };
 
 //Marks the Bakery Owner setup process as completed
-const completeBakerySetup = async (request, response) => {
+const completeBakerySetup = async (
+    request,
+    response
+) => {
 
     try {
 
         //Get the authenticated Bakery Owner ID
-        const ownerId = request.user.userId;
+        const ownerId =
+            request.user.userId;
 
-        //Find the bakery owned by this Bakery Owner
-        const bakery = await Bakery.findOne({
-            owner_id: ownerId
-        });
 
-        //Stop if the Bakery Owner does not have a bakery
-        if (!bakery) {
-            return response.status(404).json({
-                message: "Bakery not found"
+        //Find the Bakery owned by this Bakery Owner
+        const bakery =
+            await Bakery.findOne({
+                owner_id:
+                    ownerId
             });
+
+
+        //Stop if the Bakery Owner does not have a Bakery
+        if (!bakery) {
+
+            return response
+                .status(404)
+                .json({
+
+                    message:
+                        "Bakery not found"
+                });
         }
 
-        //Mark the bakery setup process as completed
-        bakery.setup_completed = true;
 
-        //Save the updated bakery
+        //Remember whether setup was already completed
+        const wasAlreadyCompleted =
+            bakery.setup_completed;
+
+
+        //Mark the Bakery setup process as completed
+        bakery.setup_completed =
+            true;
+
+
+        //Save the updated Bakery
         await bakery.save();
 
-        return response.status(200).json({
-            message: "Bakery setup completed successfully",
-            bakery: bakery
-        });
+
+        //Notify Platform Admin only the first time setup is completed
+        if (!wasAlreadyCompleted) {
+
+            try {
+
+                await sendBakeryApprovalRequestEmail(
+                    bakery
+                );
+
+            } catch (emailError) {
+
+                /*
+                    Do not fail Bakery setup
+                    if the Admin email fails.
+                */
+                console.error(
+                    "Bakery approval request email error:",
+                    emailError.message
+                );
+            }
+        }
+
+
+        //Return completed Bakery
+        return response
+            .status(200)
+            .json({
+
+                message:
+                    "Bakery setup completed successfully",
+
+                bakery:
+                    bakery
+            });
+
 
     } catch (error) {
 
-        console.error("Bakery setup completion error:", error.message);
+        console.error(
+            "Bakery setup completion error:",
+            error.message
+        );
 
-        return response.status(500).json({
-            message: "Unable to complete bakery setup"
-        });
+
+        return response
+            .status(500)
+            .json({
+
+                message:
+                    "Unable to complete bakery setup"
+            });
     }
 };
 
