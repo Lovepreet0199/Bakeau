@@ -6,6 +6,7 @@
     color: #25201E;
 }
 
+
 /* Mobile sidebar is hidden off screen by default */
 .bakery-dashboard-sidebar {
     position: fixed;
@@ -22,16 +23,19 @@
     transition: transform 0.2s ease;
 }
 
+
 /* Displays the sidebar when opened */
 .bakery-dashboard-sidebar.mobile-open {
     transform: translateX(0);
 }
+
 
 /* Sidebar content */
 .bakery-dashboard-sidebar-content {
     min-height: 100vh;
     padding: 18px 14px;
 }
+
 
 /* Dark background behind the open mobile sidebar */
 .bakery-dashboard-sidebar-overlay {
@@ -43,10 +47,12 @@
     background-color: rgba(20, 18, 17, 0.5);
 }
 
+
 /* Bakeau branding */
 .bakery-dashboard-brand {
     padding: 0 6px 16px;
 }
+
 
 .bakery-dashboard-brand h2 {
     margin: 0;
@@ -55,6 +61,7 @@
     font-weight: 600;
     color: #FFFFFF;
 }
+
 
 /* Mobile sidebar close button */
 .bakery-dashboard-sidebar-close {
@@ -70,10 +77,12 @@
     color: #BBB2AD;
 }
 
+
 .bakery-dashboard-sidebar-close:hover {
     background-color: #342D29;
     color: #FFFFFF;
 }
+
 
 /* Bakery selector */
 .bakery-dashboard-bakery-select {
@@ -90,9 +99,11 @@
     text-align: left;
 }
 
+
 .bakery-dashboard-bakery-select:hover {
     background-color: #37302C;
 }
+
 
 /* Bakery initials */
 .bakery-dashboard-bakery-avatar {
@@ -109,12 +120,14 @@
     color: #FFFFFF;
 }
 
+
 /* Bakery name */
 .bakery-dashboard-bakery-select strong {
     display: block;
     font-size: 13px;
     font-weight: 600;
 }
+
 
 /* Storefront text */
 .bakery-dashboard-bakery-select div span {
@@ -123,10 +136,12 @@
     color: #AAA09A;
 }
 
+
 /* Sidebar navigation */
 .bakery-dashboard-nav {
     margin-top: 24px;
 }
+
 
 /* Navigation item */
 .bakery-dashboard-nav-item {
@@ -145,10 +160,12 @@
     text-align: left;
 }
 
+
 .bakery-dashboard-nav-item svg {
     flex-shrink: 0;
     color: #8F8580;
 }
+
 
 /* Navigation hover */
 .bakery-dashboard-nav-item:hover {
@@ -156,9 +173,11 @@
     color: #FFFFFF;
 }
 
+
 .bakery-dashboard-nav-item:hover svg {
     color: #D8D1CD;
 }
+
 
 /* Active dashboard navigation item */
 .bakery-dashboard-nav-item.active {
@@ -168,9 +187,11 @@
     box-shadow: inset 3px 0 0 #C65F3A;
 }
 
+
 .bakery-dashboard-nav-item.active svg {
     color: #D87957;
 }
+
 
 /* Lower sidebar area */
 .bakery-dashboard-sidebar-bottom {
@@ -178,6 +199,7 @@
     padding-top: 14px;
     border-top: 1px solid #3A3431;
 }
+
 
 /* Bakery Owner information */
 .bakery-dashboard-user {
@@ -187,6 +209,7 @@
     margin-top: 14px;
     padding: 12px 8px 2px;
 }
+
 
 /* Bakery Owner initials */
 .bakery-dashboard-user-avatar {
@@ -203,12 +226,14 @@
     color: #FFFFFF;
 }
 
+
 /* Bakery Owner name */
 .bakery-dashboard-user strong {
     display: block;
     font-size: 13px;
     font-weight: 600;
 }
+
 
 /* Bakery Owner role */
 .bakery-dashboard-user div span {
@@ -218,6 +243,7 @@
     color: #938985;
 }
 
+
 /* Main dashboard area */
 .bakery-dashboard-main {
     width: 100%;
@@ -226,6 +252,7 @@
     background-color: #F7F7F6;
 }
 
+
 /* Dashboard top bar */
 .bakery-dashboard-topbar {
     min-height: 64px;
@@ -233,6 +260,7 @@
     border-bottom: 1px solid #E4E1DE;
     background-color: #FFFFFF;
 }
+
 
 /* Mobile menu button */
 .bakery-dashboard-menu-button {
@@ -249,15 +277,18 @@
     color: #4F4743;
 }
 
+
 .bakery-dashboard-menu-button:hover {
     background-color: #F7F6F5;
 }
+
 
 /* Dashboard search */
 .bakery-dashboard-search {
     position: relative;
     width: 100%;
 }
+
 
 /* Dashboard search icon */
 .bakery-dashboard-search-icon {
@@ -269,6 +300,7 @@
     transform: translateY(-50%);
     pointer-events: none;
 }
+
 
 /* Dashboard search input */
 .bakery-dashboard-search .form-control {
@@ -283,15 +315,110 @@
     box-shadow: none;
 }
 
+
 .bakery-dashboard-search .form-control::placeholder {
     color: #9A938E;
 }
+
 
 .bakery-dashboard-search .form-control:focus {
     border-color: #C9C3BF;
     background-color: #FFFFFF;
     box-shadow: 0 0 0 2px rgba(198, 95, 58, 0.08);
 }
+
+
+/* Dashboard Search results dropdown */
+.bakery-dashboard-search-results {
+    z-index: 1090;
+    max-height: 430px;
+    overflow-y: auto;
+    border: 1px solid #E4E1DE;
+    border-radius: 9px;
+    background-color: #FFFFFF;
+    box-shadow: 0 10px 30px rgba(37, 32, 30, 0.12);
+}
+
+
+/* Search section heading */
+.bakery-dashboard-search-section-title {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #918985;
+}
+
+
+/* One Search result */
+.bakery-dashboard-search-result {
+    border: 0;
+    background-color: #FFFFFF;
+    color: #25201E;
+}
+
+
+/* Search result hover */
+.bakery-dashboard-search-result:hover {
+    background-color: #F8F6F4;
+}
+
+
+/* Search result main text */
+.bakery-dashboard-search-result strong {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    color: #25201E;
+}
+
+
+/* Search result secondary text */
+.bakery-dashboard-search-result span {
+    display: block;
+    margin-top: 2px;
+    font-size: 10px;
+    color: #918985;
+}
+
+
+/* Search result price */
+.bakery-dashboard-search-result small {
+    font-size: 10px;
+    font-weight: 600;
+    color: #4D4541;
+}
+
+
+/* Search Product image */
+.bakery-dashboard-search-product-image {
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+    border-radius: 5px;
+    object-fit: cover;
+}
+
+
+/* Search loading */
+.bakery-dashboard-search-loading {
+    font-size: 11px;
+    color: #746D68;
+}
+
+
+/* Empty Search icon */
+.bakery-dashboard-search-empty-icon {
+    color: #B0A9A4;
+}
+
+
+/* Empty Search message */
+.bakery-dashboard-search-empty {
+    font-size: 11px;
+    color: #918985;
+}
+
 
 /* Notification button */
 .bakery-dashboard-icon-button {
@@ -308,9 +435,11 @@
     color: #5B534F;
 }
 
+
 .bakery-dashboard-icon-button:hover {
     background-color: #F7F6F5;
 }
+
 
 /* Bakery Owner account button */
 .bakery-dashboard-topbar-user-button {
@@ -433,6 +562,140 @@
 }
 
 
+/* Notification count badge */
+.bakery-dashboard-notification-badge {
+    min-width: 17px;
+    padding: 2px 4px;
+    border: 2px solid #FFFFFF;
+    border-radius: 20px;
+    background-color: #C65F3A;
+    font-size: 9px;
+    font-weight: 700;
+    line-height: 1;
+    color: #FFFFFF;
+}
+
+
+/* Notification dropdown */
+.bakery-dashboard-notifications {
+    z-index: 1100;
+    width: 360px;
+    overflow: hidden;
+    border: 1px solid #E4E1DE;
+    border-radius: 9px;
+    background-color: #FFFFFF;
+    box-shadow: 0 10px 30px rgba(37, 32, 30, 0.12);
+}
+
+
+/* Notification heading */
+.bakery-dashboard-notification-heading {
+    border-bottom: 1px solid #EEEAE7;
+}
+
+
+/* Notification heading title */
+.bakery-dashboard-notification-heading h2 {
+    font-size: 14px;
+    font-weight: 700;
+    color: #25201E;
+}
+
+
+/* Notification unread text */
+.bakery-dashboard-notification-heading p {
+    font-size: 10px;
+    color: #918985;
+}
+
+
+/* Mark all Notifications button */
+.bakery-dashboard-mark-read-button {
+    border: 0;
+    background-color: transparent;
+    font-size: 10px;
+    font-weight: 600;
+    color: #C65F3A;
+}
+
+
+/* Mark all hover */
+.bakery-dashboard-mark-read-button:hover {
+    color: #A95031;
+}
+
+
+/* Notification list */
+.bakery-dashboard-notification-list {
+    max-height: 380px;
+    overflow-y: auto;
+}
+
+
+/* One Notification */
+.bakery-dashboard-notification-item {
+    border: 0;
+    border-bottom: 1px solid #F0EDEB;
+    background-color: #FFFFFF;
+}
+
+
+/* Unread Notification */
+.bakery-dashboard-notification-item.unread {
+    background-color: #FFF8F5;
+}
+
+
+/* Notification hover */
+.bakery-dashboard-notification-item:hover {
+    background-color: #F8F6F4;
+}
+
+
+/* Unread Notification dot */
+.bakery-dashboard-notification-dot {
+    width: 7px;
+    height: 7px;
+    margin-top: 5px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background-color: #C65F3A;
+}
+
+
+/* Hide dot for read Notifications */
+.bakery-dashboard-notification-dot.read {
+    background-color: transparent;
+}
+
+
+/* Notification text */
+.bakery-dashboard-notification-message {
+    font-size: 11px;
+    line-height: 1.5;
+    color: #4D4541;
+}
+
+
+/* Notification time */
+.bakery-dashboard-notification-time {
+    font-size: 9px;
+    color: #918985;
+}
+
+
+/* Empty Notification icon */
+.bakery-dashboard-empty-notification-icon {
+    color: #B0A9A4;
+}
+
+
+/* Empty Notification message */
+.bakery-dashboard-empty-notifications {
+    font-size: 11px;
+    color: #918985;
+}
+
 
 /* Tablet dashboard layout */
 @media (min-width: 768px) {
@@ -441,6 +704,7 @@
         padding: 10px 20px;
     }
 }
+
 
 /* Desktop dashboard layout */
 @media (min-width: 992px) {
@@ -455,18 +719,22 @@
         transform: none;
     }
 
+
     .bakery-dashboard-sidebar-content {
         padding: 22px 14px 18px;
     }
+
 
     .bakery-dashboard-brand {
         padding: 0 10px 20px;
     }
 
+
     .bakery-dashboard-main {
         flex: 1 1 auto;
         width: auto;
     }
+
 
     .bakery-dashboard-topbar {
         min-height: 68px;
