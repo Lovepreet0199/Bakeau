@@ -13,6 +13,9 @@ import CustomizationOption from "../models/CustomizationOption.js";
 //Import Cloudinary to upload and manage bakery images
 import cloudinary from "../config/cloudinary.js";
 
+//Import Bakery approval request email helper
+import { sendBakeryApprovalRequestEmail } from "../utils/email.js";
+
 //Rounds money values to two decimal places
 const roundMoney = (amount) => {
 
@@ -152,11 +155,39 @@ const completeBakerySetup = async (request, response) => {
             });
         }
 
+        //Remember whether setup was already completed
+        const wasAlreadyCompleted =
+            bakery.setup_completed;
+
+
         //Mark the bakery setup process as completed
-        bakery.setup_completed = true;
+        bakery.setup_completed =
+            true;
+
 
         //Save the updated bakery
         await bakery.save();
+
+
+        //Notify Platform Admin only the first time setup is completed
+        if (!wasAlreadyCompleted) {
+
+            try {
+
+                await sendBakeryApprovalRequestEmail(
+                    bakery
+                );
+
+
+            } catch (emailError) {
+
+                //Do not fail Bakery setup if the Admin email fails
+                console.error(
+                    "Bakery approval request email error:",
+                    emailError.message
+                );
+            }
+        }
 
         return response.status(200).json({
             message: "Bakery setup completed successfully",

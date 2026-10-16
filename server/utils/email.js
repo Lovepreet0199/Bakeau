@@ -145,9 +145,266 @@ const sendNewOrderEmail = async (
     }
 };
 
+//Sends an Order status update email to the Customer
+const sendOrderStatusEmail = async (
+    email,
+    bakeryName,
+    bakerySlug,
+    order
+) => {
+
+    //Readable status text shown in the email
+    const statusNames = {
+
+        confirmed:
+            "Confirmed",
+
+        preparing:
+            "Being Prepared",
+
+        ready:
+            "Ready for Pickup",
+
+        completed:
+            "Completed",
+
+        cancelled:
+            "Cancelled"
+    };
+
+
+    //Get readable Order status
+    const statusText =
+        statusNames[order.status] ||
+        order.status;
+
+
+    //Create Customer Order tracking link
+    const orderUrl =
+        `${process.env.CLIENT_URL}/${bakerySlug}/orders/${order._id}`;
+
+
+    //Send status update email
+    const { error } =
+        await resend.emails.send({
+
+            from:
+                fromEmail,
+
+            to:
+                email,
+
+            subject:
+                `${order.order_number} is now ${statusText}`,
+
+            html: `
+                <h1>Order Update</h1>
+
+                <p>
+                    Your order from
+                    <strong>${bakeryName}</strong>
+                    has been updated.
+                </p>
+
+                <p>
+                    <strong>Order:</strong>
+                    ${order.order_number}
+                </p>
+
+                <p>
+                    <strong>Status:</strong>
+                    ${statusText}
+                </p>
+
+                <p>
+                    <a href="${orderUrl}">
+                        View your order
+                    </a>
+                </p>
+            `
+        });
+
+
+    //Stop if Resend could not send the email
+    if (error) {
+
+        throw new Error(
+            error.message
+        );
+    }
+};
+
+//Sends a new Bakery approval request email to the Platform Admin
+const sendBakeryApprovalRequestEmail = async (
+    bakery
+) => {
+
+    //Create link to review this Bakery
+    const bakeryAdminUrl =
+        `${process.env.CLIENT_URL}/admin/bakeries/${bakery._id}`;
+
+
+    //Send approval request email
+    const { error } =
+        await resend.emails.send({
+
+            from:
+                fromEmail,
+
+            to:
+                process.env.ADMIN_NOTIFICATION_EMAIL,
+
+            subject:
+                `New Bakery approval request - ${bakery.name}`,
+
+            html: `
+                <h1>New Bakery Approval Request</h1>
+
+                <p>
+                    A new Bakery has completed setup
+                    and is waiting for approval on Bakeau.
+                </p>
+
+                <p>
+                    <strong>Bakery:</strong>
+                    ${bakery.name}
+                </p>
+
+                <p>
+                    <strong>Contact email:</strong>
+                    ${bakery.contact_email}
+                </p>
+
+                <p>
+                    <strong>Status:</strong>
+                    Pending Approval
+                </p>
+
+                <p>
+                    <a href="${bakeryAdminUrl}">
+                        Review Bakery
+                    </a>
+                </p>
+            `
+        });
+
+
+    //Stop if Resend could not send the email
+    if (error) {
+
+        throw new Error(
+            error.message
+        );
+    }
+};
+
+//Sends a Bakery account status email to the Bakery Owner
+const sendBakeryStatusEmail = async (
+    email,
+    bakery
+) => {
+
+    //Create readable message for each Bakery status
+    const statusMessages = {
+
+        Approved: {
+            subject:
+                `${bakery.name} has been approved on Bakeau`,
+
+            heading:
+                "Your Bakery Has Been Approved",
+
+            message:
+                "Your Bakery has been approved and your storefront can now be accessed by customers."
+        },
+
+        Suspended: {
+            subject:
+                `${bakery.name} has been suspended on Bakeau`,
+
+            heading:
+                "Your Bakery Has Been Suspended",
+
+            message:
+                "Your Bakery account has been suspended. Your public storefront will not be available while the account is suspended."
+        }
+    };
+
+
+    //Get email content for this status
+    const statusContent =
+        statusMessages[
+            bakery.account_status
+        ];
+
+
+    //Stop if this status does not need an email
+    if (!statusContent) {
+        return;
+    }
+
+
+    //Create Bakery dashboard link
+    const dashboardUrl =
+        `${process.env.CLIENT_URL}/bakery/dashboard`;
+
+
+    //Send Bakery status email
+    const { error } =
+        await resend.emails.send({
+
+            from:
+                fromEmail,
+
+            to:
+                email,
+
+            subject:
+                statusContent.subject,
+
+            html: `
+                <h1>
+                    ${statusContent.heading}
+                </h1>
+
+                <p>
+                    ${statusContent.message}
+                </p>
+
+                <p>
+                    <strong>Bakery:</strong>
+                    ${bakery.name}
+                </p>
+
+                <p>
+                    <strong>Status:</strong>
+                    ${bakery.account_status}
+                </p>
+
+                <p>
+                    <a href="${dashboardUrl}">
+                        Open Bakeau
+                    </a>
+                </p>
+            `
+        });
+
+
+    //Stop if Resend could not send the email
+    if (error) {
+
+        throw new Error(
+            error.message
+        );
+    }
+};
+
 //Export the email functions so they can be used in other server files
 export {
     sendVerificationEmail,
     sendPasswordResetEmail,
-    sendNewOrderEmail
+    sendNewOrderEmail,
+    sendOrderStatusEmail,
+    sendBakeryApprovalRequestEmail,
+    sendBakeryStatusEmail
 };
