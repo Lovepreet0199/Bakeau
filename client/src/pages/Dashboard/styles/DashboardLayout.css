@@ -312,24 +312,124 @@
     background-color: #F7F6F5;
 }
 
-/* Bakery Owner information shown in topbar */
-.bakery-dashboard-topbar-user {
-    display: flex;
-    align-items: center;
-    gap: 9px;
+/* Bakery Owner account button */
+.bakery-dashboard-topbar-user-button {
+    padding: 3px 4px;
+    border: 0;
+    border-radius: 7px;
+    background-color: transparent;
+    color: #25201E;
 }
 
-.bakery-dashboard-topbar-user strong {
+
+/* Bakery Owner account hover */
+.bakery-dashboard-topbar-user-button:hover {
+    background-color: #F7F6F5;
+}
+
+
+/* Bakery Owner name */
+.bakery-dashboard-topbar-user-button strong {
     display: block;
     font-size: 13px;
     font-weight: 600;
 }
 
-.bakery-dashboard-topbar-user div span {
+
+/* Bakery Owner role */
+.bakery-dashboard-topbar-user-button div span {
     display: block;
     margin-top: 1px;
     font-size: 11px;
     color: #918985;
+}
+
+
+/* Account dropdown */
+.bakery-dashboard-account-menu {
+    z-index: 1100;
+    width: 230px;
+    overflow: hidden;
+    border: 1px solid #E4E1DE;
+    border-radius: 9px;
+    background-color: #FFFFFF;
+    box-shadow: 0 10px 30px rgba(37, 32, 30, 0.12);
+}
+
+
+/* Account dropdown heading */
+.bakery-dashboard-account-heading {
+    border-bottom: 1px solid #EEEAE7;
+}
+
+
+/* Account full name */
+.bakery-dashboard-account-heading strong {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #25201E;
+}
+
+
+/* Account email */
+.bakery-dashboard-account-heading span {
+    display: block;
+    margin-top: 2px;
+    overflow: hidden;
+    font-size: 10px;
+    color: #918985;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/* Account menu item */
+.bakery-dashboard-account-item {
+    border: 0;
+    background-color: #FFFFFF;
+    font-size: 12px;
+    color: #4D4541;
+    text-align: left;
+}
+
+
+/* Account menu item icon */
+.bakery-dashboard-account-item svg {
+    flex-shrink: 0;
+    color: #746D68;
+}
+
+
+/* Account menu item hover */
+.bakery-dashboard-account-item:hover {
+    background-color: #F7F6F5;
+    color: #25201E;
+}
+
+
+/* Account dropdown divider */
+.bakery-dashboard-account-divider {
+    border-top: 1px solid #EEEAE7;
+}
+
+
+/* Logout action */
+.bakery-dashboard-account-logout {
+    color: #A84437;
+}
+
+
+/* Logout icon */
+.bakery-dashboard-account-logout svg {
+    color: #A84437;
+}
+
+
+/* Logout hover */
+.bakery-dashboard-account-logout:hover {
+    background-color: #FCEFED;
+    color: #A84437;
 }
 
 
