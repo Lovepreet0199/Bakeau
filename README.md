@@ -163,3 +163,485 @@ Preparing
 Ready
    ↓
 Completed
+```
+
+Orders may also be cancelled when allowed.
+
+Customers receive an email when the Bakery Owner updates the order status.
+
+---
+
+## Bakery Approval Workflow
+
+```text
+Bakery Owner creates account
+        ↓
+Completes bakery setup
+        ↓
+Bakery remains Pending
+        ↓
+Platform Administrator receives email
+        ↓
+Administrator reviews bakery
+        ↓
+Approve / Suspend
+        ↓
+Bakery Owner receives status email
+```
+
+Only approved bakeries are publicly accessible through the storefront.
+
+---
+
+## Technology Stack
+
+### Frontend
+
+- React
+- Vite
+- JavaScript
+- HTML
+- CSS
+- Bootstrap
+- React Router
+- Lucide React
+
+### Backend
+
+- Node.js
+- Express.js
+- REST APIs
+- JWT Authentication
+- bcryptjs
+- express-validator
+
+### Database
+
+- MongoDB
+- Mongoose
+
+### Media
+
+- Cloudinary
+
+### Email
+
+- Resend
+- Custom Bakeau email domain
+
+### Payments
+
+- Stripe
+- Stripe Connect
+
+### Deployment
+
+- Cloudflare Pages
+- Render
+- MongoDB Atlas
+- Cloudflare DNS
+
+---
+
+## Project Structure
+
+```text
+Bakeau/
+│
+├── client/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── utils/
+│   │   ├── config/
+│   │   └── ...
+│   │
+│   └── package.json
+│
+├── server/
+│   ├── controllers/
+│   ├── models/
+│   ├── routes/
+│   ├── middleware/
+│   ├── utils/
+│   ├── config/
+│   ├── index.js
+│   └── package.json
+│
+└── README.md
+```
+
+---
+
+## Authentication
+
+Bakeau uses JWT-based authentication.
+
+Protected backend routes use authentication middleware to verify the user's token.
+
+Role-based authorization is used to restrict functionality between:
+
+```text
+customer
+bakeryOwner
+platformAdmin
+```
+
+Passwords are hashed using bcrypt before they are stored in MongoDB.
+
+---
+
+## Main Database Models
+
+Bakeau uses multiple MongoDB collections including:
+
+- User
+- Bakery
+- Product
+- CustomizationGroup
+- CustomizationOption
+- Order
+- OrderItem
+- OrderItemCustomization
+- OrderActivity
+- PickupSlot
+- Review
+- Ingredient
+- Notification
+
+---
+
+## Product Customization
+
+Bakery Owners can create customization groups for products.
+
+Examples include:
+
+```text
+Cake Size
+- Small
+- Medium
+- Large
+
+Flavour
+- Chocolate
+- Vanilla
+- Red Velvet
+
+Extra Toppings
+- Strawberries
+- Chocolate Drizzle
+- Sprinkles
+```
+
+Customization pricing is calculated and validated by the backend.
+
+The frontend does not control trusted product pricing.
+
+---
+
+## Order Pricing
+
+Order prices are calculated by the backend using stored product and customization prices.
+
+Bakeau supports:
+
+- Full payment
+- Deposits
+- Manual payments
+
+The backend stores values such as:
+
+```text
+total_price
+amount_due_now
+amount_paid
+payment_status
+```
+
+This prevents the frontend from being trusted for order pricing.
+
+---
+
+## Payments
+
+Bakery Owners can connect their Stripe account through Stripe Connect.
+
+The platform currently supports:
+
+- Stripe account creation
+- Stripe onboarding
+- Stripe connection status
+- Bakery payment settings
+- Manual payment tracking
+
+### In Progress
+
+Customer Stripe checkout/payment processing is the final major payment feature currently being completed.
+
+---
+
+## Analytics
+
+The Bakery Owner Analytics page includes:
+
+- Revenue
+- Order totals
+- Completed orders
+- Customer statistics
+- Date filtering
+- Previous-period comparison
+- Sales graph
+
+Analytics data is generated from real bakery order information stored in MongoDB.
+
+---
+
+## Inventory
+
+Bakeau includes both product and ingredient inventory management.
+
+Bakery Owners can:
+
+- Track product inventory
+- Update stock quantities
+- Track ingredients
+- View low-stock warnings
+- Identify products that require attention
+
+---
+
+## Reviews
+
+Customers can leave reviews after completing an order.
+
+Customers can:
+
+- Add a review
+- Edit their review
+- Delete their review
+
+Bakery Owners can:
+
+- View reviews
+- Reply to customer reviews
+
+Platform Administrators can:
+
+- View all reviews
+- Remove inappropriate reviews
+
+---
+
+## Responsive Design
+
+Bakeau was designed to work across:
+
+- Desktop
+- Tablet
+- Mobile
+
+Bootstrap is used for the majority of layout, spacing, responsive grids, alignment, and utility classes.
+
+Custom CSS is used primarily for Bakeau-specific visual styling and branding.
+
+---
+
+## Running the Project Locally
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/Lovepreet0199/Bakeau.git
+```
+
+```bash
+cd Bakeau
+```
+
+---
+
+### 2. Install Frontend Dependencies
+
+```bash
+cd client
+npm install
+```
+
+---
+
+### 3. Install Backend Dependencies
+
+Open another terminal:
+
+```bash
+cd server
+npm install
+```
+
+---
+
+### 4. Configure Environment Variables
+
+Create the required environment files.
+
+Example backend variables:
+
+```env
+PORT=3000
+
+MONGODB_URI=
+
+JWT_SECRET=
+
+CLIENT_URL=http://localhost:5173
+
+CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
+
+RESEND_API_KEY=
+
+STRIPE_SECRET_KEY=
+
+ADMIN_NOTIFICATION_EMAIL=
+```
+
+Do not commit real environment variables or secret API keys to GitHub.
+
+---
+
+### 5. Start the Backend
+
+From the `server` directory:
+
+```bash
+npm run dev
+```
+
+---
+
+### 6. Start the Frontend
+
+From the `client` directory:
+
+```bash
+npm run dev
+```
+
+The application will normally run at:
+
+```text
+Frontend:
+http://localhost:5173
+
+Backend:
+http://localhost:3000
+```
+
+---
+
+## Production
+
+Bakeau currently uses:
+
+```text
+Frontend:
+Cloudflare Pages
+
+Backend:
+Render
+
+Database:
+MongoDB Atlas
+
+Images:
+Cloudinary
+
+Email:
+Resend
+```
+
+Production environment variables are configured through the hosting platforms rather than stored in the repository.
+
+---
+
+## Current Development Status
+
+Most major Bakeau functionality is complete.
+
+### Completed
+
+- Authentication
+- Email verification
+- Password recovery
+- Bakery onboarding
+- Bakery approval system
+- Public storefront
+- Product management
+- Product customizations
+- Guest cart
+- Customer checkout
+- Order creation
+- Pickup scheduling
+- Order management
+- Manual payment tracking
+- Customer order tracking
+- Reviews
+- Inventory
+- Marketing / Featured Products
+- Analytics
+- Dashboard overview
+- Dashboard search
+- In-app notifications
+- Transactional emails
+- Bakery settings
+- Admin moderation
+- Production deployment
+
+### Remaining
+
+- Customer Stripe payment checkout
+- Final end-to-end testing
+- Final bug fixes and UI polish
+
+---
+
+## Future Improvements
+
+Possible future improvements include:
+
+- Customer favourites
+- Additional storefront themes
+- Advanced bakery analytics
+- Additional notification types
+- Automated refunds
+- Advanced Stripe payment reporting
+- Delivery support
+- Custom bakery domains
+- Promotional discount codes
+- Bakery subscriptions
+- Mobile application
+
+---
+
+## Developer
+
+**Lovepreet Singh Sandhu**
+
+Web Development Graduate Certificate  
+Humber Polytechnic
+
+GitHub:  
+https://github.com/Lovepreet0199
+
+Portfolio:  
+https://lovesandhu.com
+
+---
+
+## License
+
+This project was developed as an educational capstone project.
+
+All rights reserved.
