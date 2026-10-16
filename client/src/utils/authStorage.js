@@ -6,3 +6,4 @@ export function getAuthToken() {
         sessionStorage.getItem("token")
     );
 }
+
