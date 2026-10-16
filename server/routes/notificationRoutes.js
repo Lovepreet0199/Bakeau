@@ -10,9 +10,13 @@ import {
 
 //Import authentication middleware
 import {
-    authenticateUser,
-    authorizeRoles
+    authenticateUser
 } from "../middleware/authMiddleware.js";
+
+//Import role authorization middleware
+import {
+    authorizeRoles
+} from "../middleware/roleMiddleware.js";
 
 
 //Create Notification router
