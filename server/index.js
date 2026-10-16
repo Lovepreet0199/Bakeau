@@ -51,6 +51,9 @@ import notificationRoutes from "./routes/notificationRoutes.js";
 //Import Dashboard Search routes
 import searchRoutes from "./routes/searchRoutes.js";
 
+//Import Favourite routes
+import favouriteRoutes from "./routes/favouriteRoutes.js";
+
 // Create an Express app and store it in the app variable
 const app = express();
 
@@ -164,6 +167,9 @@ app.use("/api/notifications", notificationRoutes);
 
 //Use Dashboard Search routes
 app.use("/api/search", searchRoutes);
+
+//Favourite routes
+app.use("/api/favourites", favouriteRoutes);
 
 //Connect to MongoDB
 connectDB();
