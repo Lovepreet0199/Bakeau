@@ -78,8 +78,76 @@ const sendPasswordResetEmail = async (
     }
 };
 
+//Sends a new Order email to the Bakery Owner
+const sendNewOrderEmail = async (
+    email,
+    bakeryName,
+    order
+) => {
+
+    //Create link to the Order inside the Bakery dashboard
+    const orderUrl =
+        `${process.env.CLIENT_URL}/bakery/orders/${order._id}`;
+
+
+    //Send the new Order email using Resend
+    const { error } =
+        await resend.emails.send({
+
+            from:
+                fromEmail,
+
+            to:
+                email,
+
+            subject:
+                `New order ${order.order_number} - ${bakeryName}`,
+
+            html: `
+                <h1>New Order Received</h1>
+
+                <p>
+                    You received a new order for
+                    <strong>${bakeryName}</strong>.
+                </p>
+
+                <p>
+                    <strong>Order:</strong>
+                    ${order.order_number}
+                </p>
+
+                <p>
+                    <strong>Customer:</strong>
+                    ${order.contact_first_name}
+                    ${order.contact_last_name}
+                </p>
+
+                <p>
+                    <strong>Total:</strong>
+                    $${Number(order.total_price).toFixed(2)}
+                </p>
+
+                <p>
+                    <a href="${orderUrl}">
+                        View order in Bakeau
+                    </a>
+                </p>
+            `
+        });
+
+
+    //Stop if Resend could not send the email
+    if (error) {
+
+        throw new Error(
+            error.message
+        );
+    }
+};
+
 //Export the email functions so they can be used in other server files
 export {
     sendVerificationEmail,
-    sendPasswordResetEmail
+    sendPasswordResetEmail,
+    sendNewOrderEmail
 };
