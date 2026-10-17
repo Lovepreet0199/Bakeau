@@ -54,6 +54,9 @@ import searchRoutes from "./routes/searchRoutes.js";
 //Import Favourite routes
 import favouriteRoutes from "./routes/favouriteRoutes.js";
 
+//Import Stripe webhook controller
+import { handleStripeWebhook } from "./controllers/paymentController.js";
+
 // Create an Express app and store it in the app variable
 const app = express();
 
@@ -121,6 +124,15 @@ app.use(
             "Authorization"
         ]
     })
+);
+
+//Handle Stripe webhook using raw request body
+app.post(
+    "/api/payments/stripe/webhook",
+    express.raw({
+        type: "application/json"
+    }),
+    handleStripeWebhook
 );
 
 //Allow Express to read JSON data send in request bodies

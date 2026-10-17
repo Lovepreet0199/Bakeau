@@ -5,7 +5,8 @@ import express from "express";
 import {
     createManualPayment,
     receiveManualPayment,
-    revertManualPayment
+    revertManualPayment,
+    createStripeCheckoutSession
 } from "../controllers/paymentController.js";
 
 //Import authentication middleware
@@ -89,6 +90,15 @@ router.post(
     createManualPayment
 );
 
+//Create Stripe Checkout Session for Customer Order
+router.post(
+    "/stripe/checkout",
+    authenticateUser,
+    authorizeRoles("customer"),
+    manualPaymentValidation,
+    validateRequest,
+    createStripeCheckoutSession
+);
 
 //Mark Manual Payment as received
 router.patch(
