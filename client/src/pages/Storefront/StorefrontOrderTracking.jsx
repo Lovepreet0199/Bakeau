@@ -117,6 +117,13 @@ export default function StorefrontOrderTracking() {
     ] = useState(null);
 
 
+    //Tracks Stripe Balance Payment request
+    const [
+        isPayingBalance,
+        setIsPayingBalance
+    ] = useState(false);
+
+
     //Gets Customer token
     function getToken() {
 
@@ -133,8 +140,7 @@ export default function StorefrontOrderTracking() {
         return new Intl.NumberFormat(
             "en-CA",
             {
-                style:
-                    "currency",
+                style: "currency",
 
                 currency:
                     bakery?.currency ||
@@ -161,17 +167,13 @@ export default function StorefrontOrderTracking() {
         ).toLocaleDateString(
             "en-CA",
             {
-                weekday:
-                    "short",
+                weekday: "short",
 
-                month:
-                    "short",
+                month: "short",
 
-                day:
-                    "numeric",
+                day: "numeric",
 
-                timeZone:
-                    "UTC"
+                timeZone: "UTC"
             }
         );
     }
@@ -207,14 +209,11 @@ export default function StorefrontOrderTracking() {
         return date.toLocaleTimeString(
             "en-US",
             {
-                hour:
-                    "numeric",
+                hour: "numeric",
 
-                minute:
-                    "2-digit",
+                minute: "2-digit",
 
-                hour12:
-                    true
+                hour12: true
             }
         );
     }
@@ -282,8 +281,7 @@ export default function StorefrontOrderTracking() {
                 navigate(
                     `/${slug}/login`,
                     {
-                        replace:
-                            true
+                        replace: true
                     }
                 );
 
@@ -533,6 +531,7 @@ export default function StorefrontOrderTracking() {
                 () => {
 
                     refreshOrder();
+
                 },
                 10000
             );
@@ -666,6 +665,138 @@ export default function StorefrontOrderTracking() {
     }
 
 
+    //Starts Stripe Checkout for the remaining Order balance
+    async function handlePayRemainingBalance() {
+
+        //Stop duplicate Payment requests
+        if (
+            isPayingBalance ||
+            !order
+        ) {
+
+            return;
+        }
+
+
+        //Calculate latest remaining balance
+        const balance =
+            Math.max(
+                0,
+                Number(order.total_price) -
+                Number(
+                    order.amount_paid ||
+                    0
+                )
+            );
+
+
+        //Stop if Order is already fully paid
+        if (balance <= 0) {
+
+            return;
+        }
+
+
+        const token =
+            getToken();
+
+
+        //Customer must still be logged in
+        if (!token) {
+
+            navigate(
+                `/${slug}/login`,
+                {
+                    replace: true
+                }
+            );
+
+
+            return;
+        }
+
+
+        try {
+
+            //Start Payment loading
+            setIsPayingBalance(
+                true
+            );
+
+
+            //Clear old messages
+            setActionError("");
+            setActionMessage("");
+
+
+            //Create Stripe Checkout Session for remaining balance
+            const response =
+                await fetch(
+                    `${API_URL}/api/payments/stripe/checkout`,
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json",
+
+                            Authorization:
+                                `Bearer ${token}`
+                        },
+
+                        body:
+                            JSON.stringify({
+
+                                order_id:
+                                    order._id,
+
+                                /*
+                                    "full" tells the Backend to
+                                    collect the remaining Order balance.
+                                */
+                                payment_choice:
+                                    "full"
+                            })
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            //Stop if Stripe Checkout could not be created
+            if (!response.ok) {
+
+                throw new Error(
+                    data.message ||
+                    data.errors?.[0]?.msg ||
+                    "Unable to start Stripe Checkout"
+                );
+            }
+
+
+            //Send Customer to secure Stripe Checkout
+            window.location.href =
+                data.checkout_url;
+
+
+        } catch (error) {
+
+            //Display Payment error
+            setActionError(
+                error.message
+            );
+
+
+            //Stop Payment loading
+            setIsPayingBalance(
+                false
+            );
+        }
+    }
+
+
     //Display loading state
     if (isLoading) {
 
@@ -723,44 +854,100 @@ export default function StorefrontOrderTracking() {
     }
 
 
-    //Use the first Payment for this Order
-    const payment =
-        order.payments?.[0];
+    //Get all Payments for this Order
+    const payments =
+        order.payments ||
+        [];
 
 
-    //Payment has actually been received
-    const paymentReceived =
-        payment?.payment_status ===
-        "Received";
+    //Get pending Payments
+    const pendingPayments =
+        payments.filter(
+            (payment) =>
+                payment.payment_status ===
+                "Pending"
+        );
 
 
-    //Payment waiting for Bakery verification
+    //Check whether a Payment is waiting for Bakery verification
     const paymentPending =
-        payment?.payment_status ===
-        "Pending";
+        pendingPayments.length >
+        0;
 
 
-    //Amount connected to the Payment
-    const paymentAmount =
-        Number(
-            payment?.amount ||
+    //Total amount waiting for Manual verification
+    const pendingPaymentAmount =
+        pendingPayments.reduce(
+            (
+                total,
+                payment
+            ) =>
+                total +
+                Number(
+                    payment.amount ||
+                    0
+                ),
             0
         );
 
 
-    //Remaining balance after a received payment
+    //Total amount actually received for this Order
+    const paymentAmount =
+        Number(
+            order.amount_paid ||
+            0
+        );
+
+
+    //Check whether any Payment has been received
+    const paymentReceived =
+        paymentAmount >
+        0;
+
+
+    //Calculate remaining Order balance
     const remainingBalance =
-        paymentReceived
-            ? Math.max(
-                0,
-                Number(
-                    order.total_price
-                ) -
-                paymentAmount
-            )
-            : Number(
+        Math.max(
+            0,
+            Number(
                 order.total_price
-            );
+            ) -
+            paymentAmount
+        );
+
+
+    //Check whether Stripe has been used for this Order
+    const hasStripePayment =
+        payments.some(
+            (payment) =>
+                payment.payment_method ===
+                "Stripe" &&
+                payment.payment_status ===
+                "Received"
+        );
+
+
+    //Check whether Manual Payment has been received
+    const hasManualPayment =
+        payments.some(
+            (payment) =>
+                payment.payment_method ===
+                "Manual" &&
+                payment.payment_status ===
+                "Received"
+        );
+
+
+    //Customer can pay remaining balance through Stripe
+    const canPayRemainingBalance =
+        order.payment_status ===
+        "partially_paid" &&
+        remainingBalance >
+        0 &&
+        bakery.stripe_charges_enabled &&
+        !paymentPending &&
+        order.status !==
+        "cancelled";
 
 
     //Pickup address
@@ -1003,7 +1190,6 @@ export default function StorefrontOrderTracking() {
                                                     <small className="d-block">
 
                                                         Qty{" "}
-
                                                         {
                                                             item.quantity
                                                         }
@@ -1058,11 +1244,9 @@ export default function StorefrontOrderTracking() {
                                                         <small className="storefront-tracking-product-note d-block mt-2">
 
                                                             Note: "
-
                                                             {
                                                                 item.special_notes
                                                             }
-
                                                             "
 
                                                         </small>
@@ -1414,7 +1598,7 @@ export default function StorefrontOrderTracking() {
                                         <strong>
                                             {
                                                 formatPrice(
-                                                    paymentAmount
+                                                    pendingPaymentAmount
                                                 )
                                             }
                                         </strong>
@@ -1469,18 +1653,61 @@ export default function StorefrontOrderTracking() {
 
 
                                 {/* Payment method */}
-                                {payment && (
+                                {paymentReceived && (
 
                                     <small className="d-block mt-3">
 
-                                        {
-                                            payment.payment_method ===
-                                                "Manual"
-                                                ? "Manual Interac e-Transfer"
-                                                : "Paid via Stripe"
+                                        {hasStripePayment &&
+                                            hasManualPayment
+                                            ? "Payments received through Manual Payment and Stripe"
+                                            : hasStripePayment
+                                                ? "Paid securely via Stripe"
+                                                : "Manual Interac e-Transfer"
                                         }
 
                                     </small>
+
+                                )}
+
+
+                                {/* Pay remaining Balance through Stripe */}
+                                {canPayRemainingBalance && (
+
+                                    <div className="mt-3">
+
+                                        <button
+                                            type="button"
+                                            onClick={
+                                                handlePayRemainingBalance
+                                            }
+                                            disabled={
+                                                isPayingBalance
+                                            }
+                                            className="storefront-tracking-payment-button w-100"
+                                        >
+
+                                            {isPayingBalance
+                                                ? "Opening secure payment..."
+                                                : `Pay remaining balance · ${formatPrice(
+                                                    remainingBalance
+                                                )}`
+                                            }
+
+                                        </button>
+
+
+                                        {/* Stripe trust badge */}
+                                        <div className="text-center mt-2">
+
+                                            <img
+                                                src="/stripe/powered-by-stripe.svg"
+                                                alt="Powered by Stripe"
+                                                height="22"
+                                            />
+
+                                        </div>
+
+                                    </div>
 
                                 )}
 

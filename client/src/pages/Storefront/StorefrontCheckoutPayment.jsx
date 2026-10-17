@@ -1,12 +1,28 @@
 import API_URL from "../../config/api.js";
+
 //Import React hooks
-import { useEffect, useMemo, useState } from "react";
+import {
+    useEffect,
+    useMemo,
+    useState
+} from "react";
 
 //Import React Router tools
-import { Link, useNavigate, useParams } from "react-router-dom";
+import {
+    Link,
+    useNavigate,
+    useParams
+} from "react-router-dom";
 
 //Import Checkout icons
-import { ArrowLeft, CalendarDays, Check, CreditCard, ShoppingBag } from "lucide-react";
+import {
+    ArrowLeft,
+    CalendarDays,
+    Check,
+    CreditCard,
+    ShieldCheck,
+    ShoppingBag
+} from "lucide-react";
 
 //Import Cart hook
 import { useCart } from "../../context/useCart";
@@ -29,8 +45,10 @@ export default function StorefrontCheckoutPayment() {
     const { slug } = useParams();
     const navigate = useNavigate();
 
+
     //Get Cart information
     const { cartItems } = useCart();
+
 
     //Page data
     const [bakery, setBakery] = useState(null);
@@ -39,9 +57,11 @@ export default function StorefrontCheckoutPayment() {
     const [contact, setContact] = useState(null);
     const [orderNote, setOrderNote] = useState("");
 
+
     //Payment selections
     const [paymentChoice, setPaymentChoice] = useState("full");
     const [paymentMethod, setPaymentMethod] = useState("manual");
+
 
     //Page states
     const [isLoading, setIsLoading] = useState(true);
@@ -62,7 +82,11 @@ export default function StorefrontCheckoutPayment() {
 
     //Gets Customer authentication token
     function getToken() {
-        return localStorage.getItem("token") || sessionStorage.getItem("token");
+
+        return (
+            localStorage.getItem("token") ||
+            sessionStorage.getItem("token")
+        );
     }
 
 
@@ -71,7 +95,10 @@ export default function StorefrontCheckoutPayment() {
 
         return new Intl.NumberFormat("en-CA", {
             style: "currency",
-            currency: cartQuote?.currency || bakery?.currency || "CAD"
+            currency:
+                cartQuote?.currency ||
+                bakery?.currency ||
+                "CAD"
         }).format(Number(amount) || 0);
     }
 
@@ -81,7 +108,9 @@ export default function StorefrontCheckoutPayment() {
 
         if (!date) return "";
 
-        return new Date(`${date}T12:00:00`).toLocaleDateString("en-CA", {
+        return new Date(
+            `${date}T12:00:00`
+        ).toLocaleDateString("en-CA", {
             weekday: "short",
             month: "short",
             day: "numeric"
@@ -95,41 +124,61 @@ export default function StorefrontCheckoutPayment() {
         if (!time) return "";
 
         const [hour, minute] = time.split(":");
+
         const date = new Date();
 
-        date.setHours(Number(hour), Number(minute), 0, 0);
+        date.setHours(
+            Number(hour),
+            Number(minute),
+            0,
+            0
+        );
 
-        return date.toLocaleTimeString("en-US", {
-            hour: "numeric",
-            minute: "2-digit",
-            hour12: true
-        });
+        return date.toLocaleTimeString(
+            "en-US",
+            {
+                hour: "numeric",
+                minute: "2-digit",
+                hour12: true
+            }
+        );
     }
 
 
     //Get total Order price
-    const orderTotal = Number(cartQuote?.total || 0);
+    const orderTotal =
+        Number(cartQuote?.total || 0);
 
 
     //Get minimum amount due now
-    const depositAmount = Number(cartQuote?.amount_due_now || orderTotal);
+    const depositAmount =
+        Number(
+            cartQuote?.amount_due_now ||
+            orderTotal
+        );
 
 
     //Order has a Deposit when amount due now is less than total
-    const depositRequired = depositAmount < orderTotal;
+    const depositRequired =
+        depositAmount < orderTotal;
 
 
     //Amount Customer has selected to pay
     const selectedPaymentAmount =
-        paymentChoice === "deposit" && depositRequired
+        paymentChoice === "deposit" &&
+            depositRequired
             ? depositAmount
             : orderTotal;
 
 
     //Remaining balance after selected payment
     const remainingBalance =
-        paymentChoice === "deposit" && depositRequired
-            ? Math.max(0, orderTotal - depositAmount)
+        paymentChoice === "deposit" &&
+            depositRequired
+            ? Math.max(
+                0,
+                orderTotal - depositAmount
+            )
             : 0;
 
 
@@ -138,7 +187,9 @@ export default function StorefrontCheckoutPayment() {
         bakery?.address?.street,
         bakery?.address?.city,
         bakery?.address?.province
-    ].filter(Boolean).join(", ");
+    ]
+        .filter(Boolean)
+        .join(", ");
 
 
     //Loads Checkout information
@@ -148,45 +199,89 @@ export default function StorefrontCheckoutPayment() {
 
             const token = getToken();
 
+
             //Customer needs to be logged in
             if (!token) {
 
-                const returnTo = `/${slug}/checkout/payment`;
+                const returnTo =
+                    `/${slug}/checkout/payment`;
 
-                localStorage.setItem("authBakerySlug", slug);
-                localStorage.setItem("authReturnTo", returnTo);
+                localStorage.setItem(
+                    "authBakerySlug",
+                    slug
+                );
 
-                navigate(`/${slug}/login?redirect=${encodeURIComponent(returnTo)}`, {
-                    replace: true
-                });
+                localStorage.setItem(
+                    "authReturnTo",
+                    returnTo
+                );
+
+                navigate(
+                    `/${slug}/login?redirect=${encodeURIComponent(returnTo)}`,
+                    {
+                        replace: true
+                    }
+                );
 
                 return;
             }
 
 
             //Get information saved by previous Checkout steps
-            const savedPickup = sessionStorage.getItem(`checkoutPickup:${slug}`);
-            const savedContact = sessionStorage.getItem(`checkoutContact:${slug}`);
-            const savedNote = sessionStorage.getItem(`checkoutNote:${slug}`);
+            const savedPickup =
+                sessionStorage.getItem(
+                    `checkoutPickup:${slug}`
+                );
+
+            const savedContact =
+                sessionStorage.getItem(
+                    `checkoutContact:${slug}`
+                );
+
+            const savedNote =
+                sessionStorage.getItem(
+                    `checkoutNote:${slug}`
+                );
 
 
             //Pickup must be completed first
             if (!savedPickup) {
-                navigate(`/${slug}/checkout`, { replace: true });
+
+                navigate(
+                    `/${slug}/checkout`,
+                    {
+                        replace: true
+                    }
+                );
+
                 return;
             }
 
 
             //Contact Details must be completed first
             if (!savedContact) {
-                navigate(`/${slug}/checkout/details`, { replace: true });
+
+                navigate(
+                    `/${slug}/checkout/details`,
+                    {
+                        replace: true
+                    }
+                );
+
                 return;
             }
 
 
             //Cart cannot be empty
             if (bakeryCartItems.length === 0) {
-                navigate(`/${slug}/cart`, { replace: true });
+
+                navigate(
+                    `/${slug}/cart`,
+                    {
+                        replace: true
+                    }
+                );
+
                 return;
             }
 
@@ -195,76 +290,143 @@ export default function StorefrontCheckoutPayment() {
 
                 setError("");
 
+
                 //Restore Checkout information
-                setPickup(JSON.parse(savedPickup));
-                setContact(JSON.parse(savedContact));
-                setOrderNote(savedNote || "");
+                setPickup(
+                    JSON.parse(savedPickup)
+                );
+
+                setContact(
+                    JSON.parse(savedContact)
+                );
+
+                setOrderNote(
+                    savedNote || ""
+                );
 
 
                 //Load Bakery
-                const bakeryResponse = await fetch(
-                    `${API_URL}/api/bakeries/public/${slug}`
-                );
+                const bakeryResponse =
+                    await fetch(
+                        `${API_URL}/api/bakeries/public/${slug}`
+                    );
 
-                const bakeryData = await bakeryResponse.json();
+
+                const bakeryData =
+                    await bakeryResponse.json();
 
 
                 if (!bakeryResponse.ok) {
+
                     throw new Error(
-                        bakeryData.message || "Unable to load Bakery"
+                        bakeryData.message ||
+                        "Unable to load Bakery"
                     );
                 }
 
 
-                setBakery(bakeryData.bakery);
-
-
-                //Make sure Customer login is still valid
-                const customerResponse = await fetch(
-                    `${API_URL}/api/auth/me`,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        }
-                    }
+                setBakery(
+                    bakeryData.bakery
                 );
 
 
-                if (customerResponse.status === 401) {
+                //Use Stripe by default when Manual Payment is not available
+                if (
+                    !bakeryData.bakery
+                        .allow_manual_payment &&
+                    bakeryData.bakery
+                        .stripe_charges_enabled
+                ) {
 
-                    localStorage.removeItem("token");
-                    localStorage.removeItem("user");
+                    setPaymentMethod(
+                        "stripe"
+                    );
+                }
 
-                    sessionStorage.removeItem("token");
-                    sessionStorage.removeItem("user");
 
-                    const returnTo = `/${slug}/checkout/payment`;
+                //Make sure Customer login is still valid
+                const customerResponse =
+                    await fetch(
+                        `${API_URL}/api/auth/me`,
+                        {
+                            headers: {
+                                Authorization:
+                                    `Bearer ${token}`
+                            }
+                        }
+                    );
 
-                    localStorage.setItem("authBakerySlug", slug);
-                    localStorage.setItem("authReturnTo", returnTo);
 
-                    navigate(`/${slug}/login?redirect=${encodeURIComponent(returnTo)}`, {
-                        replace: true
-                    });
+                if (
+                    customerResponse.status === 401
+                ) {
+
+                    localStorage.removeItem(
+                        "token"
+                    );
+
+                    localStorage.removeItem(
+                        "user"
+                    );
+
+                    sessionStorage.removeItem(
+                        "token"
+                    );
+
+                    sessionStorage.removeItem(
+                        "user"
+                    );
+
+
+                    const returnTo =
+                        `/${slug}/checkout/payment`;
+
+
+                    localStorage.setItem(
+                        "authBakerySlug",
+                        slug
+                    );
+
+                    localStorage.setItem(
+                        "authReturnTo",
+                        returnTo
+                    );
+
+
+                    navigate(
+                        `/${slug}/login?redirect=${encodeURIComponent(returnTo)}`,
+                        {
+                            replace: true
+                        }
+                    );
 
                     return;
                 }
 
 
-                const customerData = await customerResponse.json();
+                const customerData =
+                    await customerResponse.json();
 
 
                 if (!customerResponse.ok) {
+
                     throw new Error(
-                        customerData.message || "Unable to verify Customer"
+                        customerData.message ||
+                        "Unable to verify Customer"
                     );
                 }
 
 
-                const customer = customerData.user || customerData;
+                const customer =
+                    customerData.user ||
+                    customerData;
 
 
-                if (customer.role !== "customer") {
+                if (
+                    customer.role !==
+                    "customer"
+                ) {
+
                     throw new Error(
                         "Please sign in with a Customer account"
                     );
@@ -272,57 +434,90 @@ export default function StorefrontCheckoutPayment() {
 
 
                 //Create trusted Cart quote request
-                const items = bakeryCartItems.map((item) => ({
-                    product_id: item.product_id,
-                    quantity: item.quantity,
-                    customization_option_ids: item.customization_option_ids
-                }));
+                const items =
+                    bakeryCartItems.map(
+                        (item) => ({
+                            product_id:
+                                item.product_id,
+
+                            quantity:
+                                item.quantity,
+
+                            customization_option_ids:
+                                item.customization_option_ids
+                        })
+                    );
 
 
                 //Load trusted Backend Cart pricing
-                const quoteResponse = await fetch(
-                    `${API_URL}/api/bakeries/public/${slug}/cart/quote`,
-                    {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({
-                            items: items
-                        })
-                    }
-                );
+                const quoteResponse =
+                    await fetch(
+                        `${API_URL}/api/bakeries/public/${slug}/cart/quote`,
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body:
+                                JSON.stringify({
+                                    items: items
+                                })
+                        }
+                    );
 
 
-                const quoteData = await quoteResponse.json();
+                const quoteData =
+                    await quoteResponse.json();
 
 
                 if (!quoteResponse.ok) {
+
                     throw new Error(
                         quoteData.message ||
-                        quoteData.errors?.[0]?.msg ||
+                        quoteData.errors?.[0]
+                            ?.msg ||
                         "Unable to verify Cart"
                     );
                 }
 
 
-                setCartQuote(quoteData.quote);
+                setCartQuote(
+                    quoteData.quote
+                );
 
 
                 //Use Deposit as default when one is required
                 if (
-                    Number(quoteData.quote.amount_due_now) <
-                    Number(quoteData.quote.total)
+                    Number(
+                        quoteData.quote
+                            .amount_due_now
+                    ) <
+                    Number(
+                        quoteData.quote
+                            .total
+                    )
                 ) {
-                    setPaymentChoice("deposit");
+
+                    setPaymentChoice(
+                        "deposit"
+                    );
+
                 } else {
-                    setPaymentChoice("full");
+
+                    setPaymentChoice(
+                        "full"
+                    );
                 }
 
 
             } catch (error) {
 
-                setError(error.message);
+                setError(
+                    error.message
+                );
 
             } finally {
 
@@ -333,10 +528,14 @@ export default function StorefrontCheckoutPayment() {
 
         loadPaymentPage();
 
-    }, [slug, bakeryCartItems, navigate]);
+    }, [
+        slug,
+        bakeryCartItems,
+        navigate
+    ]);
 
 
-    //Creates the Order and Manual Payment
+    //Creates the Order and starts the selected Payment method
     async function handlePlaceOrder() {
 
         if (isSubmitting) {
@@ -354,13 +553,41 @@ export default function StorefrontCheckoutPayment() {
             !contact ||
             !cartQuote
         ) {
-            setError("Checkout information is incomplete.");
+
+            setError(
+                "Checkout information is incomplete."
+            );
+
             return;
         }
 
 
-        if (!bakery.allow_manual_payment) {
-            setError("Manual payment is not available for this Bakery.");
+        //Make sure the selected Payment method is available
+        if (
+            paymentMethod ===
+            "manual" &&
+            !bakery.allow_manual_payment
+        ) {
+
+            setError(
+                "Manual payment is not available for this Bakery."
+            );
+
+            return;
+        }
+
+
+        //Make sure Stripe is available for this Bakery
+        if (
+            paymentMethod ===
+            "stripe" &&
+            !bakery.stripe_charges_enabled
+        ) {
+
+            setError(
+                "Stripe payment is not available for this Bakery."
+            );
+
             return;
         }
 
@@ -375,83 +602,113 @@ export default function StorefrontCheckoutPayment() {
                 If the Order was already created but Payment failed,
                 reuse the existing Order instead of creating a duplicate.
             */
-            let orderId = sessionStorage.getItem(
-                `checkoutOrderId:${slug}`
-            );
+            let orderId =
+                sessionStorage.getItem(
+                    `checkoutOrderId:${slug}`
+                );
 
-            let orderNumber = sessionStorage.getItem(
-                `checkoutOrderNumber:${slug}`
-            );
+            let orderNumber =
+                sessionStorage.getItem(
+                    `checkoutOrderNumber:${slug}`
+                );
 
 
             //Create the Order only when it has not already been created
             if (!orderId) {
 
                 //Prepare Order items
-                const items = bakeryCartItems.map((item) => ({
-                    product_id: item.product_id,
-                    quantity: item.quantity,
-                    customization_option_ids: item.customization_option_ids,
-                    special_notes: item.special_notes || ""
-                }));
+                const items =
+                    bakeryCartItems.map(
+                        (item) => ({
+                            product_id:
+                                item.product_id,
+
+                            quantity:
+                                item.quantity,
+
+                            customization_option_ids:
+                                item.customization_option_ids,
+
+                            special_notes:
+                                item.special_notes ||
+                                ""
+                        })
+                    );
 
 
                 //Create Order
-                const orderResponse = await fetch(
-                    `${API_URL}/api/orders`,
-                    {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                            Authorization: `Bearer ${token}`
-                        },
-                        body: JSON.stringify({
+                const orderResponse =
+                    await fetch(
+                        `${API_URL}/api/orders`,
+                        {
+                            method: "POST",
 
-                            bakery_id: bakery._id,
+                            headers: {
+                                "Content-Type":
+                                    "application/json",
 
-                            pickup_slot_id:
-                                pickup.pickup_slot_id,
-
-                            pickup_time:
-                                pickup.time,
-
-                            contact: {
-                                first_name:
-                                    contact.first_name,
-
-                                last_name:
-                                    contact.last_name,
-
-                                email:
-                                    contact.email,
-
-                                phone_number:
-                                    contact.phone_number
+                                Authorization:
+                                    `Bearer ${token}`
                             },
 
-                            bakery_note:
-                                orderNote,
+                            body:
+                                JSON.stringify({
 
-                            items: items
-                        })
-                    }
-                );
+                                    bakery_id:
+                                        bakery._id,
+
+                                    pickup_slot_id:
+                                        pickup.pickup_slot_id,
+
+                                    pickup_time:
+                                        pickup.time,
+
+                                    contact: {
+
+                                        first_name:
+                                            contact.first_name,
+
+                                        last_name:
+                                            contact.last_name,
+
+                                        email:
+                                            contact.email,
+
+                                        phone_number:
+                                            contact.phone_number
+                                    },
+
+                                    bakery_note:
+                                        orderNote,
+
+                                    items:
+                                        items
+                                })
+                        }
+                    );
 
 
-                const orderData = await orderResponse.json();
+                const orderData =
+                    await orderResponse.json();
 
 
                 if (!orderResponse.ok) {
+
                     throw new Error(
                         orderData.message ||
-                        orderData.errors?.[0]?.msg ||
+                        orderData.errors?.[0]
+                            ?.msg ||
                         "Unable to create Order"
                     );
                 }
 
 
-                orderId = orderData.order._id;
-                orderNumber = orderData.order.order_number;
+                orderId =
+                    orderData.order._id;
+
+                orderNumber =
+                    orderData.order
+                        .order_number;
 
 
                 //Remember created Order in case Payment request fails
@@ -468,71 +725,198 @@ export default function StorefrontCheckoutPayment() {
 
 
             //Create Manual Payment
-            const paymentResponse = await fetch(
-                `${API_URL}/api/payments/manual`,
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`
-                    },
-                    body: JSON.stringify({
-                        order_id: orderId,
-                        payment_choice: paymentChoice
-                    })
-                }
-            );
-
-
-            const paymentData = await paymentResponse.json();
-
-
-            /*
-                If a Payment already exists, the Order was already
-                successfully submitted during a previous request.
-            */
             if (
-                !paymentResponse.ok &&
-                paymentResponse.status !== 409
+                paymentMethod ===
+                "manual"
             ) {
-                throw new Error(
-                    paymentData.message ||
-                    paymentData.errors?.[0]?.msg ||
-                    "Unable to create Payment"
+
+                const paymentResponse =
+                    await fetch(
+                        `${API_URL}/api/payments/manual`,
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json",
+
+                                Authorization:
+                                    `Bearer ${token}`
+                            },
+
+                            body:
+                                JSON.stringify({
+                                    order_id:
+                                        orderId,
+
+                                    payment_choice:
+                                        paymentChoice
+                                })
+                        }
+                    );
+
+
+                const paymentData =
+                    await paymentResponse.json();
+
+
+                /*
+                    If a Payment already exists, the Order was already
+                    successfully submitted during a previous request.
+                */
+                if (
+                    !paymentResponse.ok &&
+                    paymentResponse.status !==
+                    409
+                ) {
+
+                    throw new Error(
+                        paymentData.message ||
+                        paymentData.errors?.[0]
+                            ?.msg ||
+                        "Unable to create Payment"
+                    );
+                }
+
+
+                //Save Confirmation information
+                sessionStorage.setItem(
+                    `checkoutConfirmation:${slug}`,
+                    JSON.stringify({
+                        order_id:
+                            orderId,
+
+                        order_number:
+                            orderNumber,
+
+                        payment_choice:
+                            paymentChoice,
+
+                        payment_method:
+                            "manual",
+
+                        amount:
+                            selectedPaymentAmount
+                    })
                 );
+
+
+                //Remove temporary Checkout information
+                sessionStorage.removeItem(
+                    `checkoutPickup:${slug}`
+                );
+
+                sessionStorage.removeItem(
+                    `checkoutContact:${slug}`
+                );
+
+                sessionStorage.removeItem(
+                    `checkoutNote:${slug}`
+                );
+
+                sessionStorage.removeItem(
+                    `checkoutOrderId:${slug}`
+                );
+
+                sessionStorage.removeItem(
+                    `checkoutOrderNumber:${slug}`
+                );
+
+
+                //Go to Order Confirmation
+                navigate(
+                    `/${slug}/order/${orderId}/confirmed`
+                );
+
+                return;
             }
 
 
-            //Save Confirmation information
-            sessionStorage.setItem(
-                `checkoutConfirmation:${slug}`,
-                JSON.stringify({
-                    order_id: orderId,
-                    order_number: orderNumber,
-                    payment_choice: paymentChoice,
-                    payment_method: paymentMethod,
-                    amount: selectedPaymentAmount
-                })
-            );
+            //Create Stripe Checkout Session
+            if (
+                paymentMethod ===
+                "stripe"
+            ) {
+
+                const stripeResponse =
+                    await fetch(
+                        `${API_URL}/api/payments/stripe/checkout`,
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json",
+
+                                Authorization:
+                                    `Bearer ${token}`
+                            },
+
+                            body:
+                                JSON.stringify({
+                                    order_id:
+                                        orderId,
+
+                                    payment_choice:
+                                        paymentChoice
+                                })
+                        }
+                    );
 
 
-            //Remove temporary Checkout information
-            sessionStorage.removeItem(`checkoutPickup:${slug}`);
-            sessionStorage.removeItem(`checkoutContact:${slug}`);
-            sessionStorage.removeItem(`checkoutNote:${slug}`);
-            sessionStorage.removeItem(`checkoutOrderId:${slug}`);
-            sessionStorage.removeItem(`checkoutOrderNumber:${slug}`);
+                const stripeData =
+                    await stripeResponse.json();
 
 
-            //Go to Order Confirmation
-            navigate(
-                `/${slug}/order/${orderId}/confirmed`
-            );
+                //Stop if Stripe Checkout could not be created
+                if (
+                    !stripeResponse.ok
+                ) {
+
+                    throw new Error(
+                        stripeData.message ||
+                        stripeData.errors?.[0]
+                            ?.msg ||
+                        "Unable to start Stripe Checkout"
+                    );
+                }
+
+
+                //Save Stripe Checkout information
+                sessionStorage.setItem(
+                    `checkoutConfirmation:${slug}`,
+                    JSON.stringify({
+                        order_id:
+                            orderId,
+
+                        order_number:
+                            orderNumber,
+
+                        payment_choice:
+                            paymentChoice,
+
+                        payment_method:
+                            "stripe",
+
+                        amount:
+                            selectedPaymentAmount
+                    })
+                );
+
+
+                //Send Customer to Stripe Checkout
+                window.location.href =
+                    stripeData.checkout_url;
+
+                return;
+            }
 
 
         } catch (error) {
 
-            setError(error.message);
+            setError(
+                error.message
+            );
 
         } finally {
 
@@ -547,7 +931,10 @@ export default function StorefrontCheckoutPayment() {
         return (
             <div className="storefront-payment-loading d-flex align-items-center justify-content-center">
 
-                <div className="spinner-border" role="status">
+                <div
+                    className="spinner-border"
+                    role="status"
+                >
                     <span className="visually-hidden">
                         Loading Payment...
                     </span>
@@ -559,7 +946,10 @@ export default function StorefrontCheckoutPayment() {
 
 
     //Page error
-    if (error && (!bakery || !cartQuote)) {
+    if (
+        error &&
+        (!bakery || !cartQuote)
+    ) {
 
         return (
             <div className="storefront-payment-loading d-flex flex-column align-items-center justify-content-center gap-3 text-center p-4">
@@ -568,7 +958,9 @@ export default function StorefrontCheckoutPayment() {
                     Payment unavailable
                 </h1>
 
-                <p>{error}</p>
+                <p>
+                    {error}
+                </p>
 
                 <Link
                     to={`/${slug}/checkout/details`}
@@ -586,11 +978,17 @@ export default function StorefrontCheckoutPayment() {
 
         <div
             className="storefront-payment-page min-vh-100 d-flex flex-column"
-            style={getStorefrontTheme(bakery)}
+            style={
+                getStorefrontTheme(
+                    bakery
+                )
+            }
         >
 
             {/* Shared Storefront Navbar */}
-            <StorefrontNavbar bakery={bakery} />
+            <StorefrontNavbar
+                bakery={bakery}
+            />
 
 
             <main className="storefront-payment-main flex-grow-1">
@@ -605,9 +1003,13 @@ export default function StorefrontCheckoutPayment() {
                             to={`/${slug}/checkout/details`}
                             className="storefront-payment-back d-flex align-items-center gap-2 text-decoration-none"
                         >
-                            <ArrowLeft size={15} />
+                            <ArrowLeft
+                                size={15}
+                            />
+
                             Back
                         </Link>
+
 
                         <span>
                             Contact details
@@ -652,9 +1054,14 @@ export default function StorefrontCheckoutPayment() {
                                         {/* Deposit */}
                                         <button
                                             type="button"
-                                            onClick={() => setPaymentChoice("deposit")}
+                                            onClick={() =>
+                                                setPaymentChoice(
+                                                    "deposit"
+                                                )
+                                            }
                                             className={
-                                                paymentChoice === "deposit"
+                                                paymentChoice ===
+                                                    "deposit"
                                                     ? "storefront-payment-option storefront-payment-option-selected"
                                                     : "storefront-payment-option"
                                             }
@@ -663,10 +1070,18 @@ export default function StorefrontCheckoutPayment() {
                                             <div className="d-flex align-items-start gap-3">
 
                                                 <div className="storefront-payment-radio">
-                                                    {paymentChoice === "deposit" && (
-                                                        <Check size={12} />
-                                                    )}
+
+                                                    {paymentChoice ===
+                                                        "deposit" && (
+                                                            <Check
+                                                                size={
+                                                                    12
+                                                                }
+                                                            />
+                                                        )}
+
                                                 </div>
+
 
                                                 <div>
 
@@ -682,8 +1097,11 @@ export default function StorefrontCheckoutPayment() {
 
                                             </div>
 
+
                                             <strong>
-                                                {formatPrice(depositAmount)}
+                                                {formatPrice(
+                                                    depositAmount
+                                                )}
                                             </strong>
 
                                         </button>
@@ -692,9 +1110,14 @@ export default function StorefrontCheckoutPayment() {
                                         {/* Full Payment */}
                                         <button
                                             type="button"
-                                            onClick={() => setPaymentChoice("full")}
+                                            onClick={() =>
+                                                setPaymentChoice(
+                                                    "full"
+                                                )
+                                            }
                                             className={
-                                                paymentChoice === "full"
+                                                paymentChoice ===
+                                                    "full"
                                                     ? "storefront-payment-option storefront-payment-option-selected"
                                                     : "storefront-payment-option"
                                             }
@@ -703,10 +1126,18 @@ export default function StorefrontCheckoutPayment() {
                                             <div className="d-flex align-items-start gap-3">
 
                                                 <div className="storefront-payment-radio">
-                                                    {paymentChoice === "full" && (
-                                                        <Check size={12} />
-                                                    )}
+
+                                                    {paymentChoice ===
+                                                        "full" && (
+                                                            <Check
+                                                                size={
+                                                                    12
+                                                                }
+                                                            />
+                                                        )}
+
                                                 </div>
+
 
                                                 <div>
 
@@ -722,8 +1153,11 @@ export default function StorefrontCheckoutPayment() {
 
                                             </div>
 
+
                                             <strong>
-                                                {formatPrice(orderTotal)}
+                                                {formatPrice(
+                                                    orderTotal
+                                                )}
                                             </strong>
 
                                         </button>
@@ -747,8 +1181,11 @@ export default function StorefrontCheckoutPayment() {
 
                                         </div>
 
+
                                         <strong className="storefront-payment-big-price">
-                                            {formatPrice(orderTotal)}
+                                            {formatPrice(
+                                                orderTotal
+                                            )}
                                         </strong>
 
                                     </div>
@@ -775,15 +1212,31 @@ export default function StorefrontCheckoutPayment() {
 
                                     <button
                                         type="button"
-                                        onClick={() => setPaymentMethod("manual")}
-                                        className="storefront-payment-method storefront-payment-method-selected w-100"
+                                        onClick={() =>
+                                            setPaymentMethod(
+                                                "manual"
+                                            )
+                                        }
+                                        className={
+                                            paymentMethod ===
+                                                "manual"
+                                                ? "storefront-payment-method storefront-payment-method-selected w-100"
+                                                : "storefront-payment-method w-100"
+                                        }
                                     >
 
                                         <div className="d-flex align-items-center gap-3">
 
                                             <div className="storefront-payment-method-icon">
-                                                <CreditCard size={18} />
+
+                                                <CreditCard
+                                                    size={
+                                                        18
+                                                    }
+                                                />
+
                                             </div>
+
 
                                             <div className="text-start">
 
@@ -799,8 +1252,84 @@ export default function StorefrontCheckoutPayment() {
 
                                         </div>
 
+
                                         <div className="storefront-payment-radio">
-                                            <Check size={12} />
+
+                                            {paymentMethod ===
+                                                "manual" && (
+                                                    <Check
+                                                        size={
+                                                            12
+                                                        }
+                                                    />
+                                                )}
+
+                                        </div>
+
+                                    </button>
+
+                                )}
+
+
+                                {/* Stripe Payment */}
+                                {bakery?.stripe_charges_enabled && (
+
+                                    <button
+                                        type="button"
+                                        onClick={() =>
+                                            setPaymentMethod("stripe")
+                                        }
+                                        className={
+                                            paymentMethod === "stripe"
+                                                ? "storefront-payment-method storefront-payment-method-stripe storefront-payment-method-selected w-100 mt-3"
+                                                : "storefront-payment-method storefront-payment-method-stripe w-100 mt-3"
+                                        }
+                                    >
+
+                                        <div className="d-flex align-items-center justify-content-between gap-3 w-100">
+
+                                            <div className="d-flex align-items-center gap-3 text-start">
+
+                                                {/* Secure Stripe icon */}
+                                                <div className="storefront-payment-stripe-icon d-flex align-items-center justify-content-center flex-shrink-0">
+
+                                                    <ShieldCheck size={21} />
+
+                                                </div>
+
+
+                                                <div>
+
+                                                    <strong className="d-block storefront-payment-stripe-title">
+                                                        Pay securely by card
+                                                    </strong>
+
+                                                    <small className="d-block storefront-payment-stripe-text">
+                                                        Secure payment processed by Stripe.
+                                                    </small>
+
+
+                                                    {/* Official Powered by Stripe badge */}
+                                                    <img
+                                                        src="/stripe/powered-by-stripe.svg"
+                                                        alt="Powered by Stripe"
+                                                        className="storefront-payment-stripe-badge mt-2"
+                                                    />
+
+                                                </div>
+
+                                            </div>
+
+
+                                            {/* Selected Payment indicator */}
+                                            <div className="storefront-payment-radio flex-shrink-0">
+
+                                                {paymentMethod === "stripe" && (
+                                                    <Check size={12} />
+                                                )}
+
+                                            </div>
+
                                         </div>
 
                                     </button>
@@ -809,32 +1338,75 @@ export default function StorefrontCheckoutPayment() {
 
 
                                 {/* Manual payment information */}
-                                {paymentMethod === "manual" && bakery?.allow_manual_payment && (
+                                {paymentMethod ===
+                                    "manual" &&
+                                    bakery?.allow_manual_payment && (
 
-                                    <div className="storefront-payment-manual-info mt-3">
+                                        <div className="storefront-payment-manual-info mt-3">
 
-                                        <strong className="d-block mb-1">
-                                            Payment instructions
-                                        </strong>
-
-                                        <p className="mb-2">
-                                            After placing your Order, follow the Bakery's payment instructions to complete your payment.
-                                        </p>
-
-                                        <span>
-                                            Amount to send:
-                                            <strong className="ms-1">
-                                                {formatPrice(selectedPaymentAmount)}
+                                            <strong className="d-block mb-1">
+                                                Payment instructions
                                             </strong>
-                                        </span>
 
-                                        <small className="d-block mt-2">
-                                            Your payment will remain pending until the Bakery confirms that it has been received.
-                                        </small>
+                                            <p className="mb-2">
+                                                After placing your Order, follow the Bakery's payment instructions to complete your payment.
+                                            </p>
 
-                                    </div>
+                                            <span>
+                                                Amount to send:
 
-                                )}
+                                                <strong className="ms-1">
+                                                    {formatPrice(
+                                                        selectedPaymentAmount
+                                                    )}
+                                                </strong>
+                                            </span>
+
+                                            <small className="d-block mt-2">
+                                                Your payment will remain pending until the Bakery confirms that it has been received.
+                                            </small>
+
+                                        </div>
+
+                                    )}
+
+
+                                {/* Stripe payment information */}
+                                {paymentMethod === "stripe" &&
+                                    bakery?.stripe_charges_enabled && (
+
+                                        <div className="storefront-payment-stripe-info mt-3">
+
+                                            <div className="d-flex align-items-start gap-3">
+
+                                                <ShieldCheck
+                                                    size={20}
+                                                    className="storefront-payment-stripe-info-icon flex-shrink-0 mt-1"
+                                                />
+
+
+                                                <div>
+
+                                                    <strong className="d-block mb-1">
+                                                        Secure checkout
+                                                    </strong>
+
+                                                    <small className="d-block">
+                                                        You will be redirected to Stripe's secure
+                                                        checkout to complete your payment.
+                                                    </small>
+
+                                                    <small className="d-block mt-1 storefront-payment-stripe-muted">
+                                                        Bakeau does not store your card details.
+                                                    </small>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    )}
 
                             </section>
 
@@ -852,17 +1424,37 @@ export default function StorefrontCheckoutPayment() {
                             {/* Place Order */}
                             <button
                                 type="button"
-                                onClick={handlePlaceOrder}
+                                onClick={
+                                    handlePlaceOrder
+                                }
                                 disabled={
                                     isSubmitting ||
-                                    !bakery?.allow_manual_payment
+                                    (
+                                        paymentMethod ===
+                                        "manual" &&
+                                        !bakery
+                                            ?.allow_manual_payment
+                                    ) ||
+                                    (
+                                        paymentMethod ===
+                                        "stripe" &&
+                                        !bakery
+                                            ?.stripe_charges_enabled
+                                    )
                                 }
                                 className="storefront-payment-primary-button w-100"
                             >
 
                                 {isSubmitting
-                                    ? "Placing order..."
-                                    : `Place order · ${formatPrice(selectedPaymentAmount)}`
+                                    ? "Processing..."
+                                    : paymentMethod ===
+                                        "stripe"
+                                        ? `Continue to secure payment · ${formatPrice(
+                                            selectedPaymentAmount
+                                        )}`
+                                        : `Place order · ${formatPrice(
+                                            selectedPaymentAmount
+                                        )}`
                                 }
 
                             </button>
@@ -881,66 +1473,100 @@ export default function StorefrontCheckoutPayment() {
 
 
                                 {/* Products */}
-                                {bakeryCartItems.map((item, index) => {
+                                {bakeryCartItems.map(
+                                    (
+                                        item,
+                                        index
+                                    ) => {
 
-                                    const quotedItem =
-                                        cartQuote?.items?.[index];
-
-
-                                    return (
-
-                                        <div
-                                            key={item.cart_item_id}
-                                            className="storefront-payment-product mb-3"
-                                        >
-
-                                            {item.product_image_url ? (
-
-                                                <img
-                                                    src={item.product_image_url}
-                                                    alt={item.product_name}
-                                                    className="storefront-payment-product-image"
-                                                />
-
-                                            ) : (
-
-                                                <div className="storefront-payment-product-placeholder d-flex align-items-center justify-content-center">
-
-                                                    <ShoppingBag size={18} />
-
-                                                </div>
-
-                                            )}
+                                        const quotedItem =
+                                            cartQuote
+                                                ?.items?.[
+                                            index
+                                            ];
 
 
-                                            <div>
+                                        return (
 
-                                                <strong className="storefront-payment-product-name d-block">
-                                                    {item.product_name}
-                                                </strong>
+                                            <div
+                                                key={
+                                                    item.cart_item_id
+                                                }
+                                                className="storefront-payment-product mb-3"
+                                            >
 
-                                                <small className="storefront-payment-product-info">
-                                                    Qty {item.quantity}
-                                                </small>
+                                                {item.product_image_url ? (
 
+                                                    <img
+                                                        src={
+                                                            item.product_image_url
+                                                        }
+                                                        alt={
+                                                            item.product_name
+                                                        }
+                                                        className="storefront-payment-product-image"
+                                                    />
 
-                                                {quotedItem?.customizations?.length > 0 && (
+                                                ) : (
 
-                                                    <small className="storefront-payment-product-info d-block">
+                                                    <div className="storefront-payment-product-placeholder d-flex align-items-center justify-content-center">
 
-                                                        {quotedItem.customizations
-                                                            .map((option) => option.option_name)
-                                                            .join(" · ")}
+                                                        <ShoppingBag
+                                                            size={
+                                                                18
+                                                            }
+                                                        />
 
-                                                    </small>
+                                                    </div>
 
                                                 )}
 
-                                            </div>
 
-                                        </div>
-                                    );
-                                })}
+                                                <div>
+
+                                                    <strong className="storefront-payment-product-name d-block">
+                                                        {
+                                                            item.product_name
+                                                        }
+                                                    </strong>
+
+                                                    <small className="storefront-payment-product-info">
+                                                        Qty{" "}
+                                                        {
+                                                            item.quantity
+                                                        }
+                                                    </small>
+
+
+                                                    {quotedItem
+                                                        ?.customizations
+                                                        ?.length >
+                                                        0 && (
+
+                                                            <small className="storefront-payment-product-info d-block">
+
+                                                                {quotedItem
+                                                                    .customizations
+                                                                    .map(
+                                                                        (
+                                                                            option
+                                                                        ) =>
+                                                                            option.option_name
+                                                                    )
+                                                                    .join(
+                                                                        " · "
+                                                                    )}
+
+                                                            </small>
+
+                                                        )}
+
+                                                </div>
+
+                                            </div>
+                                        );
+                                    }
+                                )}
 
 
                                 {/* Pickup */}
@@ -948,7 +1574,11 @@ export default function StorefrontCheckoutPayment() {
 
                                     <div className="d-flex gap-2 mb-1">
 
-                                        <CalendarDays size={16} />
+                                        <CalendarDays
+                                            size={
+                                                16
+                                            }
+                                        />
 
                                         <strong>
                                             Pickup
@@ -956,16 +1586,29 @@ export default function StorefrontCheckoutPayment() {
 
                                     </div>
 
+
                                     <span className="d-block">
-                                        {formatPickupDate(pickup?.date)} at {formatPickupTime(pickup?.time)}
+
+                                        {formatPickupDate(
+                                            pickup?.date
+                                        )}{" "}
+                                        at{" "}
+                                        {formatPickupTime(
+                                            pickup?.time
+                                        )}
+
                                     </span>
 
+
                                     <small>
+
                                         {bakery?.name}
+
                                         {pickupAddress
                                             ? ` · ${pickupAddress}`
                                             : ""
                                         }
+
                                     </small>
 
                                 </div>
@@ -979,15 +1622,24 @@ export default function StorefrontCheckoutPayment() {
                                     </strong>
 
                                     <span className="d-block">
-                                        {contact?.first_name} {contact?.last_name}
+                                        {
+                                            contact?.first_name
+                                        }{" "}
+                                        {
+                                            contact?.last_name
+                                        }
                                     </span>
 
                                     <small className="d-block">
-                                        {contact?.email}
+                                        {
+                                            contact?.email
+                                        }
                                     </small>
 
                                     <small className="d-block">
-                                        {contact?.phone_number}
+                                        {
+                                            contact?.phone_number
+                                        }
                                     </small>
 
                                 </div>
@@ -998,63 +1650,78 @@ export default function StorefrontCheckoutPayment() {
 
                                 {/* Pricing */}
                                 <div className="d-flex justify-content-between mb-2">
+
                                     <span>
                                         Order total
                                     </span>
 
                                     <strong>
-                                        {formatPrice(orderTotal)}
+                                        {formatPrice(
+                                            orderTotal
+                                        )}
                                     </strong>
+
                                 </div>
 
 
-                                {depositRequired && paymentChoice === "deposit" && (
+                                {depositRequired &&
+                                    paymentChoice ===
+                                    "deposit" && (
 
-                                    <>
-                                        <div className="d-flex justify-content-between mb-2 storefront-payment-highlight">
+                                        <>
+
+                                            <div className="d-flex justify-content-between mb-2 storefront-payment-highlight">
+
+                                                <span>
+                                                    Due today
+                                                </span>
+
+                                                <strong>
+                                                    {formatPrice(
+                                                        depositAmount
+                                                    )}
+                                                </strong>
+
+                                            </div>
+
+
+                                            <div className="d-flex justify-content-between storefront-payment-muted">
+
+                                                <span>
+                                                    Remaining balance
+                                                </span>
+
+                                                <span>
+                                                    {formatPrice(
+                                                        remainingBalance
+                                                    )}
+                                                </span>
+
+                                            </div>
+
+                                        </>
+
+                                    )}
+
+
+                                {paymentChoice ===
+                                    "full" && (
+
+                                        <div className="d-flex justify-content-between storefront-payment-highlight">
 
                                             <span>
                                                 Due today
                                             </span>
 
                                             <strong>
-                                                {formatPrice(depositAmount)}
+                                                {formatPrice(
+                                                    orderTotal
+                                                )}
                                             </strong>
 
                                         </div>
 
-
-                                        <div className="d-flex justify-content-between storefront-payment-muted">
-
-                                            <span>
-                                                Remaining balance
-                                            </span>
-
-                                            <span>
-                                                {formatPrice(remainingBalance)}
-                                            </span>
-
-                                        </div>
-                                    </>
-
-                                )}
-
-
-                                {paymentChoice === "full" && (
-
-                                    <div className="d-flex justify-content-between storefront-payment-highlight">
-
-                                        <span>
-                                            Due today
-                                        </span>
-
-                                        <strong>
-                                            {formatPrice(orderTotal)}
-                                        </strong>
-
-                                    </div>
-
-                                )}
+                                    )}
 
                             </aside>
 
@@ -1068,7 +1735,9 @@ export default function StorefrontCheckoutPayment() {
 
 
             {/* Shared Storefront Footer */}
-            <StorefrontFooter bakery={bakery} />
+            <StorefrontFooter
+                bakery={bakery}
+            />
 
         </div>
     );

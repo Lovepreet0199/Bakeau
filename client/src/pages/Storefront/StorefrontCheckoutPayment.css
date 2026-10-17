@@ -364,6 +364,74 @@
     font-size: 11px;
 }
 
+/* Stripe Payment option */
+.storefront-payment-method-stripe {
+    border-color: #d9d6fe;
+    background-color: #ffffff;
+}
+
+
+/* Stripe Payment hover */
+.storefront-payment-method-stripe:hover {
+    border-color: #635bff;
+}
+
+
+/* Selected Stripe Payment */
+.storefront-payment-method-stripe.storefront-payment-method-selected {
+    border-color: #8b85ff;
+    background-color: #f8f7ff;
+    box-shadow: 0 0 0 1px #8b85ff;
+}
+
+/* Stripe secure icon */
+.storefront-payment-stripe-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 10px;
+    background-color: #f1efff;
+    color: #635bff;
+}
+
+
+/* Stripe Payment title */
+.storefront-payment-stripe-title {
+    color: #242424;
+}
+
+
+/* Stripe Payment description */
+.storefront-payment-stripe-text {
+    color: #6b6b6b;
+}
+
+
+/* Official Powered by Stripe badge */
+.storefront-payment-stripe-badge {
+    width: auto;
+    height: 25px;
+}
+
+
+/* Stripe security information */
+.storefront-payment-stripe-info {
+    padding: 16px;
+    border: 1px solid #dedcff;
+    border-radius: 10px;
+    background-color: #faf9ff;
+}
+
+
+/* Stripe security icon */
+.storefront-payment-stripe-info-icon {
+    color: #635bff;
+}
+
+
+/* Stripe information secondary text */
+.storefront-payment-stripe-muted {
+    color: #747474;
+}
 
 /* Tablet and Mobile */
 @media (max-width: 991.98px) {

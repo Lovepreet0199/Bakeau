@@ -3,7 +3,12 @@ import API_URL from "../../config/api.js";
 import { useEffect, useState } from "react";
 
 //Import React Router tools
-import { Link, useNavigate, useParams } from "react-router-dom";
+import {
+    Link,
+    useNavigate,
+    useParams,
+    useSearchParams
+} from "react-router-dom";
 
 //Import icons
 import { CalendarDays, Check, CreditCard, ShoppingBag } from "lucide-react";
@@ -25,6 +30,12 @@ export default function StorefrontOrderConfirmation() {
     //Get Bakery slug and Order ID
     const { slug, orderId } = useParams();
     const navigate = useNavigate();
+
+    //Get URL information returned from Stripe
+    const [searchParams] = useSearchParams();
+
+    //Get Stripe payment result from URL
+    const paymentResult = searchParams.get("payment");
 
     //Page data
     const [bakery, setBakery] = useState(null);
@@ -154,15 +165,37 @@ export default function StorefrontOrderConfirmation() {
 
                 const orderData = await orderResponse.json();
 
-
                 if (!orderResponse.ok) {
                     throw new Error(
                         orderData.message || "Unable to load Order"
                     );
                 }
 
-
                 setOrder(orderData.order);
+
+                //Remove temporary Checkout information after successful Stripe payment
+                if (paymentResult === "success") {
+
+                    sessionStorage.removeItem(
+                        `checkoutPickup:${slug}`
+                    );
+
+                    sessionStorage.removeItem(
+                        `checkoutContact:${slug}`
+                    );
+
+                    sessionStorage.removeItem(
+                        `checkoutNote:${slug}`
+                    );
+
+                    sessionStorage.removeItem(
+                        `checkoutOrderId:${slug}`
+                    );
+
+                    sessionStorage.removeItem(
+                        `checkoutOrderNumber:${slug}`
+                    );
+                }
 
 
             } catch (error) {
@@ -178,7 +211,7 @@ export default function StorefrontOrderConfirmation() {
 
         loadConfirmation();
 
-    }, [slug, orderId, navigate]);
+    }, [slug, orderId, navigate, paymentResult]);
 
 
     //Loading
@@ -222,20 +255,29 @@ export default function StorefrontOrderConfirmation() {
     }
 
 
-    //Amount selected during Checkout
-    const paymentAmount = Number(
-        confirmation?.amount ||
-        order.amount_due_now ||
-        order.total_price
-    );
+    //Check whether Stripe payment was successfully recorded
+    const isStripePaymentSuccessful =
+        paymentResult === "success" &&
+        Number(order.amount_paid || 0) > 0;
+
+
+    //Amount associated with this Payment
+    const paymentAmount =
+        isStripePaymentSuccessful
+            ? Number(order.amount_paid || 0)
+            : Number(
+                confirmation?.amount ||
+                order.amount_due_now ||
+                order.total_price
+            );
 
 
     //Remaining Order balance
     const remainingBalance = Math.max(
         0,
-        Number(order.total_price) - paymentAmount
+        Number(order.total_price) -
+        paymentAmount
     );
-
 
     //Pickup address
     const pickupAddress = [
@@ -386,54 +428,141 @@ export default function StorefrontOrderConfirmation() {
                                 <CreditCard size={15} />
 
                                 <strong>
-                                    Manual payment pending
+
+                                    {isStripePaymentSuccessful
+                                        ? "Stripe payment successful"
+                                        : "Manual payment pending"
+                                    }
+
                                 </strong>
 
                             </div>
 
 
-                            {remainingBalance > 0 ? (
+                            {/* Successful Stripe Payment */}
+                            {isStripePaymentSuccessful ? (
 
                                 <>
-                                    <div className="d-flex justify-content-between">
 
-                                        <span>
-                                            Deposit to pay
-                                        </span>
+                                    {remainingBalance > 0 ? (
 
-                                        <strong>
-                                            {formatPrice(paymentAmount)}
-                                        </strong>
+                                        <>
 
-                                    </div>
+                                            <div className="d-flex justify-content-between">
+
+                                                <span>
+                                                    Deposit paid
+                                                </span>
+
+                                                <strong>
+                                                    {formatPrice(
+                                                        paymentAmount
+                                                    )}
+                                                </strong>
+
+                                            </div>
 
 
-                                    <div className="d-flex justify-content-between">
+                                            <div className="d-flex justify-content-between">
 
-                                        <span>
-                                            Remaining balance
-                                        </span>
+                                                <span>
+                                                    Remaining balance
+                                                </span>
 
-                                        <span>
-                                            {formatPrice(remainingBalance)}
-                                        </span>
+                                                <span>
+                                                    {formatPrice(
+                                                        remainingBalance
+                                                    )}
+                                                </span>
 
-                                    </div>
+                                            </div>
+
+                                        </>
+
+                                    ) : (
+
+                                        <div className="d-flex justify-content-between">
+
+                                            <span>
+                                                Payment received
+                                            </span>
+
+                                            <strong>
+                                                {formatPrice(
+                                                    paymentAmount
+                                                )}
+                                            </strong>
+
+                                        </div>
+
+                                    )}
+
+
+                                    <small className="d-block mt-2">
+                                        Your payment was received securely through Stripe.
+                                    </small>
+
                                 </>
 
                             ) : (
 
-                                <div className="d-flex justify-content-between">
+                                /* Manual Payment */
+                                <>
 
-                                    <span>
-                                        Full payment
-                                    </span>
+                                    {remainingBalance > 0 ? (
 
-                                    <strong>
-                                        {formatPrice(paymentAmount)}
-                                    </strong>
+                                        <>
 
-                                </div>
+                                            <div className="d-flex justify-content-between">
+
+                                                <span>
+                                                    Deposit to pay
+                                                </span>
+
+                                                <strong>
+                                                    {formatPrice(
+                                                        paymentAmount
+                                                    )}
+                                                </strong>
+
+                                            </div>
+
+
+                                            <div className="d-flex justify-content-between">
+
+                                                <span>
+                                                    Remaining balance
+                                                </span>
+
+                                                <span>
+                                                    {formatPrice(
+                                                        remainingBalance
+                                                    )}
+                                                </span>
+
+                                            </div>
+
+                                        </>
+
+                                    ) : (
+
+                                        <div className="d-flex justify-content-between">
+
+                                            <span>
+                                                Full payment
+                                            </span>
+
+                                            <strong>
+                                                {formatPrice(
+                                                    paymentAmount
+                                                )}
+                                            </strong>
+
+                                        </div>
+
+                                    )}
+
+                                </>
 
                             )}
 

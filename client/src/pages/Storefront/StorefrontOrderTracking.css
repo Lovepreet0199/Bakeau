@@ -655,6 +655,29 @@
     color: #ffffff;
 }
 
+/* Remaining Balance Payment button */
+.storefront-tracking-payment-button {
+    border: none;
+    border-radius: 10px;
+    padding: 14px 18px;
+    background-color: var(--storefront-primary);
+    color: #ffffff;
+    font-weight: 600;
+}
+
+
+/* Remaining Balance Payment button hover */
+.storefront-tracking-payment-button:hover {
+    opacity: 0.92;
+}
+
+
+/* Disabled Remaining Balance Payment button */
+.storefront-tracking-payment-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
 /* Mobile */
 @media (max-width: 575.98px) {
 
