@@ -1,4 +1,5 @@
 import API_URL from "../../config/api.js";
+
 //Import React hooks
 import { useEffect, useState } from "react";
 
@@ -77,6 +78,9 @@ export default function BakeryOrderDetails() {
     //Stores the Payment action waiting for confirmation
     const [paymentConfirmation, setPaymentConfirmation] = useState(null);
 
+    //Stores the final Order status waiting for confirmation
+    const [statusConfirmation, setStatusConfirmation] = useState(null);
+
     //Stores any Order loading or update error
     const [error, setError] = useState("");
 
@@ -125,6 +129,28 @@ export default function BakeryOrderDetails() {
     }, [id]);
 
 
+    //Handles Order status changes before sending the update
+    function requestOrderStatus(newStatus) {
+
+        //Do nothing when the selected status is already active
+        if (newStatus === order.status) {
+            return;
+        }
+
+        //Final Order actions require confirmation first
+        if (
+            newStatus === "completed" ||
+            newStatus === "cancelled"
+        ) {
+            setStatusConfirmation(newStatus);
+            return;
+        }
+
+        //Normal workflow changes can update immediately
+        updateOrderStatus(newStatus);
+    }
+
+
     //Updates the current Order status
     async function updateOrderStatus(newStatus) {
 
@@ -167,6 +193,9 @@ export default function BakeryOrderDetails() {
             const updatedOrder = await getBakeryOrder(id);
 
             setOrder(updatedOrder);
+
+            //Close final status confirmation modal
+            setStatusConfirmation(null);
 
         } catch (error) {
 
@@ -1000,7 +1029,7 @@ export default function BakeryOrderDetails() {
                                                     className="bakery-order-details-primary-action"
                                                     disabled={isUpdatingStatus}
                                                     onClick={() =>
-                                                        updateOrderStatus("confirmed")
+                                                        requestOrderStatus("confirmed")
                                                     }
                                                 >
 
@@ -1019,7 +1048,7 @@ export default function BakeryOrderDetails() {
                                                     className="bakery-order-details-danger-action"
                                                     disabled={isUpdatingStatus}
                                                     onClick={() =>
-                                                        updateOrderStatus("cancelled")
+                                                        requestOrderStatus("cancelled")
                                                     }
                                                 >
                                                     Cancel order
@@ -1051,28 +1080,42 @@ export default function BakeryOrderDetails() {
                                                             value={order.status}
                                                             disabled={isUpdatingStatus}
                                                             onChange={(event) =>
-                                                                updateOrderStatus(
+                                                                requestOrderStatus(
                                                                     event.target.value
                                                                 )
                                                             }
                                                         >
 
-                                                            <option value="confirmed">
-                                                                Confirmed
+                                                            {/* Current status */}
+                                                            <option value={order.status}>
+                                                                {order.status === "confirmed"
+                                                                    ? "Confirmed"
+                                                                    : order.status === "preparing"
+                                                                        ? "Preparing"
+                                                                        : "Ready for pickup"
+                                                                }
                                                             </option>
 
-                                                            <option value="preparing">
-                                                                Preparing
-                                                            </option>
+                                                            {/* Only show the next legal workflow status */}
+                                                            {order.status === "confirmed" && (
+                                                                <option value="preparing">
+                                                                    Preparing
+                                                                </option>
+                                                            )}
 
-                                                            <option value="ready">
-                                                                Ready for pickup
-                                                            </option>
+                                                            {order.status === "preparing" && (
+                                                                <option value="ready">
+                                                                    Ready for pickup
+                                                                </option>
+                                                            )}
 
-                                                            <option value="completed">
-                                                                Completed
-                                                            </option>
+                                                            {order.status === "ready" && (
+                                                                <option value="completed">
+                                                                    Completed
+                                                                </option>
+                                                            )}
 
+                                                            {/* Accepted Orders can also be cancelled */}
                                                             <option value="cancelled">
                                                                 Cancelled
                                                             </option>
@@ -1112,7 +1155,7 @@ export default function BakeryOrderDetails() {
                                                                 className="bakery-order-details-primary-action"
                                                                 disabled={isUpdatingStatus}
                                                                 onClick={() =>
-                                                                    updateOrderStatus("preparing")
+                                                                    requestOrderStatus("preparing")
                                                                 }
                                                             >
                                                                 Start preparing
@@ -1129,7 +1172,7 @@ export default function BakeryOrderDetails() {
                                                                 className="bakery-order-details-primary-action"
                                                                 disabled={isUpdatingStatus}
                                                                 onClick={() =>
-                                                                    updateOrderStatus("ready")
+                                                                    requestOrderStatus("ready")
                                                                 }
                                                             >
 
@@ -1153,7 +1196,7 @@ export default function BakeryOrderDetails() {
                                                                 className="bakery-order-details-primary-action"
                                                                 disabled={isUpdatingStatus}
                                                                 onClick={() =>
-                                                                    updateOrderStatus("completed")
+                                                                    requestOrderStatus("completed")
                                                                 }
                                                             >
 
@@ -1175,7 +1218,7 @@ export default function BakeryOrderDetails() {
                                                             className="bakery-order-details-danger-action"
                                                             disabled={isUpdatingStatus}
                                                             onClick={() =>
-                                                                updateOrderStatus("cancelled")
+                                                                requestOrderStatus("cancelled")
                                                             }
                                                         >
                                                             Cancel order
@@ -1205,21 +1248,8 @@ export default function BakeryOrderDetails() {
 
                                                 </div>
 
-
-                                                <button
-                                                    type="button"
-                                                    className="bakery-order-details-secondary-action"
-                                                    disabled={isUpdatingStatus}
-                                                    onClick={() =>
-                                                        updateOrderStatus("ready")
-                                                    }
-                                                >
-                                                    Reopen order
-                                                </button>
-
-
                                                 <span className="bakery-order-details-control-help">
-                                                    Use this if the Order was marked completed by mistake.
+                                                    This is a final status and cannot be changed.
                                                 </span>
 
                                             </div>
@@ -1243,21 +1273,8 @@ export default function BakeryOrderDetails() {
 
                                                 </div>
 
-
-                                                <button
-                                                    type="button"
-                                                    className="bakery-order-details-secondary-action"
-                                                    disabled={isUpdatingStatus}
-                                                    onClick={() =>
-                                                        updateOrderStatus("confirmed")
-                                                    }
-                                                >
-                                                    Restore order
-                                                </button>
-
-
                                                 <span className="bakery-order-details-control-help">
-                                                    Use this if the Order was cancelled by mistake.
+                                                    This is a final status and cannot be changed.
                                                 </span>
 
                                             </div>
@@ -1478,6 +1495,124 @@ export default function BakeryOrderDetails() {
                     </>
 
                 )}
+
+
+            {/* Final Order status confirmation modal */}
+            {statusConfirmation && (
+
+                <>
+
+                    {/* Modal */}
+                    <div
+                        className="modal d-block"
+                        tabIndex="-1"
+                        role="dialog"
+                        aria-modal="true"
+                    >
+
+                        <div className="modal-dialog modal-dialog-centered">
+
+                            <div className="modal-content border-0 shadow rounded-4">
+
+
+                                {/* Modal heading */}
+                                <div className="modal-header border-0 pb-0">
+
+                                    <h5 className="modal-title">
+                                        {statusConfirmation === "completed"
+                                            ? "Complete this Order?"
+                                            : "Cancel this Order?"
+                                        }
+                                    </h5>
+
+                                    <button
+                                        type="button"
+                                        className="btn-close"
+                                        aria-label="Close"
+                                        disabled={isUpdatingStatus}
+                                        onClick={() =>
+                                            setStatusConfirmation(null)
+                                        }
+                                    ></button>
+
+                                </div>
+
+
+                                {/* Modal content */}
+                                <div className="modal-body">
+
+                                    <p>
+                                        {statusConfirmation === "completed"
+                                            ? "Are you sure you want to mark this Order as completed?"
+                                            : "Are you sure you want to cancel this Order?"
+                                        }
+                                    </p>
+
+                                    <div
+                                        className={
+                                            statusConfirmation === "completed"
+                                                ? "alert alert-success mb-0"
+                                                : "alert alert-warning mb-0"
+                                        }
+                                        role="alert"
+                                    >
+                                        The Customer will be notified and this action cannot be undone.
+                                    </div>
+
+                                </div>
+
+
+                                {/* Modal actions */}
+                                <div className="modal-footer border-0 pt-0 d-flex flex-column flex-sm-row gap-2">
+
+                                    <button
+                                        type="button"
+                                        className="btn btn-outline-secondary"
+                                        disabled={isUpdatingStatus}
+                                        onClick={() =>
+                                            setStatusConfirmation(null)
+                                        }
+                                    >
+                                        Go back
+                                    </button>
+
+                                    <button
+                                        type="button"
+                                        className={
+                                            statusConfirmation === "completed"
+                                                ? "btn btn-success"
+                                                : "btn btn-danger"
+                                        }
+                                        disabled={isUpdatingStatus}
+                                        onClick={() =>
+                                            updateOrderStatus(
+                                                statusConfirmation
+                                            )
+                                        }
+                                    >
+                                        {isUpdatingStatus
+                                            ? "Updating..."
+                                            : statusConfirmation === "completed"
+                                                ? "Yes, complete order"
+                                                : "Yes, cancel order"
+                                        }
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    {/* Modal background */}
+                    <div className="modal-backdrop show"></div>
+
+                </>
+
+            )}
 
 
             {/* Manual Payment confirmation modal */}

@@ -358,9 +358,68 @@ const updateBakeryOrderStatus = async (request, response) => {
         const previousStatus = order.status;
 
 
+        //Define the allowed Order workflow
+        const allowedStatusTransitions = {
+
+            pending: [
+                "confirmed",
+                "cancelled"
+            ],
+
+            confirmed: [
+                "preparing",
+                "cancelled"
+            ],
+
+            preparing: [
+                "ready",
+                "cancelled"
+            ],
+
+            ready: [
+                "completed",
+                "cancelled"
+            ],
+
+            completed: [],
+
+            cancelled: []
+        };
+
+
+        //Allow the same status without creating another update
+        if (
+            previousStatus !== status &&
+            !allowedStatusTransitions[
+                previousStatus
+            ]?.includes(status)
+        ) {
+
+            return response.status(400).json({
+                message:
+                    `Order cannot move from ${previousStatus} to ${status}`
+            });
+        }
+
+        /*
+    Restore tracked inventory only when the Order
+    is actually being changed to cancelled.
+
+    Cancelled Orders cannot be reopened,
+    so inventory can only be restored once.
+*/
+        if (
+            status === "cancelled" &&
+            previousStatus !== "cancelled"
+        ) {
+
+            await restoreOrderInventory(
+                order._id
+            );
+        }
+
         //Update the Order status
         order.status = status;
-
 
         //Save the updated Order
         await order.save();
@@ -407,65 +466,66 @@ const updateBakeryOrderStatus = async (request, response) => {
                     emailError.message
                 );
             }
-        }
-
-        //Create an in-app Notification for the Customer
-        try {
-
-            //Readable status names shown to the Customer
-            const customerStatusNames = {
-                confirmed:
-                    "Confirmed",
-
-                preparing:
-                    "In Progress",
-
-                ready:
-                    "Ready for Pickup",
-
-                completed:
-                    "Completed",
-
-                cancelled:
-                    "Cancelled"
-            };
 
 
-            //Get readable status text
-            const customerStatusText =
-                customerStatusNames[
-                order.status
-                ] ||
-                order.status;
+            //Create an in-app Notification for the Customer
+            try {
+
+                //Readable status names shown to the Customer
+                const customerStatusNames = {
+                    confirmed:
+                        "Confirmed",
+
+                    preparing:
+                        "In Progress",
+
+                    ready:
+                        "Ready for Pickup",
+
+                    completed:
+                        "Completed",
+
+                    cancelled:
+                        "Cancelled"
+                };
 
 
-            //Create Notification for the Customer
-            if (order.customer_id) {
+                //Get readable status text
+                const customerStatusText =
+                    customerStatusNames[
+                    order.status
+                    ] ||
+                    order.status;
 
-                await Notification.create({
 
-                    order_id:
-                        order._id,
+                //Create Notification for the Customer
+                if (order.customer_id) {
 
-                    user_id:
-                        order.customer_id,
+                    await Notification.create({
 
-                    message:
-                        `Your order ${order.order_number} is now ${customerStatusText}`
-                });
+                        order_id:
+                            order._id,
+
+                        user_id:
+                            order.customer_id,
+
+                        message:
+                            `Your order ${order.order_number} is now ${customerStatusText}`
+                    });
+                }
+
+
+            } catch (notificationError) {
+
+                /*
+                    Do not fail the Order status update
+                    if the Notification could not be created.
+                */
+                console.error(
+                    "Customer Order notification error:",
+                    notificationError.message
+                );
             }
-
-
-        } catch (notificationError) {
-
-            /*
-                Do not fail the Order status update
-                if the Notification could not be created.
-            */
-            console.error(
-                "Customer Order notification error:",
-                notificationError.message
-            );
         }
 
         //Return the updated Order
@@ -619,10 +679,14 @@ const prepareOrderItem = async (
         );
     }
 
-    //Draft Products cannot be ordered
-    if (product.status === "draft") {
+    //Only active and visible Products can be ordered
+    if (
+        product.status !== "active" ||
+        !product.is_visible
+    ) {
+
         throw new Error(
-            `${product.name} is not published`
+            `${product.name} is not available for ordering`
         );
     }
 
@@ -878,6 +942,43 @@ const saveOrderItems = async (
     }
 };
 
+//Restores tracked Product inventory when an Order is cancelled
+const restoreOrderInventory = async (orderId) => {
+
+    //Get all Products included in this Order
+    const orderItems =
+        await OrderItem.find({
+
+            order_id:
+                orderId
+
+        });
+
+
+    //Return each tracked Product quantity
+    for (
+        const orderItem
+        of orderItems
+    ) {
+
+        await Product.updateOne(
+            {
+                _id:
+                    orderItem.product_id,
+
+                stock_type:
+                    "track_inventory"
+            },
+            {
+                $inc: {
+                    inventory_quantity:
+                        orderItem.quantity
+                }
+            }
+        );
+    }
+};
+
 //Creates the Activity description for an Order status change
 const getOrderStatusActivity = (status) => {
 
@@ -916,7 +1017,10 @@ const createOrder = async (request, response) => {
 
     try {
 
-        const customerId = request.user.userId;
+        //Get the authenticated Customer ID
+        const customerId =
+            request.user.userId;
+
 
         //Get Checkout information submitted by the Customer
         const {
@@ -928,31 +1032,153 @@ const createOrder = async (request, response) => {
             items
         } = request.body;
 
-        if (!Array.isArray(items) || items.length === 0) {
+
+        //Order must contain at least one Product
+        if (
+            !Array.isArray(items) ||
+            items.length === 0
+        ) {
+
             return response.status(400).json({
-                message: "Order must contain at least one product"
+                message:
+                    "Order must contain at least one product"
             });
         }
 
-        const bakery = await Bakery.findById(bakery_id);
 
+        //Find the selected Bakery
+        const bakery =
+            await Bakery.findById(
+                bakery_id
+            );
+
+
+        //Stop if Bakery does not exist
         if (!bakery) {
+
             return response.status(404).json({
-                message: "Bakery not found"
+                message:
+                    "Bakery not found"
             });
         }
 
-        const pickupSlot = await PickupSlot.findOne({
-            _id: pickup_slot_id,
-            bakery_id: bakery._id,
-            is_available: true
-        });
 
-        if (!pickupSlot) {
+        //Only Approved Bakeries can receive Customer Orders
+        if (
+            bakery.account_status !==
+            "Approved"
+        ) {
+
             return response.status(400).json({
-                message: "Selected pickup slot is unavailable"
+                message:
+                    "This bakery is not currently available for ordering"
             });
         }
+
+
+        //Stop if the Bakery is not accepting Orders
+        if (!bakery.accepting_orders) {
+
+            return response.status(400).json({
+                message:
+                    "This bakery is not currently accepting orders"
+            });
+        }
+
+
+        //Find the selected Pickup Slot inside this Bakery
+        const pickupSlot =
+            await PickupSlot.findOne({
+
+                _id:
+                    pickup_slot_id,
+
+                bakery_id:
+                    bakery._id,
+
+                is_available:
+                    true
+            });
+
+
+        //Stop if the Pickup Slot is unavailable
+        if (!pickupSlot) {
+
+            return response.status(400).json({
+                message:
+                    "Selected pickup slot is unavailable"
+            });
+        }
+
+
+        //Get today's date without the current time
+        const today =
+            new Date();
+
+        today.setUTCHours(
+            0,
+            0,
+            0,
+            0
+        );
+
+
+        //Get the selected Pickup date
+        const selectedPickupDate =
+            new Date(
+                pickupSlot.pickup_date
+            );
+
+        selectedPickupDate.setUTCHours(
+            0,
+            0,
+            0,
+            0
+        );
+
+
+        //Past Pickup dates cannot be used
+        if (
+            selectedPickupDate <
+            today
+        ) {
+
+            return response.status(400).json({
+                message:
+                    "Selected pickup date is no longer available"
+            });
+        }
+
+
+        //Count current non-cancelled Orders for this Pickup date
+        const bakeryOrdersForDate =
+            await Order.countDocuments({
+
+                bakery_id:
+                    bakery._id,
+
+                pickup_date:
+                    pickupSlot.pickup_date,
+
+                status: {
+                    $ne:
+                        "cancelled"
+                }
+            });
+
+
+        //Stop when Bakery daily Order capacity is reached
+        if (
+            bakeryOrdersForDate >=
+            bakery.maximum_orders_per_day
+        ) {
+
+            return response.status(400).json({
+                message:
+                    "This bakery has reached its maximum orders for the selected pickup date"
+            });
+        }
+
 
         //Make sure the selected Customer time belongs to the Bakery Pickup window
         if (
@@ -961,14 +1187,24 @@ const createOrder = async (request, response) => {
                 pickup_time
             )
         ) {
+
             return response.status(400).json({
-                message: "Selected pickup time is unavailable"
+                message:
+                    "Selected pickup time is unavailable"
             });
         }
 
-        const preparedItems = [];
 
-        for (const requestedItem of items) {
+        //Stores cleaned and validated Products
+        const preparedItems =
+            [];
+
+
+        //Validate every Product before creating the Order
+        for (
+            const requestedItem
+            of items
+        ) {
 
             const preparedItem =
                 await prepareOrderItem(
@@ -977,74 +1213,430 @@ const createOrder = async (request, response) => {
                     pickupSlot
                 );
 
-            preparedItems.push(preparedItem);
+            preparedItems.push(
+                preparedItem
+            );
         }
 
-        const totalPrice = roundMoney(
-            preparedItems.reduce(
-                (total, item) =>
-                    total + item.item_total,
-                0
-            )
-        );
 
-        const amountDueNow = roundMoney(
+        //Get the largest Product preparation notice
+        const productNoticeHours =
             preparedItems.reduce(
-                (total, item) =>
-                    total + item.amount_due_now,
+                (
+                    largestNotice,
+                    preparedItem
+                ) => {
+
+                    const productNotice =
+                        Number(
+                            preparedItem
+                                .product
+                                .minimum_preparation_notice ||
+                            0
+                        );
+
+
+                    return Math.max(
+                        largestNotice,
+                        productNotice
+                    );
+                },
                 0
-            )
-        );
+            );
+
+
+        //Use whichever notice is greater:
+        //Bakery minimum notice or Product preparation notice
+        const requiredNoticeHours =
+            Math.max(
+                Number(
+                    bakery.minimum_order_notice ||
+                    0
+                ),
+                productNoticeHours
+            );
+
+
+        //Get the Bakery timezone
+        const bakeryTimeZone =
+            bakery.timezone ||
+            "America/Toronto";
+
+
+        //Split selected Pickup time such as 14:30
+        const [
+            pickupHour,
+            pickupMinute
+        ] = pickup_time
+            .split(":")
+            .map(Number);
+
+
+        //Get the selected Pickup date
+        const pickupDate =
+            new Date(
+                pickupSlot.pickup_date
+            );
+
+
+        /*
+            Build a temporary UTC date using
+            the selected Bakery local date and time.
+        */
+        const pickupUtcGuess =
+            new Date(
+                Date.UTC(
+                    pickupDate.getUTCFullYear(),
+                    pickupDate.getUTCMonth(),
+                    pickupDate.getUTCDate(),
+                    pickupHour,
+                    pickupMinute,
+                    0,
+                    0
+                )
+            );
+
+
+        /*
+            Gets the timezone offset for a Date
+            inside the selected Bakery timezone.
+        */
+        function getTimeZoneOffset(
+            date,
+            timeZone
+        ) {
+
+            const parts =
+                new Intl.DateTimeFormat(
+                    "en-CA",
+                    {
+                        timeZone:
+                            timeZone,
+
+                        year:
+                            "numeric",
+
+                        month:
+                            "2-digit",
+
+                        day:
+                            "2-digit",
+
+                        hour:
+                            "2-digit",
+
+                        minute:
+                            "2-digit",
+
+                        second:
+                            "2-digit",
+
+                        hourCycle:
+                            "h23"
+                    }
+                ).formatToParts(
+                    date
+                );
+
+
+            //Gets one value from the formatted Date
+            function getPart(type) {
+
+                return Number(
+                    parts.find(
+                        (part) =>
+                            part.type ===
+                            type
+                    )?.value
+                );
+            }
+
+
+            //Convert Bakery local values into UTC values
+            const bakeryTimeAsUtc =
+                Date.UTC(
+                    getPart("year"),
+                    getPart("month") - 1,
+                    getPart("day"),
+                    getPart("hour"),
+                    getPart("minute"),
+                    getPart("second")
+                );
+
+
+            //Return the Bakery timezone offset
+            return (
+                bakeryTimeAsUtc -
+                date.getTime()
+            );
+        }
+
+
+        //Get the Bakery timezone offset
+        let bakeryOffset =
+            getTimeZoneOffset(
+                pickupUtcGuess,
+                bakeryTimeZone
+            );
+
+
+        //Create the actual Pickup Date and time
+        let pickupDateTime =
+            new Date(
+                pickupUtcGuess.getTime() -
+                bakeryOffset
+            );
+
+
+        /*
+            Check the offset again because
+            daylight saving time can change it.
+        */
+        const correctedBakeryOffset =
+            getTimeZoneOffset(
+                pickupDateTime,
+                bakeryTimeZone
+            );
+
+
+        //Apply corrected timezone offset when needed
+        if (
+            correctedBakeryOffset !==
+            bakeryOffset
+        ) {
+
+            pickupDateTime =
+                new Date(
+                    pickupUtcGuess.getTime() -
+                    correctedBakeryOffset
+                );
+        }
+
+
+        //Calculate the earliest allowed Pickup time
+        const earliestAllowedPickup =
+            new Date(
+                Date.now() +
+                requiredNoticeHours *
+                60 *
+                60 *
+                1000
+            );
+
+
+        //Stop if the selected Pickup time does not provide enough notice
+        if (
+            pickupDateTime <
+            earliestAllowedPickup
+        ) {
+
+            return response.status(400).json({
+                message:
+                    `This order requires at least ${requiredNoticeHours} hours notice`
+            });
+        }
+
+
+        //Get existing non-cancelled Orders for this Pickup date
+        const existingOrdersForDate =
+            await Order.find({
+
+                bakery_id:
+                    bakery._id,
+
+                pickup_date:
+                    pickupSlot.pickup_date,
+
+                status: {
+                    $ne:
+                        "cancelled"
+                }
+            }).select(
+                "_id"
+            );
+
+
+        //Get only the existing Order IDs
+        const existingOrderIds =
+            existingOrdersForDate.map(
+                (existingOrder) =>
+                    existingOrder._id
+            );
+
+
+        //Check each Product's daily Order limit
+        for (
+            const preparedItem
+            of preparedItems
+        ) {
+
+            const product =
+                preparedItem.product;
+
+
+            const productDailyLimit =
+                Number(
+                    product.maximum_orders_per_day ||
+                    0
+                );
+
+
+            //Only check Products that have a daily limit
+            if (
+                productDailyLimit >
+                0
+            ) {
+
+                //Find existing Orders containing this Product
+                const productOrderIds =
+                    await OrderItem.distinct(
+                        "order_id",
+                        {
+                            product_id:
+                                product._id,
+
+                            order_id: {
+                                $in:
+                                    existingOrderIds
+                            }
+                        }
+                    );
+
+
+                //Stop when the Product daily limit is reached
+                if (
+                    productOrderIds.length >=
+                    productDailyLimit
+                ) {
+
+                    return response.status(400).json({
+                        message:
+                            `${product.name} has reached its maximum orders for the selected pickup date`
+                    });
+                }
+            }
+        }
+
+
+        //Calculate trusted Order total
+        const totalPrice =
+            roundMoney(
+
+                preparedItems.reduce(
+                    (
+                        total,
+                        item
+                    ) =>
+                        total +
+                        item.item_total,
+                    0
+                )
+            );
+
+
+        //Calculate amount that must be paid now
+        const amountDueNow =
+            roundMoney(
+
+                preparedItems.reduce(
+                    (
+                        total,
+                        item
+                    ) =>
+                        total +
+                        item.amount_due_now,
+                    0
+                )
+            );
+
 
         //Create the Order using trusted Backend information
-        const order = await Order.create({
+        const order =
+            await Order.create({
 
-            customer_id: customerId,
+                customer_id:
+                    customerId,
 
-            order_number: `BAK-${Date.now()}`,
+                order_number:
+                    `BAK-${Date.now()}`,
 
-            bakery_id: bakery._id,
+                bakery_id:
+                    bakery._id,
 
-            //Save Contact information used for this specific Order
-            contact_first_name: contact.first_name,
-            contact_last_name: contact.last_name,
-            contact_email: contact.email,
-            contact_phone: contact.phone_number,
 
-            //Save the original Pickup window and exact Customer time
-            pickup_slot_id: pickupSlot._id,
-            pickup_date: pickupSlot.pickup_date,
-            pickup_time: pickup_time,
+                //Save Contact information used for this specific Order
+                contact_first_name:
+                    contact.first_name,
 
-            //Save optional Customer note
-            bakery_note: bakery_note || "",
+                contact_last_name:
+                    contact.last_name,
 
-            //Trusted prices calculated by the Backend
-            total_price: totalPrice,
+                contact_email:
+                    contact.email,
 
-            status: "pending",
+                contact_phone:
+                    contact.phone_number,
 
-            deposit_required:
-                amountDueNow < totalPrice,
 
-            amount_due_now: amountDueNow,
+                //Save the original Pickup window and exact Customer time
+                pickup_slot_id:
+                    pickupSlot._id,
 
-            amount_paid: 0,
+                pickup_date:
+                    pickupSlot.pickup_date,
 
-            payment_status: "unpaid"
-        });
+                pickup_time:
+                    pickup_time,
+
+
+                //Save optional Customer note
+                bakery_note:
+                    bakery_note ||
+                    "",
+
+
+                //Trusted prices calculated by the Backend
+                total_price:
+                    totalPrice,
+
+                status:
+                    "pending",
+
+                deposit_required:
+                    amountDueNow <
+                    totalPrice,
+
+                amount_due_now:
+                    amountDueNow,
+
+                amount_paid:
+                    0,
+
+                payment_status:
+                    "unpaid"
+            });
+
 
         //Store the Order creation in its Activity history
         await OrderActivity.create({
-            order_id: order._id,
-            activity_type: "order_placed",
-            description: "Order placed"
+
+            order_id:
+                order._id,
+
+            activity_type:
+                "order_placed",
+
+            description:
+                "Order placed"
         });
 
+
+        //Save Products, Customizations and reduce inventory
         await saveOrderItems(
             order,
             preparedItems
         );
+
 
         //Create a dashboard Notification for the Bakery Owner
         try {
@@ -1062,7 +1654,9 @@ const createOrder = async (request, response) => {
             });
 
 
-        } catch (notificationError) {
+        } catch (
+        notificationError
+        ) {
 
             //Do not fail the Customer's Order if Notification creation fails
             console.error(
@@ -1093,7 +1687,9 @@ const createOrder = async (request, response) => {
             }
 
 
-        } catch (emailError) {
+        } catch (
+        emailError
+        ) {
 
             //Do not fail the Customer's Order if email delivery fails
             console.error(
@@ -1102,13 +1698,24 @@ const createOrder = async (request, response) => {
             );
         }
 
-        const completeOrder =
-            await getCompleteOrderDetails(order);
 
+        //Load complete Order information
+        const completeOrder =
+            await getCompleteOrderDetails(
+                order
+            );
+
+
+        //Return the created Order
         return response.status(201).json({
-            message: "Order created successfully",
-            order: completeOrder
+
+            message:
+                "Order created successfully",
+
+            order:
+                completeOrder
         });
+
 
     } catch (error) {
 
@@ -1117,8 +1724,12 @@ const createOrder = async (request, response) => {
             error.message
         );
 
+
         return response.status(500).json({
-            message: error.message || "Unable to create order"
+
+            message:
+                error.message ||
+                "Unable to create order"
         });
     }
 };
@@ -1132,9 +1743,11 @@ const cancelMyOrder = async (request, response) => {
         const customerId =
             request.user.userId;
 
+
         //Get the Order ID from the URL
         const orderId =
             request.params.id;
+
 
         //Find the Order only if it belongs to this Customer
         const order =
@@ -1145,6 +1758,7 @@ const cancelMyOrder = async (request, response) => {
 
                 customer_id:
                     customerId
+
             });
 
 
@@ -1155,6 +1769,7 @@ const cancelMyOrder = async (request, response) => {
 
                 message:
                     "Order not found"
+
             });
         }
 
@@ -1169,14 +1784,29 @@ const cancelMyOrder = async (request, response) => {
 
                 message:
                     "Only pending orders can be cancelled"
+
             });
         }
+
+
+        /*
+            Return tracked Product quantities before
+            finishing the Order cancellation.
+
+            Customers can only cancel pending Orders,
+            so this inventory restoration can only run once.
+        */
+        await restoreOrderInventory(
+            order._id
+        );
 
 
         //Cancel the Order
         order.status =
             "cancelled";
 
+
+        //Save cancelled Order
         await order.save();
 
 
@@ -1191,6 +1821,7 @@ const cancelMyOrder = async (request, response) => {
 
             description:
                 "Order cancelled by customer"
+
         });
 
 
@@ -1202,6 +1833,7 @@ const cancelMyOrder = async (request, response) => {
 
             order:
                 order
+
         });
 
 
@@ -1212,11 +1844,13 @@ const cancelMyOrder = async (request, response) => {
             error.message
         );
 
+
         return response.status(500).json({
 
             message:
                 error.message ||
                 "Unable to cancel order"
+
         });
     }
 };
@@ -1232,6 +1866,7 @@ const updateMyPendingOrder = async (
         //Get authenticated Customer ID
         const customerId =
             request.user.userId;
+
 
         //Get Order ID from URL
         const orderId =
@@ -1256,6 +1891,7 @@ const updateMyPendingOrder = async (
 
                 customer_id:
                     customerId
+
             });
 
 
@@ -1266,6 +1902,7 @@ const updateMyPendingOrder = async (
 
                 message:
                     "Order not found"
+
             });
         }
 
@@ -1280,6 +1917,53 @@ const updateMyPendingOrder = async (
 
                 message:
                     "Only pending orders can be edited"
+
+            });
+        }
+
+
+        //Find the Bakery belonging to this Order
+        const bakery =
+            await Bakery.findById(
+                order.bakery_id
+            );
+
+
+        //Stop if Bakery no longer exists
+        if (!bakery) {
+
+            return response.status(404).json({
+
+                message:
+                    "Bakery not found"
+
+            });
+        }
+
+
+        //Only Approved Bakeries can accept Order changes
+        if (
+            bakery.account_status !==
+            "Approved"
+        ) {
+
+            return response.status(400).json({
+
+                message:
+                    "This bakery is not currently available for ordering"
+
+            });
+        }
+
+
+        //Stop if the Bakery is no longer accepting Orders
+        if (!bakery.accepting_orders) {
+
+            return response.status(400).json({
+
+                message:
+                    "This bakery is not currently accepting orders"
+
             });
         }
 
@@ -1297,6 +1981,7 @@ const updateMyPendingOrder = async (
 
                 message:
                     "Complete contact information is required"
+
             });
         }
 
@@ -1312,6 +1997,7 @@ const updateMyPendingOrder = async (
 
                 message:
                     "Bakery note cannot be longer than 300 characters"
+
             });
         }
 
@@ -1326,6 +2012,7 @@ const updateMyPendingOrder = async (
 
                 message:
                     "Pickup date and time are required"
+
             });
         }
 
@@ -1342,6 +2029,7 @@ const updateMyPendingOrder = async (
 
                 is_available:
                     true
+
             });
 
 
@@ -1352,6 +2040,96 @@ const updateMyPendingOrder = async (
 
                 message:
                     "Selected pickup slot is unavailable"
+
+            });
+        }
+
+
+        //Get today's date without the current time
+        const today =
+            new Date();
+
+        today.setUTCHours(
+            0,
+            0,
+            0,
+            0
+        );
+
+
+        //Get the selected Pickup date
+        const selectedPickupDate =
+            new Date(
+                pickupSlot.pickup_date
+            );
+
+        selectedPickupDate.setUTCHours(
+            0,
+            0,
+            0,
+            0
+        );
+
+
+        //Past Pickup dates cannot be used
+        if (
+            selectedPickupDate <
+            today
+        ) {
+
+            return response.status(400).json({
+
+                message:
+                    "Selected pickup date is no longer available"
+
+            });
+        }
+
+
+        //Count other non-cancelled Orders for this Pickup date
+        const bakeryOrdersForDate =
+            await Order.countDocuments({
+
+                bakery_id:
+                    bakery._id,
+
+                pickup_date:
+                    pickupSlot.pickup_date,
+
+                status: {
+                    $ne:
+                        "cancelled"
+                },
+
+                //Do not count the Order currently being edited
+                _id: {
+                    $ne:
+                        order._id
+                }
+
+            });
+
+
+        //Get the Bakery daily Order limit
+        const bakeryDailyLimit =
+            Number(
+                bakery.maximum_orders_per_day ||
+                0
+            );
+
+
+        //Stop when Bakery daily Order capacity is reached
+        if (
+            bakeryDailyLimit > 0 &&
+            bakeryOrdersForDate >=
+            bakeryDailyLimit
+        ) {
+
+            return response.status(400).json({
+
+                message:
+                    "This bakery has reached its maximum orders for the selected pickup date"
+
             });
         }
 
@@ -1368,6 +2146,7 @@ const updateMyPendingOrder = async (
 
                 message:
                     "Selected pickup time is unavailable"
+
             });
         }
 
@@ -1396,15 +2175,59 @@ const updateMyPendingOrder = async (
 
                 order_id:
                     order._id
+
             });
 
 
-        //Make sure existing Products are available on new Pickup day
+        /*
+            Get other non-cancelled Orders for the selected date.
+
+            The current Order is excluded because it already
+            contains these Products.
+        */
+        const existingOrdersForDate =
+            await Order.find({
+
+                bakery_id:
+                    bakery._id,
+
+                pickup_date:
+                    pickupSlot.pickup_date,
+
+                status: {
+                    $ne:
+                        "cancelled"
+                },
+
+                _id: {
+                    $ne:
+                        order._id
+                }
+
+            }).select(
+                "_id"
+            );
+
+
+        //Get only the existing Order IDs
+        const existingOrderIds =
+            existingOrdersForDate.map(
+                (existingOrder) =>
+                    existingOrder._id
+            );
+
+
+        //Tracks the largest Product preparation notice
+        let productNoticeHours = 0;
+
+
+        //Validate Products already included in this Order
         for (
             const orderItem
             of orderItems
         ) {
 
+            //Find the Product inside this Bakery
             const product =
                 await Product.findOne({
 
@@ -1413,6 +2236,7 @@ const updateMyPendingOrder = async (
 
                     bakery_id:
                         order.bakery_id
+
                 });
 
 
@@ -1423,8 +2247,25 @@ const updateMyPendingOrder = async (
 
                     message:
                         `${orderItem.product_name} is no longer available`
+
                 });
             }
+
+
+            //Get this Product's preparation notice
+            const productNotice =
+                Number(
+                    product.minimum_preparation_notice ||
+                    0
+                );
+
+
+            //Keep the largest Product preparation notice
+            productNoticeHours =
+                Math.max(
+                    productNoticeHours,
+                    productNotice
+                );
 
 
             //Check Product Pickup day availability
@@ -1440,8 +2281,255 @@ const updateMyPendingOrder = async (
 
                     message:
                         `${product.name} is not available for pickup on ${pickupDay}`
+
                 });
             }
+
+
+            //Get this Product's daily Order limit
+            const productDailyLimit =
+                Number(
+                    product.maximum_orders_per_day ||
+                    0
+                );
+
+
+            //Only check Products that have a daily limit
+            if (
+                productDailyLimit >
+                0
+            ) {
+
+                //Find other Orders containing this Product
+                const productOrderIds =
+                    await OrderItem.distinct(
+                        "order_id",
+                        {
+
+                            product_id:
+                                product._id,
+
+                            order_id: {
+                                $in:
+                                    existingOrderIds
+                            }
+
+                        }
+                    );
+
+
+                //Stop when Product daily Order limit is reached
+                if (
+                    productOrderIds.length >=
+                    productDailyLimit
+                ) {
+
+                    return response.status(400).json({
+
+                        message:
+                            `${product.name} has reached its maximum orders for the selected pickup date`
+
+                    });
+                }
+            }
+        }
+
+
+        //Use whichever notice is greater:
+        //Bakery minimum notice or Product preparation notice
+        const requiredNoticeHours =
+            Math.max(
+
+                Number(
+                    bakery.minimum_order_notice ||
+                    0
+                ),
+
+                productNoticeHours
+
+            );
+
+
+        //Get the Bakery timezone
+        const bakeryTimeZone =
+            bakery.timezone ||
+            "America/Toronto";
+
+
+        //Split selected Pickup time such as 14:30
+        const [
+            pickupHour,
+            pickupMinute
+        ] =
+            pickup_time
+                .split(":")
+                .map(Number);
+
+
+        //Get the selected Pickup date
+        const pickupDate =
+            new Date(
+                pickupSlot.pickup_date
+            );
+
+
+        /*
+            Build a temporary UTC date using
+            the selected Bakery local date and time.
+        */
+        const pickupUtcGuess =
+            new Date(
+                Date.UTC(
+                    pickupDate.getUTCFullYear(),
+                    pickupDate.getUTCMonth(),
+                    pickupDate.getUTCDate(),
+                    pickupHour,
+                    pickupMinute,
+                    0,
+                    0
+                )
+            );
+
+
+        /*
+            Gets the timezone offset for a Date
+            inside the selected Bakery timezone.
+        */
+        function getTimeZoneOffset(
+            date,
+            timeZone
+        ) {
+
+            const parts =
+                new Intl.DateTimeFormat(
+                    "en-CA",
+                    {
+                        timeZone:
+                            timeZone,
+
+                        year:
+                            "numeric",
+
+                        month:
+                            "2-digit",
+
+                        day:
+                            "2-digit",
+
+                        hour:
+                            "2-digit",
+
+                        minute:
+                            "2-digit",
+
+                        second:
+                            "2-digit",
+
+                        hourCycle:
+                            "h23"
+                    }
+                ).formatToParts(
+                    date
+                );
+
+
+            //Gets one value from the formatted Date
+            function getPart(type) {
+
+                return Number(
+                    parts.find(
+                        (part) =>
+                            part.type ===
+                            type
+                    )?.value
+                );
+            }
+
+
+            //Convert Bakery local values into UTC values
+            const bakeryTimeAsUtc =
+                Date.UTC(
+                    getPart("year"),
+                    getPart("month") - 1,
+                    getPart("day"),
+                    getPart("hour"),
+                    getPart("minute"),
+                    getPart("second")
+                );
+
+
+            //Return the Bakery timezone offset
+            return (
+                bakeryTimeAsUtc -
+                date.getTime()
+            );
+        }
+
+
+        //Get the Bakery timezone offset
+        let bakeryOffset =
+            getTimeZoneOffset(
+                pickupUtcGuess,
+                bakeryTimeZone
+            );
+
+
+        //Create the actual Pickup Date and time
+        let pickupDateTime =
+            new Date(
+                pickupUtcGuess.getTime() -
+                bakeryOffset
+            );
+
+
+        /*
+            Check the offset again because
+            daylight saving time can change it.
+        */
+        const correctedBakeryOffset =
+            getTimeZoneOffset(
+                pickupDateTime,
+                bakeryTimeZone
+            );
+
+
+        //Apply corrected timezone offset when needed
+        if (
+            correctedBakeryOffset !==
+            bakeryOffset
+        ) {
+
+            pickupDateTime =
+                new Date(
+                    pickupUtcGuess.getTime() -
+                    correctedBakeryOffset
+                );
+        }
+
+
+        //Calculate the earliest allowed Pickup time
+        const earliestAllowedPickup =
+            new Date(
+                Date.now() +
+                requiredNoticeHours *
+                60 *
+                60 *
+                1000
+            );
+
+
+        //Stop if selected Pickup time does not provide enough notice
+        if (
+            pickupDateTime <
+            earliestAllowedPickup
+        ) {
+
+            return response.status(400).json({
+
+                message:
+                    `This order requires at least ${requiredNoticeHours} hours notice`
+
+            });
         }
 
 
@@ -1497,6 +2585,7 @@ const updateMyPendingOrder = async (
 
             order:
                 completeOrder
+
         });
 
 
@@ -1513,6 +2602,7 @@ const updateMyPendingOrder = async (
             message:
                 error.message ||
                 "Unable to update order"
+
         });
     }
 };
