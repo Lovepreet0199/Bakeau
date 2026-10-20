@@ -401,6 +401,23 @@ const updateBakeryOrderStatus = async (request, response) => {
             });
         }
 
+        //Paid Orders cannot be cancelled without handling a refund
+        if (
+            status === "cancelled" &&
+            Number(
+                order.amount_paid || 0
+            ) > 0
+        ) {
+
+            return response.status(400).json({
+
+                message:
+                    "Orders with a payment cannot be cancelled until the payment is refunded."
+
+            });
+
+        }
+
         /*
     Restore tracked inventory only when the Order
     is actually being changed to cancelled.

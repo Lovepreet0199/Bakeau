@@ -273,6 +273,11 @@ export default function BakeryOrderDetails() {
     const payments =
         order?.payments || [];
 
+    //Checks whether this Order already has money received
+    const hasReceivedPayment =
+        Number(
+            order?.amount_paid || 0
+        ) > 0;
 
     return (
 
@@ -1041,16 +1046,27 @@ export default function BakeryOrderDetails() {
                                                 </button>
 
 
-                                                <button
-                                                    type="button"
-                                                    className="bakery-order-details-danger-action"
-                                                    disabled={isUpdatingStatus}
-                                                    onClick={() =>
-                                                        requestOrderStatus("cancelled")
-                                                    }
-                                                >
-                                                    Cancel order
-                                                </button>
+                                                {/* Only allow cancellation before a Payment is received */}
+                                                {!hasReceivedPayment ? (
+
+                                                    <button
+                                                        type="button"
+                                                        className="bakery-order-details-danger-action"
+                                                        disabled={isUpdatingStatus}
+                                                        onClick={() =>
+                                                            requestOrderStatus("cancelled")
+                                                        }
+                                                    >
+                                                        Cancel order
+                                                    </button>
+
+                                                ) : (
+
+                                                    <p className="mb-0">
+                                                        This Order has a payment attached and cannot be cancelled until the payment is refunded.
+                                                    </p>
+
+                                                )}
 
                                             </div>
 
@@ -1113,10 +1129,14 @@ export default function BakeryOrderDetails() {
                                                                 </option>
                                                             )}
 
-                                                            {/* Accepted Orders can also be cancelled */}
-                                                            <option value="cancelled">
-                                                                Cancelled
-                                                            </option>
+                                                            {/* Only allow cancellation before a Payment is received */}
+                                                            {!hasReceivedPayment && (
+
+                                                                <option value="cancelled">
+                                                                    Cancelled
+                                                                </option>
+
+                                                            )}
 
                                                         </select>
 
@@ -1211,16 +1231,27 @@ export default function BakeryOrderDetails() {
 
 
                                                         {/* Cancel accepted Order */}
-                                                        <button
-                                                            type="button"
-                                                            className="bakery-order-details-danger-action"
-                                                            disabled={isUpdatingStatus}
-                                                            onClick={() =>
-                                                                requestOrderStatus("cancelled")
-                                                            }
-                                                        >
-                                                            Cancel order
-                                                        </button>
+                                                        {/* Only allow cancellation before a Payment is received */}
+                                                        {!hasReceivedPayment ? (
+
+                                                            <button
+                                                                type="button"
+                                                                className="bakery-order-details-danger-action"
+                                                                disabled={isUpdatingStatus}
+                                                                onClick={() =>
+                                                                    requestOrderStatus("cancelled")
+                                                                }
+                                                            >
+                                                                Cancel order
+                                                            </button>
+
+                                                        ) : (
+
+                                                            <p className="mb-0">
+                                                                This Order has a payment attached and cannot be cancelled until the payment is refunded.
+                                                            </p>
+
+                                                        )}
 
                                                     </div>
 
