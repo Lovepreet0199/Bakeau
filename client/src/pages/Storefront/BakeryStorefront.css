@@ -31,6 +31,7 @@
     font-weight: 500;
 }
 
+
 .storefront-view-all:hover {
     color: var(--storefront-primary);
     opacity: 0.8;
@@ -113,10 +114,12 @@
         transform 0.2s ease;
 }
 
+
 .storefront-primary-button:hover {
     color: #ffffff;
     opacity: 0.92;
 }
+
 
 .storefront-primary-button:active {
     transform: translateY(1px);
@@ -155,105 +158,203 @@
 }
 
 
-/* Storefront Category card */
-.storefront-category-card {
-    min-height: 105px;
-    border: 1px solid #e7dbd2;
-    border-radius: 10px;
-    background-color: #ffffff;
-    color: #342720;
-    font-size: 12px;
-    transition:
-        border-color 0.2s ease,
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
-}
+/* Menu section */
+.storefront-menu-section {
+    scroll-margin-top: 90px;
 
-.storefront-category-card:hover {
-    border-color: var(--storefront-primary);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(66, 44, 35, 0.06);
-}
+    margin-top: 34px;
+    margin-bottom: 34px;
 
+    border: 1px solid #eadfd7;
+    border-radius: 24px;
 
-/* Category icon */
-.storefront-category-icon {
-    font-size: 28px;
-    line-height: 1;
+    background-color:
+        color-mix(in srgb,
+            var(--storefront-secondary) 34%,
+            #fffdf9);
+
+    box-shadow:
+        0 10px 30px rgba(66,
+            44,
+            35,
+            0.035);
 }
 
 
-/* Product card */
+/* Gives the Menu heading clear separation */
+.storefront-menu-section .storefront-eyebrow {
+    margin-bottom: 8px;
+}
+
+
+/* Menu Product card */
 .storefront-product-card {
     overflow: hidden;
-    border: 1px solid #e9ddd4;
-    border-radius: 12px;
+
+    border: 1px solid #e7dbd2;
+    border-radius: 18px;
+
     background-color: #ffffff;
+
+    box-shadow:
+        0 4px 16px rgba(66,
+            44,
+            35,
+            0.045);
+
     transition:
         transform 0.2s ease,
-        box-shadow 0.2s ease;
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
 }
 
+
+/* Product card hover */
 .storefront-product-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 25px rgba(66, 44, 35, 0.08);
+    transform: translateY(-4px);
+
+    border-color:
+        color-mix(in srgb,
+            var(--storefront-primary) 35%,
+            #e7dbd2);
+
+    box-shadow:
+        0 14px 32px rgba(66,
+            44,
+            35,
+            0.10);
 }
 
 
-/* Product image */
+/* Keeps all Menu images consistent */
+.storefront-product-image-wrapper {
+    overflow: hidden;
+
+    /*
+        Slightly shorter than a normal 4:3 image.
+        Keeps large desktop cards from becoming too tall.
+    */
+    --bs-aspect-ratio: 66%;
+
+    background-color: #f4ece6;
+}
+
+
+/* Menu Product image */
 .storefront-product-image {
-    aspect-ratio: 4 / 3;
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
     object-fit: cover;
+
+    transition:
+        transform 0.3s ease;
+}
+
+
+/* Slight image zoom when hovering Product */
+.storefront-product-card:hover .storefront-product-image {
+    transform: scale(1.03);
 }
 
 
 /* Product image placeholder */
 .storefront-product-placeholder {
-    aspect-ratio: 4 / 3;
+    width: 100%;
+    height: 100%;
+
     background-color: #f4ece6;
+
     font-size: 42px;
+}
+
+
+/* Product category */
+.storefront-product-category {
+    width: fit-content;
+
+    color: var(--storefront-primary);
+
+    font-size: 11px;
+    font-weight: 700;
+
+    letter-spacing: 1px;
+
+    text-transform: uppercase;
 }
 
 
 /* Product name */
 .storefront-product-title {
-    font-family: "Fraunces", serif;
-    font-size: 18px;
-    line-height: 1.3;
     color: #33251f;
+
+    font-family: "Fraunces", serif;
+
+    font-size: 20px;
+    font-weight: 600;
+
+    line-height: 1.3;
 }
 
 
 /* Product starting price */
 .storefront-product-price {
     color: #76665e;
+
     font-size: 13px;
 }
 
 
-/* Full-width Product action */
+/* Makes actual Product price stand out */
+.storefront-product-price strong {
+    color: #33251f;
+
+    font-size: 15px;
+    font-weight: 600;
+}
+
+
+/* Product action button */
 .storefront-product-action {
     width: 100%;
-    min-height: 38px;
+
+    min-height: 42px;
+
+    padding: 11px 14px;
+
     border: 1px solid color-mix(in srgb,
-            var(--storefront-primary) 30%,
+            var(--storefront-primary) 40%,
             #ffffff);
-    border-radius: 8px;
-    background-color: color-mix(in srgb,
+
+    border-radius: 9px;
+
+    background-color:
+        color-mix(in srgb,
             var(--storefront-primary) 6%,
             #ffffff);
+
     color: var(--storefront-primary);
+
     font-size: 12px;
     font-weight: 600;
+
     transition:
         background-color 0.2s ease,
         border-color 0.2s ease,
         color 0.2s ease;
 }
 
+
+/* Product action hover */
 .storefront-product-action:hover {
-    border-color: var(--storefront-primary);
-    background-color: var(--storefront-primary);
+    border-color:
+        var(--storefront-primary);
+
+    background-color:
+        var(--storefront-primary);
+
     color: #ffffff;
 }
 
@@ -290,7 +391,9 @@
 /* How it works number */
 .storefront-step-number {
     color: var(--storefront-primary);
+
     font-family: "Fraunces", serif;
+
     font-size: 32px;
     font-weight: 600;
 }
@@ -299,6 +402,7 @@
 /* How it works card title */
 .storefront-how-card h3 {
     color: #ffffff;
+
     font-size: 15px;
     font-weight: 600;
 }
@@ -307,6 +411,7 @@
 /* How it works description */
 .storefront-how-card p {
     color: rgba(255, 255, 255, 0.75);
+
     font-size: 13px;
     line-height: 1.6;
 }
@@ -321,8 +426,10 @@
 /* Featured Customer Review */
 .storefront-feature-review {
     overflow: hidden;
+
     border: 1px solid #eee3da;
     border-radius: 18px;
+
     background-color: #ffffff;
 }
 
@@ -330,7 +437,9 @@
 /* Featured Review name */
 .storefront-feature-review-name {
     color: #33251f;
+
     font-family: "Fraunces", serif;
+
     font-size: clamp(20px, 3vw, 24px);
     font-weight: 600;
 }
@@ -339,6 +448,7 @@
 /* Featured Review date */
 .storefront-feature-review-date {
     color: #948c86;
+
     font-size: 11px;
 }
 
@@ -346,6 +456,7 @@
 /* Featured Review stars */
 .storefront-feature-review-stars {
     flex-shrink: 0;
+
     color: #c98516;
 }
 
@@ -353,10 +464,15 @@
 /* Featured Review comment */
 .storefront-feature-review-comment {
     max-width: 650px;
+
     margin-bottom: 24px;
+
     color: #493d36;
+
     font-family: "Fraunces", serif;
+
     font-size: clamp(19px, 3vw, 27px);
+
     line-height: 1.55;
 }
 
@@ -370,6 +486,7 @@
 /* Featured Review image */
 .storefront-feature-review-image {
     display: block;
+
     object-fit: cover;
 }
 
@@ -377,10 +494,15 @@
 /* Bakery reply inside featured Review */
 .storefront-feature-review-reply {
     max-width: 600px;
+
     margin-bottom: 22px;
+
     padding: 13px 15px;
+
     border-left: 3px solid var(--storefront-primary);
+
     border-radius: 7px;
+
     background-color: #f7f2ed;
 }
 
@@ -388,8 +510,11 @@
 /* Bakery reply heading */
 .storefront-feature-review-reply strong {
     display: block;
+
     margin-bottom: 5px;
+
     color: var(--storefront-primary);
+
     font-size: 11px;
     font-weight: 700;
 }
@@ -398,7 +523,9 @@
 /* Bakery reply text */
 .storefront-feature-review-reply p {
     color: #5b534e;
+
     font-size: 12px;
+
     line-height: 1.6;
 }
 
@@ -406,8 +533,10 @@
 /* Verified Customer Review */
 .storefront-feature-review-verified {
     color: #33805b;
+
     font-size: 10px;
     font-weight: 700;
+
     letter-spacing: 0.3px;
 }
 
@@ -416,11 +545,24 @@
 .storefront-review-carousel-arrow {
     width: 36px;
     height: 36px;
+
     border: 1px solid #ddd2ca;
     border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.95);
+
+    background-color:
+        rgba(255,
+            255,
+            255,
+            0.95);
+
     color: #5a4a41;
-    box-shadow: 0 2px 8px rgba(65, 45, 35, 0.08);
+
+    box-shadow:
+        0 2px 8px rgba(65,
+            45,
+            35,
+            0.08);
+
     z-index: 2;
 }
 
@@ -429,10 +571,14 @@
 .storefront-review-carousel-dot {
     width: 8px;
     height: 8px;
+
     padding: 0;
+
     border: none;
     border-radius: 50%;
+
     background-color: #cbbdb2;
+
     transition:
         width 0.2s ease,
         background-color 0.2s ease;
@@ -442,8 +588,11 @@
 /* Active Review carousel dot */
 .storefront-review-carousel-dot.active {
     width: 21px;
+
     border-radius: 8px;
-    background-color: var(--storefront-primary);
+
+    background-color:
+        var(--storefront-primary);
 }
 
 
@@ -462,12 +611,16 @@
 
     from {
         opacity: 0;
-        transform: translateX(18px);
+
+        transform:
+            translateX(18px);
     }
 
     to {
         opacity: 1;
-        transform: translateX(0);
+
+        transform:
+            translateX(0);
     }
 }
 
@@ -476,7 +629,9 @@
 .storefront-reviews-empty {
     border: 1px solid #eee3da;
     border-radius: 12px;
+
     background-color: #ffffff;
+
     color: var(--storefront-primary);
 }
 
@@ -484,38 +639,51 @@
 /* Empty Reviews title */
 .storefront-reviews-empty h3 {
     color: #33251f;
+
     font-family: "Fraunces", serif;
+
     font-size: 20px;
 }
 
 
 /* Bakery About section */
 .storefront-about-section {
-    background-color: var(--storefront-secondary);
+    background-color:
+        var(--storefront-secondary);
 }
 
 
 /* Bakery About image */
 .storefront-about-image {
     width: 100%;
+
     max-height: 470px;
+
     aspect-ratio: 4 / 3;
+
     object-fit: cover;
+
     border-radius: 16px;
 }
 
 
 /* Bakery About title */
 .storefront-about-title {
-    font-family: "Fraunces", serif;
-    font-size: clamp(28px, 4vw, 36px);
     color: #30221c;
+
+    font-family: "Fraunces", serif;
+
+    font-size:
+        clamp(28px,
+            4vw,
+            36px);
 }
 
 
 /* Bakery About description */
 .storefront-about-description {
     color: #65574e;
+
     line-height: 1.8;
 }
 
@@ -523,6 +691,7 @@
 /* Bakery About icons */
 .storefront-about-icon {
     color: var(--storefront-primary);
+
     flex-shrink: 0;
 }
 
@@ -542,12 +711,16 @@
 
     from {
         opacity: 0;
-        transform: translateX(18px);
+
+        transform:
+            translateX(18px);
     }
 
     to {
         opacity: 1;
-        transform: translateX(0);
+
+        transform:
+            translateX(0);
     }
 }
 
@@ -564,12 +737,38 @@
 
     from {
         opacity: 0.6;
-        transform: scale(1.02);
+
+        transform:
+            scale(1.02);
     }
 
     to {
         opacity: 1;
-        transform: scale(1);
+
+        transform:
+            scale(1);
+    }
+}
+
+
+/* Smaller Menu spacing on phones */
+@media (max-width: 575px) {
+
+    .storefront-menu-section {
+        margin-top: 20px;
+        margin-bottom: 20px;
+
+        border-radius: 18px;
+    }
+
+
+    .storefront-product-image-wrapper {
+        --bs-aspect-ratio: 72%;
+    }
+
+
+    .storefront-product-title {
+        font-size: 18px;
     }
 }
 
@@ -581,5 +780,21 @@
     .storefront-feature-transition .storefront-feature-image,
     .storefront-review-transition {
         animation: none;
+    }
+
+
+    .storefront-product-card,
+    .storefront-product-image {
+        transition: none;
+    }
+
+
+    .storefront-product-card:hover {
+        transform: none;
+    }
+
+
+    .storefront-product-card:hover .storefront-product-image {
+        transform: none;
     }
 }

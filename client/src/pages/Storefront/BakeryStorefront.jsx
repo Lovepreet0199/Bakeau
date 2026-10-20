@@ -444,76 +444,6 @@ export default function BakeryStorefront() {
     }
 
 
-    //Returns an icon based on the Product category
-    function getCategoryIcon(category) {
-
-        const categoryName =
-            category?.toLowerCase() ||
-            "";
-
-        if (
-            categoryName.includes(
-                "cupcake"
-            )
-        ) {
-            return "🧁";
-        }
-
-        if (
-            categoryName.includes(
-                "cookie"
-            )
-        ) {
-            return "🍪";
-        }
-
-        if (
-            categoryName.includes(
-                "dessert"
-            ) ||
-            categoryName.includes(
-                "box"
-            )
-        ) {
-            return "🎁";
-        }
-
-        if (
-            categoryName.includes(
-                "season"
-            )
-        ) {
-            return "🌸";
-        }
-
-        if (
-            categoryName.includes(
-                "bread"
-            )
-        ) {
-            return "🥖";
-        }
-
-        if (
-            categoryName.includes(
-                "pastry"
-            )
-        ) {
-            return "🥐";
-        }
-
-        if (
-            categoryName.includes(
-                "cake"
-            )
-        ) {
-            return "🎂";
-        }
-
-        return "🍰";
-    }
-
-
     //Returns the correct action text for a Product
     function getProductActionLabel(product) {
 
@@ -687,40 +617,13 @@ export default function BakeryStorefront() {
         products[0];
 
 
-    //Create a list of unique Product categories
-    const categories = [
-        ...new Set(
-            products
-                .map(
-                    (product) =>
-                        product.category
-                )
-                .filter(Boolean)
-        )
-    ];
+    //Display all published Products in the Menu
+    const menuProducts =
+        products;
 
-
-    //Create Category cards
-    const categoryCards =
-        categories
-            .slice(0, 5)
-            .map(
-                (category) => ({
-                    name:
-                        category,
-
-                    icon:
-                        getCategoryIcon(
-                            category
-                        )
-                })
-            );
-
-
-    //Use Products as Best Sellers until sales ranking is added
-    const bestSellerProducts =
-        products.slice(0, 4);
-
+    //Controls responsive Menu Product card size
+    const menuProductColumnClass =
+        "col-12 col-sm-6 col-lg-4";
 
     //Sort Reviews by highest rating and then newest date
     const topReviews = [
@@ -1224,84 +1127,26 @@ export default function BakeryStorefront() {
                 </section>
 
 
-                {/* Product categories */}
-                {categoryCards.length > 0 && (
-
-                    <section
-                        id="categories"
-                        className="container-xxl px-3 py-4"
-                    >
-
-                        <div className="row g-3">
-
-                            {categoryCards.map(
-                                (category) => (
-
-                                    <div
-                                        className="col-6 col-sm-4 col-md-3 col-lg"
-                                        key={
-                                            category.name
-                                        }
-                                    >
-
-                                        <button
-                                            type="button"
-                                            className="storefront-category-card w-100 h-100 d-flex flex-column align-items-center justify-content-center gap-2 p-3 p-md-4"
-                                        >
-
-                                            <span className="storefront-category-icon">
-                                                {category.icon}
-                                            </span>
-
-                                            <span className="fw-semibold text-center">
-                                                {category.name}
-                                            </span>
-
-                                        </button>
-
-                                    </div>
-
-                                )
-                            )}
-
-                        </div>
-
-                    </section>
-
-                )}
-
-
-                {/* Best Sellers */}
+                {/* Menu */}
                 <section
                     id="menu"
-                    className="container-xxl px-3 py-4 py-lg-5"
+                    className="container-xxl storefront-menu-section px-3 px-md-4 py-4 py-lg-5"
                 >
 
-                    {/* Best Sellers heading */}
-                    <div className="d-flex align-items-end justify-content-between gap-3 mb-4">
+                    {/* Menu heading */}
+                    <div className="mb-4">
 
-                        <div>
+                        <p className="storefront-eyebrow mb-2">
+                            Our Menu
+                        </p>
 
-                            <h2 className="storefront-small-section-title mb-1">
-                                Best Sellers
-                            </h2>
+                        <h2 className="storefront-small-section-title mb-1">
+                            Freshly baked for you
+                        </h2>
 
-                            <p className="text-secondary mb-0">
-                                Customer favorites, baked fresh.
-                            </p>
-
-                        </div>
-
-
-                        <span className="storefront-view-all d-none d-sm-inline-flex align-items-center gap-1">
-
-                            View all
-
-                            <ArrowRight
-                                size={14}
-                            />
-
-                        </span>
+                        <p className="text-secondary mb-0">
+                            Browse our available cakes, cupcakes and baked treats.
+                        </p>
 
                     </div>
 
@@ -1318,42 +1163,40 @@ export default function BakeryStorefront() {
                     )}
 
 
-                    {bestSellerProducts.length > 0 ? (
+                    {menuProducts.length > 0 ? (
 
                         <div className="row g-3 g-md-4">
 
-                            {bestSellerProducts.map(
+                            {menuProducts.map(
                                 (product) => (
 
                                     <div
-                                        className="col-12 col-sm-6 col-lg-3"
-                                        key={
-                                            product._id
-                                        }
+                                        className={menuProductColumnClass}
+                                        key={product._id}
                                     >
 
                                         <article className="storefront-product-card h-100 d-flex flex-column position-relative">
 
                                             {/* Product image */}
-                                            {product.image_url ? (
+                                            <div className="ratio ratio-4x3 storefront-product-image-wrapper">
 
-                                                <img
-                                                    src={
-                                                        product.image_url
-                                                    }
-                                                    alt={
-                                                        product.name
-                                                    }
-                                                    className="storefront-product-image w-100"
-                                                />
+                                                {product.image_url ? (
 
-                                            ) : (
+                                                    <img
+                                                        src={product.image_url}
+                                                        alt={product.name}
+                                                        className="storefront-product-image w-100 h-100"
+                                                    />
 
-                                                <div className="storefront-product-placeholder d-flex align-items-center justify-content-center">
-                                                    🍰
-                                                </div>
+                                                ) : (
 
-                                            )}
+                                                    <div className="storefront-product-placeholder d-flex align-items-center justify-content-center">
+                                                        🍰
+                                                    </div>
+
+                                                )}
+
+                                            </div>
 
                                             {/* Favourite Product */}
                                             <button
@@ -1397,22 +1240,33 @@ export default function BakeryStorefront() {
 
 
                                             {/* Product information */}
-                                            <div className="d-flex flex-column flex-grow-1 p-3">
+                                            <div className="d-flex flex-column flex-grow-1 p-4">
 
-                                                <h3 className="storefront-product-title mb-1">
+                                                {/* Product category */}
+                                                {product.category && (
+
+                                                    <span className="storefront-product-category mb-2">
+                                                        {product.category}
+                                                    </span>
+
+                                                )}
+
+                                                <h3 className="storefront-product-title mb-2">
                                                     {product.name}
                                                 </h3>
 
 
-                                                <p className="storefront-product-price mb-3">
+                                                <p className="storefront-product-price mb-4">
 
                                                     From{" "}
 
-                                                    {
-                                                        formatPrice(
-                                                            product.base_price
-                                                        )
-                                                    }
+                                                    <strong>
+                                                        {
+                                                            formatPrice(
+                                                                product.base_price
+                                                            )
+                                                        }
+                                                    </strong>
 
                                                 </p>
 
@@ -1420,14 +1274,18 @@ export default function BakeryStorefront() {
                                                 {/* Product action */}
                                                 <Link
                                                     to={`/${slug}/product/${product._id}`}
-                                                    className="storefront-product-action d-flex align-items-center justify-content-center text-decoration-none mt-auto"
+                                                    className="storefront-product-action d-flex align-items-center justify-content-between text-decoration-none mt-auto"
                                                 >
 
-                                                    {
-                                                        getProductActionLabel(
-                                                            product
-                                                        )
-                                                    }
+                                                    <span>
+                                                        {
+                                                            getProductActionLabel(
+                                                                product
+                                                            )
+                                                        }
+                                                    </span>
+
+                                                    <ArrowRight size={16} />
 
                                                 </Link>
 

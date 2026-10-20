@@ -88,7 +88,7 @@ export default function PricingSection() {
 
                             <div className="pricing-price">
                                 <span className="pricing-amount">
-                                    ${billingPeriod === "monthly" ? "19" : "15"}
+                                    CAD{billingPeriod === "monthly" ? "19" : "15"}
                                 </span>
 
                                 <span className="pricing-period">/mo</span>
@@ -154,7 +154,7 @@ export default function PricingSection() {
                             {/* Professional price changes with the selected billing period */}
                             <div className="pricing-price">
                                 <span className="pricing-amount">
-                                    ${billingPeriod === "monthly" ? "49" : "39"}
+                                    CAD{billingPeriod === "monthly" ? "49" : "39"}
                                 </span>
 
                                 <span className="pricing-period">
