@@ -126,7 +126,7 @@ export default function StorefrontOrderTracking() {
     ] = useState(null);
 
 
-    //Tracks Stripe Balance Payment request
+    //Tracks remaining Balance Payment request
     const [
         isPayingBalance,
         setIsPayingBalance
@@ -805,6 +805,170 @@ export default function StorefrontOrderTracking() {
         }
     }
 
+    //Creates a Manual Payment for the remaining Order balance
+    async function handleManualRemainingBalance() {
+
+        //Stop duplicate Payment requests
+        if (
+            isPayingBalance ||
+            !order
+        ) {
+
+            return;
+        }
+
+
+        //Calculate latest remaining balance
+        const balance =
+            Math.max(
+                0,
+                Number(order.total_price) -
+                Number(
+                    order.amount_paid ||
+                    0
+                )
+            );
+
+
+        //Stop if Order is already fully paid
+        if (balance <= 0) {
+
+            return;
+        }
+
+
+        //Get Customer token
+        const token =
+            getToken();
+
+
+        //Customer must still be logged in
+        if (!token) {
+
+            navigate(
+                `/${slug}/login`,
+                {
+                    replace: true
+                }
+            );
+
+            return;
+        }
+
+
+        try {
+
+            //Start Payment loading
+            setIsPayingBalance(
+                true
+            );
+
+
+            //Clear old messages
+            setActionError("");
+            setActionMessage("");
+
+
+            //Create Manual Balance Payment
+            const response =
+                await fetch(
+                    `${API_URL}/api/payments/manual`,
+                    {
+                        method:
+                            "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json",
+
+                            Authorization:
+                                `Bearer ${token}`
+                        },
+
+                        body:
+                            JSON.stringify({
+
+                                order_id:
+                                    order._id,
+
+                                /*
+                                    "full" tells the Backend to
+                                    collect the remaining balance.
+                                */
+                                payment_choice:
+                                    "full"
+
+                            })
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            //Stop if Manual Payment could not be created
+            if (!response.ok) {
+
+                throw new Error(
+                    data.message ||
+                    data.errors?.[0]?.msg ||
+                    "Unable to create Manual Payment"
+                );
+            }
+
+
+            //Reload latest Order so Pending Payment appears
+            const orderResponse =
+                await fetch(
+                    `${API_URL}/api/orders/mine/${orderId}`,
+                    {
+                        headers: {
+                            Authorization:
+                                `Bearer ${token}`
+                        }
+                    }
+                );
+
+
+            const orderData =
+                await orderResponse.json();
+
+
+            //Update Order when reload succeeds
+            if (orderResponse.ok) {
+
+                setOrder(
+                    orderData.order
+                );
+
+            }
+
+
+            //Tell Customer what happens next
+            setActionMessage(
+                "Manual balance payment created. Complete the payment with the Bakery and wait for verification."
+            );
+
+
+        } catch (error) {
+
+            //Display Payment error
+            setActionError(
+                error.message
+            );
+
+
+        } finally {
+
+            //Stop Payment loading
+            setIsPayingBalance(
+                false
+            );
+
+        }
+
+    }
 
     //Display loading state
     if (isLoading) {
@@ -947,17 +1111,28 @@ export default function StorefrontOrderTracking() {
         );
 
 
-    //Customer can pay remaining balance through Stripe
+    //Customer can create another Payment for the remaining balance
     const canPayRemainingBalance =
         order.payment_status ===
         "partially_paid" &&
         remainingBalance > 0 &&
-        bakery.allow_stripe_payment !==
-        false &&
-        bakery.stripe_charges_enabled &&
         !paymentPending &&
         order.status !==
         "cancelled";
+
+
+    //Stripe can be used for the remaining balance
+    const canPayStripeBalance =
+        canPayRemainingBalance &&
+        bakery.allow_stripe_payment !==
+        false &&
+        bakery.stripe_charges_enabled;
+
+
+    //Manual Payment can be used for the remaining balance
+    const canPayManualBalance =
+        canPayRemainingBalance &&
+        bakery.allow_manual_payment;
 
 
     //Pickup address
@@ -1715,42 +1890,86 @@ export default function StorefrontOrderTracking() {
                                 )}
 
 
-                                {/* Pay remaining Balance through Stripe */}
+                                {/* Remaining Balance Payment options */}
                                 {canPayRemainingBalance && (
 
                                     <div className="mt-3">
 
-                                        <button
-                                            type="button"
-                                            onClick={
-                                                handlePayRemainingBalance
-                                            }
-                                            disabled={
-                                                isPayingBalance
-                                            }
-                                            className="storefront-tracking-payment-button w-100"
-                                        >
-
-                                            {isPayingBalance
-                                                ? "Opening secure payment..."
-                                                : `Pay remaining balance · ${formatPrice(
-                                                    remainingBalance
-                                                )}`
-                                            }
-
-                                        </button>
+                                        <small className="d-block mb-2">
+                                            Pay remaining balance
+                                        </small>
 
 
-                                        {/* Stripe trust badge */}
-                                        <div className="text-center mt-2">
+                                        {/* Stripe Balance Payment */}
+                                        {canPayStripeBalance && (
 
-                                            <img
-                                                src="/stripe/powered-by-stripe.svg"
-                                                alt="Powered by Stripe"
-                                                height="22"
-                                            />
+                                            <div className="mb-2">
 
-                                        </div>
+                                                <button
+                                                    type="button"
+                                                    onClick={
+                                                        handlePayRemainingBalance
+                                                    }
+                                                    disabled={
+                                                        isPayingBalance
+                                                    }
+                                                    className="storefront-tracking-payment-button w-100"
+                                                >
+
+                                                    {isPayingBalance
+
+                                                        ? "Processing..."
+
+                                                        : `Pay with Stripe · ${formatPrice(
+                                                            remainingBalance
+                                                        )}`
+                                                    }
+
+                                                </button>
+
+
+                                                {/* Stripe trust badge */}
+                                                <div className="text-center mt-2">
+
+                                                    <img
+                                                        src="/stripe/powered-by-stripe.svg"
+                                                        alt="Powered by Stripe"
+                                                        height="22"
+                                                    />
+
+                                                </div>
+
+                                            </div>
+
+                                        )}
+
+
+                                        {/* Manual Balance Payment */}
+                                        {canPayManualBalance && (
+
+                                            <button
+                                                type="button"
+                                                onClick={
+                                                    handleManualRemainingBalance
+                                                }
+                                                disabled={
+                                                    isPayingBalance
+                                                }
+                                                className="storefront-tracking-payment-button w-100"
+                                            >
+
+                                                {isPayingBalance
+
+                                                    ? "Processing..."
+
+                                                    : `Pay manually · ${formatPrice(
+                                                        remainingBalance
+                                                    )}`
+                                                }
+
+                                            </button>
+
+                                        )}
 
                                     </div>
 

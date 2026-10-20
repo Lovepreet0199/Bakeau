@@ -68,7 +68,8 @@ const createBakery = async (request, response) => {
             accepting_orders,
             payment_rule,
             deposit_percentage,
-            allow_manual_payment
+            allow_manual_payment,
+            allow_stripe_payment
         } = request.body;
 
         //Create a URL-friendly slug from the bakery name
@@ -119,7 +120,8 @@ const createBakery = async (request, response) => {
             accepting_orders: accepting_orders,
             payment_rule: payment_rule,
             deposit_percentage: deposit_percentage,
-            allow_manual_payment: allow_manual_payment
+            allow_manual_payment: allow_manual_payment,
+            allow_stripe_payment: allow_stripe_payment
         });
 
         //Return the newly created bakery
@@ -306,7 +308,8 @@ const updateMyBakery = async (request, response) => {
             accepting_orders,
             payment_rule,
             deposit_percentage,
-            allow_manual_payment
+            allow_manual_payment,
+            allow_stripe_payment
         } = request.body;
 
         //Find the bakery that belongs to the authenticated Bakery Owner
@@ -350,6 +353,11 @@ const updateMyBakery = async (request, response) => {
         bakery.payment_rule = payment_rule;
         bakery.deposit_percentage = deposit_percentage;
         bakery.allow_manual_payment = allow_manual_payment;
+        //Update Stripe Payment preference only when it was included
+        if (allow_stripe_payment !== undefined) {
+            bakery.allow_stripe_payment =
+                allow_stripe_payment;
+        }
 
         //Save the updated bakery information to the database
         await bakery.save();

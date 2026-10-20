@@ -75,6 +75,7 @@ export default function BakerySetup() {
         //Business settings
         minimum_order_notice: 72,
         timezone: "America/Toronto",
+        currency: "CAD",
         maximum_orders_per_day: 10,
         accepting_orders: true,
 
@@ -82,6 +83,7 @@ export default function BakerySetup() {
         payment_rule: "full",
         deposit_percentage: 25,
         allow_manual_payment: false,
+        allow_stripe_payment: true,
     });
 
 
@@ -157,13 +159,19 @@ export default function BakerySetup() {
                     bakery_image_public_id: formData.bakery_image_public_id,
 
                     minimum_order_notice: Number(formData.minimum_order_notice),
+
                     timezone: formData.timezone,
+                    currency: formData.currency,
                     maximum_orders_per_day: Number(formData.maximum_orders_per_day),
                     accepting_orders: formData.accepting_orders,
 
                     payment_rule: formData.payment_rule,
+
                     deposit_percentage: Number(formData.deposit_percentage),
-                    allow_manual_payment: formData.allow_manual_payment
+
+                    allow_manual_payment: formData.allow_manual_payment,
+
+                    allow_stripe_payment: formData.allow_stripe_payment
                 })
             }
         );
@@ -248,6 +256,14 @@ export default function BakerySetup() {
                 return;
             }
 
+            //At least one Payment method must be enabled
+            if (
+                !formData.allow_manual_payment &&
+                !formData.allow_stripe_payment
+            ) {
+                return;
+            }
+
             //Make sure the bakery exists before moving to the Plan step
             const bakeryExists = await ensureBakeryExists();
 
@@ -270,8 +286,13 @@ export default function BakerySetup() {
                     },
                     body: JSON.stringify({
                         payment_rule: formData.payment_rule,
-                        deposit_percentage: Number(formData.deposit_percentage),
-                        allow_manual_payment: formData.allow_manual_payment
+                        deposit_percentage: Number(
+                            formData.deposit_percentage
+                        ),
+                        allow_manual_payment:
+                            formData.allow_manual_payment,
+                        allow_stripe_payment:
+                            formData.allow_stripe_payment
                     })
                 }
             );

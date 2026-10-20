@@ -269,11 +269,9 @@ export default function BakeryOrderDetails() {
     }
 
 
-    //Find the Manual Payment belonging to this Order
-    const manualPayment = order?.payments?.find(
-        (payment) =>
-            payment.payment_method === "Manual"
-    );
+    //Get all Payments belonging to this Order
+    const payments =
+        order?.payments || [];
 
 
     return (
@@ -1307,158 +1305,212 @@ export default function BakeryOrderDetails() {
                                                 </div>
 
 
-                                                {/* Manual Payment */}
-                                                {manualPayment ? (
+                                                {/* Order Payments */}
+                                                {payments.length > 0 ? (
 
-                                                    <div className="bakery-order-details-manual-payment">
+                                                    <div className="d-flex flex-column gap-3">
 
+                                                        {payments.map((payment) => (
 
-                                                        {/* Payment information */}
-                                                        <div className="bakery-order-details-payment-info">
+                                                            <div
+                                                                key={payment._id}
+                                                                className="bakery-order-details-manual-payment"
+                                                            >
 
-                                                            <div>
+                                                                {/* Payment information */}
+                                                                <div className="bakery-order-details-payment-info">
 
-                                                                <span>
-                                                                    Payment method
-                                                                </span>
+                                                                    <div>
 
-                                                                <strong>
-                                                                    Manual Interac e-Transfer
-                                                                </strong>
+                                                                        <span>
+                                                                            Payment method
+                                                                        </span>
 
-                                                            </div>
-
-
-                                                            <div>
-
-                                                                <span>
-                                                                    Payment type
-                                                                </span>
-
-                                                                <strong>
-                                                                    {manualPayment.payment_type}
-                                                                </strong>
-
-                                                            </div>
-
-
-                                                            <div>
-
-                                                                <span>
-                                                                    Amount
-                                                                </span>
-
-                                                                <strong>
-                                                                    ${manualPayment.amount.toFixed(2)}
-                                                                </strong>
-
-                                                            </div>
-
-                                                        </div>
-
-
-                                                        {/* Pending Payment */}
-                                                        {manualPayment.payment_status === "Pending" && (
-
-                                                            <div className="bakery-order-details-payment-pending">
-
-                                                                <div>
-
-                                                                    <strong>
-                                                                        Pending verification
-                                                                    </strong>
-
-                                                                    <span>
-                                                                        Confirm this payment only after you have received the Interac e-Transfer.
-                                                                    </span>
-
-                                                                </div>
-
-
-                                                                <button
-                                                                    type="button"
-                                                                    className="bakery-order-details-payment-button"
-                                                                    disabled={isUpdatingPayment}
-                                                                    onClick={() =>
-                                                                        setPaymentConfirmation({
-                                                                            action: "receive",
-                                                                            paymentId: manualPayment._id,
-                                                                            amount: manualPayment.amount
-                                                                        })
-                                                                    }
-                                                                >
-                                                                    Mark ${manualPayment.amount.toFixed(2)} as received
-                                                                </button>
-
-                                                            </div>
-
-                                                        )}
-
-
-                                                        {/* Received Payment */}
-                                                        {manualPayment.payment_status === "Received" && (
-
-                                                            <div className="bakery-order-details-payment-received-wrapper">
-
-                                                                <div className="bakery-order-details-payment-received">
-
-                                                                    <div className="bakery-order-details-payment-received-icon">
-
-                                                                        <Check
-                                                                            size={16}
-                                                                            strokeWidth={2.5}
-                                                                        />
+                                                                        <strong>
+                                                                            {payment.payment_method}
+                                                                        </strong>
 
                                                                     </div>
 
 
                                                                     <div>
 
+                                                                        <span>
+                                                                            Payment type
+                                                                        </span>
+
                                                                         <strong>
-                                                                            Payment received
+                                                                            {payment.payment_type}
                                                                         </strong>
 
+                                                                    </div>
 
-                                                                        {manualPayment.received_at && (
 
-                                                                            <span>
-                                                                                {new Date(
-                                                                                    manualPayment.received_at
-                                                                                ).toLocaleString(
-                                                                                    "en-CA",
-                                                                                    {
-                                                                                        dateStyle: "medium",
-                                                                                        timeStyle: "short"
-                                                                                    }
-                                                                                )}
-                                                                            </span>
+                                                                    <div>
 
-                                                                        )}
+                                                                        <span>
+                                                                            Amount
+                                                                        </span>
+
+                                                                        <strong>
+                                                                            ${Number(payment.amount).toFixed(2)}
+                                                                        </strong>
 
                                                                     </div>
 
                                                                 </div>
 
 
-                                                                {/* Revert Payment */}
-                                                                <button
-                                                                    type="button"
-                                                                    className="bakery-order-details-payment-revert"
-                                                                    disabled={isUpdatingPayment}
-                                                                    onClick={() =>
-                                                                        setPaymentConfirmation({
-                                                                            action: "revert",
-                                                                            paymentId: manualPayment._id,
-                                                                            amount: manualPayment.amount
-                                                                        })
-                                                                    }
-                                                                >
-                                                                    Mark as pending again
-                                                                </button>
+                                                                {/* Pending Manual Payment */}
+                                                                {payment.payment_method === "Manual" &&
+                                                                    payment.payment_status === "Pending" && (
+
+                                                                        <div className="bakery-order-details-payment-pending">
+
+                                                                            <div>
+
+                                                                                <strong>
+                                                                                    Pending verification
+                                                                                </strong>
+
+                                                                                <span>
+                                                                                    Confirm this payment only after
+                                                                                    you have received it outside Bakeau.
+                                                                                </span>
+
+                                                                            </div>
+
+
+                                                                            <button
+                                                                                type="button"
+                                                                                className="bakery-order-details-payment-button"
+                                                                                disabled={isUpdatingPayment}
+                                                                                onClick={() =>
+                                                                                    setPaymentConfirmation({
+                                                                                        action: "receive",
+                                                                                        paymentId: payment._id,
+                                                                                        amount: payment.amount
+                                                                                    })
+                                                                                }
+                                                                            >
+                                                                                Mark ${Number(
+                                                                                    payment.amount
+                                                                                ).toFixed(2)} as received
+                                                                            </button>
+
+                                                                        </div>
+
+                                                                    )}
+
+
+                                                                {/* Received Payment */}
+                                                                {payment.payment_status === "Received" && (
+
+                                                                    <div className="bakery-order-details-payment-received-wrapper">
+
+                                                                        <div className="bakery-order-details-payment-received">
+
+                                                                            <div className="bakery-order-details-payment-received-icon">
+
+                                                                                <Check
+                                                                                    size={16}
+                                                                                    strokeWidth={2.5}
+                                                                                />
+
+                                                                            </div>
+
+
+                                                                            <div>
+
+                                                                                <strong>
+                                                                                    Payment received
+                                                                                </strong>
+
+
+                                                                                {payment.received_at && (
+
+                                                                                    <span>
+                                                                                        {new Date(
+                                                                                            payment.received_at
+                                                                                        ).toLocaleString(
+                                                                                            "en-CA",
+                                                                                            {
+                                                                                                dateStyle: "medium",
+                                                                                                timeStyle: "short"
+                                                                                            }
+                                                                                        )}
+                                                                                    </span>
+
+                                                                                )}
+
+                                                                            </div>
+
+                                                                        </div>
+
+
+                                                                        {/* Only Manual Payments can be reverted */}
+                                                                        {payment.payment_method === "Manual" && (
+
+                                                                            <button
+                                                                                type="button"
+                                                                                className="bakery-order-details-payment-revert"
+                                                                                disabled={isUpdatingPayment}
+                                                                                onClick={() =>
+                                                                                    setPaymentConfirmation({
+                                                                                        action: "revert",
+                                                                                        paymentId: payment._id,
+                                                                                        amount: payment.amount
+                                                                                    })
+                                                                                }
+                                                                            >
+                                                                                Mark as pending again
+                                                                            </button>
+
+                                                                        )}
+
+                                                                    </div>
+
+                                                                )}
+
+
+                                                                {/* Pending Stripe Payment */}
+                                                                {payment.payment_method === "Stripe" &&
+                                                                    payment.payment_status === "Pending" && (
+
+                                                                        <div className="bakery-order-details-payment-pending">
+
+                                                                            <div>
+
+                                                                                <strong>
+                                                                                    Stripe payment pending
+                                                                                </strong>
+
+                                                                                <span>
+                                                                                    Waiting for Stripe to confirm
+                                                                                    this payment.
+                                                                                </span>
+
+                                                                            </div>
+
+                                                                        </div>
+
+                                                                    )}
+
+
+                                                                {/* Failed Payment */}
+                                                                {payment.payment_status === "Failed" && (
+
+                                                                    <div className="alert alert-danger mb-0 mt-3">
+
+                                                                        Payment failed.
+
+                                                                    </div>
+
+                                                                )}
 
                                                             </div>
 
-                                                        )}
+                                                        ))}
 
                                                     </div>
 

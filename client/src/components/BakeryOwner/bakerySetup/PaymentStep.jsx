@@ -20,6 +20,9 @@ export default function PaymentStep({
     //Stores any Stripe connection error shown to the Bakery Owner
     const [stripeError, setStripeError] = useState("");
 
+    //Stores Payment method validation errors
+    const [paymentError, setPaymentError] = useState("");
+
     //Stores the current Stripe connection status for the Bakery Owner
     const [stripeStatus, setStripeStatus] = useState({
         connected: false,
@@ -166,6 +169,46 @@ export default function PaymentStep({
         window.open("https://dashboard.stripe.com/", "_blank");
     }
 
+    //Validates Payment methods before continuing
+    async function handlePaymentContinue() {
+
+        //Clear previous Payment errors
+        setPaymentError("");
+
+
+        //At least one Payment method must be selected
+        if (
+            !formData.allow_manual_payment &&
+            !formData.allow_stripe_payment
+        ) {
+
+            setPaymentError(
+                "Please enable at least one payment method."
+            );
+
+            return;
+        }
+
+
+        //Stripe must be connected if it is the only Payment method
+        if (
+            !formData.allow_manual_payment &&
+            formData.allow_stripe_payment &&
+            !stripeStatus.onboarding_complete
+        ) {
+
+            setPaymentError(
+                "Complete Stripe setup or enable Manual payments before continuing."
+            );
+
+            return;
+        }
+
+
+        //Continue to the next Bakery Setup step
+        await handleContinue();
+    }
+
     return (
         <div className="bakery-setup-step">
 
@@ -182,7 +225,7 @@ export default function PaymentStep({
                 className="bakery-setup-form"
                 onSubmit={(event) => {
                     event.preventDefault();
-                    handleContinue();
+                    handlePaymentContinue();
                 }}
             >
 
@@ -282,6 +325,47 @@ export default function PaymentStep({
                             {stripeError}
                         </p>
                     )}
+                </div>
+
+                {/* Stripe payment option */}
+                <div className="bakery-payment-manual mb-4">
+
+                    <div className="d-flex align-items-start justify-content-between gap-3">
+
+                        <div>
+
+                            <label
+                                htmlFor="allowStripePayment"
+                                className="form-label mb-1"
+                            >
+                                Stripe payments
+                            </label>
+
+                            <p className="bakery-setup-field-description mb-0">
+                                Allow customers to pay securely
+                                by card through Stripe.
+                            </p>
+
+                        </div>
+
+
+                        <div className="form-check form-switch">
+
+                            <input
+                                type="checkbox"
+                                id="allowStripePayment"
+                                name="allow_stripe_payment"
+                                className="form-check-input"
+                                checked={
+                                    formData.allow_stripe_payment
+                                }
+                                onChange={handleChange}
+                            />
+
+                        </div>
+
+                    </div>
+
                 </div>
 
                 {/* Payment rule */}
@@ -416,6 +500,15 @@ export default function PaymentStep({
                     </div>
 
                 </div>
+
+                {/* Payment method error */}
+                {paymentError && (
+
+                    <p className="text-danger mb-3">
+                        {paymentError}
+                    </p>
+
+                )}
 
                 {/* Navigation buttons */}
                 <div className="d-flex flex-column flex-sm-row justify-content-between gap-3 mt-4">

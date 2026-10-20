@@ -20,7 +20,9 @@ const createManualPayment = async (request, response) => {
     try {
 
         //Get authenticated Customer ID
-        const customerId = request.user.userId;
+        const customerId =
+            request.user.userId;
+
 
         //Get Payment information from request
         const {
@@ -31,8 +33,10 @@ const createManualPayment = async (request, response) => {
 
         //Find the Order only if it belongs to this Customer
         const order = await Order.findOne({
+
             _id: order_id,
             customer_id: customerId
+
         });
 
 
@@ -40,23 +44,66 @@ const createManualPayment = async (request, response) => {
         if (!order) {
 
             return response.status(404).json({
-                message: "Order not found"
+
+                message:
+                    "Order not found"
+
             });
+
+        }
+
+
+        //Cancelled Orders cannot be paid
+        if (
+            order.status ===
+            "cancelled"
+        ) {
+
+            return response.status(400).json({
+
+                message:
+                    "Cancelled orders cannot be paid"
+
+            });
+
+        }
+
+
+        //Stop if Order is already fully paid
+        if (
+            order.payment_status ===
+            "paid" ||
+            Number(order.amount_paid) >=
+            Number(order.total_price)
+        ) {
+
+            return response.status(400).json({
+
+                message:
+                    "This Order is already fully paid"
+
+            });
+
         }
 
 
         //Find the Bakery that owns this Order
-        const bakery = await Bakery.findById(
-            order.bakery_id
-        );
+        const bakery =
+            await Bakery.findById(
+                order.bakery_id
+            );
 
 
         //Stop if Bakery does not exist
         if (!bakery) {
 
             return response.status(404).json({
-                message: "Bakery not found"
+
+                message:
+                    "Bakery not found"
+
             });
+
         }
 
 
@@ -64,86 +111,196 @@ const createManualPayment = async (request, response) => {
         if (!bakery.allow_manual_payment) {
 
             return response.status(400).json({
-                message: "Manual payment is not available for this Bakery"
+
+                message:
+                    "Manual payment is not available for this Bakery"
+
             });
+
         }
 
 
-        //Prevent another Checkout payment from being created for this Order
-        const existingPayment = await Payment.findOne({
-            order_id: order._id,
+        //Prevent another Pending Payment for this Order
+        const pendingPayment =
+            await Payment.findOne({
 
-            payment_status: {
-                $in: ["Pending", "Received"]
-            }
-        });
+                order_id:
+                    order._id,
+
+                payment_status:
+                    "Pending"
+
+            });
 
 
-        if (existingPayment) {
+        if (pendingPayment) {
 
             return response.status(409).json({
-                message: "A payment already exists for this Order"
+
+                message:
+                    "A payment is already pending for this Order"
+
             });
+
         }
 
 
-        //Full Order amount is used by default
-        let paymentAmount = order.total_price;
-        let paymentType = "Full Payment";
+        //Calculate remaining Order balance
+        const remainingBalance =
+            Math.max(
+
+                0,
+
+                Number(
+                    order.total_price
+                ) -
+
+                Number(
+                    order.amount_paid || 0
+                )
+
+            );
+
+
+        //Stop if there is no balance left
+        if (remainingBalance <= 0) {
+
+            return response.status(400).json({
+
+                message:
+                    "This Order is already fully paid"
+
+            });
+
+        }
+
+
+        //Use remaining balance by default
+        let paymentAmount =
+            remainingBalance;
+
+
+        //A partially paid Order needs a Balance Payment
+        let paymentType =
+            Number(order.amount_paid) > 0
+
+                ? "Balance"
+
+                : "Full Payment";
 
 
         //Allow Customer to pay only the required Deposit
         if (
             order.deposit_required &&
-            payment_choice === "deposit"
+            payment_choice ===
+            "deposit"
         ) {
 
-            paymentAmount = order.amount_due_now;
-            paymentType = "Deposit";
+            //Deposit can only be paid once
+            if (
+                Number(order.amount_paid) >
+                0
+            ) {
+
+                return response.status(400).json({
+
+                    message:
+                        "The required deposit has already been paid"
+
+                });
+
+            }
+
+
+            //Use the required Deposit amount
+            paymentAmount =
+                Math.min(
+
+                    Number(
+                        order.amount_due_now
+                    ),
+
+                    remainingBalance
+
+                );
+
+
+            paymentType =
+                "Deposit";
+
         }
 
 
-        //Deposit cannot be selected when this Order requires full payment
+        //Deposit cannot be selected when full payment is required
         if (
             !order.deposit_required &&
-            payment_choice === "deposit"
+            payment_choice ===
+            "deposit"
         ) {
 
             return response.status(400).json({
-                message: "This Order requires full payment"
+
+                message:
+                    "This Order requires full payment"
+
             });
+
         }
 
 
         //Create the Manual Payment
-        const payment = await Payment.create({
+        const payment =
+            await Payment.create({
 
-            order_id: order._id,
+                order_id:
+                    order._id,
 
-            payment_type: paymentType,
+                payment_type:
+                    paymentType,
 
-            payment_method: "Manual",
+                payment_method:
+                    "Manual",
 
-            amount: paymentAmount,
+                amount:
+                    paymentAmount,
 
-            payment_status: "Pending"
-        });
+                payment_status:
+                    "Pending"
+
+            });
 
 
         //Return created Payment
         return response.status(201).json({
 
-            message: "Manual payment created successfully",
+            message:
+                "Manual payment created successfully",
 
-            payment: payment,
+            payment:
+                payment,
 
             order: {
-                _id: order._id,
-                order_number: order.order_number,
-                total_price: order.total_price,
-                amount_due_now: order.amount_due_now,
-                deposit_required: order.deposit_required
+
+                _id:
+                    order._id,
+
+                order_number:
+                    order.order_number,
+
+                total_price:
+                    order.total_price,
+
+                amount_paid:
+                    order.amount_paid,
+
+                remaining_balance:
+                    remainingBalance,
+
+                payment_status:
+                    order.payment_status
+
             }
+
         });
 
 
@@ -156,9 +313,14 @@ const createManualPayment = async (request, response) => {
 
 
         return response.status(500).json({
-            message: "Unable to create Manual payment"
+
+            message:
+                "Unable to create Manual payment"
+
         });
+
     }
+
 };
 
 
