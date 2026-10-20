@@ -693,14 +693,40 @@ const createStripeCheckoutSession = async (request, response) => {
             );
 
 
+
+
+        //Set where Customer returns after Stripe Checkout
+        let successUrl =
+            `${process.env.CLIENT_URL}/${bakery.slug}/order/${order._id}/confirmed?payment=success&session_id={CHECKOUT_SESSION_ID}`;
+
+
+        let cancelUrl =
+            `${process.env.CLIENT_URL}/${bakery.slug}/checkout/payment?payment=cancelled`;
+
+
+        //Balance Payments return to the existing Order Tracking page
+        if (
+            paymentType ===
+            "Balance"
+        ) {
+
+            successUrl =
+                `${process.env.CLIENT_URL}/${bakery.slug}/orders/${order._id}?payment=success`;
+
+
+            cancelUrl =
+                `${process.env.CLIENT_URL}/${bakery.slug}/orders/${order._id}?payment=cancelled`;
+        }
+
         //Create Stripe Checkout Session
         const checkoutSession =
+
             await stripe.checkout.sessions.create(
                 {
 
                     mode:
-                        "payment",
 
+                        "payment",
 
                     //Prefill Customer email
                     customer_email:
@@ -777,12 +803,12 @@ const createStripeCheckoutSession = async (request, response) => {
 
                     //Return Customer to Bakeau after payment
                     success_url:
-                        `${process.env.CLIENT_URL}/${bakery.slug}/order/${order._id}/confirmed?payment=success&session_id={CHECKOUT_SESSION_ID}`,
+                        successUrl,
 
 
-                    //Return Customer to payment page if cancelled
+                    //Return Customer to Bakeau if payment is cancelled
                     cancel_url:
-                        `${process.env.CLIENT_URL}/${bakery.slug}/checkout/payment?payment=cancelled`
+                        cancelUrl
 
                 },
 

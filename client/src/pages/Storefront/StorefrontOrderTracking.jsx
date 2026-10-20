@@ -49,6 +49,7 @@ export default function StorefrontOrderTracking() {
         useNavigate();
 
 
+
     //Used to get page navigation state
     const location =
         useLocation();
@@ -60,6 +61,14 @@ export default function StorefrontOrderTracking() {
         setBakery
     ] = useState(null);
 
+
+    //Gets Stripe Payment result from URL
+    const paymentResult =
+        new URLSearchParams(
+            location.search
+        ).get(
+            "payment"
+        );
 
     //Stores Customer Order
     const [
@@ -1064,6 +1073,41 @@ export default function StorefrontOrderTracking() {
 
                     )}
 
+                    {/* Stripe Balance Payment success */}
+                    {paymentResult ===
+                        "success" && (
+
+                            <div
+                                className="alert alert-success mb-4"
+                                role="alert"
+                            >
+
+                                <strong>
+                                    Payment successful.
+                                </strong>
+
+                                {" "}
+                                Your remaining balance was paid securely through Stripe.
+
+                            </div>
+
+                        )}
+
+
+                    {/* Stripe Balance Payment cancelled */}
+                    {paymentResult ===
+                        "cancelled" && (
+
+                            <div
+                                className="alert alert-warning mb-4"
+                                role="alert"
+                            >
+
+                                Stripe payment was cancelled. Your remaining balance has not been charged.
+
+                            </div>
+
+                        )}
 
                     {/* Order heading */}
                     <div className="storefront-tracking-heading d-flex justify-content-between align-items-end gap-3 flex-wrap">
