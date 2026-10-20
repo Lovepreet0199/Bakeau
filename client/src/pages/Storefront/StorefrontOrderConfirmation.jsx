@@ -1,6 +1,10 @@
 import API_URL from "../../config/api.js";
+
 //Import React hooks
 import { useEffect, useState } from "react";
+
+//Import Cart hook
+import { useCart } from "../../context/useCart";
 
 //Import React Router tools
 import {
@@ -30,6 +34,9 @@ export default function StorefrontOrderConfirmation() {
     //Get Bakery slug and Order ID
     const { slug, orderId } = useParams();
     const navigate = useNavigate();
+
+    //Used to clear ordered Products from the Cart
+    const { clearCart } = useCart();
 
     //Get URL information returned from Stripe
     const [searchParams] = useSearchParams();
@@ -173,6 +180,20 @@ export default function StorefrontOrderConfirmation() {
 
                 setOrder(orderData.order);
 
+                /*
+    Clear the Cart only when this page was reached
+    from a successfully submitted Checkout.
+*/
+                if (savedConfirmation) {
+
+                    clearCart();
+
+                    //Prevent another visit from clearing a newer Cart
+                    sessionStorage.removeItem(
+                        `checkoutConfirmation:${slug}`
+                    );
+                }
+
                 //Remove temporary Checkout information after successful Stripe payment
                 if (paymentResult === "success") {
 
@@ -211,7 +232,7 @@ export default function StorefrontOrderConfirmation() {
 
         loadConfirmation();
 
-    }, [slug, orderId, navigate, paymentResult]);
+    }, [slug, orderId, navigate, paymentResult, clearCart]);
 
 
     //Loading

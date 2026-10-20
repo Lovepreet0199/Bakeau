@@ -10,7 +10,8 @@ import {
     getMyOrders,
     getMyOrderById,
     cancelMyOrder,
-    updateMyPendingOrder
+    updateMyPendingOrder,
+    deleteBakeryOrder
 } from "../controllers/orderController.js";
 
 //Import authentication middleware to protect Order routes
@@ -207,6 +208,14 @@ router.patch(
     authenticateUser,
     authorizeRoles("customer"),
     cancelMyOrder
+);
+
+//Bakery Owner permanently deletes an unpaid Order
+router.delete(
+    "/:id",
+    authenticateUser,
+    authorizeRoles("bakeryOwner"),
+    deleteBakeryOrder
 );
 
 //Export the Order router

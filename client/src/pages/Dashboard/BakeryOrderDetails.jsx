@@ -87,6 +87,11 @@ export default function BakeryOrderDetails() {
     //Tracks whether the Contact Customer menu is open
     const [isContactMenuOpen, setIsContactMenuOpen] = useState(false);
 
+    //Tracks Delete Order confirmation
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+    //Tracks Order deletion
+    const [isDeletingOrder, setIsDeletingOrder] = useState(false);
 
     //Load the selected Order when the page opens
     useEffect(() => {
@@ -278,6 +283,83 @@ export default function BakeryOrderDetails() {
         Number(
             order?.amount_paid || 0
         ) > 0;
+
+    //Only unpaid Pending or Cancelled Orders can be deleted
+    const canDeleteOrder =
+        order &&
+        (
+            order.status ===
+            "pending" ||
+            order.status ===
+            "cancelled"
+        ) &&
+        Number(
+            order.amount_paid || 0
+        ) === 0;
+
+    //Deletes an unpaid Bakery Order
+    async function handleDeleteOrder() {
+
+        try {
+
+            setIsDeletingOrder(true);
+            setError("");
+
+            const token =
+                getAuthToken();
+
+
+            const response =
+                await fetch(
+                    `${API_URL}/api/orders/${id}`,
+                    {
+                        method:
+                            "DELETE",
+
+                        headers: {
+                            Authorization:
+                                `Bearer ${token}`
+                        }
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.message ||
+                    "Unable to delete Order"
+                );
+            }
+
+
+            //Return to Orders after deletion
+            navigate(
+                "/bakery/orders"
+            );
+
+
+        } catch (error) {
+
+            setError(
+                error.message
+            );
+
+            setIsDeleteModalOpen(
+                false
+            );
+
+        } finally {
+
+            setIsDeletingOrder(
+                false
+            );
+        }
+    }
 
     return (
 
@@ -1557,6 +1639,27 @@ export default function BakeryOrderDetails() {
 
                                         </div>
 
+                                        {/* Delete unpaid Order */}
+                                        {canDeleteOrder && (
+
+                                            <div className="border-top pt-3 mt-3">
+
+                                                <button
+                                                    type="button"
+                                                    className="btn btn-outline-danger w-100"
+                                                    onClick={() =>
+                                                        setIsDeleteModalOpen(
+                                                            true
+                                                        )
+                                                    }
+                                                >
+                                                    Delete Order
+                                                </button>
+
+                                            </div>
+
+                                        )}
+
 
                                         {/* Status update progress */}
                                         {isUpdatingStatus && (
@@ -1697,6 +1800,96 @@ export default function BakeryOrderDetails() {
 
             )}
 
+            {/* Delete Order confirmation */}
+            {isDeleteModalOpen && (
+
+                <>
+
+                    <div
+                        className="modal d-block"
+                        tabIndex="-1"
+                        role="dialog"
+                        aria-modal="true"
+                    >
+
+                        <div className="modal-dialog modal-dialog-centered">
+
+                            <div className="modal-content border-0 shadow rounded-4">
+
+                                <div className="modal-header border-0 pb-0">
+
+                                    <h5 className="modal-title">
+                                        Delete this Order?
+                                    </h5>
+
+                                    <button
+                                        type="button"
+                                        className="btn-close"
+                                        disabled={isDeletingOrder}
+                                        onClick={() =>
+                                            setIsDeleteModalOpen(
+                                                false
+                                            )
+                                        }
+                                    ></button>
+
+                                </div>
+
+
+                                <div className="modal-body">
+
+                                    <p className="mb-0">
+
+                                        This permanently removes the Order
+                                        and cannot be undone.
+
+                                    </p>
+
+                                </div>
+
+
+                                <div className="modal-footer border-0 pt-0">
+
+                                    <button
+                                        type="button"
+                                        className="btn btn-outline-secondary"
+                                        disabled={isDeletingOrder}
+                                        onClick={() =>
+                                            setIsDeleteModalOpen(
+                                                false
+                                            )
+                                        }
+                                    >
+                                        Go back
+                                    </button>
+
+                                    <button
+                                        type="button"
+                                        className="btn btn-danger"
+                                        disabled={isDeletingOrder}
+                                        onClick={
+                                            handleDeleteOrder
+                                        }
+                                    >
+                                        {isDeletingOrder
+                                            ? "Deleting..."
+                                            : "Delete Order"
+                                        }
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div className="modal-backdrop show"></div>
+
+                </>
+
+            )}
 
             {/* Manual Payment confirmation modal */}
             {paymentConfirmation && (

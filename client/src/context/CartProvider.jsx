@@ -1,7 +1,8 @@
 //Import React tools used to manage the Cart
 import {
     useEffect,
-    useState
+    useState,
+    useCallback
 } from "react";
 
 //Import the Customer Cart Context
@@ -187,19 +188,21 @@ export default function CartProvider({ children }) {
     }
 
     //Clears the Customer Cart
-    function clearCart() {
+    const clearCart =
+        useCallback(() => {
 
-        //Remove all Cart Products
-        setCartItems([]);
+            //Remove all Cart Products
+            setCartItems([]);
 
-        //Remove the Bakery note
-        setCartNote("");
+            //Remove the Bakery note
+            setCartNote("");
 
-        //Remove saved Bakery note
-        localStorage.removeItem(
-            "bakeau_cart_note"
-        );
-    }
+            //Remove saved Bakery note
+            localStorage.removeItem(
+                "bakeau_cart_note"
+            );
+
+        }, []);
 
 
     //Count the total quantity of Products in the Cart

@@ -2655,6 +2655,204 @@ const updateMyPendingOrder = async (
     }
 };
 
+//Deletes an unpaid Pending or Cancelled Bakery Order
+const deleteBakeryOrder = async (
+    request,
+    response
+) => {
+
+    try {
+
+        //Get authenticated Bakery Owner
+        const ownerId =
+            request.user.userId;
+
+        //Get Order ID
+        const orderId =
+            request.params.id;
+
+
+        //Find Bakery belonging to Owner
+        const bakery =
+            await Bakery.findOne({
+                owner_id:
+                    ownerId
+            });
+
+
+        if (!bakery) {
+
+            return response
+                .status(404)
+                .json({
+                    message:
+                        "Bakery not found"
+                });
+        }
+
+
+        //Find Order only inside this Bakery
+        const order =
+            await Order.findOne({
+
+                _id:
+                    orderId,
+
+                bakery_id:
+                    bakery._id
+            });
+
+
+        if (!order) {
+
+            return response
+                .status(404)
+                .json({
+                    message:
+                        "Order not found"
+                });
+        }
+
+
+        //Only Pending or Cancelled Orders can be deleted
+        if (
+            order.status !==
+            "pending" &&
+            order.status !==
+            "cancelled"
+        ) {
+
+            return response
+                .status(400)
+                .json({
+                    message:
+                        "Only Pending or Cancelled Orders can be deleted"
+                });
+        }
+
+
+        //Orders with received Payments cannot be deleted
+        if (
+            Number(
+                order.amount_paid || 0
+            ) > 0
+        ) {
+
+            return response
+                .status(400)
+                .json({
+                    message:
+                        "Orders with a payment cannot be deleted"
+                });
+        }
+
+
+        /*
+            Pending Orders still have inventory reserved.
+
+            Cancelled Orders already returned inventory
+            when they were cancelled.
+        */
+        if (
+            order.status ===
+            "pending"
+        ) {
+
+            await restoreOrderInventory(
+                order._id
+            );
+        }
+
+
+        //Get Order Item IDs
+        const orderItems =
+            await OrderItem.find({
+
+                order_id:
+                    order._id
+
+            }).select("_id");
+
+
+        const orderItemIds =
+            orderItems.map(
+                (item) =>
+                    item._id
+            );
+
+
+        //Delete saved Customizations
+        await OrderItemCustomization
+            .deleteMany({
+
+                order_item_id: {
+                    $in:
+                        orderItemIds
+                }
+            });
+
+
+        //Delete all records belonging to this Order
+        await Promise.all([
+
+            OrderItem.deleteMany({
+                order_id:
+                    order._id
+            }),
+
+            Payment.deleteMany({
+                order_id:
+                    order._id
+            }),
+
+            OrderActivity.deleteMany({
+                order_id:
+                    order._id
+            }),
+
+            Notification.deleteMany({
+                order_id:
+                    order._id
+            })
+        ]);
+
+
+        //Delete the Order
+        await Order.deleteOne({
+            _id:
+                order._id
+        });
+
+
+        return response
+            .status(200)
+            .json({
+
+                message:
+                    "Order deleted successfully"
+
+            });
+
+
+    } catch (error) {
+
+        console.error(
+            "Delete Bakery Order error:",
+            error.message
+        );
+
+
+        return response
+            .status(500)
+            .json({
+
+                message:
+                    "Unable to delete Order"
+
+            });
+    }
+};
+
 //Export Order controller functions
 export {
     createOrder,
@@ -2664,5 +2862,6 @@ export {
     getMyOrders,
     getMyOrderById,
     cancelMyOrder,
-    updateMyPendingOrder
+    updateMyPendingOrder,
+    deleteBakeryOrder
 };
