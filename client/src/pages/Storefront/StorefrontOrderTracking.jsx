@@ -1077,6 +1077,9 @@ export default function StorefrontOrderTracking() {
         paymentAmount >
         0;
 
+    //Checks whether this Order already has money received
+    const hasReceivedPayment =
+        paymentAmount > 0;
 
     //Calculate remaining Order balance
     const remainingBalance =
@@ -1088,6 +1091,13 @@ export default function StorefrontOrderTracking() {
             paymentAmount
         );
 
+    //Calculate Customer-facing balance after any Pending Payment
+    const displayedBalance =
+        Math.max(
+            0,
+            remainingBalance -
+            pendingPaymentAmount
+        );
 
     //Check whether Stripe has been used for this Order
     const hasStripePayment =
@@ -1251,7 +1261,9 @@ export default function StorefrontOrderTracking() {
 
                     {/* Stripe Balance Payment success */}
                     {paymentResult ===
-                        "success" && (
+                        "success" &&
+                        order.status !==
+                        "cancelled" && (
 
                             <div
                                 className="alert alert-success mb-4"
@@ -1272,6 +1284,8 @@ export default function StorefrontOrderTracking() {
 
                     {/* Stripe Balance Payment cancelled */}
                     {paymentResult ===
+                        "cancelled" &&
+                        order.status !==
                         "cancelled" && (
 
                             <div
@@ -1864,7 +1878,7 @@ export default function StorefrontOrderTracking() {
                                     <strong>
                                         {
                                             formatPrice(
-                                                remainingBalance
+                                                displayedBalance
                                             )
                                         }
                                     </strong>
@@ -1988,40 +2002,61 @@ export default function StorefrontOrderTracking() {
                                             Order actions
                                         </h2>
 
-                                        <p className="storefront-tracking-action-text mb-3">
 
-                                            You can edit/cancel this Order while it is still pending.
+                                        {/* Paid Order message */}
+                                        {hasReceivedPayment ? (
 
-                                        </p>
+                                            <p className="storefront-tracking-action-text mb-0">
 
+                                                This Order already has a payment attached.
+                                                Please contact the Bakery if you need to
+                                                change or cancel it.
 
-                                        {/* Edit Order */}
-                                        <Link
-                                            to={`/${slug}/orders/${orderId}/edit`}
-                                            className="storefront-tracking-edit-button d-flex align-items-center justify-content-center text-decoration-none w-100 mb-2"
-                                        >
-                                            Edit Order
-                                        </Link>
+                                            </p>
 
+                                        ) : (
 
-                                        <button
-                                            type="button"
-                                            className="storefront-tracking-cancel-button w-100"
-                                            onClick={() => {
+                                            <>
 
-                                                //Clear old errors
-                                                setActionError("");
+                                                <p className="storefront-tracking-action-text mb-3">
+
+                                                    You can edit/cancel this Order while it is still pending.
+
+                                                </p>
 
 
-                                                //Open confirmation modal
-                                                setIsCancelModalOpen(
-                                                    true
-                                                );
+                                                {/* Edit Order */}
+                                                <Link
+                                                    to={`/${slug}/orders/${orderId}/edit`}
+                                                    className="storefront-tracking-edit-button d-flex align-items-center justify-content-center text-decoration-none w-100 mb-2"
+                                                >
+                                                    Edit Order
+                                                </Link>
 
-                                            }}
-                                        >
-                                            Cancel Order
-                                        </button>
+
+                                                {/* Cancel Order */}
+                                                <button
+                                                    type="button"
+                                                    className="storefront-tracking-cancel-button w-100"
+                                                    onClick={() => {
+
+                                                        //Clear old errors
+                                                        setActionError("");
+
+
+                                                        //Open confirmation modal
+                                                        setIsCancelModalOpen(
+                                                            true
+                                                        );
+
+                                                    }}
+                                                >
+                                                    Cancel Order
+                                                </button>
+
+                                            </>
+
+                                        )}
 
                                     </section>
 

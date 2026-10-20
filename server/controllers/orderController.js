@@ -1788,6 +1788,22 @@ const cancelMyOrder = async (request, response) => {
             });
         }
 
+        //Paid Orders cannot be cancelled by the Customer
+        if (
+            Number(
+                order.amount_paid || 0
+            ) > 0
+        ) {
+
+            return response.status(400).json({
+
+                message:
+                    "Orders with a payment cannot be cancelled online. Please contact the Bakery."
+
+            });
+
+        }
+
 
         /*
             Return tracked Product quantities before
@@ -1921,6 +1937,21 @@ const updateMyPendingOrder = async (
             });
         }
 
+        //Paid Orders cannot be edited by the Customer
+        if (
+            Number(
+                order.amount_paid || 0
+            ) > 0
+        ) {
+
+            return response.status(400).json({
+
+                message:
+                    "Orders with a payment cannot be edited online. Please contact the Bakery."
+
+            });
+
+        }
 
         //Find the Bakery belonging to this Order
         const bakery =
