@@ -951,8 +951,9 @@ export default function StorefrontOrderTracking() {
     const canPayRemainingBalance =
         order.payment_status ===
         "partially_paid" &&
-        remainingBalance >
-        0 &&
+        remainingBalance > 0 &&
+        bakery.allow_stripe_payment !==
+        false &&
         bakery.stripe_charges_enabled &&
         !paymentPending &&
         order.status !==

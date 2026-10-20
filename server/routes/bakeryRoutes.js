@@ -157,7 +157,13 @@ const paymentSettingsValidation = [
 
     body("allow_manual_payment")
         .isBoolean()
-        .withMessage("Manual payment setting must be true or false")
+        .withMessage("Manual payment setting must be true or false"),
+
+    body("allow_stripe_payment")
+        .isBoolean()
+        .withMessage(
+            "Stripe payment setting must be true or false"
+        )
 ];
 
 //Validate information used to calculate a public Product price quote

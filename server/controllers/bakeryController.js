@@ -420,50 +420,108 @@ const uploadBakeryLogo = async (request, response) => {
 
 //Update payment settings for the authenticated Bakery Owner
 const updateBakeryPaymentSettings = async (request, response) => {
+
     try {
 
         //Get the authenticated Bakery Owner's user ID
-        const ownerId = request.user.userId;
+        const ownerId =
+            request.user.userId;
 
-        //Get the payment settings submitted by the Bakery Owner
+
+        //Get the Payment Settings submitted by the Bakery Owner
         const {
             payment_rule,
             deposit_percentage,
-            allow_manual_payment
+            allow_manual_payment,
+            allow_stripe_payment
         } = request.body;
 
-        //Find the bakery that belongs to the authenticated Bakery Owner
-        const bakery = await Bakery.findOne({
-            owner_id: ownerId
-        });
 
-        //Stop if the Bakery Owner does not have a bakery
+        //Find the Bakery belonging to this Owner
+        const bakery =
+            await Bakery.findOne({
+                owner_id:
+                    ownerId
+            });
+
+
+        //Stop if Bakery does not exist
         if (!bakery) {
+
             return response.status(404).json({
-                message: "Bakery not found"
+                message:
+                    "Bakery not found"
             });
         }
 
-        //Update the bakery payment settings
-        bakery.payment_rule = payment_rule;
-        bakery.deposit_percentage = deposit_percentage;
-        bakery.allow_manual_payment = allow_manual_payment;
 
-        //Save the updated payment settings
+        //At least one Payment method must stay enabled
+        if (
+            !allow_manual_payment &&
+            !allow_stripe_payment
+        ) {
+
+            return response.status(400).json({
+                message:
+                    "At least one payment method must be enabled"
+            });
+        }
+
+
+        //Stripe cannot be the only method until Stripe is ready
+        if (
+            !allow_manual_payment &&
+            allow_stripe_payment &&
+            !bakery.stripe_charges_enabled
+        ) {
+
+            return response.status(400).json({
+                message:
+                    "Complete Stripe setup before using Stripe as your only payment method"
+            });
+        }
+
+
+        //Update Payment Settings
+        bakery.payment_rule =
+            payment_rule;
+
+        bakery.deposit_percentage =
+            deposit_percentage;
+
+        bakery.allow_manual_payment =
+            allow_manual_payment;
+
+        bakery.allow_stripe_payment =
+            allow_stripe_payment;
+
+
+        //Save updated Bakery
         await bakery.save();
 
-        //Return the updated payment settings
+
+        //Return updated Bakery
         return response.status(200).json({
-            message: "Payment settings updated successfully",
-            bakery: bakery
+
+            message:
+                "Payment settings updated successfully",
+
+            bakery:
+                bakery
         });
+
 
     } catch (error) {
 
-        console.error("Payment settings update error:", error.message);
+        console.error(
+            "Payment settings update error:",
+            error.message
+        );
+
 
         return response.status(500).json({
-            message: "Unable to update payment settings"
+            message:
+                "Unable to update payment settings"
         });
     }
 };

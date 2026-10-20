@@ -236,6 +236,13 @@ const bakerySchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+
+    //Controls whether Customers can use Stripe Payments
+    allow_stripe_payment: {
+        type: Boolean,
+        default: true
+    },
+
     //Stripe connected account used to receive online payments
     stripe_account_id: {
         type: String,

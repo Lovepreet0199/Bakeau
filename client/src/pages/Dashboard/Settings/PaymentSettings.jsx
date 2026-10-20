@@ -39,7 +39,11 @@ export default function PaymentSettings({
 
         //Manual payment option
         allow_manual_payment:
-            bakery.allow_manual_payment ?? false
+            bakery.allow_manual_payment ?? false,
+
+        //Stripe payment option
+        allow_stripe_payment:
+            bakery.allow_stripe_payment !== false
     });
 
 
@@ -335,6 +339,33 @@ export default function PaymentSettings({
             return;
         }
 
+        //At least one Payment method must stay enabled
+        if (
+            !formData.allow_manual_payment &&
+            !formData.allow_stripe_payment
+        ) {
+
+            setError(
+                "At least one payment method must be enabled."
+            );
+
+            return;
+        }
+
+
+        //Stripe must be ready if it is the only Payment method
+        if (
+            !formData.allow_manual_payment &&
+            formData.allow_stripe_payment &&
+            !stripeStatus.onboarding_complete
+        ) {
+
+            setError(
+                "Complete Stripe setup before using Stripe as your only payment method."
+            );
+
+            return;
+        }
 
         //Start the save state
         setIsSaving(true);
@@ -362,7 +393,10 @@ export default function PaymentSettings({
                     depositPercentage,
 
                 allow_manual_payment:
-                    formData.allow_manual_payment
+                    formData.allow_manual_payment,
+
+                allow_stripe_payment:
+                    formData.allow_stripe_payment
             };
 
 
@@ -802,20 +836,91 @@ export default function PaymentSettings({
             <div className="bakery-settings-divider"></div>
 
 
-            {/* Manual payments heading */}
+            {/* Payment methods heading */}
             <div className="bakery-settings-section-heading">
 
                 <h2>
-                    Manual payments
+                    Payment methods
                 </h2>
 
                 <p>
-                    Choose whether customers can pay
-                    outside Bakeau.
+                    Choose which payment methods customers
+                    can use when placing an order.
                 </p>
 
             </div>
 
+            {/* Stripe payment toggle */}
+            <div className="bakery-settings-business-toggle">
+
+                <div>
+
+                    <strong>
+                        Stripe payments
+                    </strong>
+
+                    <p>
+                        Allow customers to pay securely
+                        by card through Stripe.
+                    </p>
+
+                </div>
+
+
+                <label className="bakery-settings-switch">
+
+                    <input
+                        type="checkbox"
+                        name="allow_stripe_payment"
+                        checked={
+                            formData.allow_stripe_payment
+                        }
+                        onChange={handleChange}
+                    />
+
+                    <span className="bakery-settings-switch-slider"></span>
+
+                </label>
+
+            </div>
+
+
+            {/* Stripe payment information */}
+            {formData.allow_stripe_payment && (
+
+                <div className="bakery-settings-payment-info">
+
+                    <div className="bakery-settings-payment-info-icon">
+
+                        <CreditCard
+                            size={18}
+                            strokeWidth={1.8}
+                        />
+
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            {stripeStatus.onboarding_complete
+                                ? "Stripe payments enabled"
+                                : "Stripe setup required"
+                            }
+                        </strong>
+
+                        <p>
+                            {stripeStatus.onboarding_complete
+                                ? "Customers can pay securely through Stripe Checkout."
+                                : "Complete your Stripe setup before customers can use Stripe payments."
+                            }
+                        </p>
+
+                    </div>
+
+                </div>
+
+            )}
 
             {/* Manual payment toggle */}
             <div className="bakery-settings-business-toggle">

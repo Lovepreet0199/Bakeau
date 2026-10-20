@@ -599,6 +599,17 @@ const createStripeCheckoutSession = async (request, response) => {
             });
         }
 
+        //Bakery must allow Stripe Payments
+        if (
+            bakery.allow_stripe_payment ===
+            false
+        ) {
+
+            return response.status(400).json({
+                message:
+                    "Stripe payment is not available for this Bakery"
+            });
+        }
 
         //Bakery must have a connected Stripe account
         if (

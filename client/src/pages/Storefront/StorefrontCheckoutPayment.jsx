@@ -335,6 +335,9 @@ export default function StorefrontCheckoutPayment() {
                     !bakeryData.bakery
                         .allow_manual_payment &&
                     bakeryData.bakery
+                        .allow_stripe_payment !==
+                    false &&
+                    bakeryData.bakery
                         .stripe_charges_enabled
                 ) {
 
@@ -581,7 +584,11 @@ export default function StorefrontCheckoutPayment() {
         if (
             paymentMethod ===
             "stripe" &&
-            !bakery.stripe_charges_enabled
+            (
+                bakery.allow_stripe_payment ===
+                false ||
+                !bakery.stripe_charges_enabled
+            )
         ) {
 
             setError(
@@ -1272,69 +1279,70 @@ export default function StorefrontCheckoutPayment() {
 
 
                                 {/* Stripe Payment */}
-                                {bakery?.stripe_charges_enabled && (
+                                {bakery?.allow_stripe_payment !== false &&
+                                    bakery?.stripe_charges_enabled && (
 
-                                    <button
-                                        type="button"
-                                        onClick={() =>
-                                            setPaymentMethod("stripe")
-                                        }
-                                        className={
-                                            paymentMethod === "stripe"
-                                                ? "storefront-payment-method storefront-payment-method-stripe storefront-payment-method-selected w-100 mt-3"
-                                                : "storefront-payment-method storefront-payment-method-stripe w-100 mt-3"
-                                        }
-                                    >
+                                        <button
+                                            type="button"
+                                            onClick={() =>
+                                                setPaymentMethod("stripe")
+                                            }
+                                            className={
+                                                paymentMethod === "stripe"
+                                                    ? "storefront-payment-method storefront-payment-method-stripe storefront-payment-method-selected w-100 mt-3"
+                                                    : "storefront-payment-method storefront-payment-method-stripe w-100 mt-3"
+                                            }
+                                        >
 
-                                        <div className="d-flex align-items-center justify-content-between gap-3 w-100">
+                                            <div className="d-flex align-items-center justify-content-between gap-3 w-100">
 
-                                            <div className="d-flex align-items-center gap-3 text-start">
+                                                <div className="d-flex align-items-center gap-3 text-start">
 
-                                                {/* Secure Stripe icon */}
-                                                <div className="storefront-payment-stripe-icon d-flex align-items-center justify-content-center flex-shrink-0">
+                                                    {/* Secure Stripe icon */}
+                                                    <div className="storefront-payment-stripe-icon d-flex align-items-center justify-content-center flex-shrink-0">
 
-                                                    <ShieldCheck size={21} />
+                                                        <ShieldCheck size={21} />
+
+                                                    </div>
+
+
+                                                    <div>
+
+                                                        <strong className="d-block storefront-payment-stripe-title">
+                                                            Pay securely by card
+                                                        </strong>
+
+                                                        <small className="d-block storefront-payment-stripe-text">
+                                                            Secure payment processed by Stripe.
+                                                        </small>
+
+
+                                                        {/* Official Powered by Stripe badge */}
+                                                        <img
+                                                            src="/stripe/powered-by-stripe.svg"
+                                                            alt="Powered by Stripe"
+                                                            className="storefront-payment-stripe-badge mt-2"
+                                                        />
+
+                                                    </div>
 
                                                 </div>
 
 
-                                                <div>
+                                                {/* Selected Payment indicator */}
+                                                <div className="storefront-payment-radio flex-shrink-0">
 
-                                                    <strong className="d-block storefront-payment-stripe-title">
-                                                        Pay securely by card
-                                                    </strong>
-
-                                                    <small className="d-block storefront-payment-stripe-text">
-                                                        Secure payment processed by Stripe.
-                                                    </small>
-
-
-                                                    {/* Official Powered by Stripe badge */}
-                                                    <img
-                                                        src="/stripe/powered-by-stripe.svg"
-                                                        alt="Powered by Stripe"
-                                                        className="storefront-payment-stripe-badge mt-2"
-                                                    />
+                                                    {paymentMethod === "stripe" && (
+                                                        <Check size={12} />
+                                                    )}
 
                                                 </div>
 
                                             </div>
 
+                                        </button>
 
-                                            {/* Selected Payment indicator */}
-                                            <div className="storefront-payment-radio flex-shrink-0">
-
-                                                {paymentMethod === "stripe" && (
-                                                    <Check size={12} />
-                                                )}
-
-                                            </div>
-
-                                        </div>
-
-                                    </button>
-
-                                )}
+                                    )}
 
 
                                 {/* Manual payment information */}
@@ -1373,6 +1381,7 @@ export default function StorefrontCheckoutPayment() {
 
                                 {/* Stripe payment information */}
                                 {paymentMethod === "stripe" &&
+                                    bakery?.allow_stripe_payment !== false &&
                                     bakery?.stripe_charges_enabled && (
 
                                         <div className="storefront-payment-stripe-info mt-3">
@@ -1438,8 +1447,13 @@ export default function StorefrontCheckoutPayment() {
                                     (
                                         paymentMethod ===
                                         "stripe" &&
-                                        !bakery
-                                            ?.stripe_charges_enabled
+                                        (
+                                            bakery
+                                                ?.allow_stripe_payment ===
+                                            false ||
+                                            !bakery
+                                                ?.stripe_charges_enabled
+                                        )
                                     )
                                 }
                                 className="storefront-payment-primary-button w-100"
