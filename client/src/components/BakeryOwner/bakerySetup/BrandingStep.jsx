@@ -1,6 +1,10 @@
 import API_URL from "../../../config/api.js";
+
 //Import useState to manage temporary upload states
 import { useState } from "react";
+
+//Import authentication helper
+import { getAuthToken } from "../../../utils/authStorage.js";
 
 
 //Displays the Branding step of the bakery setup process
@@ -50,6 +54,89 @@ export default function BrandingStep({
         "#3F3035"
     ];
 
+    //Preset Storefront themes
+    const storefrontThemeOptions = [
+
+        {
+            id: "warm",
+            name: "Warm Bakery",
+            primary_color: "#C65F3A",
+            secondary_color: "#F4E8DF",
+            dark_color: "#432C23"
+        },
+
+        {
+            id: "sage",
+            name: "Sage",
+            primary_color: "#5F7161",
+            secondary_color: "#DCE7E1",
+            dark_color: "#3D4A3E"
+        },
+
+        {
+            id: "blueberry",
+            name: "Blueberry",
+            primary_color: "#4F759B",
+            secondary_color: "#DDE6EF",
+            dark_color: "#2F3E4E"
+        },
+
+        {
+            id: "lavender",
+            name: "Lavender",
+            primary_color: "#6D597A",
+            secondary_color: "#E8DFF0",
+            dark_color: "#41364D"
+        },
+
+        {
+            id: "rose",
+            name: "Rose",
+            primary_color: "#B56576",
+            secondary_color: "#F2E1E5",
+            dark_color: "#3F3035"
+        }
+
+    ];
+
+    //Applies a Storefront theme preset
+    function applyStorefrontTheme(theme) {
+
+        //Save selected Storefront theme
+        handleChange({
+            target: {
+                name: "storefront_theme",
+                value: theme.id
+            }
+        });
+
+
+        //Apply Primary color
+        handleChange({
+            target: {
+                name: "primary_color",
+                value: theme.primary_color
+            }
+        });
+
+
+        //Apply Secondary color
+        handleChange({
+            target: {
+                name: "secondary_color",
+                value: theme.secondary_color
+            }
+        });
+
+
+        //Apply Dark color
+        handleChange({
+            target: {
+                name: "dark_color",
+                value: theme.dark_color
+            }
+        });
+    }
 
     //Uploads the selected bakery logo to Cloudinary through the Bakeau backend
     async function handleLogoUpload(event) {
@@ -75,7 +162,7 @@ export default function BrandingStep({
             {
                 method: "POST",
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem("token")}`
+                    Authorization: `Bearer ${getAuthToken()}`
                 },
                 body: uploadData
             }
@@ -131,7 +218,7 @@ export default function BrandingStep({
             {
                 method: "POST",
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem("token")}`
+                    Authorization: `Bearer ${getAuthToken()}`
                 },
                 body: uploadData
             }
@@ -323,6 +410,100 @@ export default function BrandingStep({
 
                         </div>
                     )}
+
+                </div>
+
+                {/* Storefront theme presets */}
+                <div className="mb-4">
+
+                    <label className="form-label">
+                        Theme presets
+                    </label>
+
+                    <p className="bakery-setup-field-description">
+                        Choose a ready-made theme or customize the colors below.
+                    </p>
+
+
+                    <div className="row g-3">
+
+                        {storefrontThemeOptions.map(
+                            (theme) => (
+
+                                <div
+                                    className="col-12 col-sm-6 col-lg-4"
+                                    key={
+                                        theme.id
+                                    }
+                                >
+
+                                    <button
+                                        type="button"
+                                        className={
+                                            `w-100 text-start border rounded-3 p-3 bg-white ${formData.storefront_theme ===
+                                                theme.id
+                                                ? "border-dark border-2"
+                                                : ""
+                                            }`
+                                        }
+                                        onClick={() =>
+                                            applyStorefrontTheme(
+                                                theme
+                                            )
+                                        }
+                                    >
+
+                                        <span className="fw-semibold d-block mb-3">
+                                            {
+                                                theme.name
+                                            }
+                                        </span>
+
+
+                                        {/* Theme color preview */}
+                                        <span className="d-flex align-items-center gap-2">
+
+                                            <span
+                                                className="rounded-circle d-inline-block"
+                                                style={{
+                                                    width: "28px",
+                                                    height: "28px",
+                                                    backgroundColor:
+                                                        theme.primary_color
+                                                }}
+                                            />
+
+
+                                            <span
+                                                className="rounded-circle d-inline-block"
+                                                style={{
+                                                    width: "28px",
+                                                    height: "28px",
+                                                    backgroundColor:
+                                                        theme.secondary_color
+                                                }}
+                                            />
+
+
+                                            <span
+                                                className="rounded-circle d-inline-block"
+                                                style={{
+                                                    width: "28px",
+                                                    height: "28px",
+                                                    backgroundColor:
+                                                        theme.dark_color
+                                                }}
+                                            />
+
+                                        </span>
+
+                                    </button>
+
+                                </div>
+                            )
+                        )}
+
+                    </div>
 
                 </div>
 

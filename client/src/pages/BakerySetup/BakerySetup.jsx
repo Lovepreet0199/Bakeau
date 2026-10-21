@@ -62,6 +62,7 @@ export default function BakerySetup() {
         contact_phone: "",
 
         //Branding information
+        storefront_theme: "warm",
         primary_color: "#C65F3A",
         secondary_color: "#F4E8DF",
         dark_color: "#432C23",
@@ -149,6 +150,7 @@ export default function BakerySetup() {
                         country: "Canada"
                     },
 
+                    storefront_theme: formData.storefront_theme,
                     primary_color: formData.primary_color,
                     secondary_color: formData.secondary_color,
                     dark_color: formData.dark_color,
