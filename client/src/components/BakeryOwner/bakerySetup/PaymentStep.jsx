@@ -125,7 +125,7 @@ export default function PaymentStep({
             }
 
             //Get the Bakery Owner's saved authentication token
-            const token = localStorage.getItem("token");
+            const token = getAuthToken();
 
             //Send a request to the backend to create or continue Stripe onboarding
             const response = await fetch(
