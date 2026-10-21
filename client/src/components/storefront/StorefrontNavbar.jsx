@@ -933,6 +933,11 @@ export default function StorefrontNavbar({
         setIsMobileMenuOpen(
             false
         );
+
+        //Send Customer back to the public Storefront
+        navigate(
+            `/${slug}`
+        );
     }
 
 

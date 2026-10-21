@@ -2093,36 +2093,65 @@ const updateMyPendingOrder = async (
         }
 
 
-        //Get today's date without the current time
-        const today =
-            new Date();
-
-        today.setUTCHours(
-            0,
-            0,
-            0,
-            0
-        );
+        //Get the Bakery timezone
+        const bakeryTimeZone =
+            bakery.timezone ||
+            "America/Toronto";
 
 
-        //Get the selected Pickup date
+        //Get today's date inside the Bakery timezone
+        const todayParts =
+            new Intl.DateTimeFormat(
+                "en-CA",
+                {
+                    timeZone:
+                        bakeryTimeZone,
+
+                    year:
+                        "numeric",
+
+                    month:
+                        "2-digit",
+
+                    day:
+                        "2-digit"
+                }
+            ).formatToParts(
+                new Date()
+            );
+
+
+        //Gets one Date value
+        function getTodayPart(
+            type
+        ) {
+
+            return todayParts.find(
+                (part) =>
+                    part.type ===
+                    type
+            )?.value;
+        }
+
+
+        //Create today's Bakery date as YYYY-MM-DD
+        const todayDate =
+            `${getTodayPart("year")}-${getTodayPart("month")}-${getTodayPart("day")}`;
+
+
+        //Get selected Pickup date as YYYY-MM-DD
         const selectedPickupDate =
             new Date(
                 pickupSlot.pickup_date
-            );
-
-        selectedPickupDate.setUTCHours(
-            0,
-            0,
-            0,
-            0
-        );
+            )
+                .toISOString()
+                .split("T")[0];
 
 
         //Past Pickup dates cannot be used
         if (
             selectedPickupDate <
-            today
+            todayDate
         ) {
 
             return response.status(400).json({
@@ -2396,13 +2425,6 @@ const updateMyPendingOrder = async (
                 productNoticeHours
 
             );
-
-
-        //Get the Bakery timezone
-        const bakeryTimeZone =
-            bakery.timezone ||
-            "America/Toronto";
-
 
         //Split selected Pickup time such as 14:30
         const [

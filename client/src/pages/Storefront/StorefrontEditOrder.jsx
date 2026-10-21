@@ -186,6 +186,17 @@ export default function StorefrontEditOrder() {
             .split("T")[0];
     }
 
+    //Checks whether a Pickup date is before today
+    function isDateInPast(dateKey) {
+
+        const todayKey =
+            formatDateKey(
+                new Date()
+            );
+
+        return dateKey <
+            todayKey;
+    }
 
     //Formats Date object into YYYY-MM-DD
     function formatDateKey(date) {
@@ -600,9 +611,11 @@ export default function StorefrontEditOrder() {
         if (
             selectedDate ===
             originalPickupDate &&
+            !isDateInPast(
+                selectedDate
+            ) &&
             order
         ) {
-
             const currentSlotId =
                 order.pickup_slot_id?._id ||
                 order.pickup_slot_id;
@@ -979,10 +992,25 @@ export default function StorefrontEditOrder() {
             );
 
 
-        //Current Pickup date remains selectable
+        //Current Pickup date may stay selectable
+        //only when the date has not passed
         const isCurrentDate =
             dateKey ===
-            originalPickupDate;
+            originalPickupDate &&
+            !isDateInPast(
+                dateKey
+            );
+
+
+        //Past dates cannot be selected
+        if (
+            isDateInPast(
+                dateKey
+            )
+        ) {
+
+            return;
+        }
 
 
         //Only available dates may be selected
@@ -1423,14 +1451,29 @@ export default function StorefrontEditOrder() {
                                                         );
 
 
+                                                    //Check whether Calendar date has passed
+                                                    const isPastDate =
+                                                        isDateInPast(
+                                                            calendarDay.date
+                                                        );
+
+
+                                                    //Current Order date may remain available
+                                                    //when it has not passed
                                                     const isOriginalDate =
                                                         calendarDay.date ===
-                                                        originalPickupDate;
+                                                        originalPickupDate &&
+                                                        !isPastDate;
 
 
+                                                    //Date is available when the Bakery allows it
+                                                    //or it is this Order's current valid date
                                                     const available =
-                                                        dayAvailability?.available ||
-                                                        isOriginalDate;
+                                                        !isPastDate &&
+                                                        (
+                                                            dayAvailability?.available ||
+                                                            isOriginalDate
+                                                        );
 
 
                                                     const selected =
