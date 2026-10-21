@@ -105,49 +105,6 @@
 }
 
 
-/* Product count summary */
-.storefront-menu-summary {
-    display: flex;
-
-    align-items: center;
-
-    gap: 8px;
-
-    margin-bottom: 36px;
-
-    padding: 18px 22px;
-
-    border:
-        1px solid color-mix(in srgb,
-            var(--storefront-primary) 12%,
-            #eee3da);
-
-    border-radius: 12px;
-
-    background-color:
-        var(--storefront-card-surface);
-}
-
-
-/* Product count number */
-.storefront-menu-summary strong {
-    color:
-        var(--storefront-primary);
-
-    font-size: 22px;
-
-    font-weight: 700;
-}
-
-
-/* Product count text */
-.storefront-menu-summary span {
-    color: #76665e;
-
-    font-size: 13px;
-}
-
-
 /* Empty Menu */
 .storefront-menu-empty {
     padding: 48px 24px;

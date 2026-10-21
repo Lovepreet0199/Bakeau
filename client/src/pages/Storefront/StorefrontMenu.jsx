@@ -526,23 +526,6 @@ export default function StorefrontMenu() {
                     </section>
 
 
-                    {/* Product count */}
-                    <section className="storefront-menu-summary">
-
-                        <strong>
-                            {products.length}
-                        </strong>
-
-                        <span>
-                            {products.length === 1
-                                ? " item available"
-                                : " items available"
-                            }
-                        </span>
-
-                    </section>
-
-
                     {/* Products */}
                     {products.length > 0 ? (
 
