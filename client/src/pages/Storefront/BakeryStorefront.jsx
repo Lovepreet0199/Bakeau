@@ -78,7 +78,22 @@ export default function BakeryStorefront() {
     //Stores Storefront loading errors
     const [error, setError] = useState("");
 
+    //Updates the browser tab title for the Bakery Storefront
+    useEffect(() => {
 
+        if (bakery) {
+
+            document.title =
+                `${bakery.name} | Bakeau`;
+
+        } else {
+
+            document.title =
+                "Bakery Storefront | Bakeau";
+        }
+
+    }, [bakery]);
+    
     //Loads the Bakery, Products and Reviews
     useEffect(() => {
 

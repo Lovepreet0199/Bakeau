@@ -22,6 +22,12 @@ import "./AdminBakeries.css";
 
 //Displays Bakery accounts for the Platform Administrator
 export default function AdminBakeries() {
+    useEffect(() => {
+
+        document.title =
+            "Platform Admin | Bakeau";
+
+    }, []);
 
     //Used to navigate between pages
     const navigate =

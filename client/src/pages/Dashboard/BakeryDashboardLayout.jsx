@@ -1,5 +1,8 @@
 //Allows the dashboard to track the mobile sidebar
-import { useState } from "react";
+import {
+    useEffect,
+    useState
+} from "react";
 
 //Displays nested Bakery Owner dashboard pages
 import { Outlet } from "react-router-dom";
@@ -13,6 +16,14 @@ import "./styles/DashboardLayout.css";
 
 //Displays the shared layout used by all Bakery Owner dashboard pages
 export default function BakeryDashboardLayout() {
+
+    //Updates the browser tab title for the Bakery Owner dashboard
+    useEffect(() => {
+
+        document.title =
+            "Bakery Dashboard | Bakeau";
+
+    }, []);
 
     //Tracks whether the sidebar is open on smaller screens
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
