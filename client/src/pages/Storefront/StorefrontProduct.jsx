@@ -1,13 +1,19 @@
 import API_URL from "../../config/api.js";
+
 //Import React hooks
-import { useEffect, useState } from "react";
+import {
+    useEffect,
+    useState
+} from "react";
 
 //Import React Router tools
-import { Link, useParams } from "react-router-dom";
+import {
+    Link,
+    useParams
+} from "react-router-dom";
 
 //Import Product icons
 import {
-    Check,
     Clock3,
     Minus,
     Plus,
@@ -18,59 +24,130 @@ import {
 import "./StorefrontProduct.css";
 
 //Import Customer Cart hook
-import { useCart } from "../../context/useCart";
+import {
+    useCart
+} from "../../context/useCart";
 
 //Import shared Storefront components
-import StorefrontNavbar from "../../components/storefront/StorefrontNavbar";
-import StorefrontFooter from "../../components/storefront/StorefrontFooter";
+import StorefrontNavbar
+    from "../../components/storefront/StorefrontNavbar";
+
+import StorefrontFooter
+    from "../../components/storefront/StorefrontFooter";
 
 //Import Storefront theme helper
-import { getStorefrontTheme } from "../../utils/storefrontTheme";
+import {
+    getStorefrontTheme
+} from "../../utils/storefrontTheme";
+
 
 //Displays a Product from a public Bakery Storefront
 export default function StorefrontProduct() {
 
     //Get Bakery slug and Product ID from the URL
-    const { slug, productId } = useParams();
+    const {
+        slug,
+        productId
+    } = useParams();
+
 
     //Stores Bakery information
-    const [bakery, setBakery] = useState(null);
+    const [
+        bakery,
+        setBakery
+    ] = useState(null);
+
 
     //Stores Product information
-    const [product, setProduct] = useState(null);
+    const [
+        product,
+        setProduct
+    ] = useState(null);
+
 
     //Stores Product customization Groups and Options
-    const [customizationDetails, setCustomizationDetails] = useState([]);
+    const [
+        customizationDetails,
+        setCustomizationDetails
+    ] = useState([]);
+
 
     //Stores selected customization Options
-    const [selectedOptions, setSelectedOptions] = useState({});
+    const [
+        selectedOptions,
+        setSelectedOptions
+    ] = useState({});
+
 
     //Stores the trusted backend-calculated Product quote
-    const [quote, setQuote] = useState(null);
+    const [
+        quote,
+        setQuote
+    ] = useState(null);
+
 
     //Tracks whether the backend quote is loading
-    const [isQuoteLoading, setIsQuoteLoading] = useState(false);
+    const [
+        isQuoteLoading,
+        setIsQuoteLoading
+    ] = useState(false);
+
 
     //Stores backend quote errors
-    const [quoteError, setQuoteError] = useState("");
+    const [
+        quoteError,
+        setQuoteError
+    ] = useState("");
+
 
     //Stores Customer special instructions
-    const [specialInstructions, setSpecialInstructions] = useState("");
+    const [
+        specialInstructions,
+        setSpecialInstructions
+    ] = useState("");
+
 
     //Tracks Product quantity
-    const [quantity, setQuantity] = useState(1);
+    const [
+        quantity,
+        setQuantity
+    ] = useState(1);
+
 
     //Stores Product validation errors
-    const [validationError, setValidationError] = useState("");
+    const [
+        validationError,
+        setValidationError
+    ] = useState("");
+
 
     //Tracks page loading
-    const [isLoading, setIsLoading] = useState(true);
+    const [
+        isLoading,
+        setIsLoading
+    ] = useState(true);
+
 
     //Stores loading errors
-    const [error, setError] = useState("");
+    const [
+        error,
+        setError
+    ] = useState("");
+
 
     //Tracks successful Add to Cart feedback
-    const [isAddedToCart, setIsAddedToCart] = useState(false);
+    const [
+        isAddedToCart,
+        setIsAddedToCart
+    ] = useState(false);
+
+
+    //Tracks whether View Cart should be shown
+    const [
+        showViewCart,
+        setShowViewCart
+    ] = useState(false);
+
 
     //Get Customer Cart functions
     const {
@@ -83,23 +160,54 @@ export default function StorefrontProduct() {
 
         async function fetchProduct() {
 
-            setIsLoading(true);
-            setError("");
+            setIsLoading(
+                true
+            );
+
+            setError(
+                ""
+            );
+
+
+            //Reset Cart feedback when opening another Product
+            setIsAddedToCart(
+                false
+            );
+
+            setShowViewCart(
+                false
+            );
+
 
             try {
 
                 //Load Bakery and Product information together
-                const [bakeryResponse, productResponse] = await Promise.all([
-                    fetch(`${API_URL}/api/bakeries/public/${slug}`),
-                    fetch(`${API_URL}/api/bakeries/public/${slug}/products/${productId}`)
+                const [
+                    bakeryResponse,
+                    productResponse
+                ] = await Promise.all([
+                    fetch(
+                        `${API_URL}/api/bakeries/public/${slug}`
+                    ),
+
+                    fetch(
+                        `${API_URL}/api/bakeries/public/${slug}/products/${productId}`
+                    )
                 ]);
 
+
                 //Convert responses into JavaScript data
-                const bakeryData = await bakeryResponse.json();
-                const productData = await productResponse.json();
+                const bakeryData =
+                    await bakeryResponse.json();
+
+                const productData =
+                    await productResponse.json();
+
 
                 //Stop if the Bakery could not be loaded
-                if (!bakeryResponse.ok) {
+                if (
+                    !bakeryResponse.ok
+                ) {
 
                     throw new Error(
                         bakeryData.message ||
@@ -107,8 +215,11 @@ export default function StorefrontProduct() {
                     );
                 }
 
+
                 //Stop if the Product could not be loaded
-                if (!productResponse.ok) {
+                if (
+                    !productResponse.ok
+                ) {
 
                     throw new Error(
                         productData.message ||
@@ -116,35 +227,46 @@ export default function StorefrontProduct() {
                     );
                 }
 
+
                 //Get Product customization information
                 const details =
                     productData.customizationDetails ||
                     [];
 
+
                 //Stores default required selections
-                const defaultSelections = {};
+                const defaultSelections =
+                    {};
+
 
                 //Select the first Option for each required Group
-                details.forEach((detail) => {
+                details.forEach(
+                    (detail) => {
 
-                    if (
-                        detail.group?.is_required &&
-                        detail.options?.length > 0
-                    ) {
+                        if (
+                            detail.group?.is_required &&
+                            detail.options?.length > 0
+                        ) {
 
-                        const groupKey =
-                            detail.group._id ||
-                            detail.group.name;
+                            const groupKey =
+                                detail.group._id ||
+                                detail.group.name;
 
-                        defaultSelections[groupKey] =
-                            detail.options[0];
+
+                            defaultSelections[
+                                groupKey
+                            ] =
+                                detail.options[0];
+                        }
                     }
-                });
+                );
+
 
                 //Save Bakery information
                 setBakery(
                     bakeryData.bakery
                 );
+
 
                 //Save Product information
                 setProduct(
@@ -152,15 +274,18 @@ export default function StorefrontProduct() {
                     productData
                 );
 
+
                 //Save customization information
                 setCustomizationDetails(
                     details
                 );
 
+
                 //Save default required Options
                 setSelectedOptions(
                     defaultSelections
                 );
+
 
             } catch (error) {
 
@@ -169,25 +294,37 @@ export default function StorefrontProduct() {
                     error.message
                 );
 
+
             } finally {
 
                 //Stop page loading
-                setIsLoading(false);
+                setIsLoading(
+                    false
+                );
             }
         }
 
+
         fetchProduct();
 
-    }, [slug, productId]);
+
+    }, [
+        slug,
+        productId
+    ]);
 
 
     //Gets a trusted Product quote whenever selections or quantity change
     useEffect(() => {
 
         //Wait until the Product has loaded
-        if (!product) {
+        if (
+            !product
+        ) {
+
             return;
         }
+
 
         //Check if any required Group does not have a selection
         const missingRequiredGroup =
@@ -198,29 +335,45 @@ export default function StorefrontProduct() {
                         detail.group?._id ||
                         detail.group?.name;
 
+
                     return (
                         detail.group?.is_required &&
-                        !selectedOptions[groupKey]
+                        !selectedOptions[
+                        groupKey
+                        ]
                     );
                 }
             );
 
+
         //Do not request a quote until required Options are selected
-        if (missingRequiredGroup) {
+        if (
+            missingRequiredGroup
+        ) {
+
             return;
         }
+
 
         //Create a controller so outdated quote requests can be cancelled
         const controller =
             new AbortController();
 
+
         //Wait briefly before requesting a new quote
         const quoteTimer =
             setTimeout(
+
                 async () => {
 
-                    setIsQuoteLoading(true);
-                    setQuoteError("");
+                    setIsQuoteLoading(
+                        true
+                    );
+
+                    setQuoteError(
+                        ""
+                    );
+
 
                     try {
 
@@ -233,14 +386,20 @@ export default function StorefrontProduct() {
                                     (option) =>
                                         option?._id
                                 )
-                                .filter(Boolean);
+                                .filter(
+                                    Boolean
+                                );
+
 
                         //Request trusted pricing from the backend
                         const quoteResponse =
                             await fetch(
+
                                 `${API_URL}/api/bakeries/public/${slug}/products/${productId}/quote`,
+
                                 {
-                                    method: "POST",
+                                    method:
+                                        "POST",
 
                                     headers: {
                                         "Content-Type":
@@ -264,27 +423,34 @@ export default function StorefrontProduct() {
                                 }
                             );
 
+
                         //Convert the backend response into JavaScript data
                         const quoteData =
                             await quoteResponse.json();
 
+
                         //Stop if the backend could not create the quote
-                        if (!quoteResponse.ok) {
+                        if (
+                            !quoteResponse.ok
+                        ) {
 
                             const errorMessage =
                                 quoteData.message ||
                                 quoteData.errors?.[0]?.msg ||
                                 "Unable to calculate product price";
 
+
                             throw new Error(
                                 errorMessage
                             );
                         }
 
+
                         //Save the trusted backend-calculated quote
                         setQuote(
                             quoteData.quote
                         );
+
 
                     } catch (error) {
 
@@ -293,16 +459,22 @@ export default function StorefrontProduct() {
                             error.name ===
                             "AbortError"
                         ) {
+
                             return;
                         }
 
+
                         //Remove the old quote when pricing fails
-                        setQuote(null);
+                        setQuote(
+                            null
+                        );
+
 
                         //Display the backend pricing error
                         setQuoteError(
                             error.message
                         );
+
 
                     } finally {
 
@@ -310,15 +482,17 @@ export default function StorefrontProduct() {
                         if (
                             !controller.signal.aborted
                         ) {
+
                             setIsQuoteLoading(
                                 false
                             );
                         }
                     }
-
                 },
+
                 250
             );
+
 
         //Cancel old quote requests when selections change quickly
         return () => {
@@ -329,6 +503,7 @@ export default function StorefrontProduct() {
 
             controller.abort();
         };
+
 
     }, [
         slug,
@@ -341,7 +516,9 @@ export default function StorefrontProduct() {
 
 
     //Returns a unique key for a customization Group
-    function getGroupKey(group) {
+    function getGroupKey(
+        group
+    ) {
 
         return (
             group?._id ||
@@ -351,7 +528,9 @@ export default function StorefrontProduct() {
 
 
     //Returns a unique key for a customization Option
-    function getOptionKey(option) {
+    function getOptionKey(
+        option
+    ) {
 
         return (
             option?._id ||
@@ -361,7 +540,9 @@ export default function StorefrontProduct() {
 
 
     //Formats backend price values for display
-    function formatPrice(price) {
+    function formatPrice(
+        price
+    ) {
 
         return new Intl.NumberFormat(
             "en-CA",
@@ -374,7 +555,9 @@ export default function StorefrontProduct() {
                     "CAD"
             }
         ).format(
-            Number(price) ||
+            Number(
+                price
+            ) ||
             0
         );
     }
@@ -391,10 +574,12 @@ export default function StorefrontProduct() {
                 detail.group
             );
 
+
         const currentOption =
             selectedOptions[
             groupKey
             ];
+
 
         //Allow an optional Option to be removed
         if (
@@ -415,22 +600,30 @@ export default function StorefrontProduct() {
                         ...currentSelections
                     };
 
+
                     delete updatedSelections[
                         groupKey
                     ];
+
 
                     return updatedSelections;
                 }
             );
 
-            setValidationError("");
+
+            setValidationError(
+                ""
+            );
+
 
             return;
         }
 
+
         //Save the selected Option
         setSelectedOptions(
             (currentSelections) => ({
+
                 ...currentSelections,
 
                 [groupKey]:
@@ -438,8 +631,11 @@ export default function StorefrontProduct() {
             })
         );
 
+
         //Clear previous validation error
-        setValidationError("");
+        setValidationError(
+            ""
+        );
     }
 
 
@@ -456,7 +652,9 @@ export default function StorefrontProduct() {
     //Decrease Product quantity
     function decreaseQuantity() {
 
-        if (quantity > 1) {
+        if (
+            quantity > 1
+        ) {
 
             setQuantity(
                 (currentQuantity) =>
@@ -479,6 +677,7 @@ export default function StorefrontProduct() {
                             detail.group
                         );
 
+
                     return (
                         detail.group?.is_required &&
                         !selectedOptions[
@@ -487,6 +686,7 @@ export default function StorefrontProduct() {
                     );
                 }
             );
+
 
         //Stop if a required Option is missing
         if (
@@ -497,21 +697,30 @@ export default function StorefrontProduct() {
                 `Please select an option for ${missingRequiredGroup.group.name}.`
             );
 
+
             return;
         }
 
+
         //Do not continue without a trusted backend quote
-        if (!quote) {
+        if (
+            !quote
+        ) {
 
             setValidationError(
                 "Please wait for the price to update."
             );
 
+
             return;
         }
 
+
         //Clear previous validation errors
-        setValidationError("");
+        setValidationError(
+            ""
+        );
+
 
         //Add the configured Product to the Customer Cart
         addToCart({
@@ -526,6 +735,7 @@ export default function StorefrontProduct() {
             bakery_name:
                 bakery.name,
 
+
             //Store the Product information
             product_id:
                 product._id,
@@ -536,9 +746,11 @@ export default function StorefrontProduct() {
             product_image_url:
                 product.image_url,
 
+
             //Store the selected quantity
             quantity:
                 quantity,
+
 
             //Store only the selected customization Option IDs
             customization_option_ids:
@@ -549,34 +761,57 @@ export default function StorefrontProduct() {
                         (option) =>
                             option?._id
                     )
-                    .filter(Boolean),
+                    .filter(
+                        Boolean
+                    ),
+
 
             //Store customization information for Cart display
             customizations:
                 quote.customizations,
 
+
             //Store Customer instructions
             special_instructions:
                 specialInstructions,
+
 
             //Store the backend quote for display
             quote:
                 quote
         });
 
+
         //Show Customer that Product was added
-        setIsAddedToCart(true);
+        setIsAddedToCart(
+            true
+        );
 
-        //Return button to normal after a short delay
-        setTimeout(() => {
-            setIsAddedToCart(false);
-        }, 1800);
 
+        //Show View Cart after Product is added
+        setShowViewCart(
+            true
+        );
+
+
+        //Remove success message after a short delay
+        setTimeout(
+            () => {
+
+                setIsAddedToCart(
+                    false
+                );
+
+            },
+            1800
+        );
     }
 
 
     //Display loading screen
-    if (isLoading) {
+    if (
+        isLoading
+    ) {
 
         return (
 
@@ -613,6 +848,7 @@ export default function StorefrontProduct() {
                     Product unavailable
                 </h1>
 
+
                 <p className="text-secondary mb-0">
 
                     {
@@ -621,6 +857,7 @@ export default function StorefrontProduct() {
                     }
 
                 </p>
+
 
                 <Link
                     to={`/${slug}`}
@@ -654,7 +891,9 @@ export default function StorefrontProduct() {
 
             {/* Shared Storefront Navbar */}
             <StorefrontNavbar
-                bakery={bakery}
+                bakery={
+                    bakery
+                }
                 orderNotice={
                     orderNotice
                 }
@@ -673,19 +912,31 @@ export default function StorefrontProduct() {
                         Home
                     </Link>
 
-                    <span>/</span>
+
+                    <span>
+                        /
+                    </span>
+
 
                     <Link
                         to={`/${slug}#menu`}
                         className="text-decoration-none"
                     >
-                        {product.category}
+                        {
+                            product.category
+                        }
                     </Link>
 
-                    <span>/</span>
 
                     <span>
-                        {product.name}
+                        /
+                    </span>
+
+
+                    <span>
+                        {
+                            product.name
+                        }
                     </span>
 
                 </div>
@@ -697,58 +948,64 @@ export default function StorefrontProduct() {
                     <div className="col-12 col-lg-6">
 
                         {/* Main Product image */}
-                        {product.image_url ? (
+                        {
+                            product.image_url
+                                ? (
 
-                            <div className="ratio ratio-1x1">
+                                    <div className="ratio ratio-1x1">
 
-                                <img
-                                    src={
-                                        product.image_url
-                                    }
-                                    alt={
-                                        product.name
-                                    }
-                                    className="storefront-product-main-image w-100 h-100"
-                                />
+                                        <img
+                                            src={
+                                                product.image_url
+                                            }
+                                            alt={
+                                                product.name
+                                            }
+                                            className="storefront-product-main-image w-100 h-100"
+                                        />
 
-                            </div>
+                                    </div>
+                                )
+                                : (
 
-                        ) : (
+                                    <div className="storefront-product-image-placeholder ratio ratio-1x1">
 
-                            <div className="storefront-product-image-placeholder ratio ratio-1x1">
+                                        <div className="d-flex align-items-center justify-content-center text-center p-4">
+                                            Product image coming soon
+                                        </div>
 
-                                <div className="d-flex align-items-center justify-content-center text-center p-4">
-
-                                    Product image coming soon
-
-                                </div>
-
-                            </div>
-                        )}
+                                    </div>
+                                )
+                        }
 
 
                         {/* Product thumbnail */}
-                        {product.image_url && (
+                        {
+                            product.image_url &&
+                            (
 
-                            <div className="d-flex gap-2 mt-3">
+                                <div className="d-flex gap-2 mt-3">
 
-                                <button
-                                    type="button"
-                                    className="storefront-product-thumbnail active p-0"
-                                >
+                                    <button
+                                        type="button"
+                                        className="storefront-product-thumbnail active p-0"
+                                    >
 
-                                    <img
-                                        src={
-                                            product.image_url
-                                        }
-                                        alt={`${product.name} thumbnail`}
-                                        className="w-100 h-100"
-                                    />
+                                        <img
+                                            src={
+                                                product.image_url
+                                            }
+                                            alt={
+                                                `${product.name} thumbnail`
+                                            }
+                                            className="w-100 h-100"
+                                        />
 
-                                </button>
+                                    </button>
 
-                            </div>
-                        )}
+                                </div>
+                            )
+                        }
 
                     </div>
 
@@ -787,32 +1044,42 @@ export default function StorefrontProduct() {
 
 
                         {/* Product notice */}
-                        {orderNotice && (
+                        {
+                            orderNotice &&
+                            (
 
-                            <div className="storefront-product-notice d-flex align-items-start gap-2 p-3 mb-4">
+                                <div className="storefront-product-notice d-flex align-items-start gap-2 p-3 mb-4">
 
-                                <Clock3
-                                    size={18}
-                                    className="flex-shrink-0 mt-1"
-                                />
+                                    <Clock3
+                                        size={18}
+                                        className="flex-shrink-0 mt-1"
+                                    />
 
-                                <div>
-
-                                    <strong>
-                                        Made to order
-                                    </strong>
 
                                     <div>
 
-                                        Please order at least{" "}
-                                        {orderNotice} hours before pickup.
+                                        <strong>
+                                            Made to order
+                                        </strong>
+
+
+                                        <div>
+
+                                            Please order at least{" "}
+
+                                            {
+                                                orderNotice
+                                            }{" "}
+
+                                            hours before pickup.
+
+                                        </div>
 
                                     </div>
 
                                 </div>
-
-                            </div>
-                        )}
+                            )
+                        }
 
 
                         {/* Starting price */}
@@ -821,6 +1088,7 @@ export default function StorefrontProduct() {
                             <p className="text-secondary small mb-1">
                                 Starting at
                             </p>
+
 
                             <h2 className="storefront-product-page-price mb-0">
 
@@ -837,175 +1105,193 @@ export default function StorefrontProduct() {
 
 
                         {/* Product customization Groups */}
-                        {customizationDetails.length > 0 && (
+                        {
+                            customizationDetails.length > 0 &&
+                            (
 
-                            <div className="d-flex flex-column gap-4 mb-4">
+                                <div className="d-flex flex-column gap-4 mb-4">
 
-                                {customizationDetails.map(
-                                    (detail) => {
+                                    {
+                                        customizationDetails.map(
+                                            (detail) => {
 
-                                        const groupKey =
-                                            getGroupKey(
-                                                detail.group
-                                            );
+                                                const groupKey =
+                                                    getGroupKey(
+                                                        detail.group
+                                                    );
 
-                                        const selectedOption =
-                                            selectedOptions[
-                                            groupKey
-                                            ];
 
-                                        return (
-
-                                            <section
-                                                key={
+                                                const selectedOption =
+                                                    selectedOptions[
                                                     groupKey
-                                                }
-                                                className="storefront-customization-group"
-                                            >
+                                                    ];
 
-                                                {/* Customization heading */}
-                                                <div className="d-flex align-items-center justify-content-between gap-3 mb-2">
 
-                                                    <h3 className="storefront-customization-title mb-0">
+                                                return (
 
-                                                        {
-                                                            detail.group
-                                                                ?.name
+                                                    <section
+                                                        key={
+                                                            groupKey
                                                         }
-
-                                                    </h3>
-
-
-                                                    <span
-                                                        className={
-                                                            detail.group
-                                                                ?.is_required
-                                                                ? "storefront-required-label"
-                                                                : "storefront-optional-label"
-                                                        }
+                                                        className="storefront-customization-group"
                                                     >
 
-                                                        {
-                                                            detail.group
-                                                                ?.is_required
-                                                                ? "Required"
-                                                                : "Optional"
-                                                        }
+                                                        {/* Customization heading */}
+                                                        <div className="d-flex align-items-center justify-content-between gap-3 mb-2">
 
-                                                    </span>
+                                                            <h3 className="storefront-customization-title mb-0">
 
-                                                </div>
+                                                                {
+                                                                    detail.group
+                                                                        ?.name
+                                                                }
 
-
-                                                {/* Customization Options */}
-                                                <div className="d-grid gap-2">
-
-                                                    {detail.options?.map(
-                                                        (option) => {
-
-                                                            const isSelected =
-                                                                selectedOption &&
-                                                                getOptionKey(
-                                                                    selectedOption
-                                                                ) ===
-                                                                getOptionKey(
-                                                                    option
-                                                                );
-
-                                                            return (
-
-                                                                <button
-                                                                    key={
-                                                                        getOptionKey(
-                                                                            option
-                                                                        )
-                                                                    }
-                                                                    type="button"
-                                                                    onClick={() =>
-                                                                        selectOption(
-                                                                            detail,
-                                                                            option
-                                                                        )
-                                                                    }
-                                                                    className={
-                                                                        isSelected
-                                                                            ? "storefront-option-card selected d-flex align-items-center justify-content-between gap-3 text-start p-3"
-                                                                            : "storefront-option-card d-flex align-items-center justify-content-between gap-3 text-start p-3"
-                                                                    }
-                                                                >
-
-                                                                    <div className="d-flex align-items-center gap-3">
-
-                                                                        {/* Radio indicator */}
-                                                                        <span
-                                                                            className={
-                                                                                isSelected
-                                                                                    ? "storefront-option-radio selected d-flex align-items-center justify-content-center flex-shrink-0"
-                                                                                    : "storefront-option-radio d-flex align-items-center justify-content-center flex-shrink-0"
-                                                                            }
-                                                                        >
-
-                                                                            {isSelected && (
-                                                                                <span />
-                                                                            )}
-
-                                                                        </span>
+                                                            </h3>
 
 
-                                                                        <span className="fw-medium">
+                                                            <span
+                                                                className={
+                                                                    detail.group
+                                                                        ?.is_required
+                                                                        ? "storefront-required-label"
+                                                                        : "storefront-optional-label"
+                                                                }
+                                                            >
 
-                                                                            {
-                                                                                option.name
-                                                                            }
+                                                                {
+                                                                    detail.group
+                                                                        ?.is_required
+                                                                        ? "Required"
+                                                                        : "Optional"
+                                                                }
 
-                                                                        </span>
+                                                            </span>
 
-                                                                    </div>
+                                                        </div>
 
 
-                                                                    {/* Backend Option price shown for selection */}
-                                                                    {Number(
-                                                                        option.additional_price ||
-                                                                        0
-                                                                    ) > 0 && (
+                                                        {/* Customization Options */}
+                                                        <div className="d-grid gap-2">
 
-                                                                            <span className="storefront-option-price flex-shrink-0">
+                                                            {
+                                                                detail.options?.map(
+                                                                    (option) => {
 
-                                                                                +
+                                                                        const isSelected =
+                                                                            selectedOption &&
+                                                                            getOptionKey(
+                                                                                selectedOption
+                                                                            ) ===
+                                                                            getOptionKey(
+                                                                                option
+                                                                            );
+
+
+                                                                        return (
+
+                                                                            <button
+                                                                                key={
+                                                                                    getOptionKey(
+                                                                                        option
+                                                                                    )
+                                                                                }
+                                                                                type="button"
+                                                                                onClick={() =>
+                                                                                    selectOption(
+                                                                                        detail,
+                                                                                        option
+                                                                                    )
+                                                                                }
+                                                                                className={
+                                                                                    isSelected
+                                                                                        ? "storefront-option-card selected d-flex align-items-center justify-content-between gap-3 text-start p-3"
+                                                                                        : "storefront-option-card d-flex align-items-center justify-content-between gap-3 text-start p-3"
+                                                                                }
+                                                                            >
+
+                                                                                <div className="d-flex align-items-center gap-3">
+
+                                                                                    {/* Radio indicator */}
+                                                                                    <span
+                                                                                        className={
+                                                                                            isSelected
+                                                                                                ? "storefront-option-radio selected d-flex align-items-center justify-content-center flex-shrink-0"
+                                                                                                : "storefront-option-radio d-flex align-items-center justify-content-center flex-shrink-0"
+                                                                                        }
+                                                                                    >
+
+                                                                                        {
+                                                                                            isSelected &&
+                                                                                            (
+                                                                                                <span />
+                                                                                            )
+                                                                                        }
+
+                                                                                    </span>
+
+
+                                                                                    <span className="fw-medium">
+
+                                                                                        {
+                                                                                            option.name
+                                                                                        }
+
+                                                                                    </span>
+
+                                                                                </div>
+
+
+                                                                                {/* Backend Option price shown for selection */}
                                                                                 {
-                                                                                    formatPrice(
-                                                                                        option.additional_price
+                                                                                    Number(
+                                                                                        option.additional_price ||
+                                                                                        0
+                                                                                    ) > 0 &&
+                                                                                    (
+
+                                                                                        <span className="storefront-option-price flex-shrink-0">
+
+                                                                                            +
+
+                                                                                            {
+                                                                                                formatPrice(
+                                                                                                    option.additional_price
+                                                                                                )
+                                                                                            }
+
+                                                                                        </span>
                                                                                     )
                                                                                 }
 
-                                                                            </span>
-                                                                        )}
+                                                                            </button>
+                                                                        );
+                                                                    }
+                                                                )
+                                                            }
 
-                                                                </button>
-                                                            );
-                                                        }
-                                                    )}
+                                                        </div>
 
-                                                </div>
-
-                                            </section>
-                                        );
+                                                    </section>
+                                                );
+                                            }
+                                        )
                                     }
-                                )}
 
-                            </div>
-                        )}
+                                </div>
+                            )
+                        }
 
 
                         {/* Product without customization */}
-                        {customizationDetails.length === 0 && (
+                        {
+                            customizationDetails.length === 0 &&
+                            (
 
-                            <div className="storefront-simple-product-message p-3 mb-4">
-
-                                No customization is required for this item.
-
-                            </div>
-                        )}
+                                <div className="storefront-simple-product-message p-3 mb-4">
+                                    No customization is required for this item.
+                                </div>
+                            )
+                        }
 
 
                         {/* Special instructions */}
@@ -1017,6 +1303,7 @@ export default function StorefrontProduct() {
                             >
 
                                 Special instructions
+
 
                                 <span className="storefront-optional-label ms-2">
                                     Optional
@@ -1030,10 +1317,11 @@ export default function StorefrontProduct() {
                                 value={
                                     specialInstructions
                                 }
-                                onChange={(event) =>
-                                    setSpecialInstructions(
-                                        event.target.value
-                                    )
+                                onChange={
+                                    (event) =>
+                                        setSpecialInstructions(
+                                            event.target.value
+                                        )
                                 }
                                 maxLength={300}
                                 rows="3"
@@ -1047,6 +1335,7 @@ export default function StorefrontProduct() {
                                 {
                                     specialInstructions.length
                                 }
+
                                 /300
 
                             </small>
@@ -1110,51 +1399,61 @@ export default function StorefrontProduct() {
 
 
                         {/* Quote loading */}
-                        {isQuoteLoading && (
+                        {
+                            isQuoteLoading &&
+                            (
 
-                            <div className="d-flex align-items-center gap-2 text-secondary small mb-3">
+                                <div className="d-flex align-items-center gap-2 text-secondary small mb-3">
 
-                                <div
-                                    className="spinner-border spinner-border-sm"
-                                    role="status"
-                                >
+                                    <div
+                                        className="spinner-border spinner-border-sm"
+                                        role="status"
+                                    >
 
-                                    <span className="visually-hidden">
-                                        Updating price...
-                                    </span>
+                                        <span className="visually-hidden">
+                                            Updating price...
+                                        </span>
+
+                                    </div>
+
+
+                                    Updating price...
 
                                 </div>
-
-                                Updating price...
-
-                            </div>
-                        )}
+                            )
+                        }
 
 
                         {/* Backend quote error */}
-                        {quoteError && (
+                        {
+                            quoteError &&
+                            (
 
-                            <div className="alert alert-danger py-2 mb-3">
+                                <div className="alert alert-danger py-2 mb-3">
 
-                                {
-                                    quoteError
-                                }
+                                    {
+                                        quoteError
+                                    }
 
-                            </div>
-                        )}
+                                </div>
+                            )
+                        }
 
 
                         {/* Product validation error */}
-                        {validationError && (
+                        {
+                            validationError &&
+                            (
 
-                            <div className="alert alert-danger py-2 mb-3">
+                                <div className="alert alert-danger py-2 mb-3">
 
-                                {
-                                    validationError
-                                }
+                                    {
+                                        validationError
+                                    }
 
-                            </div>
-                        )}
+                                </div>
+                            )
+                        }
 
 
                         {/* Trusted backend Price breakdown */}
@@ -1172,6 +1471,7 @@ export default function StorefrontProduct() {
                                     Base price
                                 </span>
 
+
                                 <strong>
 
                                     {
@@ -1188,55 +1488,63 @@ export default function StorefrontProduct() {
 
 
                             {/* Trusted customization charges */}
-                            {quote?.customizations
-                                ?.filter(
-                                    (customization) =>
-                                        Number(
-                                            customization.additional_price ||
-                                            0
-                                        ) > 0
-                                )
-                                .map(
-                                    (customization) => (
-
-                                        <div
-                                            key={
-                                                customization.option_id
-                                            }
-                                            className="d-flex justify-content-between gap-3 mb-2 storefront-product-summary-option"
-                                        >
-
-                                            <span>
-
-                                                {
-                                                    customization.group_name
-                                                }
-                                                :{" "}
-                                                {
-                                                    customization.option_name
-                                                }
-
-                                            </span>
-
-                                            <span>
-
-                                                +
-                                                {
-                                                    formatPrice(
-                                                        customization.additional_price
-                                                    )
-                                                }
-
-                                            </span>
-
-                                        </div>
+                            {
+                                quote?.customizations
+                                    ?.filter(
+                                        (customization) =>
+                                            Number(
+                                                customization.additional_price ||
+                                                0
+                                            ) > 0
                                     )
-                                )}
+                                    .map(
+                                        (customization) => (
+
+                                            <div
+                                                key={
+                                                    customization.option_id
+                                                }
+                                                className="d-flex justify-content-between gap-3 mb-2 storefront-product-summary-option"
+                                            >
+
+                                                <span>
+
+                                                    {
+                                                        customization.group_name
+                                                    }
+
+                                                    :{" "}
+
+                                                    {
+                                                        customization.option_name
+                                                    }
+
+                                                </span>
+
+
+                                                <span>
+
+                                                    +
+
+                                                    {
+                                                        formatPrice(
+                                                            customization.additional_price
+                                                        )
+                                                    }
+
+                                                </span>
+
+                                            </div>
+                                        )
+                                    )
+                            }
 
 
                             {/* Quantity */}
-                            {quote &&
-                                quote.quantity > 1 && (
+                            {
+                                quote &&
+                                quote.quantity > 1 &&
+                                (
 
                                     <div className="d-flex justify-content-between gap-3 mb-2">
 
@@ -1244,12 +1552,14 @@ export default function StorefrontProduct() {
                                             Quantity
                                         </span>
 
+
                                         <span>
                                             × {quote.quantity}
                                         </span>
 
                                     </div>
-                                )}
+                                )
+                            }
 
 
                             <hr className="my-3" />
@@ -1263,6 +1573,7 @@ export default function StorefrontProduct() {
                                     <strong className="d-block">
                                         Estimated total
                                     </strong>
+
 
                                     <small className="text-secondary">
                                         Before tax
@@ -1287,16 +1598,19 @@ export default function StorefrontProduct() {
 
 
                             {/* Trusted deposit */}
-                            {quote?.payment_rule ===
+                            {
+                                quote?.payment_rule ===
                                 "deposit" &&
                                 quote.deposit_percentage >
-                                0 && (
+                                0 &&
+                                (
 
                                     <div className="storefront-product-deposit d-flex justify-content-between gap-3 mt-3 p-3">
 
                                         <span>
 
                                             Deposit due at checkout{" "}
+
                                             (
                                             {
                                                 quote.deposit_percentage
@@ -1304,6 +1618,7 @@ export default function StorefrontProduct() {
                                             %)
 
                                         </span>
+
 
                                         <strong>
 
@@ -1316,65 +1631,76 @@ export default function StorefrontProduct() {
                                         </strong>
 
                                     </div>
-                                )}
+                                )
+                            }
 
 
-                            {/* Add to Cart */}
-                            <button
-                                type="button"
-                                onClick={
-                                    handleAddToCart
-                                }
-                                disabled={
-                                    isQuoteLoading ||
-                                    !quote ||
-                                    isAddedToCart
-                                }
-                                className="storefront-product-primary-button w-100 d-flex align-items-center justify-content-center gap-2 mt-4"
-                            >
+                            {/* Product actions */}
+                            <div className="d-flex flex-column flex-sm-row gap-2 mt-4">
 
-                                {/* Change icon after Product is added */}
-                                {isAddedToCart ? (
-
-                                    <Check
-                                        size={18}
-                                    />
-
-                                ) : (
+                                {/* Add to Cart */}
+                                <button
+                                    type="button"
+                                    onClick={
+                                        handleAddToCart
+                                    }
+                                    disabled={
+                                        isQuoteLoading ||
+                                        !quote
+                                    }
+                                    className="storefront-product-primary-button flex-grow-1 d-flex align-items-center justify-content-center gap-2"
+                                >
 
                                     <ShoppingCart
                                         size={18}
                                     />
 
-                                )}
+
+                                    {
+                                        isQuoteLoading
+                                            ? "Updating price..."
+                                            : quote
+                                                ? `Add to Cart · ${formatPrice(
+                                                    quote.item_total
+                                                )}`
+                                                : "Add to Cart"
+                                    }
+
+                                </button>
 
 
-                                {/* Change button text after Product is added */}
-                                {isAddedToCart
-                                    ? "Added to Cart"
-                                    : isQuoteLoading
-                                        ? "Updating price..."
-                                        : quote
-                                            ? `Add to Cart · ${formatPrice(
-                                                quote.item_total
-                                            )}`
-                                            : "Add to Cart"
+                                {/* Open Cart after Product is added */}
+                                {
+                                    showViewCart &&
+                                    (
+
+                                        <Link
+                                            to={`/${slug}/cart`}
+                                            className="storefront-product-view-cart-button d-flex align-items-center justify-content-center text-decoration-none"
+                                        >
+                                            View Cart
+                                        </Link>
+                                    )
                                 }
 
-                            </button>
+                            </div>
 
 
                             {/* Add to Cart success message */}
-                            {isAddedToCart && (
+                            {
+                                isAddedToCart &&
+                                (
 
-                                <div
-                                    className="alert alert-success py-2 mt-3 mb-0"
-                                    role="alert"
-                                >
-                                    ✓ {product.name} was added to your cart.
-                                </div>
+                                    <div
+                                        className="alert alert-success py-2 mt-3 mb-0"
+                                        role="alert"
+                                    >
 
-                            )}
+                                        ✓ {product.name} was added to your cart.
+
+                                    </div>
+                                )
+                            }
 
                         </div>
 
@@ -1387,7 +1713,9 @@ export default function StorefrontProduct() {
 
             {/* Shared Storefront Footer */}
             <StorefrontFooter
-                bakery={bakery}
+                bakery={
+                    bakery
+                }
             />
 
         </div>
