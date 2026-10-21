@@ -21,9 +21,14 @@ export default function CTASection() {
                     </p>
 
                     {/* Main CTA takes bakery owners toward registration */}
-                    <button className="cta-button">
+                    <button
+                        type="button"
+                        className="cta-button"
+                        onClick={() => window.location.href = "/register"}
+                    >
                         Start Your Bakery
                     </button>
+
 
                     {/* Reinforces the free-trial details */}
                     <p className="cta-note">

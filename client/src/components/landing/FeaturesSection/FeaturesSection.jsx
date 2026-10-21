@@ -100,7 +100,7 @@ export default function FeaturesSection() {
                             </div>
 
                             {/* Link to an example bakery storefront */}
-                            <a href="#storefront" className="features-example-btn">
+                            <a href="/sandhu-bakery" className="features-example-btn">
                                 See a Storefront Example →
                             </a>
 

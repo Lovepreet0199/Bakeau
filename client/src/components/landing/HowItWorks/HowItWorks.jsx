@@ -111,7 +111,11 @@ export default function HowItWorks() {
 
                 {/* Call to action after explaining the five steps */}
                 <div className="text-center how-it-works-action">
-                    <button className="how-it-works-btn">
+                    <button
+                        type="button"
+                        className="how-it-works-btn"
+                        onClick={() => window.location.href = "/register"}
+                    >
                         Start Your Bakery
                     </button>
                 </div>

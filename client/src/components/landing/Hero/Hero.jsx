@@ -44,7 +44,7 @@ export default function Hero() {
                             </a>
 
                             {/* Secondary action for viewing an example Bakeau storefront */}
-                            <a href="#storefront" className="hero-secondary-btn text-center">
+                            <a href="/sandhu-bakery" className="hero-secondary-btn text-center">
                                 See a Live Example
                             </a>
 

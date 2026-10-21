@@ -103,8 +103,10 @@ export default function PricingSection() {
 
                             {/* Highlight the button when Starter is selected */}
                             <button
+                                type="button"
                                 className={`pricing-trial-btn ${selectedPlan === "starter" ? "pricing-trial-btn-selected" : ""
                                     }`}
+                                onClick={() => window.location.href = "/register"}
                             >
                                 Start free trial
                             </button>
@@ -171,8 +173,10 @@ export default function PricingSection() {
 
                             {/* Highlight the button when Professional is selected */}
                             <button
+                                type="button"
                                 className={`pricing-trial-btn ${selectedPlan === "professional" ? "pricing-trial-btn-selected" : ""
                                     }`}
+                                onClick={() => window.location.href = "/register"}
                             >
                                 Start free trial
                             </button>

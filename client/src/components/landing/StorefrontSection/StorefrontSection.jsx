@@ -71,7 +71,11 @@ export default function StorefrontSection() {
                         </div>
 
                         {/* Opens an example of a Bakeau bakery storefront */}
-                        <button className="storefront-example-btn">
+                        <button
+                            type="button"
+                            className="storefront-example-btn"
+                            onClick={() => window.location.href = "/sandhu-bakery"}
+                        >
                             See example storefront →
                         </button>
 
