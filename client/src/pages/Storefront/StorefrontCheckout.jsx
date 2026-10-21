@@ -138,6 +138,45 @@ export default function StorefrontCheckout() {
         setAvailabilityError
     ] = useState("");
 
+    //Stores current time used for Pickup notice validation
+    const [
+        currentTimeMs,
+        setCurrentTimeMs
+    ] = useState(null);
+
+    //Keeps the current time updated for Pickup notice validation
+    useEffect(() => {
+
+        //Update current time
+        function updateCurrentTime() {
+
+            setCurrentTimeMs(
+                Date.now()
+            );
+        }
+
+
+        //Set time when Checkout loads
+        updateCurrentTime();
+
+
+        //Refresh time every minute
+        const timer =
+            window.setInterval(
+                updateCurrentTime,
+                60000
+            );
+
+
+        //Stop timer when leaving Checkout
+        return () => {
+
+            window.clearInterval(
+                timer
+            );
+        };
+
+    }, []);
 
     //Only get Cart items for this Bakery
     const bakeryCartItems =
@@ -343,10 +382,10 @@ export default function StorefrontCheckout() {
             totalMinutes % 60;
 
         return `${String(hours)
-                .padStart(
-                    2,
-                    "0"
-                )
+            .padStart(
+                2,
+                "0"
+            )
             }:${String(minutes)
                 .padStart(
                     2,
@@ -620,15 +659,215 @@ export default function StorefrontCheckout() {
 
 
     //Create Customer Pickup times from selected day's window
-    const availablePickupTimes =
+    const pickupTimes =
         selectedDay?.windows
-
             ? createPickupTimes(
                 selectedDay.windows
             )
-
             : [];
 
+
+    //Get the notice required for this Cart
+    const requiredNoticeHours =
+        Number(
+            cartQuote?.required_notice_hours ||
+            bakery?.minimum_order_notice ||
+            0
+        );
+
+
+    //Checks whether one Pickup time gives enough notice
+    function hasEnoughPickupNotice(
+        date,
+        time
+    ) {
+
+        if (
+            !date ||
+            !time ||
+            currentTimeMs === null
+        ) {
+
+            return false;
+        }
+
+
+        //Get Bakery timezone
+        const bakeryTimeZone =
+            bakery?.timezone ||
+            "America/Toronto";
+
+
+        //Split selected Pickup time
+        const [
+            pickupHour,
+            pickupMinute
+        ] =
+            time
+                .split(":")
+                .map(Number);
+
+
+        //Get selected Pickup date
+        const selectedPickupDate =
+            new Date(
+                `${date}T12:00:00`
+            );
+
+
+        /*
+            Build a temporary UTC Date using
+            the Bakery's local Pickup values.
+        */
+        const pickupUtcGuess =
+            new Date(
+                Date.UTC(
+                    selectedPickupDate.getFullYear(),
+                    selectedPickupDate.getMonth(),
+                    selectedPickupDate.getDate(),
+                    pickupHour,
+                    pickupMinute,
+                    0,
+                    0
+                )
+            );
+
+
+        //Gets Bakery timezone offset
+        function getTimeZoneOffset(
+            dateValue,
+            timeZone
+        ) {
+
+            const parts =
+                new Intl.DateTimeFormat(
+                    "en-CA",
+                    {
+                        timeZone:
+                            timeZone,
+
+                        year:
+                            "numeric",
+
+                        month:
+                            "2-digit",
+
+                        day:
+                            "2-digit",
+
+                        hour:
+                            "2-digit",
+
+                        minute:
+                            "2-digit",
+
+                        second:
+                            "2-digit",
+
+                        hourCycle:
+                            "h23"
+                    }
+                ).formatToParts(
+                    dateValue
+                );
+
+
+            function getPart(
+                type
+            ) {
+
+                return Number(
+                    parts.find(
+                        (part) =>
+                            part.type ===
+                            type
+                    )?.value
+                );
+            }
+
+
+            const bakeryTimeAsUtc =
+                Date.UTC(
+                    getPart("year"),
+                    getPart("month") - 1,
+                    getPart("day"),
+                    getPart("hour"),
+                    getPart("minute"),
+                    getPart("second")
+                );
+
+
+            return (
+                bakeryTimeAsUtc -
+                dateValue.getTime()
+            );
+        }
+
+
+        //Get Bakery timezone offset
+        let bakeryOffset =
+            getTimeZoneOffset(
+                pickupUtcGuess,
+                bakeryTimeZone
+            );
+
+
+        //Create actual Pickup Date and time
+        let pickupDateTime =
+            new Date(
+                pickupUtcGuess.getTime() -
+                bakeryOffset
+            );
+
+
+        //Check offset again for daylight saving time
+        const correctedBakeryOffset =
+            getTimeZoneOffset(
+                pickupDateTime,
+                bakeryTimeZone
+            );
+
+
+        if (
+            correctedBakeryOffset !==
+            bakeryOffset
+        ) {
+
+            pickupDateTime =
+                new Date(
+                    pickupUtcGuess.getTime() -
+                    correctedBakeryOffset
+                );
+        }
+
+
+        //Calculate earliest valid Pickup
+        const earliestAllowedPickup =
+            new Date(
+                currentTimeMs +
+                requiredNoticeHours *
+                60 *
+                60 *
+                1000
+            );
+
+
+        return (
+            pickupDateTime >=
+            earliestAllowedPickup
+        );
+    }
+
+
+    //Only show Pickup times that provide enough notice
+    const availablePickupTimes =
+        pickupTimes.filter(
+            (pickupTime) =>
+                hasEnoughPickupNotice(
+                    selectedDate,
+                    pickupTime.time
+                )
+        );
 
     //Create Pickup address
     const pickupAddress = [
@@ -1117,12 +1356,19 @@ export default function StorefrontCheckout() {
             !selectedPickupSlotId ||
             isDateInPast(
                 selectedDate
+            ) ||
+            !hasEnoughPickupNotice(
+                selectedDate,
+                selectedTime
             )
         ) {
 
+            //Clear Pickup time if it is no longer valid
+            setSelectedTime("");
+            setSelectedPickupSlotId("");
+
             return;
         }
-
 
         //Save Pickup selection for next Checkout pages
         sessionStorage.setItem(
@@ -1499,6 +1745,17 @@ export default function StorefrontCheckout() {
                                 </div>
                             )}
 
+                            {requiredNoticeHours > 0 && (
+
+                                <div className="alert alert-light border small">
+                                    This order requires at least{" "}
+                                    <strong>
+                                        {requiredNoticeHours} hours
+                                    </strong>{" "}
+                                    notice.
+                                </div>
+
+                            )}
 
                             {/* Available times */}
                             {selectedDate && (

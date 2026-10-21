@@ -1006,6 +1006,12 @@ const getPublicBakeryCartQuote = async (request, response) => {
         //Tracks how much the Customer must pay now
         let cartAmountDueNow = 0;
 
+        //Start with the Bakery minimum Order notice
+        let requiredNoticeHours =
+            Number(
+                bakery.minimum_order_notice ||
+                0
+            );
 
         //Validate and calculate every Cart Product
         for (const requestedItem of items) {
@@ -1066,7 +1072,6 @@ const getPublicBakeryCartQuote = async (request, response) => {
                         true
                 });
 
-
             //Stop if the Product cannot be ordered
             if (!product) {
 
@@ -1075,6 +1080,17 @@ const getPublicBakeryCartQuote = async (request, response) => {
                         "One or more Cart products could not be found"
                 });
             }
+
+
+            //Use the largest Product preparation notice in the Cart
+            requiredNoticeHours =
+                Math.max(
+                    requiredNoticeHours,
+                    Number(
+                        product.minimum_preparation_notice ||
+                        0
+                    )
+                );
 
 
             //Check inventory when this Product tracks stock
@@ -1419,7 +1435,11 @@ const getPublicBakeryCartQuote = async (request, response) => {
                     cartAmountDueNow,
 
                 currency:
-                    bakery.currency
+                    bakery.currency,
+
+                //Largest notice required for this Cart
+                required_notice_hours:
+                    requiredNoticeHours
             }
         });
 
