@@ -18,6 +18,46 @@ import {
     sendBakeryApprovalRequestEmail
 } from "../utils/email.js";
 
+//Creates an optimized Cloudinary delivery URL
+const createCloudinaryImageUrl = (
+    publicId,
+    version,
+    imageType
+) => {
+
+    //Use smaller dimensions for Bakery logos
+    if (imageType === "logo") {
+
+        return cloudinary.url(
+            publicId,
+            {
+                secure: true,
+                version: version,
+                width: 600,
+                height: 600,
+                crop: "limit",
+                quality: "auto",
+                fetch_format: "auto"
+            }
+        );
+    }
+
+
+    //Use larger dimensions for Bakery storefront images
+    return cloudinary.url(
+        publicId,
+        {
+            secure: true,
+            version: version,
+            width: 1600,
+            height: 1200,
+            crop: "limit",
+            quality: "auto",
+            fetch_format: "auto"
+        }
+    );
+};
+
 //Rounds money values to two decimal places
 const roundMoney = (amount) => {
 
@@ -378,50 +418,92 @@ const updateMyBakery = async (request, response) => {
 };
 
 //Upload a logo for the authenticated Bakery Owner's bakery
-const uploadBakeryLogo = async (request, response) => {
+const uploadBakeryLogo = async (
+    request,
+    response
+) => {
 
     try {
 
         //Check if the Bakery Owner selected an image
         if (!request.file) {
+
             return response.status(400).json({
-                message: "Please select a logo image"
+                message:
+                    "Please select a logo image"
             });
         }
 
-        //Upload the bakery logo to Cloudinary
-        const uploadResult = await new Promise((resolve, reject) => {
 
-            const uploadStream = cloudinary.uploader.upload_stream(
-                {
-                    folder: "bakeau/bakery-logos"
-                },
-                (error, result) => {
+        //Upload the original Bakery logo to Cloudinary
+        const uploadResult =
+            await new Promise(
+                (resolve, reject) => {
 
-                    if (error) {
-                        reject(error);
-                    } else {
-                        resolve(result);
-                    }
+                    const uploadStream =
+                        cloudinary.uploader.upload_stream(
+                            {
+                                folder:
+                                    "bakeau/bakery-logos",
+
+                                resource_type:
+                                    "image"
+                            },
+                            (
+                                error,
+                                result
+                            ) => {
+
+                                if (error) {
+                                    reject(error);
+                                } else {
+                                    resolve(result);
+                                }
+                            }
+                        );
+
+
+                    uploadStream.end(
+                        request.file.buffer
+                    );
                 }
             );
 
-            uploadStream.end(request.file.buffer);
+
+        //Create an optimized delivery URL
+        const logoImageUrl =
+            createCloudinaryImageUrl(
+                uploadResult.public_id,
+                uploadResult.version,
+                "logo"
+            );
+
+
+        //Return the uploaded logo information
+        return response.status(200).json({
+
+            message:
+                "Bakery logo uploaded successfully",
+
+            logo_image_url:
+                logoImageUrl,
+
+            logo_image_public_id:
+                uploadResult.public_id
         });
 
-        //Return the uploaded logo information so it can be saved during bakery setup
-        return response.status(200).json({
-            message: "Bakery logo uploaded successfully",
-            logo_image_url: uploadResult.secure_url,
-            logo_image_public_id: uploadResult.public_id
-        });
 
     } catch (error) {
 
-        console.error("Bakery logo upload error: ", error.message);
+        console.error(
+            "Bakery logo upload error:",
+            error.message
+        );
+
 
         return response.status(500).json({
-            message: "Unable to upload bakery logo"
+            message:
+                "Unable to upload bakery logo"
         });
     }
 };
@@ -534,51 +616,93 @@ const updateBakeryPaymentSettings = async (request, response) => {
     }
 };
 
-//Upload a bakery image for the About section during bakery setup
-const uploadBakeryImage = async (request, response) => {
+//Upload a Bakery image for the Storefront
+const uploadBakeryImage = async (
+    request,
+    response
+) => {
 
     try {
 
         //Check if the Bakery Owner selected an image
         if (!request.file) {
+
             return response.status(400).json({
-                message: "Please select a bakery image"
+                message:
+                    "Please select a bakery image"
             });
         }
 
-        //Upload the bakery image to Cloudinary
-        const uploadResult = await new Promise((resolve, reject) => {
 
-            const uploadStream = cloudinary.uploader.upload_stream(
-                {
-                    folder: "bakeau/bakery-images"
-                },
-                (error, result) => {
+        //Upload the original Bakery image to Cloudinary
+        const uploadResult =
+            await new Promise(
+                (resolve, reject) => {
 
-                    if (error) {
-                        reject(error);
-                    } else {
-                        resolve(result);
-                    }
+                    const uploadStream =
+                        cloudinary.uploader.upload_stream(
+                            {
+                                folder:
+                                    "bakeau/bakery-images",
+
+                                resource_type:
+                                    "image"
+                            },
+                            (
+                                error,
+                                result
+                            ) => {
+
+                                if (error) {
+                                    reject(error);
+                                } else {
+                                    resolve(result);
+                                }
+                            }
+                        );
+
+
+                    uploadStream.end(
+                        request.file.buffer
+                    );
                 }
             );
 
-            uploadStream.end(request.file.buffer);
+
+        //Create an optimized delivery URL
+        const bakeryImageUrl =
+            createCloudinaryImageUrl(
+                uploadResult.public_id,
+                uploadResult.version,
+                "bakery"
+            );
+
+
+        //Return the uploaded Bakery image information
+        return response.status(200).json({
+
+            message:
+                "Bakery image uploaded successfully",
+
+            bakery_image_url:
+                bakeryImageUrl,
+
+            bakery_image_public_id:
+                uploadResult.public_id
         });
 
-        //Return the uploaded bakery image information so it can be saved during bakery setup
-        return response.status(200).json({
-            message: "Bakery image uploaded successfully",
-            bakery_image_url: uploadResult.secure_url,
-            bakery_image_public_id: uploadResult.public_id
-        });
 
     } catch (error) {
 
-        console.error("Bakery image upload error: ", error.message);
+        console.error(
+            "Bakery image upload error:",
+            error.message
+        );
+
 
         return response.status(500).json({
-            message: "Unable to upload bakery image"
+            message:
+                "Unable to upload bakery image"
         });
     }
 };
