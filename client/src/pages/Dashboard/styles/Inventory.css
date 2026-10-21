@@ -38,7 +38,7 @@
 /* Inventory tabs */
 .bakery-inventory-tabs {
     width: 100%;
-    max-width: 1050px;
+    max-width: 100%;
     display: flex;
     align-items: center;
     gap: 4px;
@@ -127,7 +127,7 @@
 /* Inventory warning */
 .bakery-inventory-warning {
     width: 100%;
-    max-width: 1050px;
+    max-width: 100%;
     display: flex;
     align-items: flex-start;
     gap: 10px;
@@ -160,7 +160,7 @@
 /* Inventory error */
 .bakery-inventory-error {
     width: 100%;
-    max-width: 1050px;
+    max-width: 100%;
     margin-bottom: 15px;
     padding: 11px 13px;
     border: 1px solid #F2C7C4;
@@ -174,7 +174,7 @@
 /* Inventory toolbar */
 .bakery-inventory-toolbar {
     width: 100%;
-    max-width: 1050px;
+    max-width: 100%;
     display: flex;
     align-items: center;
     margin-bottom: 14px;
@@ -221,7 +221,7 @@
 /* Inventory card */
 .bakery-inventory-card {
     width: 100%;
-    max-width: 1050px;
+    max-width: 100%;
     overflow: hidden;
     border: 1px solid #E4E1DE;
     border-radius: 9px;
@@ -451,7 +451,7 @@
 /* Inventory loading */
 .bakery-inventory-loading {
     width: 100%;
-    max-width: 1050px;
+    max-width: 100%;
     min-height: 260px;
     display: flex;
     align-items: center;
@@ -462,7 +462,7 @@
 
 
 /* Loading spinner */
-.bakery-inventory-loading > svg {
+.bakery-inventory-loading>svg {
     animation: bakery-inventory-spin 0.8s linear infinite;
 }
 
@@ -686,8 +686,7 @@
     }
 
 
-    .bakery-inventory-heading
-    .bakery-inventory-primary-button {
+    .bakery-inventory-heading .bakery-inventory-primary-button {
         width: 100%;
     }
 
