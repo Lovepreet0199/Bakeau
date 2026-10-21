@@ -140,6 +140,9 @@ import BakeryAnalytics from "./pages/Dashboard/BakeryAnalytics.jsx";
 //Import Customer Favourites page
 import StorefrontFavourites from "./pages/Storefront/StorefrontFavourites";
 
+//Import complete Storefront Menu page
+import StorefrontMenu from "./pages/Storefront/StorefrontMenu";
+
 //Displays the Bakeau application routes
 export default function App() {
 
@@ -254,6 +257,12 @@ export default function App() {
         <Route
           path="/bakery-setup"
           element={<BakerySetup />}
+        />
+
+        {/* Complete public Bakery Menu */}
+        <Route
+          path="/:slug/menu"
+          element={<StorefrontMenu />}
         />
 
         {/* Public customer Bakery Storefront */}

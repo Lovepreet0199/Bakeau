@@ -1,6 +1,29 @@
 /* Main public Bakery Storefront */
 .bakery-storefront-page {
-    background-color: #fffdf9;
+
+    /* Light Bakery-themed section background */
+    --storefront-surface-light:
+        color-mix(in srgb,
+            var(--storefront-secondary) 22%,
+            #fffdf9);
+
+    /* Bakery secondary section background */
+    --storefront-surface-secondary:
+        var(--storefront-secondary);
+
+    /* Soft card surface instead of harsh white */
+    --storefront-card-surface:
+        color-mix(in srgb,
+            var(--storefront-secondary) 8%,
+            #fffdf9);
+
+    /* Dark Bakery surface */
+    --storefront-surface-dark:
+        var(--storefront-dark);
+
+    background-color:
+        var(--storefront-surface-light);
+
     color: #33251f;
 }
 
@@ -31,19 +54,32 @@
     font-weight: 500;
 }
 
-
 .storefront-view-all:hover {
     color: var(--storefront-primary);
     opacity: 0.8;
 }
 
 
+/* Featured section */
+.storefront-feature-section {
+    background-color:
+        var(--storefront-surface-light);
+}
+
+
 /* Featured Product showcase */
 .storefront-feature-card {
     overflow: hidden;
-    border: 1px solid #eee3da;
+
+    border:
+        1px solid color-mix(in srgb,
+            var(--storefront-primary) 12%,
+            #eee3da);
+
     border-radius: 18px;
-    background-color: var(--storefront-secondary);
+
+    background-color:
+        var(--storefront-card-surface);
 }
 
 
@@ -109,17 +145,16 @@
     padding: 12px 19px;
     font-size: 13px;
     font-weight: 600;
+
     transition:
         opacity 0.2s ease,
         transform 0.2s ease;
 }
 
-
 .storefront-primary-button:hover {
     color: #ffffff;
     opacity: 0.92;
 }
-
 
 .storefront-primary-button:active {
     transform: translateY(1px);
@@ -162,22 +197,8 @@
 .storefront-menu-section {
     scroll-margin-top: 90px;
 
-    margin-top: 34px;
-    margin-bottom: 34px;
-
-    border: 1px solid #eadfd7;
-    border-radius: 24px;
-
     background-color:
-        color-mix(in srgb,
-            var(--storefront-secondary) 34%,
-            #fffdf9);
-
-    box-shadow:
-        0 10px 30px rgba(66,
-            44,
-            35,
-            0.035);
+        var(--storefront-surface-secondary);
 }
 
 
@@ -194,7 +215,8 @@
     border: 1px solid #e7dbd2;
     border-radius: 18px;
 
-    background-color: #ffffff;
+    background-color:
+        var(--storefront-card-surface);
 
     box-shadow:
         0 4px 16px rgba(66,
@@ -230,10 +252,6 @@
 .storefront-product-image-wrapper {
     overflow: hidden;
 
-    /*
-        Slightly shorter than a normal 4:3 image.
-        Keeps large desktop cards from becoming too tall.
-    */
     --bs-aspect-ratio: 66%;
 
     background-color: #f4ece6;
@@ -324,7 +342,8 @@
 
     padding: 11px 14px;
 
-    border: 1px solid color-mix(in srgb,
+    border:
+        1px solid color-mix(in srgb,
             var(--storefront-primary) 40%,
             #ffffff);
 
@@ -363,13 +382,16 @@
 .storefront-empty-products {
     border: 1px dashed #d9ccc3;
     border-radius: 12px;
+
     background-color: #ffffff;
 }
 
 
 /* How it works section */
 .storefront-how-section {
-    background-color: var(--storefront-dark);
+    background-color:
+        var(--storefront-surface-dark);
+
     color: #ffffff;
 }
 
@@ -377,6 +399,7 @@
 /* How it works title */
 .storefront-how-title {
     font-family: "Fraunces", serif;
+
     font-size: clamp(26px, 4vw, 30px);
 }
 
@@ -384,13 +407,17 @@
 /* How it works card */
 .storefront-how-card {
     border-radius: 12px;
-    background-color: rgba(255, 255, 255, 0.09);
-}
 
+    background-color:
+        rgba(255, 255, 255, 0.09);
+}
 
 /* How it works number */
 .storefront-step-number {
-    color: var(--storefront-primary);
+    color:
+        color-mix(in srgb,
+            var(--storefront-primary) 40%,
+            #ffffff);
 
     font-family: "Fraunces", serif;
 
@@ -410,16 +437,19 @@
 
 /* How it works description */
 .storefront-how-card p {
-    color: rgba(255, 255, 255, 0.75);
+    color:
+        rgba(255, 255, 255, 0.75);
 
     font-size: 13px;
+
     line-height: 1.6;
 }
 
 
 /* Customer Reviews section */
 .storefront-reviews-section {
-    background-color: #fffdf9;
+    background-color:
+        var(--storefront-surface-light);
 }
 
 
@@ -427,10 +457,15 @@
 .storefront-feature-review {
     overflow: hidden;
 
-    border: 1px solid #eee3da;
+    border:
+        1px solid color-mix(in srgb,
+            var(--storefront-primary) 12%,
+            #eee3da);
+
     border-radius: 18px;
 
-    background-color: #ffffff;
+    background-color:
+        var(--storefront-card-surface);
 }
 
 
@@ -440,7 +475,9 @@
 
     font-family: "Fraunces", serif;
 
-    font-size: clamp(20px, 3vw, 24px);
+    font-size:
+        clamp(20px, 3vw, 24px);
+
     font-weight: 600;
 }
 
@@ -471,7 +508,8 @@
 
     font-family: "Fraunces", serif;
 
-    font-size: clamp(19px, 3vw, 27px);
+    font-size:
+        clamp(19px, 3vw, 27px);
 
     line-height: 1.55;
 }
@@ -499,7 +537,8 @@
 
     padding: 13px 15px;
 
-    border-left: 3px solid var(--storefront-primary);
+    border-left:
+        3px solid var(--storefront-primary);
 
     border-radius: 7px;
 
@@ -649,7 +688,7 @@
 /* Bakery About section */
 .storefront-about-section {
     background-color:
-        var(--storefront-secondary);
+        var(--storefront-surface-secondary);
 }
 
 
@@ -754,18 +793,9 @@
 /* Smaller Menu spacing on phones */
 @media (max-width: 575px) {
 
-    .storefront-menu-section {
-        margin-top: 20px;
-        margin-bottom: 20px;
-
-        border-radius: 18px;
-    }
-
-
     .storefront-product-image-wrapper {
         --bs-aspect-ratio: 72%;
     }
-
 
     .storefront-product-title {
         font-size: 18px;
@@ -782,17 +812,14 @@
         animation: none;
     }
 
-
     .storefront-product-card,
     .storefront-product-image {
         transition: none;
     }
 
-
     .storefront-product-card:hover {
         transform: none;
     }
-
 
     .storefront-product-card:hover .storefront-product-image {
         transform: none;

@@ -1,4 +1,5 @@
 import API_URL from "../../config/api.js";
+
 //Import React hooks
 import { useEffect, useState } from "react";
 
@@ -52,7 +53,6 @@ export default function BakeryStorefront() {
     //Stores Product IDs saved by the logged-in Customer
     const [favouriteProductIds, setFavouriteProductIds] = useState([]);
 
-
     //Tracks which Favourite is currently being updated
     const [updatingFavouriteId, setUpdatingFavouriteId] = useState(null);
 
@@ -102,33 +102,45 @@ export default function BakeryStorefront() {
                 ]);
 
                 //Convert responses into JavaScript data
-                const bakeryData = await bakeryResponse.json();
-                const productsData = await productsResponse.json();
-                const reviewsData = await reviewsResponse.json();
+                const bakeryData =
+                    await bakeryResponse.json();
+
+                const productsData =
+                    await productsResponse.json();
+
+                const reviewsData =
+                    await reviewsResponse.json();
+
 
                 //Stop if the Bakery could not be loaded
                 if (!bakeryResponse.ok) {
+
                     throw new Error(
                         bakeryData.message ||
                         "Unable to load bakery"
                     );
                 }
 
+
                 //Stop if the Products could not be loaded
                 if (!productsResponse.ok) {
+
                     throw new Error(
                         productsData.message ||
                         "Unable to load products"
                     );
                 }
 
+
                 //Stop if the Reviews could not be loaded
                 if (!reviewsResponse.ok) {
+
                     throw new Error(
                         reviewsData.message ||
                         "Unable to load reviews"
                     );
                 }
+
 
                 //Save the Bakery information
                 setBakery(
@@ -176,6 +188,7 @@ export default function BakeryStorefront() {
         fetchStorefront();
 
     }, [slug]);
+
 
     //Loads Favourites for the logged-in Customer
     useEffect(() => {
@@ -225,15 +238,13 @@ export default function BakeryStorefront() {
                 /*
                     A logged-in Bakery Owner or Admin
                     may also visit a Storefront.
-    
+
                     Favourites are only for Customers,
                     so simply ignore unauthorized roles.
                 */
                 if (
-                    response.status ===
-                    401 ||
-                    response.status ===
-                    403
+                    response.status === 401 ||
+                    response.status === 403
                 ) {
 
                     setFavouriteProductIds(
@@ -260,7 +271,7 @@ export default function BakeryStorefront() {
 
                 /*
                     Store only Product IDs.
-    
+
                     product_id is populated by the backend,
                     so its _id identifies the Product.
                 */
@@ -302,6 +313,7 @@ export default function BakeryStorefront() {
         slug
     ]);
 
+
     //Scrolls to a Storefront section when the URL contains a hash
     useEffect(() => {
 
@@ -314,6 +326,7 @@ export default function BakeryStorefront() {
             return;
         }
 
+
         //Get the section ID from the URL
         const sectionId =
             location.hash.replace(
@@ -321,11 +334,13 @@ export default function BakeryStorefront() {
                 ""
             );
 
+
         //Find the Storefront section
         const section =
             document.getElementById(
                 sectionId
             );
+
 
         //Scroll to the section when it exists
         if (section) {
@@ -353,16 +368,19 @@ export default function BakeryStorefront() {
                     product.is_featured
             );
 
+
         //Use featured Products or regular Products as a fallback
         const rotatingProducts =
             featured.length > 0
                 ? featured.slice(0, 4)
                 : products.slice(0, 4);
 
+
         //Do not start the carousel when there is only one Product
         if (rotatingProducts.length <= 1) {
             return;
         }
+
 
         //Move to the next Product every 5 seconds
         const interval =
@@ -377,6 +395,7 @@ export default function BakeryStorefront() {
                 );
 
             }, 5000);
+
 
         //Clean up the timer
         return () =>
@@ -398,10 +417,12 @@ export default function BakeryStorefront() {
                 5
             );
 
+
         //Do not start carousel when there is only one Review
         if (rotatingReviewCount <= 1) {
             return;
         }
+
 
         //Move to the next Review every 5 seconds
         const interval =
@@ -416,6 +437,7 @@ export default function BakeryStorefront() {
                 );
 
             }, 5000);
+
 
         //Clean up the timer
         return () =>
@@ -451,6 +473,7 @@ export default function BakeryStorefront() {
             product?.category?.toLowerCase() ||
             "";
 
+
         if (
             categoryName.includes(
                 "cake"
@@ -458,6 +481,7 @@ export default function BakeryStorefront() {
         ) {
             return "Customize";
         }
+
 
         return "View item";
     }
@@ -470,14 +494,17 @@ export default function BakeryStorefront() {
             return "Customer";
         }
 
+
         const firstName =
             customer.first_name ||
             "Customer";
+
 
         const lastInitial =
             customer.last_name
                 ? `${customer.last_name.charAt(0)}.`
                 : "";
+
 
         return `${firstName} ${lastInitial}`.trim();
     }
@@ -502,20 +529,24 @@ export default function BakeryStorefront() {
                 (1000 * 60 * 60 * 24)
             );
 
+
         //Review was posted today
         if (days <= 0) {
             return "Today";
         }
+
 
         //Review was posted yesterday
         if (days === 1) {
             return "Yesterday";
         }
 
+
         //Reviews from this week
         if (days < 7) {
             return `${days} days ago`;
         }
+
 
         //Reviews from this month
         if (days < 30) {
@@ -525,10 +556,12 @@ export default function BakeryStorefront() {
                     days / 7
                 );
 
+
             return weeks === 1
                 ? "1 week ago"
                 : `${weeks} weeks ago`;
         }
+
 
         //Older Reviews use a normal date
         return reviewDate.toLocaleDateString(
@@ -552,10 +585,13 @@ export default function BakeryStorefront() {
                     className="spinner-border"
                     role="status"
                 >
+
                     <span className="visually-hidden">
                         Loading storefront...
                     </span>
+
                 </div>
+
 
                 <p className="mb-0">
                     Loading bakery...
@@ -580,9 +616,11 @@ export default function BakeryStorefront() {
                     Storefront unavailable
                 </h1>
 
+
                 <p className="text-secondary mb-1">
                     {error || "Bakery not found"}
                 </p>
+
 
                 <Link
                     to="/"
@@ -617,13 +655,18 @@ export default function BakeryStorefront() {
         products[0];
 
 
-    //Display all published Products in the Menu
+    //Show only three Products on the Storefront homepage
     const menuProducts =
-        products;
+        products.slice(
+            0,
+            3
+        );
+
 
     //Controls responsive Menu Product card size
     const menuProductColumnClass =
         "col-12 col-sm-6 col-lg-4";
+
 
     //Sort Reviews by highest rating and then newest date
     const topReviews = [
@@ -640,11 +683,13 @@ export default function BakeryStorefront() {
                     secondReview.rating !==
                     firstReview.rating
                 ) {
+
                     return (
                         secondReview.rating -
                         firstReview.rating
                     );
                 }
+
 
                 //Show newer Reviews first when ratings are equal
                 return (
@@ -725,6 +770,7 @@ export default function BakeryStorefront() {
                     : currentIndex + 1
         );
     }
+
 
     //Adds or removes a Product from Customer Favourites
     async function toggleFavourite(productId) {
@@ -868,6 +914,7 @@ export default function BakeryStorefront() {
         }
     }
 
+
     return (
 
         //Theme comes from the Bakery Owner and applies to the whole Storefront
@@ -889,240 +936,250 @@ export default function BakeryStorefront() {
             <main>
 
                 {/* Featured section */}
-                <section className="container-xxl px-3 pt-4 pt-lg-5">
+                <section className="storefront-feature-section py-5">
 
-                    {/* Featured heading */}
-                    <div className="d-flex align-items-end justify-content-between gap-3 mb-4">
+                    <div className="container-xxl px-3">
 
-                        <div>
+                        {/* Featured heading */}
+                        <div className="d-flex align-items-end justify-content-between gap-3 mb-4">
 
-                            <p className="storefront-eyebrow mb-2">
-                                Baker's Picks
-                            </p>
+                            <div>
 
-                            <h2 className="storefront-small-section-title mb-0">
-                                Featured this week
-                            </h2>
+                                <p className="storefront-eyebrow mb-2">
+                                    Baker's Picks
+                                </p>
 
-                        </div>
-
-
-                        <a
-                            href="#menu"
-                            className="storefront-view-all d-none d-sm-inline-flex align-items-center gap-1 text-decoration-none"
-                        >
-                            View all
-
-                            <ArrowRight
-                                size={14}
-                            />
-                        </a>
-
-                    </div>
-
-
-                    {/* Featured Product showcase */}
-                    {featuredProduct ? (
-
-                        <div className="storefront-feature-card position-relative">
-
-                            <div
-                                key={
-                                    featuredProduct._id
-                                }
-                                className="row g-0 align-items-stretch storefront-feature-transition"
-                            >
-
-                                {/* Featured Product image */}
-                                <div className="col-12 col-lg-7">
-
-                                    {featuredProduct.image_url ? (
-
-                                        //Bootstrap keeps the Product image responsive
-                                        <div className="ratio ratio-16x9">
-
-                                            <img
-                                                src={
-                                                    featuredProduct.image_url
-                                                }
-                                                alt={
-                                                    featuredProduct.name
-                                                }
-                                                className="storefront-feature-image w-100 h-100"
-                                            />
-
-                                        </div>
-
-                                    ) : (
-
-                                        <div className="storefront-feature-placeholder d-flex align-items-center justify-content-center text-center p-5">
-                                            Product image coming soon
-                                        </div>
-
-                                    )}
-
-                                </div>
-
-
-                                {/* Featured Product information */}
-                                <div className="col-12 col-lg-5 d-flex">
-
-                                    <div className="d-flex flex-column align-items-start justify-content-center w-100 p-4 p-md-5">
-
-                                        <p className="storefront-eyebrow mb-2">
-                                            {featuredProduct.category}
-                                        </p>
-
-
-                                        <h1 className="storefront-feature-title mb-3">
-                                            {featuredProduct.name}
-                                        </h1>
-
-
-                                        <p className="storefront-feature-description mb-4">
-                                            {featuredProduct.description}
-                                        </p>
-
-
-                                        <div className="d-flex align-items-center flex-wrap gap-3 mb-4">
-
-                                            <strong className="storefront-feature-price">
-
-                                                From{" "}
-
-                                                {
-                                                    formatPrice(
-                                                        featuredProduct.base_price
-                                                    )
-                                                }
-
-                                            </strong>
-
-
-                                            {bakery.minimum_order_notice && (
-
-                                                <span className="storefront-notice-text">
-
-                                                    {
-                                                        bakery.minimum_order_notice
-                                                    }{" "}
-                                                    hours notice
-
-                                                </span>
-
-                                            )}
-
-                                        </div>
-
-
-                                        {/* Open Product page */}
-                                        <Link
-                                            to={`/${slug}/product/${featuredProduct._id}`}
-                                            className="storefront-primary-button d-inline-flex align-items-center justify-content-center gap-2 text-decoration-none"
-                                        >
-
-                                            {
-                                                getProductActionLabel(
-                                                    featuredProduct
-                                                )
-                                            }
-
-                                            <ArrowRight
-                                                size={17}
-                                            />
-
-                                        </Link>
-
-                                    </div>
-
-                                </div>
+                                <h2 className="storefront-small-section-title mb-0">
+                                    Featured this week
+                                </h2>
 
                             </div>
 
 
-                            {/* Carousel controls */}
-                            {heroProducts.length > 1 && (
+                            <Link
+                                to={`/${slug}/menu`}
+                                className="storefront-view-all d-none d-sm-inline-flex align-items-center gap-1 text-decoration-none"
+                            >
 
-                                <>
+                                View all
 
-                                    {/* Previous Product */}
-                                    <button
-                                        type="button"
-                                        aria-label="Previous featured product"
-                                        onClick={
-                                            showPreviousFeature
-                                        }
-                                        className="storefront-carousel-arrow position-absolute top-50 start-0 translate-middle-y ms-3 d-none d-md-flex align-items-center justify-content-center"
-                                    >
-                                        <ArrowLeft
-                                            size={18}
-                                        />
-                                    </button>
+                                <ArrowRight
+                                    size={14}
+                                />
+
+                            </Link>
+
+                        </div>
 
 
-                                    {/* Next Product */}
-                                    <button
-                                        type="button"
-                                        aria-label="Next featured product"
-                                        onClick={
-                                            showNextFeature
-                                        }
-                                        className="storefront-carousel-arrow position-absolute top-50 end-0 translate-middle-y me-3 d-none d-md-flex align-items-center justify-content-center"
-                                    >
-                                        <ArrowRight
-                                            size={18}
-                                        />
-                                    </button>
+                        {/* Featured Product showcase */}
+                        {featuredProduct ? (
 
+                            <div className="storefront-feature-card position-relative">
 
-                                    {/* Carousel dots */}
-                                    <div className="position-absolute bottom-0 start-50 translate-middle-x d-flex align-items-center gap-2 mb-3">
+                                <div
+                                    key={
+                                        featuredProduct._id
+                                    }
+                                    className="row g-0 align-items-stretch storefront-feature-transition"
+                                >
 
-                                        {heroProducts.map(
-                                            (
-                                                product,
-                                                index
-                                            ) => (
+                                    {/* Featured Product image */}
+                                    <div className="col-12 col-lg-7">
 
-                                                <button
-                                                    type="button"
-                                                    key={
-                                                        product._id
+                                        {featuredProduct.image_url ? (
+
+                                            //Bootstrap keeps the Product image responsive
+                                            <div className="ratio ratio-16x9">
+
+                                                <img
+                                                    src={
+                                                        featuredProduct.image_url
                                                     }
-                                                    aria-label={
-                                                        `Show ${product.name}`
+                                                    alt={
+                                                        featuredProduct.name
                                                     }
-                                                    onClick={() =>
-                                                        setCurrentFeatureIndex(
-                                                            index
-                                                        )
-                                                    }
-                                                    className={
-                                                        index ===
-                                                            currentFeatureIndex
-                                                            ? "storefront-carousel-dot active"
-                                                            : "storefront-carousel-dot"
-                                                    }
+                                                    className="storefront-feature-image w-100 h-100"
                                                 />
 
-                                            )
+                                            </div>
+
+                                        ) : (
+
+                                            <div className="storefront-feature-placeholder d-flex align-items-center justify-content-center text-center p-5">
+                                                Product image coming soon
+                                            </div>
+
                                         )}
 
                                     </div>
 
-                                </>
 
-                            )}
+                                    {/* Featured Product information */}
+                                    <div className="col-12 col-lg-5 d-flex">
 
-                        </div>
+                                        <div className="d-flex flex-column align-items-start justify-content-center w-100 p-4 p-md-5">
 
-                    ) : (
+                                            <p className="storefront-eyebrow mb-2">
+                                                {featuredProduct.category}
+                                            </p>
 
-                        <div className="storefront-empty-products text-center p-5">
-                            Products coming soon.
-                        </div>
 
-                    )}
+                                            <h1 className="storefront-feature-title mb-3">
+                                                {featuredProduct.name}
+                                            </h1>
+
+
+                                            <p className="storefront-feature-description mb-4">
+                                                {featuredProduct.description}
+                                            </p>
+
+
+                                            <div className="d-flex align-items-center flex-wrap gap-3 mb-4">
+
+                                                <strong className="storefront-feature-price">
+
+                                                    From{" "}
+
+                                                    {
+                                                        formatPrice(
+                                                            featuredProduct.base_price
+                                                        )
+                                                    }
+
+                                                </strong>
+
+
+                                                {bakery.minimum_order_notice && (
+
+                                                    <span className="storefront-notice-text">
+
+                                                        {
+                                                            bakery.minimum_order_notice
+                                                        }{" "}
+                                                        hours notice
+
+                                                    </span>
+
+                                                )}
+
+                                            </div>
+
+
+                                            {/* Open Product page */}
+                                            <Link
+                                                to={`/${slug}/product/${featuredProduct._id}`}
+                                                className="storefront-primary-button d-inline-flex align-items-center justify-content-center gap-2 text-decoration-none"
+                                            >
+
+                                                {
+                                                    getProductActionLabel(
+                                                        featuredProduct
+                                                    )
+                                                }
+
+                                                <ArrowRight
+                                                    size={17}
+                                                />
+
+                                            </Link>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+
+                                {/* Carousel controls */}
+                                {heroProducts.length > 1 && (
+
+                                    <>
+
+                                        {/* Previous Product */}
+                                        <button
+                                            type="button"
+                                            aria-label="Previous featured product"
+                                            onClick={
+                                                showPreviousFeature
+                                            }
+                                            className="storefront-carousel-arrow position-absolute top-50 start-0 translate-middle-y ms-3 d-none d-md-flex align-items-center justify-content-center"
+                                        >
+
+                                            <ArrowLeft
+                                                size={18}
+                                            />
+
+                                        </button>
+
+
+                                        {/* Next Product */}
+                                        <button
+                                            type="button"
+                                            aria-label="Next featured product"
+                                            onClick={
+                                                showNextFeature
+                                            }
+                                            className="storefront-carousel-arrow position-absolute top-50 end-0 translate-middle-y me-3 d-none d-md-flex align-items-center justify-content-center"
+                                        >
+
+                                            <ArrowRight
+                                                size={18}
+                                            />
+
+                                        </button>
+
+
+                                        {/* Carousel dots */}
+                                        <div className="position-absolute bottom-0 start-50 translate-middle-x d-flex align-items-center gap-2 mb-3">
+
+                                            {heroProducts.map(
+                                                (
+                                                    product,
+                                                    index
+                                                ) => (
+
+                                                    <button
+                                                        type="button"
+                                                        key={
+                                                            product._id
+                                                        }
+                                                        aria-label={
+                                                            `Show ${product.name}`
+                                                        }
+                                                        onClick={() =>
+                                                            setCurrentFeatureIndex(
+                                                                index
+                                                            )
+                                                        }
+                                                        className={
+                                                            index ===
+                                                                currentFeatureIndex
+                                                                ? "storefront-carousel-dot active"
+                                                                : "storefront-carousel-dot"
+                                                        }
+                                                    />
+
+                                                )
+                                            )}
+
+                                        </div>
+
+                                    </>
+
+                                )}
+
+                            </div>
+
+                        ) : (
+
+                            <div className="storefront-empty-products text-center p-5">
+                                Products coming soon.
+                            </div>
+
+                        )}
+
+                    </div>
 
                 </section>
 
@@ -1130,191 +1187,233 @@ export default function BakeryStorefront() {
                 {/* Menu */}
                 <section
                     id="menu"
-                    className="container-xxl storefront-menu-section px-3 px-md-4 py-4 py-lg-5"
+                    className="storefront-menu-section py-5"
                 >
 
-                    {/* Menu heading */}
-                    <div className="mb-4">
+                    <div className="container-xxl px-3 px-md-4">
 
-                        <p className="storefront-eyebrow mb-2">
-                            Our Menu
-                        </p>
+                        {/* Menu heading */}
+                        <div className="mb-4">
 
-                        <h2 className="storefront-small-section-title mb-1">
-                            Freshly baked for you
-                        </h2>
+                            <p className="storefront-eyebrow mb-2">
+                                Our Menu
+                            </p>
 
-                        <p className="text-secondary mb-0">
-                            Browse our available cakes, cupcakes and baked treats.
-                        </p>
-
-                    </div>
-
-                    {/* Favourite error */}
-                    {favouriteError && (
-
-                        <div
-                            className="alert alert-danger mb-4"
-                            role="alert"
-                        >
-                            {favouriteError}
-                        </div>
-
-                    )}
-
-
-                    {menuProducts.length > 0 ? (
-
-                        <div className="row g-3 g-md-4">
-
-                            {menuProducts.map(
-                                (product) => (
-
-                                    <div
-                                        className={menuProductColumnClass}
-                                        key={product._id}
-                                    >
-
-                                        <article className="storefront-product-card h-100 d-flex flex-column position-relative">
-
-                                            {/* Product image */}
-                                            <div className="ratio ratio-4x3 storefront-product-image-wrapper">
-
-                                                {product.image_url ? (
-
-                                                    <img
-                                                        src={product.image_url}
-                                                        alt={product.name}
-                                                        className="storefront-product-image w-100 h-100"
-                                                    />
-
-                                                ) : (
-
-                                                    <div className="storefront-product-placeholder d-flex align-items-center justify-content-center">
-                                                        🍰
-                                                    </div>
-
-                                                )}
-
-                                            </div>
-
-                                            {/* Favourite Product */}
-                                            <button
-                                                type="button"
-                                                className="btn btn-light rounded-circle shadow-sm position-absolute top-0 end-0 m-2 d-flex align-items-center justify-content-center p-2"
-                                                aria-label={
-                                                    favouriteProductIds.includes(
-                                                        product._id
-                                                    )
-                                                        ? "Remove from favourites"
-                                                        : "Add to favourites"
-                                                }
-                                                disabled={
-                                                    updatingFavouriteId ===
-                                                    product._id
-                                                }
-                                                onClick={() =>
-                                                    toggleFavourite(
-                                                        product._id
-                                                    )
-                                                }
-                                            >
-                                                <Heart
-                                                    size={19}
-                                                    className={
-                                                        favouriteProductIds.includes(
-                                                            product._id
-                                                        )
-                                                            ? "text-danger"
-                                                            : "text-dark"
-                                                    }
-                                                    fill={
-                                                        favouriteProductIds.includes(
-                                                            product._id
-                                                        )
-                                                            ? "currentColor"
-                                                            : "none"
-                                                    }
-                                                />
-                                            </button>
-
-
-                                            {/* Product information */}
-                                            <div className="d-flex flex-column flex-grow-1 p-4">
-
-                                                {/* Product category */}
-                                                {product.category && (
-
-                                                    <span className="storefront-product-category mb-2">
-                                                        {product.category}
-                                                    </span>
-
-                                                )}
-
-                                                <h3 className="storefront-product-title mb-2">
-                                                    {product.name}
-                                                </h3>
-
-
-                                                <p className="storefront-product-price mb-4">
-
-                                                    From{" "}
-
-                                                    <strong>
-                                                        {
-                                                            formatPrice(
-                                                                product.base_price
-                                                            )
-                                                        }
-                                                    </strong>
-
-                                                </p>
-
-
-                                                {/* Product action */}
-                                                <Link
-                                                    to={`/${slug}/product/${product._id}`}
-                                                    className="storefront-product-action d-flex align-items-center justify-content-between text-decoration-none mt-auto"
-                                                >
-
-                                                    <span>
-                                                        {
-                                                            getProductActionLabel(
-                                                                product
-                                                            )
-                                                        }
-                                                    </span>
-
-                                                    <ArrowRight size={16} />
-
-                                                </Link>
-
-                                            </div>
-
-                                        </article>
-
-                                    </div>
-
-                                )
-                            )}
-
-                        </div>
-
-                    ) : (
-
-                        <div className="storefront-empty-products text-center p-4 p-md-5">
-
-                            <h3 className="mb-2">
-                                Menu coming soon
-                            </h3>
+                            <h2 className="storefront-small-section-title mb-1">
+                                Freshly baked for you
+                            </h2>
 
                             <p className="text-secondary mb-0">
-                                This bakery has not published any products yet.
+                                Browse our available cakes, cupcakes and baked treats.
                             </p>
 
                         </div>
 
-                    )}
+
+                        {/* Favourite error */}
+                        {favouriteError && (
+
+                            <div
+                                className="alert alert-danger mb-4"
+                                role="alert"
+                            >
+                                {favouriteError}
+                            </div>
+
+                        )}
+
+
+                        {menuProducts.length > 0 ? (
+
+                            <div className="row g-3 g-md-4">
+
+                                {menuProducts.map(
+                                    (product) => (
+
+                                        <div
+                                            className={
+                                                menuProductColumnClass
+                                            }
+                                            key={
+                                                product._id
+                                            }
+                                        >
+
+                                            <article className="storefront-product-card h-100 d-flex flex-column position-relative">
+
+                                                {/* Product image */}
+                                                <div className="ratio ratio-4x3 storefront-product-image-wrapper">
+
+                                                    {product.image_url ? (
+
+                                                        <img
+                                                            src={
+                                                                product.image_url
+                                                            }
+                                                            alt={
+                                                                product.name
+                                                            }
+                                                            className="storefront-product-image w-100 h-100"
+                                                        />
+
+                                                    ) : (
+
+                                                        <div className="storefront-product-placeholder d-flex align-items-center justify-content-center">
+                                                            🍰
+                                                        </div>
+
+                                                    )}
+
+                                                </div>
+
+
+                                                {/* Favourite Product */}
+                                                <button
+                                                    type="button"
+                                                    className="btn btn-light rounded-circle shadow-sm position-absolute top-0 end-0 m-2 d-flex align-items-center justify-content-center p-2"
+                                                    aria-label={
+                                                        favouriteProductIds.includes(
+                                                            product._id
+                                                        )
+                                                            ? "Remove from favourites"
+                                                            : "Add to favourites"
+                                                    }
+                                                    disabled={
+                                                        updatingFavouriteId ===
+                                                        product._id
+                                                    }
+                                                    onClick={() =>
+                                                        toggleFavourite(
+                                                            product._id
+                                                        )
+                                                    }
+                                                >
+
+                                                    <Heart
+                                                        size={19}
+                                                        className={
+                                                            favouriteProductIds.includes(
+                                                                product._id
+                                                            )
+                                                                ? "text-danger"
+                                                                : "text-dark"
+                                                        }
+                                                        fill={
+                                                            favouriteProductIds.includes(
+                                                                product._id
+                                                            )
+                                                                ? "currentColor"
+                                                                : "none"
+                                                        }
+                                                    />
+
+                                                </button>
+
+
+                                                {/* Product information */}
+                                                <div className="d-flex flex-column flex-grow-1 p-4">
+
+                                                    {/* Product category */}
+                                                    {product.category && (
+
+                                                        <span className="storefront-product-category mb-2">
+                                                            {product.category}
+                                                        </span>
+
+                                                    )}
+
+
+                                                    <h3 className="storefront-product-title mb-2">
+                                                        {product.name}
+                                                    </h3>
+
+
+                                                    <p className="storefront-product-price mb-4">
+
+                                                        From{" "}
+
+                                                        <strong>
+                                                            {
+                                                                formatPrice(
+                                                                    product.base_price
+                                                                )
+                                                            }
+                                                        </strong>
+
+                                                    </p>
+
+
+                                                    {/* Product action */}
+                                                    <Link
+                                                        to={`/${slug}/product/${product._id}`}
+                                                        className="storefront-product-action d-flex align-items-center justify-content-between text-decoration-none mt-auto"
+                                                    >
+
+                                                        <span>
+                                                            {
+                                                                getProductActionLabel(
+                                                                    product
+                                                                )
+                                                            }
+                                                        </span>
+
+                                                        <ArrowRight
+                                                            size={16}
+                                                        />
+
+                                                    </Link>
+
+                                                </div>
+
+                                            </article>
+
+                                        </div>
+
+                                    )
+                                )}
+
+                            </div>
+
+                        ) : (
+
+                            <div className="storefront-empty-products text-center p-4 p-md-5">
+
+                                <h3 className="mb-2">
+                                    Menu coming soon
+                                </h3>
+
+                                <p className="text-secondary mb-0">
+                                    This bakery has not published any products yet.
+                                </p>
+
+                            </div>
+
+                        )}
+
+
+                        {/* Opens complete Bakery Menu */}
+                        {products.length > 0 && (
+
+                            <div className="text-center mt-4">
+
+                                <Link
+                                    to={`/${slug}/menu`}
+                                    className="storefront-primary-button d-inline-flex align-items-center gap-2 text-decoration-none"
+                                >
+
+                                    View full menu
+
+                                    <ArrowRight
+                                        size={16}
+                                    />
+
+                                </Link>
+
+                            </div>
+
+                        )}
+
+                    </div>
 
                 </section>
 
@@ -1412,8 +1511,8 @@ export default function BakeryStorefront() {
 
                         <div className="text-center mt-4">
 
-                            <a
-                                href="#menu"
+                            <Link
+                                to={`/${slug}/menu`}
                                 className="storefront-primary-button d-inline-flex align-items-center gap-2 text-decoration-none"
                             >
 
@@ -1423,7 +1522,7 @@ export default function BakeryStorefront() {
                                     size={16}
                                 />
 
-                            </a>
+                            </Link>
 
                         </div>
 

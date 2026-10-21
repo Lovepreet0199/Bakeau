@@ -1048,7 +1048,7 @@ export default function StorefrontNavbar({
                         <nav className="d-none d-lg-flex align-items-center gap-4">
 
                             <Link
-                                to={`/${slug}#menu`}
+                                to={`/${slug}/menu`}
                                 className="storefront-nav-link"
                             >
                                 Menu
@@ -1753,10 +1753,8 @@ export default function StorefrontNavbar({
                                 <nav className="d-grid gap-1">
 
                                     <Link
-                                        to={`/${slug}#menu`}
-                                        onClick={
-                                            closeMobileMenu
-                                        }
+                                        to={`/${slug}/menu`}
+                                        onClick={closeMobileMenu}
                                         className="storefront-mobile-nav-link text-decoration-none px-3 py-2"
                                     >
                                         Menu

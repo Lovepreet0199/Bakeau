@@ -1,40 +1,287 @@
-/* Storefront Footer */
+/* Main public Storefront Footer */
 .storefront-footer {
-    background-color: var(--storefront-dark);
+    background-color:
+        var(--storefront-dark);
+
     color: #ffffff;
 }
 
 
-/* Footer Bakery name */
+/* Bakery name inside Footer */
 .storefront-footer h3 {
-    font-family: "Fraunces", serif;
+    font-family:
+        "Fraunces",
+        serif;
+
     font-size: 20px;
 }
 
 
-/* Footer headings */
+/* Footer section headings */
 .storefront-footer h4 {
     font-size: 14px;
 }
 
 
-/* Footer text */
+/* Footer information text */
 .storefront-footer p {
     max-width: 500px;
-    color: rgba(255, 255, 255, 0.75);
+
+    color:
+        rgba(255,
+            255,
+            255,
+            0.75);
+
     font-size: 12px;
-    line-height: 1.8;
+
+    line-height: 22px;
 }
 
 
-/* Footer links */
+/* Footer Policy links */
 .storefront-footer-link {
-    color: rgba(255, 255, 255, 0.55);
+    padding: 0;
+
+    border: none;
+
+    background-color: transparent;
+
+    color:
+        rgba(255,
+            255,
+            255,
+            0.58);
+
     font-size: 11px;
+
     cursor: pointer;
-    transition: color 0.2s ease;
+
+    transition:
+        color 0.2s ease;
 }
 
+
+/* Footer Policy link hover */
 .storefront-footer-link:hover {
     color: #ffffff;
+}
+
+
+/* Dark background behind Policy Modal */
+.storefront-policy-modal-backdrop {
+    position: fixed;
+
+    inset: 0;
+
+    background-color:
+        rgba(31,
+            23,
+            20,
+            0.48);
+
+    z-index: 2000;
+}
+
+
+/* Public Policy Modal */
+.storefront-policy-modal {
+    max-width: 650px;
+
+    max-height: 700px;
+
+    overflow-y: auto;
+
+    border:
+        1px solid color-mix(in srgb,
+            var(--storefront-primary) 12%,
+            #eee3da);
+
+    border-radius: 18px;
+
+    background-color:
+        color-mix(in srgb,
+            var(--storefront-secondary) 8%,
+            #fffdf9);
+
+    color: #33251f;
+
+    box-shadow:
+        0 24px 60px rgba(30,
+            20,
+            16,
+            0.28);
+}
+
+
+/* Policy Modal heading area */
+.storefront-policy-modal-header {
+    border-bottom:
+        1px solid #eadfd7;
+}
+
+
+/* Small Bakery label */
+.storefront-policy-label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color:
+        var(--storefront-primary);
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: 1px;
+
+    text-transform: uppercase;
+}
+
+
+/* Policy Modal title */
+.storefront-policy-modal-header h2 {
+    color: #33251f;
+
+    font-family:
+        "Fraunces",
+        serif;
+
+    font-size: 26px;
+
+    font-weight: 600;
+}
+
+
+/* Policy Modal close X button */
+.storefront-policy-close {
+    width: 36px;
+
+    height: 36px;
+
+    flex-shrink: 0;
+
+    padding: 0;
+
+    border:
+        1px solid #dfd2ca;
+
+    border-radius: 50%;
+
+    background-color:
+        color-mix(in srgb,
+            var(--storefront-secondary) 8%,
+            #fffdf9);
+
+    color: #554740;
+
+    font-size: 24px;
+
+    line-height: 24px;
+
+    cursor: pointer;
+}
+
+
+/* Policy Modal close hover */
+.storefront-policy-close:hover {
+    border-color:
+        var(--storefront-primary);
+
+    color:
+        var(--storefront-primary);
+}
+
+
+/* Policy information */
+.storefront-policy-content {
+    color: #5d5048;
+
+    font-size: 14px;
+
+    line-height: 24px;
+}
+
+
+/* Keeps Owner-entered line breaks */
+.storefront-policy-content p {
+    white-space: pre-line;
+}
+
+
+/* Empty Policy message */
+.storefront-policy-empty {
+    color: #8c7e76;
+
+    font-style: italic;
+}
+
+
+/* Policy divider */
+.storefront-policy-detail {
+    border-top:
+        1px solid #eadfd7;
+}
+
+
+/* Pickup Policy detail heading */
+.storefront-policy-detail strong {
+    color: #33251f;
+
+    font-size: 12px;
+}
+
+
+/* Pickup Policy detail text */
+.storefront-policy-detail span {
+    color: #65574e;
+
+    font-size: 13px;
+}
+
+
+/* Terms section divider */
+.storefront-policy-section+.storefront-policy-section {
+    border-top:
+        1px solid #eadfd7;
+}
+
+
+/* Terms subsection heading */
+.storefront-policy-section h3 {
+    color: #33251f;
+
+    font-family:
+        "Fraunces",
+        serif;
+
+    font-size: 18px;
+}
+
+
+/* Policy Modal Close button */
+.storefront-policy-done {
+    padding: 10px 20px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background-color:
+        var(--storefront-primary);
+
+    color: #ffffff;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+
+/* Policy Close button hover */
+.storefront-policy-done:hover {
+    opacity: 0.92;
 }
