@@ -22,10 +22,12 @@ import {
     Heart
 } from "lucide-react";
 
-
 //Import shared Storefront components
-import StorefrontNavbar from "../../components/storefront/StorefrontNavbar";
-import StorefrontFooter from "../../components/storefront/StorefrontFooter";
+import StorefrontNavbar
+    from "../../components/storefront/StorefrontNavbar";
+
+import StorefrontFooter
+    from "../../components/storefront/StorefrontFooter";
 
 //Import Storefront theme helper
 import {
@@ -37,28 +39,57 @@ import {
 export default function StorefrontFavourites() {
 
     //Get Bakery slug
-    const { slug } = useParams();
+    const {
+        slug
+    } = useParams();
+
 
     //Used to navigate Customer
-    const navigate = useNavigate();
+    const navigate =
+        useNavigate();
+
 
     //Stores Bakery information
-    const [bakery, setBakery] = useState(null);
+    const [
+        bakery,
+        setBakery
+    ] = useState(null);
+
 
     //Stores Customer Favourites
-    const [favourites, setFavourites] = useState([]);
+    const [
+        favourites,
+        setFavourites
+    ] = useState([]);
+
 
     //Tracks page loading
-    const [isLoading, setIsLoading] = useState(true);
+    const [
+        isLoading,
+        setIsLoading
+    ] = useState(true);
+
 
     //Stores page errors
-    const [error, setError] = useState("");
+    const [
+        error,
+        setError
+    ] = useState("");
+
 
     //Tracks Favourite currently being removed
-    const [removingFavouriteId, setRemovingFavouriteId] = useState(null);
+    const [
+        removingFavouriteId,
+        setRemovingFavouriteId
+    ] = useState(null);
+
 
     //Stores Favourite action errors
-    const [favouriteError, setFavouriteError] = useState("");
+    const [
+        favouriteError,
+        setFavouriteError
+    ] = useState("");
+
 
     //Loads Bakery and Customer Favourites
     useEffect(() => {
@@ -76,11 +107,14 @@ export default function StorefrontFavourites() {
 
 
             //Customer must be logged in
-            if (!token) {
+            if (
+                !token
+            ) {
 
                 navigate(
                     `/${slug}/login`
                 );
+
 
                 return;
             }
@@ -91,6 +125,7 @@ export default function StorefrontFavourites() {
                 setIsLoading(
                     true
                 );
+
 
                 setError(
                     ""
@@ -103,6 +138,7 @@ export default function StorefrontFavourites() {
                     favouritesResponse
                 ] =
                     await Promise.all([
+
                         fetch(
                             `${API_URL}/api/bakeries/public/${slug}`
                         ),
@@ -116,11 +152,13 @@ export default function StorefrontFavourites() {
                                 }
                             }
                         )
+
                     ]);
 
 
                 const bakeryData =
                     await bakeryResponse.json();
+
 
                 const favouritesData =
                     await favouritesResponse.json();
@@ -136,12 +174,15 @@ export default function StorefrontFavourites() {
                         `/${slug}/login`
                     );
 
+
                     return;
                 }
 
 
                 //Stop if Bakery could not be loaded
-                if (!bakeryResponse.ok) {
+                if (
+                    !bakeryResponse.ok
+                ) {
 
                     throw new Error(
                         bakeryData.message ||
@@ -151,7 +192,9 @@ export default function StorefrontFavourites() {
 
 
                 //Stop if Favourites could not be loaded
-                if (!favouritesResponse.ok) {
+                if (
+                    !favouritesResponse.ok
+                ) {
 
                     throw new Error(
                         favouritesData.message ||
@@ -180,6 +223,7 @@ export default function StorefrontFavourites() {
                     error
                 );
 
+
                 setError(
                     error.message
                 );
@@ -202,6 +246,7 @@ export default function StorefrontFavourites() {
         navigate
     ]);
 
+
     //Keep only Favourite Products from this Bakery
     const bakeryFavourites =
         favourites.filter(
@@ -216,7 +261,9 @@ export default function StorefrontFavourites() {
 
 
     //Formats Product prices using Bakery currency
-    function formatPrice(price) {
+    function formatPrice(
+        price
+    ) {
 
         return new Intl.NumberFormat(
             "en-CA",
@@ -229,12 +276,16 @@ export default function StorefrontFavourites() {
                     "CAD"
             }
         ).format(
-            price || 0
+            price ||
+            0
         );
     }
 
+
     //Removes a Product from Customer Favourites
-    async function removeFavourite(productId) {
+    async function removeFavourite(
+        productId
+    ) {
 
         //Get Customer token
         const token =
@@ -247,17 +298,23 @@ export default function StorefrontFavourites() {
 
 
         //Customer must be logged in
-        if (!token) {
+        if (
+            !token
+        ) {
 
             navigate(
                 `/${slug}/login`
             );
 
+
             return;
         }
 
 
-        setFavouriteError("");
+        setFavouriteError(
+            ""
+        );
+
 
         setRemovingFavouriteId(
             productId
@@ -287,18 +344,24 @@ export default function StorefrontFavourites() {
 
 
             //Customer session expired
-            if (response.status === 401) {
+            if (
+                response.status ===
+                401
+            ) {
 
                 navigate(
                     `/${slug}/login`
                 );
+
 
                 return;
             }
 
 
             //Stop if request failed
-            if (!response.ok) {
+            if (
+                !response.ok
+            ) {
 
                 throw new Error(
                     data.message ||
@@ -309,8 +372,10 @@ export default function StorefrontFavourites() {
 
             //Remove Favourite from page immediately
             setFavourites(
+
                 (currentFavourites) =>
                     currentFavourites.filter(
+
                         (favourite) =>
                             String(
                                 favourite.product_id?._id ||
@@ -330,6 +395,7 @@ export default function StorefrontFavourites() {
                 error
             );
 
+
             setFavouriteError(
                 error.message
             );
@@ -343,8 +409,11 @@ export default function StorefrontFavourites() {
         }
     }
 
+
     //Temporary loading screen
-    if (isLoading) {
+    if (
+        isLoading
+    ) {
 
         return (
 
@@ -354,9 +423,11 @@ export default function StorefrontFavourites() {
                     className="spinner-border"
                     role="status"
                 >
+
                     <span className="visually-hidden">
                         Loading favourites...
                     </span>
+
                 </div>
 
             </div>
@@ -374,15 +445,24 @@ export default function StorefrontFavourites() {
 
             <div className="min-vh-100 d-flex flex-column align-items-center justify-content-center gap-3 text-center p-4">
 
-                <Heart size={30} />
+                <Heart
+                    size={30}
+                />
+
 
                 <h1 className="h3 mb-0">
                     Unable to load favourites
                 </h1>
 
+
                 <p className="text-secondary mb-0">
-                    {error}
+
+                    {
+                        error
+                    }
+
                 </p>
+
 
                 <Link
                     to={`/${slug}`}
@@ -409,7 +489,9 @@ export default function StorefrontFavourites() {
 
             {/* Storefront Navbar */}
             <StorefrontNavbar
-                bakery={bakery}
+                bakery={
+                    bakery
+                }
             />
 
 
@@ -424,167 +506,215 @@ export default function StorefrontFavourites() {
                             My favourites
                         </h1>
 
+
                         <p className="text-secondary mb-0">
-                            {bakeryFavourites.length} saved{" "}
+
                             {
-                                bakeryFavourites.length === 1
+                                bakeryFavourites.length
+                            }{" "}
+
+                            saved{" "}
+
+                            {
+                                bakeryFavourites.length ===
+                                1
                                     ? "product"
                                     : "products"
                             }{" "}
-                            from {bakery.name}
+
+                            from{" "}
+
+                            {
+                                bakery.name
+                            }
+
                         </p>
 
                     </div>
 
+
                     {/* Favourite error */}
-                    {favouriteError && (
+                    {
+                        favouriteError &&
+                        (
 
-                        <div
-                            className="alert alert-danger mb-4"
-                            role="alert"
-                        >
-                            {favouriteError}
-                        </div>
+                            <div
+                                className="alert alert-danger mb-4"
+                                role="alert"
+                            >
 
-                    )}
+                                {
+                                    favouriteError
+                                }
+
+                            </div>
+                        )
+                    }
+
 
                     {/* Favourite Products */}
-                    {bakeryFavourites.length > 0 ? (
+                    {
+                        bakeryFavourites.length >
+                        0
+                            ? (
 
-                        <div className="row g-3 g-md-4">
+                                <div className="row g-3 g-md-4">
 
-                            {bakeryFavourites.map(
-                                (favourite) => {
+                                    {
+                                        bakeryFavourites.map(
+                                            (favourite) => {
 
-                                    const product =
-                                        favourite.product_id;
+                                                const product =
+                                                    favourite.product_id;
 
 
-                                    //Skip deleted Products
-                                    if (!product) {
+                                                //Skip deleted Products
+                                                if (
+                                                    !product
+                                                ) {
 
-                                        return null;
+                                                    return null;
+                                                }
+
+
+                                                return (
+
+                                                    <div
+                                                        className="col-12 col-sm-6 col-lg-3"
+                                                        key={
+                                                            favourite._id
+                                                        }
+                                                    >
+
+                                                        <article className="storefront-product-card h-100 d-flex flex-column position-relative">
+
+                                                            {/* Product image */}
+                                                            <div className="ratio ratio-4x3 storefront-product-image-wrapper">
+
+                                                                {
+                                                                    product.image_url
+                                                                        ? (
+
+                                                                            <img
+                                                                                src={
+                                                                                    product.image_url
+                                                                                }
+                                                                                alt={
+                                                                                    product.name
+                                                                                }
+                                                                                className="storefront-product-image w-100 h-100"
+                                                                            />
+                                                                        )
+                                                                        : (
+
+                                                                            <div className="storefront-product-placeholder d-flex align-items-center justify-content-center">
+                                                                                🍰
+                                                                            </div>
+                                                                        )
+                                                                }
+
+                                                            </div>
+
+
+                                                            {/* Remove Favourite */}
+                                                            <button
+                                                                type="button"
+                                                                className="btn btn-light rounded-circle shadow-sm position-absolute top-0 end-0 m-2 d-flex align-items-center justify-content-center p-2"
+                                                                aria-label="Remove from favourites"
+                                                                disabled={
+                                                                    removingFavouriteId ===
+                                                                    product._id
+                                                                }
+                                                                onClick={() =>
+                                                                    removeFavourite(
+                                                                        product._id
+                                                                    )
+                                                                }
+                                                            >
+
+                                                                <Heart
+                                                                    size={19}
+                                                                    className="text-danger"
+                                                                    fill="currentColor"
+                                                                />
+
+                                                            </button>
+
+
+                                                            {/* Product information */}
+                                                            <div className="d-flex flex-column flex-grow-1 p-3">
+
+                                                                <h2 className="storefront-product-title h5 mb-1">
+
+                                                                    {
+                                                                        product.name
+                                                                    }
+
+                                                                </h2>
+
+
+                                                                <p className="storefront-product-price mb-3">
+
+                                                                    From{" "}
+
+                                                                    {
+                                                                        formatPrice(
+                                                                            product.base_price
+                                                                        )
+                                                                    }
+
+                                                                </p>
+
+
+                                                                <Link
+                                                                    to={`/${slug}/product/${product._id}`}
+                                                                    className="storefront-product-action d-flex align-items-center justify-content-center text-decoration-none mt-auto"
+                                                                >
+                                                                    View item
+                                                                </Link>
+
+                                                            </div>
+
+                                                        </article>
+
+                                                    </div>
+                                                );
+                                            }
+                                        )
                                     }
 
+                                </div>
+                            )
+                            : (
 
-                                    return (
+                                <div className="text-center py-5">
 
-                                        <div
-                                            className="col-12 col-sm-6 col-lg-3"
-                                            key={
-                                                favourite._id
-                                            }
-                                        >
-
-                                            <article className="storefront-product-card h-100 d-flex flex-column position-relative">
-
-                                                {/* Remove Favourite */}
-                                                <button
-                                                    type="button"
-                                                    className="btn btn-light rounded-circle shadow-sm position-absolute top-0 end-0 m-2 d-flex align-items-center justify-content-center p-2"
-                                                    aria-label="Remove from favourites"
-                                                    disabled={
-                                                        removingFavouriteId ===
-                                                        product._id
-                                                    }
-                                                    onClick={() =>
-                                                        removeFavourite(
-                                                            product._id
-                                                        )
-                                                    }
-                                                >
-                                                    <Heart
-                                                        size={19}
-                                                        className="text-danger"
-                                                        fill="currentColor"
-                                                    />
-                                                </button>
-
-                                                {/* Product image */}
-                                                {product.image_url ? (
-
-                                                    <img
-                                                        src={
-                                                            product.image_url
-                                                        }
-                                                        alt={
-                                                            product.name
-                                                        }
-                                                        className="storefront-product-image w-100"
-                                                    />
-
-                                                ) : (
-
-                                                    <div className="storefront-product-placeholder d-flex align-items-center justify-content-center">
-                                                        🍰
-                                                    </div>
-                                                )}
+                                    <Heart
+                                        size={34}
+                                    />
 
 
-                                                {/* Product information */}
-                                                <div className="d-flex flex-column flex-grow-1 p-3">
-
-                                                    <h2 className="storefront-product-title h5 mb-1">
-                                                        {product.name}
-                                                    </h2>
+                                    <h2 className="h4 mt-3 mb-2">
+                                        No favourites yet
+                                    </h2>
 
 
-                                                    <p className="storefront-product-price mb-3">
-
-                                                        From{" "}
-
-                                                        {
-                                                            formatPrice(
-                                                                product.base_price
-                                                            )
-                                                        }
-
-                                                    </p>
+                                    <p className="text-secondary mb-4">
+                                        Save products you love and they will appear here.
+                                    </p>
 
 
-                                                    <Link
-                                                        to={`/${slug}/product/${product._id}`}
-                                                        className="storefront-product-action d-flex align-items-center justify-content-center text-decoration-none mt-auto"
-                                                    >
-                                                        View item
-                                                    </Link>
+                                    <Link
+                                        to={`/${slug}/menu`}
+                                        className="storefront-primary-button d-inline-flex align-items-center justify-content-center text-decoration-none"
+                                    >
+                                        Browse products
+                                    </Link>
 
-                                                </div>
+                                </div>
+                            )
+                    }
 
-                                            </article>
-
-                                        </div>
-                                    );
-                                }
-                            )}
-
-                        </div>
-
-                    ) : (
-
-                        <div className="text-center py-5">
-
-                            <Heart
-                                size={34}
-                            />
-
-                            <h2 className="h4 mt-3 mb-2">
-                                No favourites yet
-                            </h2>
-
-                            <p className="text-secondary mb-4">
-                                Save products you love and they will appear here.
-                            </p>
-
-                            <Link
-                                to={`/${slug}#menu`}
-                                className="storefront-primary-button d-inline-flex align-items-center justify-content-center text-decoration-none"
-                            >
-                                Browse products
-                            </Link>
-
-                        </div>
-                    )}
                 </div>
 
             </main>
@@ -592,7 +722,9 @@ export default function StorefrontFavourites() {
 
             {/* Storefront Footer */}
             <StorefrontFooter
-                bakery={bakery}
+                bakery={
+                    bakery
+                }
             />
 
         </div>
