@@ -129,7 +129,7 @@ export default function PaymentStep({
 
             //Send a request to the backend to create or continue Stripe onboarding
             const response = await fetch(
-                `${API_URL}/api/bakeries/stripe/connect`,
+                `${API_URL}/api/bakeries/stripe/connect?return_to=setup`,
                 {
                     method: "POST",
                     headers: {

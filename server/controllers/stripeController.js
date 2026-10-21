@@ -77,6 +77,14 @@ const connectStripeAccount = async (request, response) => {
 
             await bakery.save();
         }
+        //Get where Stripe onboarding was started from
+        const returnTo = request.query.return_to;
+
+        //Choose where Stripe should return the Bakery Owner
+        const stripeReturnUrl =
+            returnTo === "settings"
+                ? `${process.env.CLIENT_URL}/bakery/settings?tab=payments`
+                : `${process.env.CLIENT_URL}/bakery/setup?step=payments`;
 
         //Create a Stripe onboarding link for the Bakery Owner
         const accountLink = await stripe.v2.core.accountLinks.create({
@@ -84,8 +92,8 @@ const connectStripeAccount = async (request, response) => {
             use_case: {
                 type: "account_onboarding",
                 account_onboarding: {
-                    refresh_url: `${process.env.CLIENT_URL}/bakery/setup?step=payments`,
-                    return_url: `${process.env.CLIENT_URL}/bakery/setup?step=payments`
+                    refresh_url: stripeReturnUrl,
+                    return_url: stripeReturnUrl
                 }
             }
         });

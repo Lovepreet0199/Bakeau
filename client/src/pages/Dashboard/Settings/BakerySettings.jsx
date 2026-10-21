@@ -5,6 +5,9 @@ import {
     useState
 } from "react";
 
+//Import React Router tools
+import { useSearchParams } from "react-router-dom";
+
 //Import Settings icons
 import {
     LoaderCircle,
@@ -64,8 +67,15 @@ export default function BakerySettings() {
     //Stores the Bakery returned by the backend
     const [bakery, setBakery] = useState(null);
 
+    //Get Settings tab from the URL
+    const [searchParams] = useSearchParams();
+
     //Tracks the selected Settings tab
-    const [activeTab, setActiveTab] = useState("general");
+    const [activeTab, setActiveTab] = useState(
+        searchParams.get("tab") === "payments"
+            ? "payments"
+            : "general"
+    );
 
     //Tracks whether Settings are loading
     const [isLoading, setIsLoading] = useState(true);

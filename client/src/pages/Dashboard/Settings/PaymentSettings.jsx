@@ -253,7 +253,7 @@ export default function PaymentSettings({
 
             //Create or continue Stripe onboarding
             const response = await fetch(
-                `${API_URL}/api/bakeries/stripe/connect`,
+                `${API_URL}/api/bakeries/stripe/connect?return_to=settings`,
                 {
                     method: "POST",
                     headers: {
