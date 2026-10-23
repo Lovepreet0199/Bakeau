@@ -763,6 +763,36 @@ export default function BakeryOrderDetails() {
                                 </section>
 
 
+                                {/* Customer Order Note */}
+                                {order.bakery_note && (
+                                    <section className="bakery-order-details-card">
+
+                                        <div className="bakery-order-details-card-header">
+                                            <h2>
+                                                Customer Order Note
+                                            </h2>
+                                        </div>
+
+                                        <div className="bakery-order-details-card-body">
+
+                                            <div className="bakery-order-details-note">
+
+                                                <span>
+                                                    Instructions from customer
+                                                </span>
+
+                                                <p className="mb-0">
+                                                    {order.bakery_note}
+                                                </p>
+
+                                            </div>
+
+                                        </div>
+
+                                    </section>
+                                )}
+
+
                                 {/* Order Activity history */}
                                 <section className="bakery-order-details-card">
 

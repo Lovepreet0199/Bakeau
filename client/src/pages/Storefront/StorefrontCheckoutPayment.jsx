@@ -636,8 +636,9 @@ export default function StorefrontCheckoutPayment() {
                             customization_option_ids:
                                 item.customization_option_ids,
 
+                            //Send product instructions with the order
                             special_notes:
-                                item.special_notes ||
+                                item.special_instructions ||
                                 ""
                         })
                     );
