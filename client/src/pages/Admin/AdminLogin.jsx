@@ -13,6 +13,9 @@ import {
 //Reuse the existing Bakeau Login styles
 import "../Login/Login.css";
 
+//Import Admin Login button styles
+import "./AdminLogin.css";
+
 
 //Displays the Platform Administrator Login page
 export default function AdminLogin() {
